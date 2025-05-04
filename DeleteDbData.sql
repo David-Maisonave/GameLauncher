@@ -1,0 +1,4 @@
+DELETE FROM Roms;
+DELETE FROM Images;
+DELETE FROM GameSystems;
+

@@ -1,0 +1,10 @@
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\bin\Debug\GameLauncher.exe
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\bin\Debug\GameLauncher.pdb
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.csproj.AssemblyReference.cache
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.Form1.resources
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.Form2.resources
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.Properties.Resources.resources
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.csproj.GenerateResource.cache
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.csproj.CoreCompileInputs.cache
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.exe
+E:\_\David-Maisonave\GameLauncher\CSharpDialog\GameLauncher\obj\x86\Debug\GameLauncher.pdb

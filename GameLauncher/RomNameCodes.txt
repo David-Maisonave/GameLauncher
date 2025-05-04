@@ -1,0 +1,108 @@
+Video game rom codes
+**************************************************************************
+Primary rom codes
+    [a] Alternate (alternate version of the game, usually trying a different output method)
+    [p] Pirate
+    [b] Bad Dump (crappy port / buggy)
+    [f] Fixed (fixed the rom port from a previously-bad version)
+    [T-] Old translation
+    [T+] Newer translation
+    [tr] Translation
+    [i] Incomplete translation
+    [n] File name translated
+    [t] Trainer port (A trainer is special code which executes before the game is begun. It allows you to access cheats from a menu)
+    [h] Hack (Don't bother unless you're looking for weird stuff)
+    (-) Unknown Year
+    [o] Overdump
+    [J] Japanese translation
+    (M#) Multilanguage (# of Languages)
+    (UE) or (U)(E) English translation
+    [!] Verified Good Dump (this is usually the version you want)
+    (###) Checksum
+    (Unl) Unlicensed
+
+Country codes
+    (1)     Japan & Korea
+    (4)     USA & Brazil - NTSC
+    (5)     NTSC only
+    (8)     PAL only
+    (A)     Australia
+    (J)     Japan
+    (B)     Brazil
+    (K)     Korea
+    (C)     China
+    (NL)    Netherlands
+    (E)     Europe
+    (EUR)   Europe
+    (PD)    Public Domain
+    (F)     France
+    (S)     Spain
+    (F)     World (Genesis)
+    (FC)    French Canadian
+    (SW)    Sweden
+    (FN)    Finland
+    (U)     USA
+    (USA)   USA
+    (G)     Germany
+    (UK)    England
+    (GR)    Greece
+    (Unk)   Unknown Country
+    (HK)    Hong Kong
+    (I)     Italy
+    (H)     Holland
+    (EU)    Europe and USA
+    (JU)    Japan and USA
+    (JUE)   All regions
+    (W)     World (same as JUE) 
+
+Miscelaneous:
+(Proto)                 - Prototype cartridge. This is an unfinished build of a game.
+(Beta)                  - Beta cartridge. This is an unfinished build of a game.
+(V1.0), (V1.1), etc     - Version number.
+(REV00), (REV01), etc   - Revision number.   
+(PRG0), (PRG1), etc     - Revision number.   
+[a1], [a2], etc         - Alternate version. Another acceptable dump.
+[f1], [f2], etc         - Fixed. Edited (cracked) to work in emulators.
+[h1], [h2], etc         - Hack. Something about this cartridge has been changed, probably by pirates. The change is likely not noticeable.
+[h1C], [h2C], etc       - Hack. Something about this cartridge has been changed, definitly by Chinese pirates.
+[p1], [p2], etc         - Pirate version. The pirates changed something about the cartridge. Likely a simple removal of copywrites or a multipack.
+[t1], [t2], etc         - Trained. The ROM has been edited to alter stats or other gameplay mechanics.
+[o1], [o2], etc         - Overdump. Lots of extra data on the end, which is likely garbage.
+[b1], [b2], etc         - Bad dump. You almost certainly don't want to download this.
+[hI]                    - Intro hack.
+(MP)                    - Mega Play.
+[c]                     - Checksum.
+[x]                     - Bad checksum.
+[T+language_name]       - Translation + language translated to _ transator.
+[hI]                    - Has screen added to the beggining of the ROM!
+
+Notes:
+[o1] or [b1] tags mean that the ROM is essentially garbage.
+Bad checksums ([x]) aren't nessisarily bad; a good dump of Dynamite Heddy has a bad checksum.
+
+**************************************************************************
+Special codes
+Game Boy
+    [C]         Color (for Game Boy Color)
+    [S]         Super (for Super Game Boy)
+    [BF]        Bung Fix (Bung released a programmable cartridge compatable with the GameBoy which could hold any data you wished to play. However, many games do not function on Bung v1.0 carts and have to be "fixed"). Also bung lolol
+    (multiboot) GBA multiboot. This is the data booted on a GBA through a link cable.
+
+SNES
+    (BS) BS ROMs (These Japanese ROMs were distributed through a satellite system in Japan known as the Broadcast Satellaview. They were transmitted along with a TV show which was connected to the game in some way. These games were only playable during the show, and thus stop after an hour, and many were timed so that only certain time periods were playable)
+    (ST) Sufami Turbo (The Sufami Turbo device allowed two GameBoy sized carts to be plugged into the SNES. Certain carts combined into new games much like the Sonic & Knuckles lock-on technology by Sega)
+    (NP) Nintendo Power (Nintendo Power has been known to release games only available to its subscribers. Most of these ROMs are Japanese, as this practice occured mainly in Japan)
+
+Sega Genesis/Mega Drive
+    (1) Japan (Carts with this code will run on both Japanese and Korean machine)
+    (4) USA (While this code is technically the same as a (U) code, it is a newer header format and represents that the cart will run on USA and Brazil NTSC machines)
+    (5) NTSC Only
+    (8) PAL Only
+    [ (B) Brazil ] (This country code indicates that it’s intended for Brazil audiences)
+    [ [c] Checksum ] (This code represents a cart with known faulty checksum routines)
+    [ [x] Bad Checksum]
+    [ [R-] Countries ]
+
+NES/Famicom
+    [PC10] Playchoice 10 version
+    [VS] Vs Version
