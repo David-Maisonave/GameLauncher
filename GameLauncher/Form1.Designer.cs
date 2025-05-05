@@ -64,7 +64,6 @@
             this.myListView.ItemMouseHover += new System.Windows.Forms.ListViewItemMouseHoverEventHandler(this.myListView_ItemMouseHover);
             this.myListView.SelectedIndexChanged += new System.EventHandler(this.myListView_SelectedIndexChanged);
             this.myListView.DoubleClick += new System.EventHandler(this.myListView_OnDbClick);
-            this.myListView.Enter += new System.EventHandler(this.myListView_OnDbClick);
             this.myListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.myListView_MouseClick);
             // 
             // comboBoxSystem
@@ -97,6 +96,7 @@
             this.textBoxStatus.ReadOnly = true;
             this.textBoxStatus.Size = new System.Drawing.Size(631, 19);
             this.textBoxStatus.TabIndex = 7;
+            this.textBoxStatus.TabStop = false;
             // 
             // contextMenuStrip1
             // 
@@ -205,7 +205,6 @@
             this.Name = "Form1";
             this.Text = "Game Launcher [Ver-0.8] by David Maisonave Sr";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.myListView_OnFormClosing);
-            this.Enter += new System.EventHandler(this.myListView_OnDbClick);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

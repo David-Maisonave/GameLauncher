@@ -1135,7 +1135,10 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Z)
                     {
                         MiscData += "[z]"; // Lower trigger [left]val=34000>, [right]val=31000>
-                        SendKeys.SendWait("{END}");
+                        if (state.Value > 34000)
+                            SendKeys.SendWait("{END}");
+                        else
+                            SendKeys.SendWait("{END}");
                     }
                     else if (state.Offset == JoystickOffset.RotationX)
                     {
@@ -1152,7 +1155,7 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Buttons0)
                     {
                         MiscData += "[Buttons0]"; // A button
-                        SendKeys.SendWait("{ENTER}");
+                        SendKeys.SendWait("+{TAB}");
                     }
                     else if (state.Offset == JoystickOffset.Buttons1)
                     {
