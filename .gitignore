@@ -141,3 +141,10 @@ ipch/
 *.msix
 *.msm
 *.msp
+
+
+obj/
+/obj
+/obj/
+obj/*
+

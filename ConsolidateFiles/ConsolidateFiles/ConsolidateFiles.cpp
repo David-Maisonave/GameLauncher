@@ -102,15 +102,6 @@ private:
 	}
 };
 
-//void testExecute() {
-//	z7zip = "\"" + z7zip + "\"";
-//	for (int i = 0; i < 99; ++i) {
-//		string s = "start \"\" \"C:\\Program Files\\7-Zip\\7z.exe\" a -tzip \"E:\\MyPrograms\\TestFiles\\Consolidated\\A Bug's Life (U) [!].zip\" \"E:\\MyPrograms\\TestFiles\\Consolidated\\A Bug's Life (U) [!].v64\"";
-//		int r = system(s.c_str());
-//		cout << "results = " << r << endl;
-//		r = 0;
-//	}
-//}
 
 int main(int argc, char* argv[])
 {

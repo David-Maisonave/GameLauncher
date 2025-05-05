@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 
+using SharpDX.DirectInput;
+
 using Shell32;
 
 using System;
@@ -9,11 +11,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -1028,7 +1032,10 @@ namespace GameLauncher
             }
             return @"C:\Emulator";
         }
-    public Form1()
+        public static Form1 form1 = null;
+        public static Thread threadJoyStick = null;
+        public static bool threadJoyStickAborting = false;
+        public Form1()
         {
             InitializeComponent();
             comboBoxIconDisplay.Items.Add("Large Icons");
@@ -1042,6 +1049,171 @@ namespace GameLauncher
             if (dbPath != null && Directory.Exists(System.IO.Path.GetDirectoryName(dbPath)))
                 dataDirPath = System.IO.Path.GetDirectoryName(dbPath);
             InitializeDbConnection(dbPath);
+            form1 = this;
+            threadJoyStick = new Thread(PollJoystick);
+            threadJoyStick.Start();
+        }
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
+
+        public static string MiscData = "";
+        public static readonly int GamePadDown  = 18000;
+        public static readonly int GamePadUp    = 0;
+        public static readonly int GamePadLeft  = 27000;
+        public static readonly int GamePadRight = 9000;
+        public static void PollJoystick()
+        {
+            // https://stackoverflow.com/questions/18416039/joystick-acquisition-with-sharpdx
+            //var directInput = new DirectInput();
+            // To simulate cursor and keys see following: https://gamedev.stackexchange.com/questions/19906/how-do-i-simulate-the-mouse-and-keyboard-using-c-or-c
+            DirectInput directInput = new DirectInput();
+
+            List<Joystick> sticks = new List<Joystick>();
+            foreach (DeviceInstance device in directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
+            {
+                Joystick stick = new Joystick(directInput, device.InstanceGuid);
+                stick.Acquire();
+
+                foreach (DeviceObjectInstance deviceObject in stick.GetObjects(DeviceObjectTypeFlags.Axis))
+                {
+                    stick.GetObjectPropertiesById(deviceObject.ObjectId).Range = new InputRange(-100, 100);
+                }
+                sticks.Add(stick);
+            }
+
+            Guid joystickGuid = Guid.Empty;
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AttachedOnly))
+                joystickGuid = deviceInstance.InstanceGuid;
+            // If Gamepad not found, look for a Joystick
+            if (joystickGuid == Guid.Empty)
+                foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AttachedOnly))
+                    joystickGuid = deviceInstance.InstanceGuid;
+
+            if (joystickGuid == Guid.Empty)
+                foreach (var deviceInstance in directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
+                    joystickGuid = deviceInstance.InstanceGuid;
+
+            // If Joystick not found, throws an error
+            if (joystickGuid == Guid.Empty)
+            {
+                Console.WriteLine("No joystick/Gamepad found.");
+                threadJoyStickAborting = true;
+                return;
+                //Console.ReadKey();
+                //Environment.Exit(1);
+            }
+
+            Joystick joystick = new Joystick(directInput, joystickGuid);
+            joystick.Properties.BufferSize = 128;
+            joystick.Acquire();
+
+            while (threadJoyStickAborting == false)
+            {
+                joystick.Poll();
+                if (threadJoyStickAborting == true)
+                    return;
+                //foreach (Joystick js in sticks) 
+                //{
+                //    JoystickUpdate lastState = js.GetBufferedData().Last();
+                //    if (lastState.Offset == JoystickOffset.X)
+                //    {
+                //        form1.textBoxStatus.Text = lastState.Value.ToString();
+                //    }
+                //}
+                MiscData = "";
+                var data = joystick.GetBufferedData();
+                foreach (JoystickUpdate state in data)
+                {
+                    if (state.Offset == JoystickOffset.X)
+                    {
+                        MiscData += "[x]"; // 1st Joystick left and down
+                    }
+                    else if (state.Offset == JoystickOffset.Y)
+                    {
+                        MiscData += "[y]"; // 1st Joystick right and up
+                    }
+                    else if (state.Offset == JoystickOffset.Z)
+                    {
+                        MiscData += "[z]"; // Lower trigger [left]val=34000>, [right]val=31000>
+                        SendKeys.SendWait("{END}");
+                    }
+                    else if (state.Offset == JoystickOffset.RotationX)
+                    {
+                        MiscData += "[RotationX]"; // 2nd Joystick left and right
+                    }
+                    else if (state.Offset == JoystickOffset.RotationY)
+                    {
+                        MiscData += "[RotationY]";// 2nd Joystick up and down
+                    }
+                    else if (state.Offset == JoystickOffset.RotationZ)
+                    {
+                        MiscData += "[RotationZ]";
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons0)
+                    {
+                        MiscData += "[Buttons0]"; // A button
+                        SendKeys.SendWait("{ENTER}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons1)
+                    {
+                        MiscData += "[Buttons1]"; // B button
+                        SendKeys.SendWait("{TAB}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons2)
+                    {
+                        MiscData += "[Buttons2]"; // X button
+                        SendKeys.SendWait("{PGDN}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons3)
+                    {
+                        MiscData += "[Buttons3]"; // Y button
+                        SendKeys.SendWait("{PGUP}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons4)
+                    {
+                        MiscData += "[Buttons4]"; // Left upper trigger
+                        SendKeys.SendWait("{HOME}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons5)
+                    {
+                        MiscData += "[Buttons5]"; // Right upper trigger
+                        SendKeys.SendWait("{HOME}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons6)
+                    {
+                        MiscData += "[Buttons6]"; // Back/Select button
+                        SendKeys.SendWait("{ALT}{F4}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons7)
+                    {
+                        MiscData += "[Buttons7]"; // Start button
+                    }
+                    else if (state.Offset == JoystickOffset.PointOfViewControllers0)
+                    { // PointOfViewControllers0, [up]val=0, [down]val=18000,[left]val=27000,[right]val=9000
+                        MiscData += $"[PointOfViewControllers0 {state.Value}]";
+                        if (GamePadUp == state.Value)
+                        {
+                            SendKeys.SendWait("{UP}");
+                        }
+                        else if (GamePadDown == state.Value)
+                        {
+                            SendKeys.SendWait("{DOWN}");
+                        }
+                        else if (GamePadLeft == state.Value)
+                        {
+                            SendKeys.SendWait("{LEFT}");
+                        }
+                        else if (GamePadRight == state.Value)
+                        {
+                            SendKeys.SendWait("{RIGHT}");
+                        }
+                    }
+                    else
+                    {
+                        MiscData += "[misc]";
+                    }
+                }
+            }
         }
         private string GetEmulatorStartScanPath()
         {
@@ -1216,6 +1388,11 @@ namespace GameLauncher
             else if (comboBoxIconDisplay.SelectedIndex == 2)
                 myListView.View = View.Tile;
 
+        }
+
+        private void myListView_OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            threadJoyStickAborting = true;
         }
     }
     public class PreviousCollectedImages
