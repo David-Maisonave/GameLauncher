@@ -1105,6 +1105,7 @@ namespace GameLauncher
             joystick.Properties.BufferSize = 128;
             joystick.Acquire();
             long LastTimePressF5 = -1;
+            const long MaxSecondsToWait = 5;
 
             while (threadJoyStickAborting == false)
             {
@@ -1193,7 +1194,7 @@ namespace GameLauncher
                         MiscData += "[Buttons7]"; // Start button
                         DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
                         long now = dto.ToUnixTimeSeconds();
-                        if (LastTimePressF5 != -1 && LastTimePressF5 + 6 > now)
+                        if (LastTimePressF5 != -1 && LastTimePressF5 + MaxSecondsToWait > now)
                             break;
                         LastTimePressF5 = now;
                         SendKeys.SendWait("{F5}");
@@ -1221,10 +1222,22 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Buttons8)
                     {
                         MiscData += "[Buttons8]"; // 1st Joystick center button
+                        DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+                        long now = dto.ToUnixTimeSeconds();
+                        if (LastTimePressF5 != -1 && LastTimePressF5 + MaxSecondsToWait > now)
+                            break;
+                        LastTimePressF5 = now;
+                        SendKeys.SendWait("{F5}");
                     }
                     else if (state.Offset == JoystickOffset.Buttons9)
                     {
                         MiscData += "[Buttons9]"; // 2nd Joystick center button
+                        DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+                        long now = dto.ToUnixTimeSeconds();
+                        if (LastTimePressF5 != -1 && LastTimePressF5 + MaxSecondsToWait > now)
+                            break;
+                        LastTimePressF5 = now;
+                        SendKeys.SendWait("{F5}");
                     }
                     else
                     {
