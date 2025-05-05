@@ -220,8 +220,8 @@ namespace GameLauncher
         private string GetFirstColStr(string sql, string defaultValue = "")
         {
             // On failure, returns default value
-            var command = new SqliteCommand(sql, connection);
-            var reader = command.ExecuteReader();
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            SqliteDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
                 var firstColumn = reader.GetString(0);
@@ -232,8 +232,8 @@ namespace GameLauncher
         private int GetFirstColInt(string sql, int defaultValue = -1)
         {
             // On failure, returns default value
-            var command = new SqliteCommand(sql, connection);
-            var reader = command.ExecuteReader();
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            SqliteDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
                 var idx = reader.GetInt32(0);
@@ -244,8 +244,8 @@ namespace GameLauncher
         private (int, string) GetIntAndStr(string sql, int defaultInt = -1, string defaultStr = null)
         {
             // On failure, returns default values
-            var command = new SqliteCommand(sql, connection);
-            var reader = command.ExecuteReader();
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            SqliteDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
                 int i = reader.GetInt32(0);
@@ -256,7 +256,7 @@ namespace GameLauncher
         }
         private bool UpdateDB(string sql)
         {
-            var command = new SqliteCommand(sql, connection);
+            SqliteCommand command = new SqliteCommand(sql, connection);
             var x = command.ExecuteNonQuery();
             return x > 0;
         }
@@ -1104,6 +1104,7 @@ namespace GameLauncher
             Joystick joystick = new Joystick(directInput, joystickGuid);
             joystick.Properties.BufferSize = 128;
             joystick.Acquire();
+            long LastTimePressF5 = -1;
 
             while (threadJoyStickAborting == false)
             {
@@ -1190,6 +1191,11 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Buttons7)
                     {
                         MiscData += "[Buttons7]"; // Start button
+                        DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+                        long now = dto.ToUnixTimeSeconds();
+                        if (LastTimePressF5 != -1 && LastTimePressF5 + 6 > now)
+                            break;
+                        LastTimePressF5 = now;
                         SendKeys.SendWait("{F5}");
                     }
                     else if (state.Offset == JoystickOffset.PointOfViewControllers0)
