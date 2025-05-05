@@ -13,6 +13,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -1053,9 +1054,6 @@ namespace GameLauncher
             threadJoyStick = new Thread(PollJoystick);
             threadJoyStick.Start();
         }
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
-
         public static string MiscData = "";
         public static readonly int GamePadDown  = 18000;
         public static readonly int GamePadUp    = 0;
@@ -1112,6 +1110,8 @@ namespace GameLauncher
                 joystick.Poll();
                 if (threadJoyStickAborting == true)
                     return;
+                if (WaitingShellExecuteToComplete)
+                    continue;
                 //foreach (Joystick js in sticks) 
                 //{
                 //    JoystickUpdate lastState = js.GetBufferedData().Last();
@@ -1185,11 +1185,12 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Buttons6)
                     {
                         MiscData += "[Buttons6]"; // Back/Select button
-                        SendKeys.SendWait("{ALT}{F4}");
+                        System.Windows.Forms.Application.Exit();
                     }
                     else if (state.Offset == JoystickOffset.Buttons7)
                     {
                         MiscData += "[Buttons7]"; // Start button
+                        SendKeys.SendWait("{F5}");
                     }
                     else if (state.Offset == JoystickOffset.PointOfViewControllers0)
                     { // PointOfViewControllers0, [up]val=0, [down]val=18000,[left]val=27000,[right]val=9000
@@ -1211,6 +1212,14 @@ namespace GameLauncher
                             SendKeys.SendWait("{RIGHT}");
                         }
                     }
+                    else if (state.Offset == JoystickOffset.Buttons8)
+                    {
+                        MiscData += "[Buttons8]"; // 1st Joystick center button
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons9)
+                    {
+                        MiscData += "[Buttons9]"; // 2nd Joystick center button
+                    }
                     else
                     {
                         MiscData += "[misc]";
@@ -1230,6 +1239,34 @@ namespace GameLauncher
             foreach (ListViewItem item in myListView.SelectedItems)
                 return RomList[item.Index];
             return null;
+        }
+        public static bool WaitingShellExecuteToComplete = false;
+        private void PlaySelectedRom()
+        {
+            lock (myListView) ;
+            WaitingShellExecuteToComplete = true;
+            foreach (ListViewItem item in myListView.SelectedItems)
+            {// ToDo: Add logic so that when a ROM file has been renamed via context menu, that the rom.FilePath is fetched from the DB until GameLauncher has restarted or selected game console has changed.
+                Rom rom = RomList[item.Index];
+                if (!File.Exists(rom.FilePath))
+                {
+                    MessageBox.Show($"Error: The selected ROM file no longer exists:\n'{rom.FilePath}'", "ROM not exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
+                string emulatorExecutable = GetEmulatorExecutable(comboBoxSystem.Text, preferredEmulator);
+                string execCommand = $"\"{emulatorExecutable}\" \"{rom.FilePath}\"";
+                var prevWinState = this.WindowState;
+                this.WindowState = FormWindowState.Minimized;
+                Process process = Process.Start(new ProcessStartInfo($"\"{emulatorExecutable}\"", $"\"{rom.FilePath}\"")
+                {
+                    UseShellExecute = true
+                });
+                process.WaitForExit();
+                WaitingShellExecuteToComplete = false;
+                this.WindowState = prevWinState;
+                break; // Only get the first item....
+            }
         }
         private void myListView_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1254,15 +1291,10 @@ namespace GameLauncher
             if (rom.NotesUser.Length > 0)
                 NotesUser = $"; Ver={rom.NotesUser}";
             textBoxStatus.Text = $"{QtyPlayers}FileName='{rom.FilePath}'; FileSize={rom.RomSize}; ImagePath='{rom.ImagePath}'{Version}{Status}{NotesCore}{NotesUser}";
-            
-            //System.Text.StringBuilder messageBoxCS = new System.Text.StringBuilder();
-            //messageBoxCS.AppendFormat("{0} = {1}", "Item", e.Item);
-            //messageBoxCS.AppendLine();
-            //MessageBox.Show(messageBoxCS.ToString(), $"ItemMouseHover Event ID{e.Item.Index}");
         }
         private void myListViewContextMenu_Play_Click(object sender, EventArgs e)
         {
-            myListView_OnDbClick(sender, e);
+            PlaySelectedRom();
         }
         private void myListViewContextMenu_RenameROM_Click(object sender, EventArgs e)
         {
@@ -1357,23 +1389,7 @@ namespace GameLauncher
         }
         private void myListView_OnDbClick(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in myListView.SelectedItems)
-            {// ToDo: Add logic so that when a ROM file has been renamed via context menu, that the rom.FilePath is fetched from the DB until GameLauncher has restarted or selected game console has changed.
-                Rom rom = RomList[item.Index];
-                if (!File.Exists(rom.FilePath))
-                {
-                    MessageBox.Show($"Error: The selected ROM file no longer exists:\n'{rom.FilePath}'", "ROM not exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
-                string emulatorExecutable = GetEmulatorExecutable(comboBoxSystem.Text, preferredEmulator);
-                string execCommand = $"\"{emulatorExecutable}\" \"{rom.FilePath}\"";
-                Process.Start(new ProcessStartInfo($"\"{emulatorExecutable}\"", $"\"{rom.FilePath}\"")
-                {
-                    UseShellExecute = true
-                });
-                break; // Only get the first item....
-            }
+            PlaySelectedRom();
         }
         private void comboBoxSystem_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1396,6 +1412,20 @@ namespace GameLauncher
         private void myListView_OnFormClosing(object sender, FormClosingEventArgs e)
         {
             threadJoyStickAborting = true;
+        }
+        private long LastTimePressF5 = -1;
+        private void myListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            Point a = Cursor.Position;
+            if (e.KeyCode == Keys.F5)
+            {
+                DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+                long now = dto.ToUnixTimeSeconds();
+                if (LastTimePressF5 != -1 && LastTimePressF5 + 6 > now)
+                    return;
+                LastTimePressF5 = now;
+                PlaySelectedRom();
+            }
         }
     }
     public class PreviousCollectedImages
