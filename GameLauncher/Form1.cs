@@ -32,6 +32,7 @@ namespace GameLauncher
 {
     public partial class Form1 : Form
     {
+        public readonly string[] validRoms = { "3ds", "app", "bin", "car", "dsi", "gb", "gba", "gbc", "gcm", "gen", "gg", "ids", "iso", "md", "n64", "nds", "ngc", "ngp", "nsp", "pce", "rom", "sfc", "smc", "smd", "sms", "srl", "v64", "vpk", "wad", "xci", "xiso", "z64" };
         public const string ROM_EXTS_ALL = "ROM Files|*.3ds;*.app;*.bin;*.car;*.dat;*.dsi;*.gb;*.gba;*.gbc;*.gcm;*.gcz;*.gen;*.gg;*.ids;*.iso;*.lst;*.md;*.n64;*.nds;*.ngc;*.ngp;*.nsp;*.pce;*.rom;*.sfc;*.smc;*.smd;*.sms;*.srl;*.v64;*.vpk;*.wad;*.xci;*.xiso;*.z64|" +
             "Compress Files (*.7z,*.bz2,*.gz,*.rar,*.tar,*.zip)|*.7z;*.7zip;*.bz2;*.gz;*.gzip;*.rar;*.tar;*.tar.bz2;*.tar.gz;*.zip|" +
             "All files (*.*)|*.*";
@@ -720,6 +721,8 @@ namespace GameLauncher
         public const int MINIMUM_ZIP_SIZE = 1000; 
         private bool InitializeRomsInDatabase(string startingPath = @"C:\Emulators", string romSubFolderName = @"\roms", string imageSubFolderName = @"\images", bool createTables = false)
         {
+            Stopwatch totalProcessWatch = System.Diagnostics.Stopwatch.StartNew();
+            Stopwatch databaseCollectionWatch = System.Diagnostics.Stopwatch.StartNew();
             if (createTables) 
                 CreateSqlTables();
             // Check for master image path. Note: These images can apply to any game in any system which matches truncated name
@@ -751,10 +754,10 @@ namespace GameLauncher
                     foreach (string f in romFiles)
                     {
                         long RomSize = new System.IO.FileInfo(f).Length;
-                        string ext = Path.GetExtension(f).ToLower();
+                        string ext = Path.GetExtension(f).ToLower().TrimStart('.');
                         if (ext.Equals("sav"))
                             continue;
-                        if (RomSize < MINIMUM_ROM_SIZE)
+                        if (!validRoms.Contains(ext.ToLower()) && RomSize < MINIMUM_ROM_SIZE)
                         {
                             if (ext.Equals("zip") || ext.Equals("bin"))
                             { // There are some Atari ROM's that are smaller than 2K
@@ -773,6 +776,18 @@ namespace GameLauncher
                     GetMultiplayerRomData(emulatorDir);
                 }
             }
+            databaseCollectionWatch.Stop();
+            TimeSpan databaseCollectioElapsed = databaseCollectionWatch.Elapsed;
+            Stopwatch imageListCollectionWatch = System.Diagnostics.Stopwatch.StartNew();
+            foreach (GameSystem system in GameSystems) 
+            {
+                DisplaySystemIcons(system.Name);
+            }
+            imageListCollectionWatch.Stop();
+            totalProcessWatch.Stop();
+            TimeSpan imageListCollectionElapsed = imageListCollectionWatch.Elapsed;
+            TimeSpan totalProcessElapsed = totalProcessWatch.Elapsed;
+            MessageBox.Show($"Completed data collection DB collection time = {databaseCollectioElapsed.ToString(@"hh\:mm\:ss")} and ImageList time = {imageListCollectionElapsed.ToString(@"mm\:ss")}\nTotal time = {totalProcessElapsed.ToString(@"hh\:mm\:ss")}", "Process Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return true;
         }
         private int GetRoms(string SystemName)
@@ -1059,6 +1074,27 @@ namespace GameLauncher
         public static readonly int GamePadUp    = 0;
         public static readonly int GamePadLeft  = 27000;
         public static readonly int GamePadRight = 9000;
+        private static Dictionary<string, long> dictAvoidRepeat = new Dictionary<string, long>();
+        private static bool IsRepeat(string keys, long MaxSecondsToWait = MaxSecondsToWaitDefault)
+        {
+            keys = $"__{keys}";
+            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+            long now = dto.ToUnixTimeSeconds();
+            if (dictAvoidRepeat.ContainsKey(keys) && dictAvoidRepeat[keys] + MaxSecondsToWait > now)
+                return true;
+            dictAvoidRepeat[keys] = now;
+            return false;
+        }
+        private static bool Send_Keys(string keys, long MaxSecondsToWait = MaxSecondsToWaitDefault)
+        {
+            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+            long now = dto.ToUnixTimeSeconds();
+            if (dictAvoidRepeat.ContainsKey(keys) && dictAvoidRepeat[keys] + MaxSecondsToWait > now)
+                return false;
+            dictAvoidRepeat[keys] = now;
+            SendKeys.SendWait(keys);
+            return true;
+        }
         public static void PollJoystick()
         {
             // https://stackoverflow.com/questions/18416039/joystick-acquisition-with-sharpdx
@@ -1104,9 +1140,6 @@ namespace GameLauncher
             Joystick joystick = new Joystick(directInput, joystickGuid);
             joystick.Properties.BufferSize = 128;
             joystick.Acquire();
-            long LastTimePressF5 = -1;
-            const long MaxSecondsToWait = 5;
-
             while (threadJoyStickAborting == false)
             {
                 joystick.Poll();
@@ -1138,9 +1171,15 @@ namespace GameLauncher
                     {
                         MiscData += "[z]"; // Lower trigger [left]val=34000>, [right]val=31000>
                         if (state.Value > 34000)
-                            SendKeys.SendWait("{END}");
+                        {
+                            if (!Send_Keys("{END}"))
+                                break;
+                        }
                         else
-                            SendKeys.SendWait("{END}");
+                        {
+                            if (!Send_Keys("{F9}"))
+                                break;
+                        }
                     }
                     else if (state.Offset == JoystickOffset.RotationX)
                     {
@@ -1157,32 +1196,36 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Buttons0)
                     {
                         MiscData += "[Buttons0]"; // A button
-                        SendKeys.SendWait("+{TAB}");
+                        if (!Send_Keys("{F5}", MaxSecondsToWait_F5))
+                            break;
                     }
                     else if (state.Offset == JoystickOffset.Buttons1)
                     {
                         MiscData += "[Buttons1]"; // B button
-                        SendKeys.SendWait("{TAB}");
+                        if (!Send_Keys("{TAB}"))
+                            break;
                     }
                     else if (state.Offset == JoystickOffset.Buttons2)
                     {
                         MiscData += "[Buttons2]"; // X button
-                        SendKeys.SendWait("{PGDN}");
+                        Send_Keys("{PGDN}");
                     }
                     else if (state.Offset == JoystickOffset.Buttons3)
                     {
                         MiscData += "[Buttons3]"; // Y button
-                        SendKeys.SendWait("{PGUP}");
+                        Send_Keys("{PGUP}");
                     }
                     else if (state.Offset == JoystickOffset.Buttons4)
                     {
                         MiscData += "[Buttons4]"; // Left upper trigger
-                        SendKeys.SendWait("{HOME}");
+                        if (!Send_Keys("{HOME}"))
+                            break;
                     }
                     else if (state.Offset == JoystickOffset.Buttons5)
                     {
                         MiscData += "[Buttons5]"; // Right upper trigger
-                        SendKeys.SendWait("{HOME}");
+                        if (!Send_Keys("{F8}"))
+                            break;
                     }
                     else if (state.Offset == JoystickOffset.Buttons6)
                     {
@@ -1192,52 +1235,32 @@ namespace GameLauncher
                     else if (state.Offset == JoystickOffset.Buttons7)
                     {
                         MiscData += "[Buttons7]"; // Start button
-                        DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-                        long now = dto.ToUnixTimeSeconds();
-                        if (LastTimePressF5 != -1 && LastTimePressF5 + MaxSecondsToWait > now)
+                        if (!Send_Keys("{F5}", MaxSecondsToWait_F5))
                             break;
-                        LastTimePressF5 = now;
-                        SendKeys.SendWait("{F5}");
                     }
                     else if (state.Offset == JoystickOffset.PointOfViewControllers0)
                     { // PointOfViewControllers0, [up]val=0, [down]val=18000,[left]val=27000,[right]val=9000
                         MiscData += $"[PointOfViewControllers0 {state.Value}]";
                         if (GamePadUp == state.Value)
-                        {
                             SendKeys.SendWait("{UP}");
-                        }
                         else if (GamePadDown == state.Value)
-                        {
                             SendKeys.SendWait("{DOWN}");
-                        }
                         else if (GamePadLeft == state.Value)
-                        {
                             SendKeys.SendWait("{LEFT}");
-                        }
                         else if (GamePadRight == state.Value)
-                        {
                             SendKeys.SendWait("{RIGHT}");
-                        }
                     }
                     else if (state.Offset == JoystickOffset.Buttons8)
                     {
                         MiscData += "[Buttons8]"; // 1st Joystick center button
-                        DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-                        long now = dto.ToUnixTimeSeconds();
-                        if (LastTimePressF5 != -1 && LastTimePressF5 + MaxSecondsToWait > now)
+                        if (!Send_Keys("{F6}"))
                             break;
-                        LastTimePressF5 = now;
-                        SendKeys.SendWait("{F5}");
                     }
                     else if (state.Offset == JoystickOffset.Buttons9)
                     {
                         MiscData += "[Buttons9]"; // 2nd Joystick center button
-                        DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-                        long now = dto.ToUnixTimeSeconds();
-                        if (LastTimePressF5 != -1 && LastTimePressF5 + MaxSecondsToWait > now)
+                        if (!Send_Keys("{F4}"))
                             break;
-                        LastTimePressF5 = now;
-                        SendKeys.SendWait("{F5}");
                     }
                     else
                     {
@@ -1432,19 +1455,69 @@ namespace GameLauncher
         {
             threadJoyStickAborting = true;
         }
-        private long LastTimePressF5 = -1;
+        const long MaxSecondsToWait_F5 = 5;
+        const long MaxSecondsToWaitDefault = 2;
         private void myListView_KeyDown(object sender, KeyEventArgs e)
         {
-            Point a = Cursor.Position;
-            if (e.KeyCode == Keys.F5)
+            if (e.KeyCode == Keys.F2)
             {
-                DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-                long now = dto.ToUnixTimeSeconds();
-                if (LastTimePressF5 != -1 && LastTimePressF5 + 6 > now)
+                if (comboBoxSystem.SelectedIndex == 0)
+                    comboBoxSystem.SelectedIndex = comboBoxSystem.Items.Count - 1;
+                else
+                    comboBoxSystem.SelectedIndex -= 1;
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                if (comboBoxSystem.SelectedIndex == comboBoxSystem.Items.Count - 1)
+                    comboBoxSystem.SelectedIndex = 0;
+                else
+                    comboBoxSystem.SelectedIndex += 1;
+            }
+            else if (e.KeyCode == Keys.F5)
+            {
+                if (IsRepeat("F5", MaxSecondsToWait_F5))
                     return;
-                LastTimePressF5 = now;
                 PlaySelectedRom();
             }
+            else if (e.KeyCode == Keys.F6)
+            {
+                if (IsRepeat("F6"))
+                    return;
+                if (this.WindowState == FormWindowState.Normal)
+                    this.WindowState = FormWindowState.Maximized;
+                else if (this.WindowState == FormWindowState.Maximized)
+                    this.WindowState = FormWindowState.Normal;
+            }
+            else if (e.KeyCode == Keys.F7)
+            {
+                if (IsRepeat("F7"))
+                    return;
+                this.WindowState = FormWindowState.Minimized;
+            }
+            else if (e.KeyCode == Keys.F8)
+            {
+                if (IsRepeat("F8"))
+                    return;
+                if (comboBoxIconDisplay.SelectedIndex == 2)
+                    comboBoxIconDisplay.SelectedIndex = 0;
+                else
+                    comboBoxIconDisplay.SelectedIndex += 1;
+            }
+            else if (e.KeyCode == Keys.F9)
+            {
+                if (IsRepeat("F9"))
+                    return;
+                if (comboBoxIconDisplay.SelectedIndex == 0)
+                    comboBoxIconDisplay.SelectedIndex = 2;
+                else
+                    comboBoxIconDisplay.SelectedIndex -= 1;
+            }
+            else if (e.KeyCode == Keys.F10)
+                comboBoxIconDisplay.SelectedIndex = 0;
+            else if (e.KeyCode == Keys.F11)
+                comboBoxIconDisplay.SelectedIndex = 1;
+            else if (e.KeyCode == Keys.F12)
+                comboBoxIconDisplay.SelectedIndex = 2;
         }
     }
     public class PreviousCollectedImages

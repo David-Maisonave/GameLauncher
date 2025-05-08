@@ -58,7 +58,7 @@
             this.myListView.Name = "myListView";
             this.myListView.ShowGroups = false;
             this.myListView.ShowItemToolTips = true;
-            this.myListView.Size = new System.Drawing.Size(944, 690);
+            this.myListView.Size = new System.Drawing.Size(944, 683);
             this.myListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.myListView.TabIndex = 0;
             this.myListView.UseCompatibleStateImageBehavior = false;
@@ -95,7 +95,7 @@
             this.textBoxStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxStatus.Location = new System.Drawing.Point(18, 742);
+            this.textBoxStatus.Location = new System.Drawing.Point(18, 726);
             this.textBoxStatus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxStatus.Name = "textBoxStatus";
             this.textBoxStatus.ReadOnly = true;
