@@ -25,6 +25,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
 
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
@@ -75,18 +76,39 @@ namespace GameLauncher
                     File.Move(f, newName);
             }
         }
+        private const int MaxNumberThreadPerList = 6; // ToDo: Make this user changeable but with maximum of 20
+        // Note: Below results show that there's very little difference when using more than 6 threads
+        // Performance for 1959 Roms (NES)
+        // 1  Threads = 26.56 seconds
+        // 2  Threads = 17.51 seconds
+        // 4  Threads = 15.56 seconds
+        // 6  Threads = 14.46 seconds
+        // 8  Threads = 14.44 seconds
+        // 10 Threads = 14.44 seconds
+        // 16 Threads = 14.44 seconds
+        // 20 Threads = 14.44 seconds
         static ImageList[] tmpImageList1 = null;
         static ImageList[] tmpImageList2 = null;
         static List<int> StartPosList = null;
         static List<Rom> RomList = new List<Rom>();
+        class ProcessImageListThreadDetails
+        {
+            public int setID;
+            public int listID;
+            public int startPos;
+            public int lastPos;
+        }
+        static ProcessImageListThreadDetails[] processImageListThreadDetails = new ProcessImageListThreadDetails[MaxNumberThreadPerList * 2];
 
         static void ProcessImageListTask(int setId, int listID, int startPos, int lastPos)
         {
+            if (tmpImageList1 == null || tmpImageList2 == null)
+                return;
             Console.WriteLine($"Starting set{setId} with list{listID}. Start pos={startPos} and last pos={lastPos}.");
             for (int i = startPos; i < lastPos; i++)
             {
                 if (setId == 0)
-                    tmpImageList1[listID].Images.Add(System.Drawing.Image.FromFile(RomList[i].ImagePath));
+                    tmpImageList1[listID].Images.Add(System.Drawing.Image.FromFile(RomList[index: i].ImagePath));
                 else
                     tmpImageList2[listID].Images.Add(System.Drawing.Image.FromFile(RomList[i].ImagePath));
 
@@ -96,6 +118,48 @@ namespace GameLauncher
             else
                 Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList2[listID].Images.Count}.");
         }
+        static void ProcessImageListTask(int idx) => ProcessImageListTask(processImageListThreadDetails[idx].setID, processImageListThreadDetails[idx].listID, processImageListThreadDetails[idx].startPos, processImageListThreadDetails[idx].lastPos);
+        static void ProcessImageList1Task0() => ProcessImageListTask(0);
+        static void ProcessImageList1Task1() => ProcessImageListTask(1);
+        static void ProcessImageList1Task2() => ProcessImageListTask(2);
+        static void ProcessImageList1Task3() => ProcessImageListTask(3);
+        static void ProcessImageList1Task4() => ProcessImageListTask(4);
+        static void ProcessImageList1Task5() => ProcessImageListTask(5);
+        static void ProcessImageList1Task6() => ProcessImageListTask(6);
+        static void ProcessImageList1Task7() => ProcessImageListTask(7);
+        static void ProcessImageList1Task8() => ProcessImageListTask(8);
+        static void ProcessImageList1Task9() => ProcessImageListTask(9);
+        static void ProcessImageList1Task10() => ProcessImageListTask(10);
+        static void ProcessImageList1Task11() => ProcessImageListTask(11);
+        static void ProcessImageList1Task12() => ProcessImageListTask(12);
+        static void ProcessImageList1Task13() => ProcessImageListTask(13);
+        static void ProcessImageList1Task14() => ProcessImageListTask(14);
+        static void ProcessImageList1Task15() => ProcessImageListTask(15);
+        static void ProcessImageList1Task16() => ProcessImageListTask(16);
+        static void ProcessImageList1Task17() => ProcessImageListTask(17);
+        static void ProcessImageList1Task18() => ProcessImageListTask(18);
+        static void ProcessImageList1Task19() => ProcessImageListTask(19);
+        static void ProcessImageList2Task0() => ProcessImageListTask(MaxNumberThreadPerList + 0);
+        static void ProcessImageList2Task1() => ProcessImageListTask(MaxNumberThreadPerList + 1);
+        static void ProcessImageList2Task2() => ProcessImageListTask(MaxNumberThreadPerList + 2);
+        static void ProcessImageList2Task3() => ProcessImageListTask(MaxNumberThreadPerList + 3);
+        static void ProcessImageList2Task4() => ProcessImageListTask(MaxNumberThreadPerList + 4);
+        static void ProcessImageList2Task5() => ProcessImageListTask(MaxNumberThreadPerList + 5);
+        static void ProcessImageList2Task6() => ProcessImageListTask(MaxNumberThreadPerList + 6);
+        static void ProcessImageList2Task7() => ProcessImageListTask(MaxNumberThreadPerList + 7);
+        static void ProcessImageList2Task8() => ProcessImageListTask(MaxNumberThreadPerList + 8);
+        static void ProcessImageList2Task9() => ProcessImageListTask(MaxNumberThreadPerList + 9);
+        static void ProcessImageList2Task10() => ProcessImageListTask(MaxNumberThreadPerList + 10);
+        static void ProcessImageList2Task11() => ProcessImageListTask(MaxNumberThreadPerList + 11);
+        static void ProcessImageList2Task12() => ProcessImageListTask(MaxNumberThreadPerList + 12);
+        static void ProcessImageList2Task13() => ProcessImageListTask(MaxNumberThreadPerList + 13);
+        static void ProcessImageList2Task14() => ProcessImageListTask(MaxNumberThreadPerList + 14);
+        static void ProcessImageList2Task15() => ProcessImageListTask(MaxNumberThreadPerList + 15);
+        static void ProcessImageList2Task16() => ProcessImageListTask(MaxNumberThreadPerList + 16);
+        static void ProcessImageList2Task17() => ProcessImageListTask(MaxNumberThreadPerList + 17);
+        static void ProcessImageList2Task18() => ProcessImageListTask(MaxNumberThreadPerList + 18);
+        static void ProcessImageList2Task19() => ProcessImageListTask(MaxNumberThreadPerList + 19);
+
         public List<GameSystem> GameSystems = new List<GameSystem>();
         SqliteConnection connection = null;
         private string ConvertToSimplifiedName(string name,
@@ -781,6 +845,7 @@ namespace GameLauncher
             Stopwatch imageListCollectionWatch = System.Diagnostics.Stopwatch.StartNew();
             foreach (GameSystem system in GameSystems) 
             {
+                DeleteImageList(system.Name);
                 DisplaySystemIcons(system.Name);
             }
             imageListCollectionWatch.Stop();
@@ -838,10 +903,24 @@ namespace GameLauncher
             }
             return RomList.Count;
         }
+        private string GetImageListFile(string systemName, int index)
+        {
+            string imageListSuffix = index == 1 ? ".ImageList1.GameLauncher" : ".ImageList2.GameLauncher";
+            return Path.Combine(dataDirPath, $"Cache_{systemName}{imageListSuffix}");
+        }
+        private void DeleteImageList(string systemName)
+        {
+            string imageList1Path = GetImageListFile(systemName, 1);
+            string imageList2Path = GetImageListFile(systemName, 2);
+            if (File.Exists(imageList1Path))
+                File.Delete(imageList1Path);
+            if (File.Exists(imageList2Path))
+                File.Delete(imageList2Path);
+        }
         private PreviousCollectedImages GetSavedCollectionData(string systemName)
         {
-            string imageList1Path = Path.Combine(dataDirPath, $"GameLauncher_{systemName}.ImageList1.collection");
-            string imageList2Path = Path.Combine(dataDirPath, $"GameLauncher_{systemName}.ImageList2.collection");
+            string imageList1Path = GetImageListFile(systemName, 1);
+            string imageList2Path = GetImageListFile(systemName, 2);
             if (File.Exists(imageList1Path) && File.Exists(imageList2Path))
             {
                 PreviousCollectedImages previousCollectedImages = new PreviousCollectedImages();
@@ -854,8 +933,9 @@ namespace GameLauncher
         }
         private void SaveCollectionData(string systemName, PreviousCollectedImages previousCollectedImages)
         {
-            string imageList1Path = Path.Combine(dataDirPath, $"GameLauncher_{systemName}.ImageList1.collection");
-            string imageList2Path = Path.Combine(dataDirPath, $"GameLauncher_{systemName}.ImageList2.collection");
+            DeleteImageList(systemName);
+            string imageList1Path = GetImageListFile(systemName, 1);
+            string imageList2Path = GetImageListFile(systemName, 2);
             SerializableImageList.Save(previousCollectedImages.list1, imageList1Path);
             SerializableImageList.Save(previousCollectedImages.list2, imageList2Path);
         }
@@ -864,8 +944,7 @@ namespace GameLauncher
         private Dictionary<string, PreviousCollectedData> previousCollections = new Dictionary<string, PreviousCollectedData>();
         private const int largeIconSize = 128;
         private const int smallIconSize = 32;
-        private const int MaxNumberThreadPerList = 2; // ToDo: Make this user changeable
-        public bool DisplaySystemIcons(string systemName, bool usePreviousCollectionCache = false)
+        public bool DisplaySystemIcons(string systemName, bool usePreviousCollectionCache = false, bool doMultithreading = true)
         {
             textBoxStatus.Text = $"Collecting ROM data for {systemName}. Please standby....";
             if (usePreviousCollectionCache && previousCollections.ContainsKey(systemName))
@@ -897,7 +976,7 @@ namespace GameLauncher
                     System.Windows.Forms.ImageList myImageList2 = new ImageList();
                     //set the image size smaller than the first imageList...
                     myImageList2.ImageSize = new Size(smallIconSize, smallIconSize);
-                    if (false && RomList.Count > MaxNumberThreadPerList * 3)
+                    if (doMultithreading && RomList.Count > MaxNumberThreadPerList * 3)
                     { // !!!!! There's a bug in this code. Don't use until issue is resolve !!!!!
                         StartPosList = new List<int>();
                         tmpImageList1 = new ImageList[MaxNumberThreadPerList];
@@ -906,22 +985,118 @@ namespace GameLauncher
                         {
                             StartPosList.Add(RomList.Count / MaxNumberThreadPerList * i);
 
-                            //ImageList tmpImage1 = new ImageList();
-                            //tmpImage1.ImageSize = new Size(largeIconSize, largeIconSize);
-                            tmpImageList1[i] = myImageList1; // tmpImage1;
-                                                             //ImageList tmpImage2 = new ImageList();
-                                                             //tmpImage2.ImageSize = new Size(smallIconSize, smallIconSize);
-                            tmpImageList2[i] = myImageList2; // tmpImage2;
+                            ImageList tmpImage1 = new ImageList();
+                            tmpImage1.ImageSize = new Size(largeIconSize, largeIconSize);
+                            tmpImageList1[i] = tmpImage1;
+                            ImageList tmpImage2 = new ImageList();
+                            tmpImage2.ImageSize = new Size(smallIconSize, smallIconSize);
+                            tmpImageList2[i] = tmpImage2;
                         }
                         StartPosList.Add(RomList.Count);
                         Task[] tasks = new Task[MaxNumberThreadPerList * 2];
                         for (int idx = 0; idx < MaxNumberThreadPerList; ++idx)
                         {
-                            tasks[idx] = Task.Run(() => ProcessImageListTask(0, idx, StartPosList[idx], StartPosList[idx + 1]));
-                            tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageListTask(1, idx, StartPosList[idx], StartPosList[idx + 1]));
+                            processImageListThreadDetails[idx] = new ProcessImageListThreadDetails();
+                            processImageListThreadDetails[idx + MaxNumberThreadPerList] = new ProcessImageListThreadDetails();
+                            processImageListThreadDetails[idx].setID = 0;
+                            processImageListThreadDetails[idx + MaxNumberThreadPerList].setID = 1;
+                            processImageListThreadDetails[idx].listID = idx;
+                            processImageListThreadDetails[idx + MaxNumberThreadPerList].listID = idx;
+                            processImageListThreadDetails[idx].startPos = StartPosList[idx];
+                            processImageListThreadDetails[idx + MaxNumberThreadPerList].startPos = StartPosList[idx];
+                            processImageListThreadDetails[idx].lastPos = StartPosList[idx + 1];
+                            processImageListThreadDetails[idx + MaxNumberThreadPerList].lastPos = StartPosList[idx + 1];
+                            switch (idx)
+                            {
+                                case 0:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task0());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task0());
+                                    break;
+                                case 1:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task1());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task1());
+                                    break;
+                                case 2:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task2());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task2());
+                                    break;
+                                case 3:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task3());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task3());
+                                    break;
+                                case 4:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task4());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task4());
+                                    break;
+                                case 5:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task5());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task5());
+                                    break;
+                                case 6:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task6());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task6());
+                                    break;
+                                case 7:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task7());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task7());
+                                    break;
+                                case 8:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task8());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task8());
+                                    break;
+                                case 9:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task9());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task9());
+                                    break;
+                                case 10:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task10());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task10());
+                                    break;
+                                case 11:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task11());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task11());
+                                    break;
+                                case 12:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task12());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task12());
+                                    break;
+                                case 13:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task13());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task13());
+                                    break;
+                                case 14:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task14());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task14());
+                                    break;
+                                case 15:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task15());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task15());
+                                    break;
+                                case 16:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task16());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task16());
+                                    break;
+                                case 17:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task17());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task17());
+                                    break;
+                                case 18:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task18());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task18());
+                                    break;
+                                case 19:
+                                    tasks[idx] = Task.Run(() => ProcessImageList1Task19());
+                                    tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageList2Task19());
+                                    break;
+                            }
+                            // Both below method crashed!!! Do not use!!!
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //tasks[idx] = Task.Run(() => ProcessImageListTask(0, idx, StartPosList[idx], StartPosList[idx + 1]));
+                            //tasks[idx + MaxNumberThreadPerList] = Task.Run(() => ProcessImageListTask(1, idx, StartPosList[idx], StartPosList[idx + 1]));
 
                             //tasks[idx] =                            Task.Factory.StartNew(() => ProcessImageListTask(0, idx, StartPosList[idx], StartPosList[idx + 1]));
                             //tasks[idx + MaxNumberThreadPerList] =   Task.Factory.StartNew(() => ProcessImageListTask(1, idx, StartPosList[idx], StartPosList[idx + 1]));
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         }
                         //Task.WaitAll(tasks[1]);
                         Task.WaitAll(tasks);
@@ -963,6 +1138,8 @@ namespace GameLauncher
             // ListViewItemToolTipChanged; SetItemText(item.Index, 0, item.Text);
             for (int i = 0; i < RomList.Count; i++)
                  myListView.Items.Add(RomList[i].Title, i);
+            ListViewItem it = myListView.Items[0];
+            myListView.Items[0] = it;
             textBoxStatus.Text = $"{RomList.Count} Games (ROM's) found for {systemName}";
             return true;
         }
@@ -1367,6 +1544,7 @@ namespace GameLauncher
                 UpdateDB($"DELETE FROM Roms WHERE FilePath = \"{saveFileDialog.FileName}\"");
             UpdateDB($"UPDATE Roms SET FilePath = \"{saveFileDialog.FileName}\" WHERE FilePath = \"{rom.FilePath}\"");
             MessageBox.Show($"ROM '{rom.Title}' renamed to '{saveFileDialog.FileName}'.");
+            DeleteImageList(comboBoxSystem.Text);
         }
         private void myListViewContextMenu_DeleteROM_Click(object sender, EventArgs e)
         {
@@ -1377,14 +1555,67 @@ namespace GameLauncher
             {
                 File.Delete(rom.FilePath);
                 UpdateDB($"DELETE FROM Roms WHERE FilePath = \"{rom.FilePath}\"");
+                DeleteImageList(comboBoxSystem.Text);
             }
         }
         private void myListViewContextMenu_AssignPreferredEmulator_Click(object sender, EventArgs e)
-        {// ToDo: 
-            //if (e.Alt)
-            //{
-            //    MessageBox.Show("Alt key was pressed!");
-            //}
+        {// ToDo:
+            Rom rom = GetSelectedROM();
+            if (rom == null)
+                return;
+            int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
+            string emulatorExecutable = GetEmulatorExecutable(comboBoxSystem.Text, preferredEmulator);
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = $"Emulator Executable File (*.exe)|*.exe|All Files (*.*)|*.*";
+            saveFileDialog.Title = "Select preferred emulator executable";
+            saveFileDialog.FileName = emulatorExecutable;
+            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(emulatorExecutable);
+            saveFileDialog.CheckFileExists = true;
+            DialogResult results = saveFileDialog.ShowDialog();
+            if (results == DialogResult.Cancel)
+                return;
+            if (saveFileDialog.FileName == "" || !File.Exists(saveFileDialog.FileName))
+            {
+                MessageBox.Show($"Error: Entered invalid file name for emulator", "Invalid Name!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (saveFileDialog.FileName.ToLower().Equals(rom.FilePath.ToLower()))
+            {
+                MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // Check if selected emulator already exists in DB
+            int emulatorIndex = -1;
+            int lastPopulatedEmulator = -1;
+            for (int i = 1; i < 11; i++)
+            {
+                string sql = $"SELECT EmulatorPath{i} FROM GameSystems WHERE Name like \"{comboBoxSystem.Text}\"";
+                string s = GetFirstColStr(sql);
+                if (s != null && s.Length > 0)
+                {
+                    if (s.ToLower().Equals(saveFileDialog.FileName.ToLower()))
+                    {
+                        emulatorIndex = i;
+                        break;
+                    }
+                    lastPopulatedEmulator = i;
+                }
+            }
+            if (emulatorIndex == -1)
+            {// Add emulator to DB
+                if (lastPopulatedEmulator == 10)
+                {
+                    MessageBox.Show($"Error: Can not set emulator because there's already 10 emulators associated with game console system {comboBoxSystem.Text}", "Can not set emulator!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                emulatorIndex = lastPopulatedEmulator + 1;
+                UpdateDB($"UPDATE GameSystems SET EmulatorPath{emulatorIndex} = \"{saveFileDialog.FileName}\" WHERE Name like \"{comboBoxSystem.Text}\"");
+            }
+            if (emulatorIndex != -1)
+            {
+                UpdateDB($"UPDATE Roms SET PreferredEmulator = {emulatorIndex} WHERE FilePath LIKE \"{rom.FilePath}\"");
+                MessageBox.Show($"Emulator updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
         private void myListView_button_Rescan_Click(object sender, EventArgs e)
         {// ToDo: 
@@ -1414,6 +1645,7 @@ namespace GameLauncher
             // ToDo: Add logic to see if the image is in the DB, and if so, get the imageID. If not in DB, than add it, and than get the imageID.
             UpdateDB($"UPDATE Roms SET ImagePath = \"{saveFileDialog.FileName}\", ImageID = -1 WHERE FilePath = \"{rom.FilePath}\"");
             MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
+            DeleteImageList(comboBoxSystem.Text);
         }
         private void myListViewContextMenu_ChangeTitle_Click(object sender, EventArgs e)
         {// ToDo: using Microsoft.VisualBasic;

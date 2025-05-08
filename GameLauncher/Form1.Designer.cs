@@ -70,6 +70,7 @@
             // 
             // comboBoxSystem
             // 
+            this.comboBoxSystem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSystem.FormattingEnabled = true;
             this.comboBoxSystem.Location = new System.Drawing.Point(18, 2);
             this.comboBoxSystem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -81,6 +82,7 @@
             // 
             // comboBoxIconDisplay
             // 
+            this.comboBoxIconDisplay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxIconDisplay.FormattingEnabled = true;
             this.comboBoxIconDisplay.Location = new System.Drawing.Point(266, 2);
             this.comboBoxIconDisplay.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -114,7 +116,7 @@
             this.toolStripMenuItemChangeAssignedImage,
             this.toolStripMenuItemChangeTitle});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(291, 196);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(291, 229);
             // 
             // toolStripMenuItemPlayRom
             // 
@@ -154,7 +156,6 @@
             // toolStripMenuItemChangeAssignedImage
             // 
             this.toolStripMenuItemChangeAssignedImage.AutoToolTip = true;
-            this.toolStripMenuItemChangeAssignedImage.Enabled = false;
             this.toolStripMenuItemChangeAssignedImage.Name = "toolStripMenuItemChangeAssignedImage";
             this.toolStripMenuItemChangeAssignedImage.Size = new System.Drawing.Size(290, 32);
             this.toolStripMenuItemChangeAssignedImage.Text = "Change Assigned Image";
