@@ -59,7 +59,6 @@
             this.myListView.ShowGroups = false;
             this.myListView.ShowItemToolTips = true;
             this.myListView.Size = new System.Drawing.Size(944, 683);
-            this.myListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.myListView.TabIndex = 0;
             this.myListView.UseCompatibleStateImageBehavior = false;
             this.myListView.ItemMouseHover += new System.Windows.Forms.ListViewItemMouseHoverEventHandler(this.myListView_ItemMouseHover);
@@ -116,7 +115,7 @@
             this.toolStripMenuItemChangeAssignedImage,
             this.toolStripMenuItemChangeTitle});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(291, 229);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(291, 196);
             // 
             // toolStripMenuItemPlayRom
             // 

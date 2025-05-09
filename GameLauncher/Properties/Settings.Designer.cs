@@ -22,5 +22,41 @@ namespace GameLauncher.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DbPath {
+            get {
+                return ((string)(this["DbPath"]));
+            }
+            set {
+                this["DbPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultImagePath {
+            get {
+                return ((string)(this["DefaultImagePath"]));
+            }
+            set {
+                this["DefaultImagePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EmulatorsBasePath {
+            get {
+                return ((string)(this["EmulatorsBasePath"]));
+            }
+            set {
+                this["EmulatorsBasePath"] = value;
+            }
+        }
     }
 }
