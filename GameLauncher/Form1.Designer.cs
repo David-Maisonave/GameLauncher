@@ -43,6 +43,7 @@
             this.toolStripMenuItemChangeTitle = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip_Info = new System.Windows.Forms.ToolTip(this.components);
             this.button_Rescan = new System.Windows.Forms.Button();
+            this.button_Settings = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +63,6 @@
             this.myListView.TabIndex = 0;
             this.myListView.UseCompatibleStateImageBehavior = false;
             this.myListView.ItemMouseHover += new System.Windows.Forms.ListViewItemMouseHoverEventHandler(this.myListView_ItemMouseHover);
-            this.myListView.SelectedIndexChanged += new System.EventHandler(this.myListView_SelectedIndexChanged);
             this.myListView.DoubleClick += new System.EventHandler(this.myListView_OnDbClick);
             this.myListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.myListView_KeyDown);
             this.myListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.myListView_MouseClick);
@@ -145,7 +145,6 @@
             // toolStripMenuItemAssignPreferredEmulator
             // 
             this.toolStripMenuItemAssignPreferredEmulator.AutoToolTip = true;
-            this.toolStripMenuItemAssignPreferredEmulator.Enabled = false;
             this.toolStripMenuItemAssignPreferredEmulator.Name = "toolStripMenuItemAssignPreferredEmulator";
             this.toolStripMenuItemAssignPreferredEmulator.Size = new System.Drawing.Size(290, 32);
             this.toolStripMenuItemAssignPreferredEmulator.Text = "Assign Preferred Emulator";
@@ -190,17 +189,31 @@
             this.button_Rescan.Name = "button_Rescan";
             this.button_Rescan.Size = new System.Drawing.Size(140, 32);
             this.button_Rescan.TabIndex = 8;
-            this.button_Rescan.Text = "Rescan ROM";
+            this.button_Rescan.TabStop = false;
+            this.button_Rescan.Text = "&Rescan ROM";
             this.toolTip_Info.SetToolTip(this.button_Rescan, "Rescan ROM files for selected game console system.");
             this.button_Rescan.UseVisualStyleBackColor = true;
-            this.button_Rescan.Visible = false;
             this.button_Rescan.Click += new System.EventHandler(this.myListView_button_Rescan_Click);
+            // 
+            // button_Settings
+            // 
+            this.button_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_Settings.Location = new System.Drawing.Point(822, -2);
+            this.button_Settings.Name = "button_Settings";
+            this.button_Settings.Size = new System.Drawing.Size(140, 32);
+            this.button_Settings.TabIndex = 9;
+            this.button_Settings.TabStop = false;
+            this.button_Settings.Text = "&Settings";
+            this.toolTip_Info.SetToolTip(this.button_Settings, "Select changes to default settings");
+            this.button_Settings.UseVisualStyleBackColor = true;
+            this.button_Settings.Click += new System.EventHandler(this.button_Settings_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 788);
+            this.Controls.Add(this.button_Settings);
             this.Controls.Add(this.button_Rescan);
             this.Controls.Add(this.textBoxStatus);
             this.Controls.Add(this.comboBoxIconDisplay);
@@ -231,6 +244,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemChangeTitle;
         private System.Windows.Forms.ToolTip toolTip_Info;
         private System.Windows.Forms.Button button_Rescan;
+        private System.Windows.Forms.Button button_Settings;
     }
 }
 

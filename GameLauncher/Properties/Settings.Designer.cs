@@ -58,5 +58,65 @@ namespace GameLauncher.Properties {
                 this["EmulatorsBasePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool usePreviousCollectionCache {
+            get {
+                return ((bool)(this["usePreviousCollectionCache"]));
+            }
+            set {
+                this["usePreviousCollectionCache"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int MaxNumberOfPairThreadsPerList {
+            get {
+                return ((int)(this["MaxNumberOfPairThreadsPerList"]));
+            }
+            set {
+                this["MaxNumberOfPairThreadsPerList"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("128")]
+        public int largeIconSize {
+            get {
+                return ((int)(this["largeIconSize"]));
+            }
+            set {
+                this["largeIconSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32")]
+        public int smallIconSize {
+            get {
+                return ((int)(this["smallIconSize"]));
+            }
+            set {
+                this["smallIconSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool useJoystickController {
+            get {
+                return ((bool)(this["useJoystickController"]));
+            }
+            set {
+                this["useJoystickController"] = value;
+            }
+        }
     }
 }
