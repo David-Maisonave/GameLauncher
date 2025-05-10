@@ -118,5 +118,29 @@ namespace GameLauncher.Properties {
                 this["useJoystickController"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool disableAdvanceOptions {
+            get {
+                return ((bool)(this["disableAdvanceOptions"]));
+            }
+            set {
+                this["disableAdvanceOptions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Maximised {
+            get {
+                return ((bool)(this["Maximised"]));
+            }
+            set {
+                this["Maximised"] = value;
+            }
+        }
     }
 }

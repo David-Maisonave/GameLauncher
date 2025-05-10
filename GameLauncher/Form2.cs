@@ -33,6 +33,7 @@ namespace GameLauncher
             textBox_DefaultImagePath.Text = Properties.Settings.Default.DefaultImagePath;
             checkBox_usePreviousCollectionCache.Checked = Properties.Settings.Default.usePreviousCollectionCache;
             checkBox_useJoystickController.Checked = Properties.Settings.Default.useJoystickController;
+            checkBox_disableAdvanceOptions.Checked = Properties.Settings.Default.disableAdvanceOptions;
 
             InitialLargeIconSize = Properties.Settings.Default.largeIconSize;
             InitialSmallIconSize = Properties.Settings.Default.smallIconSize;
@@ -55,6 +56,7 @@ namespace GameLauncher
             }
             if (!AllowedSmallIconSize.Contains((int)numericUpDown_smallIconSize.Value))
                 numericUpDown_largeIconSize.Value = numericUpDown_smallIconSize.Value > 32 ? 64 : 32;
+            Properties.Settings.Default.disableAdvanceOptions = checkBox_disableAdvanceOptions.Checked;
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
             Properties.Settings.Default.usePreviousCollectionCache = checkBox_usePreviousCollectionCache.Checked;
             Properties.Settings.Default.DbPath = textBox_DbPath.Text;
@@ -153,6 +155,11 @@ namespace GameLauncher
                 return;
             }
             textBox_DefaultImagePath.Text = saveFileDialog.FileName;
+        }
+        private void LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            linkLabel_Github_GameLauncher.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://github.com/David-Maisonave/GameLauncher");
         }
     }
 }

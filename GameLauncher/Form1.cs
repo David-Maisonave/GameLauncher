@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 
 using SharpDX.DirectInput;
+using SharpDX.Multimedia;
 
 using Shell32;
 
@@ -706,6 +707,15 @@ namespace GameLauncher
                 var x = command.ExecuteNonQuery();
             }
         }
+        private void UpdateRomInDb(Rom rom)
+        {
+            if (rom == null)
+                return;
+            string sql = $"INSERT OR REPLACE INTO Roms (NameSimplified, System, FilePath, NameOrg, Title, Compressed, ImageID, ImagePath, Region, Language, Status, Version, NotesCore, RomSize, PreferredEmulator, QtyPlayers, Developer, ReleaseDate, Genre, NotesUser, FileFormat, Description) VALUES" +
+            $" (\"{rom.NameSimplified}\", {rom.System}, \"{rom.FilePath}\", \"{rom.NameOrg}\", \"{rom.Title}\", \"{rom.Compressed}\", {rom.ImageID}, \"{rom.ImagePath}\", \"{rom.Region}\", \"{rom.Language}\", \"{rom.Status}\", \"{rom.Version}\", \"{rom.NotesCore}\", {rom.RomSize}, {rom.PreferredEmulatorID}, {rom.QtyPlayers}, \"{rom.Developer}\", \"{rom.ReleaseDate}\", \"{rom.Genre}\", \"{rom.NotesUser}\", \"{rom.FileFormat}\", \"{rom.Description}\")";
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            command.ExecuteNonQuery();
+        }
         public const int MINIMUM_ROM_SIZE = 10000; // NES has "Demo Boy 2" which is 1948 bytes. Next smallest is "NES PowerPad Test Cart" at 2,598 bytes.
         public const int MINIMUM_ZIP_SIZE = 1000;
         private string romSubFolderName = @"\roms";
@@ -743,11 +753,7 @@ namespace GameLauncher
                         else
                             continue;
                     }
-                    Rom rom = GetRomDetails(f, systemIndex, RomSize);
-                    sql = $"INSERT OR REPLACE INTO Roms (NameSimplified, System, FilePath, NameOrg, Title, Compressed, ImageID, ImagePath, Region, Language, Status, Version, NotesCore, RomSize, PreferredEmulator, QtyPlayers, Developer, ReleaseDate, Genre, NotesUser, FileFormat, Description) VALUES" +
-                        $" (\"{rom.NameSimplified}\", {systemIndex}, \"{f}\", \"{rom.NameOrg}\", \"{rom.Title}\", \"{rom.Compressed}\", {rom.ImageID}, \"{rom.ImagePath}\", \"{rom.Region}\", \"{rom.Language}\", \"{rom.Status}\", \"{rom.Version}\", \"{rom.NotesCore}\", {rom.RomSize}, {rom.PreferredEmulatorID}, {rom.QtyPlayers}, \"{rom.Developer}\", \"{rom.ReleaseDate}\", \"{rom.Genre}\", \"{rom.NotesUser}\", \"{rom.FileFormat}\", \"{rom.Description}\")";
-                    command = new SqliteCommand(sql, connection);
-                    x = command.ExecuteNonQuery();
+                    UpdateRomInDb(GetRomDetails(f, systemIndex, RomSize));
                 }
                 GetMultiplayerRomData(emulatorDir);
             }
@@ -818,6 +824,7 @@ namespace GameLauncher
             }
             findEmulatorExecuteProcessWatch.Stop();
             TimeSpan findEmulatorExecuteElapsed = findEmulatorExecuteProcessWatch.Elapsed;
+            // Note: Not finding improvement in performance for either thread methods.
             if (doMultithread == 1)
             {
                 Task[] tasks = new Task[emulatorDirs.Length];
@@ -829,12 +836,7 @@ namespace GameLauncher
                 Task.WaitAll(tasks);
             }
             else if (doMultithread == 2)
-            {
-                Parallel.ForEach(systemScanTaskDatas, systemScanTaskData =>
-                {
-                    InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables);
-                });
-            }
+                Parallel.ForEach(systemScanTaskDatas, systemScanTaskData => InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables));
             else
             {
                 foreach (SystemScanTaskData systemScanTaskData in systemScanTaskDatas)
@@ -1286,7 +1288,6 @@ namespace GameLauncher
                     updatePropertiesSettings = true;
                 }
             }
-
             if (updatePropertiesSettings)
                 Properties.Settings.Default.Save();
             return validationSuccess;
@@ -1314,9 +1315,28 @@ namespace GameLauncher
                 threadJoyStick = new Thread(PollJoystick);
                 threadJoyStick.Start();
             }
+            if (Properties.Settings.Default.Maximised)
+            {
+                WindowState = FormWindowState.Maximized;
+            }
+            SetAdvanceOptions();
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private void SetAdvanceOptions()
+        {
+            if (Properties.Settings.Default.disableAdvanceOptions)
+            {
+                button_Rescan.Enabled = false;
+                contextMenuStrip1.Enabled = false;
+            }
+            else
+            {
+                button_Rescan.Enabled = true;
+                contextMenuStrip1.Enabled = true;
+            }
+        }
+
         public static string MiscData = "";
         public static readonly int GamePadDown  = 18000;
         public static readonly int GamePadUp    = 0;
@@ -1526,14 +1546,20 @@ namespace GameLauncher
         }
         private Rom GetSelectedROM()
         {
-            List<int> selectedRoms = new List<int>();
-            foreach (ListViewItem item in myListView.SelectedItems)
-            {
-                selectedRoms.Add(item.Index);
-            }
+            //List<int> selectedRoms = new List<int>();
+            //foreach (ListViewItem item in myListView.SelectedItems)
+            //{
+            //    selectedRoms.Add(item.Index);
+            //}
             foreach (ListViewItem item in myListView.SelectedItems)
                 return RomList[item.Index];
             return null;
+        }
+        private int GetSelectedRomIndex()
+        {
+            foreach (ListViewItem item in myListView.SelectedItems)
+                return item.Index;
+            return -1;
         }
         public static bool WaitingShellExecuteToComplete = false;
         private void PlaySelectedRom()
@@ -1608,7 +1634,7 @@ namespace GameLauncher
                 MessageBox.Show($"Error: Entered invalid file name for ROM file\n'{rom.Title}'", "Invalid Name!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (saveFileDialog.FileName.ToLower().Equals(rom.FilePath.ToLower()))
+            if (saveFileDialog.FileName.Equals(rom.FilePath))
             {
                 MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -1617,7 +1643,9 @@ namespace GameLauncher
             File.Move(rom.FilePath, saveFileDialog.FileName);
             if (needToDelRomFromDbBeforeUpdate) 
                 UpdateDB($"DELETE FROM Roms WHERE FilePath = \"{saveFileDialog.FileName}\"");
-            UpdateDB($"UPDATE Roms SET FilePath = \"{saveFileDialog.FileName}\" WHERE FilePath = \"{rom.FilePath}\"");
+            UpdateDB($"DELETE FROM Roms WHERE FilePath = \"{rom.FilePath}\""); // Do this to make sure old record is remove before insert
+            rom.FilePath = saveFileDialog.FileName;
+            UpdateRomInDb(rom);
             MessageBox.Show($"ROM '{rom.Title}' renamed to '{saveFileDialog.FileName}'.");
             DeleteImageList(comboBoxSystem.Text);
         }
@@ -1688,7 +1716,8 @@ namespace GameLauncher
             }
             if (emulatorIndex != -1)
             {
-                UpdateDB($"UPDATE Roms SET PreferredEmulator = {emulatorIndex} WHERE FilePath LIKE \"{rom.FilePath}\"");
+                rom.PreferredEmulatorID = emulatorIndex;
+                UpdateRomInDb(rom);
                 MessageBox.Show($"Emulator updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -1714,7 +1743,7 @@ namespace GameLauncher
             }
         }
         private void myListViewContextMenu_ChangeAssignedImage_Click(object sender, EventArgs e)
-        {// ToDo: Finish below code for selecting a different image file.....
+        {
             Rom rom = GetSelectedROM();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = $"Image File (*.png,*.bmp)|*.png;*.bmp|All Files (*.*)|*.*";
@@ -1737,12 +1766,23 @@ namespace GameLauncher
                 return;
             }
             int imageID = GetImageID(saveFileDialog.FileName);
-            UpdateDB($"UPDATE Roms SET ImagePath = \"{saveFileDialog.FileName}\", ImageID = {imageID} WHERE FilePath = \"{rom.FilePath}\"");
+            rom.ImageID = imageID;
+            rom.ImagePath = saveFileDialog.FileName;
+            UpdateRomInDb(rom);
             MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
             DeleteImageList(comboBoxSystem.Text);
         }
         private void myListViewContextMenu_ChangeTitle_Click(object sender, EventArgs e)
-        {// ToDo: using Microsoft.VisualBasic;
+        {
+            Rom rom = GetSelectedROM();
+            InputForm inputForm = new InputForm("                ROM Title:", "Change ROM Title", rom.Title, $"Enter new ROM title for game \"{rom.Title}\"", $"Enter new ROM title for game having file name \"{rom.FilePath}\"");
+            inputForm.ShowDialog();
+            if (inputForm.Ok)
+            {
+                rom.Title = inputForm.Value; 
+                UpdateRomInDb(rom);
+                DeleteImageList(comboBoxSystem.Text);
+            }
         }
         private void myListView_MouseClick(object sender, MouseEventArgs e)
         {
@@ -1780,6 +1820,8 @@ namespace GameLauncher
         private void myListView_OnFormClosing(object sender, FormClosingEventArgs e)
         {
             threadJoyStickAborting = true;
+            Properties.Settings.Default.Maximised = WindowState == FormWindowState.Maximized;
+            Properties.Settings.Default.Save();
         }
         const long MaxSecondsToWait_F5 = 5;
         const long MaxSecondsToWaitDefault = 2;
@@ -1851,9 +1893,10 @@ namespace GameLauncher
             Form_Settings form_Settings = new Form_Settings();
             form_Settings.ShowDialog();
             if (form_Settings.IconSizeChanged)
-                DeleteImageList();
+                CreateCacheForDisplaySystemIcons(comboBoxSystem.Text);
             if (form_Settings.EmulatorsBasePathChanged)
                 RedoDbInit($"Emulator path has changed to\n\"{Properties.Settings.Default.EmulatorsBasePath}\"\nDo you want to erase GameLauncher database and perform a new scan?","Rescan?", MessageBoxIcon.Question);
+            SetAdvanceOptions();
         }
     }
     public class PreviousCollectedImages
