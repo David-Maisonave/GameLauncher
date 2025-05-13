@@ -1,6 +1,6 @@
 ﻿namespace GameLauncher
 {
-    partial class Form1
+    partial class Form_Main
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Main));
             this.myListView = new System.Windows.Forms.ListView();
             this.comboBoxSystem = new System.Windows.Forms.ComboBox();
             this.comboBoxIconDisplay = new System.Windows.Forms.ComboBox();
@@ -42,9 +42,16 @@
             this.toolStripMenuItemChangeAssignedImage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemChangeTitle = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip_Info = new System.Windows.Forms.ToolTip(this.components);
-            this.button_Rescan = new System.Windows.Forms.Button();
+            this.button_Util = new System.Windows.Forms.Button();
             this.button_Settings = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.groupBox_ProgressBar = new System.Windows.Forms.GroupBox();
+            this.button_CancelScan = new System.Windows.Forms.Button();
+            this.progressBar_ROMs = new System.Windows.Forms.ProgressBar();
+            this.label_RomScanLabel = new System.Windows.Forms.Label();
+            this.label_GameConsoleLabel = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
+            this.groupBox_ProgressBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // myListView
@@ -70,7 +77,7 @@
             // 
             this.comboBoxSystem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSystem.FormattingEnabled = true;
-            this.comboBoxSystem.Location = new System.Drawing.Point(12, 3);
+            this.comboBoxSystem.Location = new System.Drawing.Point(12, 1);
             this.comboBoxSystem.Name = "comboBoxSystem";
             this.comboBoxSystem.Size = new System.Drawing.Size(248, 21);
             this.comboBoxSystem.TabIndex = 1;
@@ -81,7 +88,7 @@
             // 
             this.comboBoxIconDisplay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxIconDisplay.FormattingEnabled = true;
-            this.comboBoxIconDisplay.Location = new System.Drawing.Point(264, 3);
+            this.comboBoxIconDisplay.Location = new System.Drawing.Point(264, 1);
             this.comboBoxIconDisplay.Name = "comboBoxIconDisplay";
             this.comboBoxIconDisplay.Size = new System.Drawing.Size(88, 21);
             this.comboBoxIconDisplay.TabIndex = 2;
@@ -178,26 +185,26 @@
             this.toolTip_Info.ToolTipTitle = "Info";
             this.toolTip_Info.UseAnimation = false;
             // 
-            // button_Rescan
+            // button_Util
             // 
-            this.button_Rescan.Location = new System.Drawing.Point(357, 1);
-            this.button_Rescan.Margin = new System.Windows.Forms.Padding(2);
-            this.button_Rescan.Name = "button_Rescan";
-            this.button_Rescan.Size = new System.Drawing.Size(100, 28);
-            this.button_Rescan.TabIndex = 8;
-            this.button_Rescan.TabStop = false;
-            this.button_Rescan.Text = "&Rescan ROM";
-            this.toolTip_Info.SetToolTip(this.button_Rescan, "Rescan ROM files for selected game console system.");
-            this.button_Rescan.UseVisualStyleBackColor = true;
-            this.button_Rescan.Click += new System.EventHandler(this.myListView_button_Rescan_Click);
+            this.button_Util.Location = new System.Drawing.Point(356, 1);
+            this.button_Util.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Util.Name = "button_Util";
+            this.button_Util.Size = new System.Drawing.Size(105, 28);
+            this.button_Util.TabIndex = 8;
+            this.button_Util.TabStop = false;
+            this.button_Util.Text = "&Utility";
+            this.toolTip_Info.SetToolTip(this.button_Util, "Advance options.");
+            this.button_Util.UseVisualStyleBackColor = true;
+            this.button_Util.Click += new System.EventHandler(this.myListView_button_Utility_Click);
             // 
             // button_Settings
             // 
             this.button_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Settings.Location = new System.Drawing.Point(472, 1);
+            this.button_Settings.Location = new System.Drawing.Point(465, 1);
             this.button_Settings.Margin = new System.Windows.Forms.Padding(2);
             this.button_Settings.Name = "button_Settings";
-            this.button_Settings.Size = new System.Drawing.Size(100, 28);
+            this.button_Settings.Size = new System.Drawing.Size(105, 28);
             this.button_Settings.TabIndex = 9;
             this.button_Settings.TabStop = false;
             this.button_Settings.Text = "&Settings";
@@ -205,22 +212,101 @@
             this.button_Settings.UseVisualStyleBackColor = true;
             this.button_Settings.Click += new System.EventHandler(this.button_Settings_Click);
             // 
-            // Form1
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(6, 53);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(548, 23);
+            this.progressBar1.Step = 1;
+            this.progressBar1.TabIndex = 96;
+            this.progressBar1.UseWaitCursor = true;
+            this.progressBar1.Visible = false;
+            // 
+            // groupBox_ProgressBar
+            // 
+            this.groupBox_ProgressBar.Controls.Add(this.button_CancelScan);
+            this.groupBox_ProgressBar.Controls.Add(this.progressBar_ROMs);
+            this.groupBox_ProgressBar.Controls.Add(this.label_RomScanLabel);
+            this.groupBox_ProgressBar.Controls.Add(this.progressBar1);
+            this.groupBox_ProgressBar.Controls.Add(this.label_GameConsoleLabel);
+            this.groupBox_ProgressBar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.groupBox_ProgressBar.Location = new System.Drawing.Point(12, 117);
+            this.groupBox_ProgressBar.Name = "groupBox_ProgressBar";
+            this.groupBox_ProgressBar.Size = new System.Drawing.Size(560, 196);
+            this.groupBox_ProgressBar.TabIndex = 90;
+            this.groupBox_ProgressBar.TabStop = false;
+            this.groupBox_ProgressBar.Text = "Progress on initial ROM database creation";
+            this.groupBox_ProgressBar.Visible = false;
+            // 
+            // button_CancelScan
+            // 
+            this.button_CancelScan.Location = new System.Drawing.Point(252, 155);
+            this.button_CancelScan.Name = "button_CancelScan";
+            this.button_CancelScan.Size = new System.Drawing.Size(75, 35);
+            this.button_CancelScan.TabIndex = 101;
+            this.button_CancelScan.Text = "&Cancel";
+            this.button_CancelScan.UseVisualStyleBackColor = true;
+            this.button_CancelScan.Visible = false;
+            this.button_CancelScan.Click += new System.EventHandler(this.button_CancelScan_Click);
+            // 
+            // progressBar_ROMs
+            // 
+            this.progressBar_ROMs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar_ROMs.Location = new System.Drawing.Point(6, 115);
+            this.progressBar_ROMs.Name = "progressBar_ROMs";
+            this.progressBar_ROMs.Size = new System.Drawing.Size(548, 23);
+            this.progressBar_ROMs.Step = 1;
+            this.progressBar_ROMs.TabIndex = 98;
+            this.progressBar_ROMs.UseWaitCursor = true;
+            this.progressBar_ROMs.Visible = false;
+            // 
+            // label_RomScanLabel
+            // 
+            this.label_RomScanLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_RomScanLabel.AutoSize = true;
+            this.label_RomScanLabel.Location = new System.Drawing.Point(8, 92);
+            this.label_RomScanLabel.Name = "label_RomScanLabel";
+            this.label_RomScanLabel.Size = new System.Drawing.Size(132, 20);
+            this.label_RomScanLabel.TabIndex = 100;
+            this.label_RomScanLabel.Text = "ROM scan status";
+            this.label_RomScanLabel.Visible = false;
+            // 
+            // label_GameConsoleLabel
+            // 
+            this.label_GameConsoleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_GameConsoleLabel.AutoSize = true;
+            this.label_GameConsoleLabel.Location = new System.Drawing.Point(8, 29);
+            this.label_GameConsoleLabel.Name = "label_GameConsoleLabel";
+            this.label_GameConsoleLabel.Size = new System.Drawing.Size(223, 20);
+            this.label_GameConsoleLabel.TabIndex = 99;
+            this.label_GameConsoleLabel.Text = "Game Console System Status";
+            this.label_GameConsoleLabel.Visible = false;
+            // 
+            // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 361);
+            this.Controls.Add(this.groupBox_ProgressBar);
             this.Controls.Add(this.button_Settings);
-            this.Controls.Add(this.button_Rescan);
+            this.Controls.Add(this.button_Util);
             this.Controls.Add(this.textBoxStatus);
             this.Controls.Add(this.comboBoxIconDisplay);
             this.Controls.Add(this.comboBoxSystem);
             this.Controls.Add(this.myListView);
             this.MinimumSize = new System.Drawing.Size(600, 400);
-            this.Name = "Form1";
+            this.Name = "Form_Main";
             this.Text = "Game Launcher [Ver-0.9] by David Maisonave Sr";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.myListView_OnFormClosing);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.groupBox_ProgressBar.ResumeLayout(false);
+            this.groupBox_ProgressBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -240,8 +326,14 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlayRom;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemChangeTitle;
         private System.Windows.Forms.ToolTip toolTip_Info;
-        private System.Windows.Forms.Button button_Rescan;
+        private System.Windows.Forms.Button button_Util;
         private System.Windows.Forms.Button button_Settings;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.GroupBox groupBox_ProgressBar;
+        private System.Windows.Forms.ProgressBar progressBar_ROMs;
+        private System.Windows.Forms.Label label_GameConsoleLabel;
+        private System.Windows.Forms.Label label_RomScanLabel;
+        private System.Windows.Forms.Button button_CancelScan;
     }
 }
 

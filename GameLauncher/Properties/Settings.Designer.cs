@@ -142,5 +142,41 @@ namespace GameLauncher.Properties {
                 this["Maximised"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RegexRenameFilesDir {
+            get {
+                return ((string)(this["RegexRenameFilesDir"]));
+            }
+            set {
+                this["RegexRenameFilesDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RegexRenameFilesPattern {
+            get {
+                return ((string)(this["RegexRenameFilesPattern"]));
+            }
+            set {
+                this["RegexRenameFilesPattern"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RegexRenameFilesReplace {
+            get {
+                return ((string)(this["RegexRenameFilesReplace"]));
+            }
+            set {
+                this["RegexRenameFilesReplace"] = value;
+            }
+        }
     }
 }

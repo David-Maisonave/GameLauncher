@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 
 using SharpDX.DirectInput;
-using SharpDX.Multimedia;
 
 using Shell32;
 
@@ -11,30 +10,34 @@ using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using System.Xml.Linq;
 
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GameLauncher
 {
-    public partial class Form1 : Form
+    public partial class Form_Main : Form
     {
-        public readonly string[] validRoms = { "3ds", "app", "bin", "car", "dsi", "gb", "gba", "gbc", "gcm", "gen", "gg", "ids", "iso", "md", "n64", "nds", "ngc", "ngp", "nsp", "pce", "rom", "sfc", "smc", "smd", "sms", "srl", "v64", "vpk", "wad", "xci", "xiso", "z64" };
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Class members variables
+        // -------------------------------------------------------------------------------------------------------------------------------------
+        // const or readonly variables
+        private const string SQL_CREATETABLES =
+                "CREATE TABLE \"GameSystems\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\t\"RomDirPath\"\tTEXT NOT NULL,\r\n\t\"ImageDirPath\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath1\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath2\"\tTEXT,\r\n\t\"EmulatorPath3\"\tTEXT,\r\n\t\"EmulatorPath4\"\tTEXT,\r\n\t\"EmulatorPath5\"\tTEXT,\r\n\t\"EmulatorPath6\"\tTEXT,\r\n\t\"EmulatorPath7\"\tTEXT,\r\n\t\"EmulatorPath8\"\tTEXT,\r\n\t\"EmulatorPath9\"\tTEXT,\r\n\t\"EmulatorPath10\"\tTEXT,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
+                "CREATE TABLE \"Images\" (\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
+                "CREATE TABLE \"PersistenceVariables\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Value\"\tTEXT,\r\n\t\"ValueInt\"\tINTEGER,\r\n\tPRIMARY KEY(\"Name\")\r\n);\r\n" +
+                "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImageID\"\tINTEGER DEFAULT -1,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
+                "CREATE TABLE \"Roms_UserChanges\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImageID\"\tINTEGER DEFAULT -1,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
+                "\r\n";
+        public readonly string[] VALID_ROMS = { "3ds", "app", "bin", "car", "dsi", "gb", "gba", "gbc", "gcm", "gen", "gg", "ids", "iso", "md", "n64", "nds", "ngc", "ngp", "nsp", "pce", "rom", "sfc", "smc", "smd", "sms", "srl", "v64", "vpk", "wad", "xci", "xiso", "z64" };
+        public readonly string[] COMMON_EMULATOR_PATHS = { @"C:\Emulator", @"C:\GameEmulator", @"C:\RetroGameEmulator", @"C:\RetroEmulator", @"C:\Game", @"C:\Retro", @"C:\RetroGame", @"C:\GameRetro" };
         public const string ROM_EXTS_ALL = "ROM Files|*.3ds;*.app;*.bin;*.car;*.dat;*.dsi;*.gb;*.gba;*.gbc;*.gcm;*.gcz;*.gen;*.gg;*.ids;*.iso;*.lst;*.md;*.n64;*.nds;*.ngc;*.ngp;*.nsp;*.pce;*.rom;*.sfc;*.smc;*.smd;*.sms;*.srl;*.v64;*.vpk;*.wad;*.xci;*.xiso;*.z64|" +
             "Compress Files (*.7z,*.bz2,*.gz,*.rar,*.tar,*.zip)|*.7z;*.7zip;*.bz2;*.gz;*.gzip;*.rar;*.tar;*.tar.bz2;*.tar.gz;*.zip|" +
             "All files (*.*)|*.*";
@@ -65,6 +68,86 @@ namespace GameLauncher
             "Xbox Files (*.xiso)|*.xiso|" +
             "Compress Files (*.7z,*.bz2,*.gz,*.rar,*.tar,*.zip)|*.7z;*.7zip;*.bz2;*.gz;*.gzip;*.rar;*.tar;*.tar.bz2;*.tar.gz;*.zip|" +
             "All files (*.*)|*.*";
+        public const int MINIMUM_ROM_SIZE = 10000; // NES has "Demo Boy 2" which is 1948 bytes. Next smallest is "NES PowerPad Test Cart" at 2,598 bytes.
+        public const int MINIMUM_ZIP_SIZE = 1000;
+        public const int MAXIMUM_PROGRESSBAR = 1000;
+        public const long MAX_SECONDS_TO_WAIT_F5 = 5;
+        public const long MAX_SECONDS_TO_WAIT_DEFAULT = 2;
+        public const string GAMELAUNCHER_DB_NAME = "GameLauncher.db";
+        public const string DATA_SUBPATH = @"data\";
+        public const string GAMELAUNCHER_SUBPATH = @"GameLauncher\";
+        // -------------------------------------------------------------------------------------------------------------------------------------
+        // static readonly variables
+        public static readonly int GamePadDown = 18000;
+        public static readonly int GamePadUp = 0;
+        public static readonly int GamePadLeft = 27000;
+        public static readonly int GamePadRight = 9000;
+        // -------------------------------------------------------------------------------------------------------------------------------------
+        // Modifiable variables
+        private List<Rom> romList = new List<Rom>();
+        private SqliteConnection connection = null;
+        private string romSubFolderName = @"\roms"; // ToDo: Make this user modifiable via settings form
+        private string imageSubFolderName = @"\images"; // ToDo: Make this user modifiable via settings form
+        private string dataDirPath = null;
+        private string binDirPath = null;
+        private string defaultImagePath = null;
+        private Dictionary<string, PreviousCollectedData> previousCollections = new Dictionary<string, PreviousCollectedData>();
+        private ImageList[] tmpImageList1 = null;
+        private ImageList[] tmpImageList2 = null;
+        private List<int> startPosList = null;
+        // -------------------------------------------------------------------------------------------------------------------------------------
+        // Modifiable static variables used by static methods (mostly joystick related functions)
+        private static Thread threadJoyStick = null;
+        private static bool threadJoyStickAborting = false;
+        private static string miscData = "";
+        private static bool waitingShellExecuteToComplete = false;
+        private static Dictionary<string, long> dictAvoidRepeat = new Dictionary<string, long>();
+        private static bool cancelScan = false;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Class types
+        class SystemScanTaskData
+        {
+            public string systemName;
+            public string emulatorDir;
+            public EmulatorExecutables emulatorExecutables;
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Form1 Constructor
+        public Form_Main()
+        {
+            InitializeComponent();
+            ValidatePropertiesSettings();
+            comboBoxIconDisplay.Items.Add("Large Icons");
+            comboBoxIconDisplay.Items.Add("Small Icons");
+            comboBoxIconDisplay.Items.Add("Tiles");
+            comboBoxIconDisplay.Text = "Large Icons";
+            binDirPath = AppDomain.CurrentDomain.BaseDirectory;
+            dataDirPath = AppDomain.CurrentDomain.BaseDirectory;
+        }
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            string dbPath = GetDbPath();
+            if (dbPath != null && Directory.Exists(System.IO.Path.GetDirectoryName(dbPath)))
+                dataDirPath = System.IO.Path.GetDirectoryName(dbPath);
+            defaultImagePath = GetDefaultImagePath(dbPath); // Make sure to do this before InitializeDbConnection
+            InitializeDbConnection(dbPath);
+            Properties.Settings.Default.Save();
+            if (Properties.Settings.Default.useJoystickController)
+            {
+                threadJoyStick = new Thread(PollJoystick);
+                threadJoyStick.Start();
+            }
+            if (Properties.Settings.Default.Maximised)
+            {
+                WindowState = FormWindowState.Maximized;
+            }
+            SetAdvanceOptions();
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Static methods
         public static void RegexRenameFiles(string dir, string pattern, string replaceStr)
         {// Example Usage: RegexRenameFiles(@"C:\Emulator\NintendoDS\roms", "(roms\\\\)[0-9][0-9][0-9][0-9][\\s_]-[\\s_](.*)", "$1$2"); 
             if (!Directory.Exists(dir))
@@ -77,8 +160,290 @@ namespace GameLauncher
                     File.Move(f, newName);
             }
         }
-        private List<Rom> RomList = new List<Rom>();
-        SqliteConnection connection = null;
+        public static string GetShortcutTargetFile(string shortcutFilename)
+        {
+            string pathOnly = System.IO.Path.GetDirectoryName(shortcutFilename);
+            string filenameOnly = System.IO.Path.GetFileName(shortcutFilename);
+
+            // This requires a COM Reference to Shell32 (Microsoft Shell Controls And Automation).
+            Shell shell = new Shell();
+            Folder folder = shell.NameSpace(pathOnly);
+            FolderItem folderItem = folder.ParseName(filenameOnly);
+            if (folderItem != null && folderItem.IsLink)
+            {
+                Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
+                return link.Path;
+            }
+
+            return null;
+        }
+        private static bool IsRepeat(string keys, long MaxSecondsToWait = MAX_SECONDS_TO_WAIT_DEFAULT)
+        {
+            keys = $"__{keys}";
+            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+            long now = dto.ToUnixTimeSeconds();
+            if (dictAvoidRepeat.ContainsKey(keys) && dictAvoidRepeat[keys] + MaxSecondsToWait > now)
+                return true;
+            dictAvoidRepeat[keys] = now;
+            return false;
+        }
+        private static bool Send_Keys(string keys, long MaxSecondsToWait = MAX_SECONDS_TO_WAIT_DEFAULT)
+        {
+            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
+            long now = dto.ToUnixTimeSeconds();
+            if (dictAvoidRepeat.ContainsKey(keys) && dictAvoidRepeat[keys] + MaxSecondsToWait > now)
+                return false;
+            dictAvoidRepeat[keys] = now;
+            SendKeys.SendWait(keys);
+            return true;
+        }
+        public static void PollJoystick()
+        {
+            // https://stackoverflow.com/questions/18416039/joystick-acquisition-with-sharpdx
+            //var directInput = new DirectInput();
+            // To simulate cursor and keys see following: https://gamedev.stackexchange.com/questions/19906/how-do-i-simulate-the-mouse-and-keyboard-using-c-or-c
+            DirectInput directInput = new DirectInput();
+
+            List<Joystick> sticks = new List<Joystick>();
+            foreach (DeviceInstance device in directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
+            {
+                Joystick stick = new Joystick(directInput, device.InstanceGuid);
+                stick.Acquire();
+
+                foreach (DeviceObjectInstance deviceObject in stick.GetObjects(DeviceObjectTypeFlags.Axis))
+                {
+                    stick.GetObjectPropertiesById(deviceObject.ObjectId).Range = new InputRange(-100, 100);
+                }
+                sticks.Add(stick);
+            }
+
+            Guid joystickGuid = Guid.Empty;
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AttachedOnly))
+                joystickGuid = deviceInstance.InstanceGuid;
+            // If Gamepad not found, look for a Joystick
+            if (joystickGuid == Guid.Empty)
+                foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AttachedOnly))
+                    joystickGuid = deviceInstance.InstanceGuid;
+
+            if (joystickGuid == Guid.Empty)
+                foreach (var deviceInstance in directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
+                    joystickGuid = deviceInstance.InstanceGuid;
+
+            // If Joystick not found, throws an error
+            if (joystickGuid == Guid.Empty)
+            {
+                Console.WriteLine("No joystick/Gamepad found.");
+                threadJoyStickAborting = true;
+                return;
+                //Console.ReadKey();
+                //Environment.Exit(1);
+            }
+
+            Joystick joystick = new Joystick(directInput, joystickGuid);
+            joystick.Properties.BufferSize = 128;
+            joystick.Acquire();
+            while (threadJoyStickAborting == false)
+            {
+                joystick.Poll();
+                if (threadJoyStickAborting == true && Properties.Settings.Default.useJoystickController == false)
+                    return;
+                if (waitingShellExecuteToComplete)
+                    continue;
+                //foreach (Joystick js in sticks) 
+                //{
+                //    JoystickUpdate lastState = js.GetBufferedData().Last();
+                //    if (lastState.Offset == JoystickOffset.X)
+                //    {
+                //        form1.textBoxStatus.Text = lastState.Value.ToString();
+                //    }
+                //}
+                miscData = "";
+                var data = joystick.GetBufferedData();
+                foreach (JoystickUpdate state in data)
+                {
+                    if (state.Offset == JoystickOffset.X)
+                    {
+                        miscData += "[x]"; // 1st Joystick left and down
+                    }
+                    else if (state.Offset == JoystickOffset.Y)
+                    {
+                        miscData += "[y]"; // 1st Joystick right and up
+                    }
+                    else if (state.Offset == JoystickOffset.Z)
+                    {
+                        miscData += "[z]"; // Lower trigger [left]val=34000>, [right]val=31000>
+                        if (state.Value > 34000)
+                        {
+                            if (!Send_Keys("{END}"))
+                                break;
+                        }
+                        else
+                        {
+                            if (!Send_Keys("{F9}"))
+                                break;
+                        }
+                    }
+                    else if (state.Offset == JoystickOffset.RotationX)
+                    {
+                        miscData += "[RotationX]"; // 2nd Joystick left and right
+                    }
+                    else if (state.Offset == JoystickOffset.RotationY)
+                    {
+                        miscData += "[RotationY]";// 2nd Joystick up and down
+                    }
+                    else if (state.Offset == JoystickOffset.RotationZ)
+                    {
+                        miscData += "[RotationZ]";
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons0)
+                    {
+                        miscData += "[Buttons0]"; // A button
+                        if (!Send_Keys("{F5}", MAX_SECONDS_TO_WAIT_F5))
+                            break;
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons1)
+                    {
+                        miscData += "[Buttons1]"; // B button
+                        if (!Send_Keys("{TAB}"))
+                            break;
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons2)
+                    {
+                        miscData += "[Buttons2]"; // X button
+                        Send_Keys("{PGDN}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons3)
+                    {
+                        miscData += "[Buttons3]"; // Y button
+                        Send_Keys("{PGUP}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons4)
+                    {
+                        miscData += "[Buttons4]"; // Left upper trigger
+                        if (!Send_Keys("{HOME}"))
+                            break;
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons5)
+                    {
+                        miscData += "[Buttons5]"; // Right upper trigger
+                        if (!Send_Keys("{F8}"))
+                            break;
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons6)
+                    {
+                        miscData += "[Buttons6]"; // Back/Select button
+                        System.Windows.Forms.Application.Exit();
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons7)
+                    {
+                        miscData += "[Buttons7]"; // Start button
+                        if (!Send_Keys("{F5}", MAX_SECONDS_TO_WAIT_F5))
+                            break;
+                    }
+                    else if (state.Offset == JoystickOffset.PointOfViewControllers0)
+                    { // PointOfViewControllers0, [up]val=0, [down]val=18000,[left]val=27000,[right]val=9000
+                        miscData += $"[PointOfViewControllers0 {state.Value}]";
+                        if (GamePadUp == state.Value)
+                            SendKeys.SendWait("{UP}");
+                        else if (GamePadDown == state.Value)
+                            SendKeys.SendWait("{DOWN}");
+                        else if (GamePadLeft == state.Value)
+                            SendKeys.SendWait("{LEFT}");
+                        else if (GamePadRight == state.Value)
+                            SendKeys.SendWait("{RIGHT}");
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons8)
+                    {
+                        miscData += "[Buttons8]"; // 1st Joystick center button
+                        if (!Send_Keys("{F6}"))
+                            break;
+                    }
+                    else if (state.Offset == JoystickOffset.Buttons9)
+                    {
+                        miscData += "[Buttons9]"; // 2nd Joystick center button
+                        if (!Send_Keys("{F4}"))
+                            break;
+                    }
+                    else
+                    {
+                        miscData += "[misc]";
+                    }
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Delegate coding
+        public delegate void MyDelegateInitProgressBar(System.Windows.Forms.ProgressBar myControl, int arg);
+        public void DelegateInitProgressBar(System.Windows.Forms.ProgressBar myControl, int max)
+        {
+            myControl.Enabled = false;
+            myControl.Visible = false;
+            myControl.Update();
+            myControl.Minimum = 1;
+            myControl.Maximum = max;
+            myControl.Step = 1;
+            myControl.Value = 1;
+            myControl.ResetText();
+            myControl.Enabled = true;
+            myControl.Visible = true;
+            myControl.Update();
+        }
+        public void DelegateInitProgressBarPerformStep(System.Windows.Forms.ProgressBar myControl, int maxLenReset)
+        {
+            myControl.PerformStep();
+            if (maxLenReset != -1 && myControl.Value >= maxLenReset)
+                myControl.Value = 0;
+            myControl.Update();
+            myControl.Refresh();
+            Application.DoEvents();
+        }
+        public delegate void MyDelegateForm_Main(Form_Main form_Main, bool arg);
+        public void DelegateDisplayOrHideProgressGroup(Form_Main form_Main, bool display) => form_Main.DisplayOrHideProgressGroup(display);
+        public void DelegateScanForNewRomsOnAllSystems(Form_Main form_Main, bool arg) => form_Main.ScanForNewRomsOnAllSystems(arg);
+        public void DelegateRescanSelectedSystem(Form_Main form_Main, bool arg) => form_Main.RescanSelectedSystem();
+        public void DelegateRedoDbInit(Form_Main form_Main, bool arg) => form_Main.RedoDbInit("Are you sure you want to rescan all ROM's?\nThis will take about 15-60 minutes.", "Rescan?", MessageBoxIcon.Question);
+        public delegate void MyDelegateInitializeRomsInDatabaseForSystem(Form_Main form_Main, InitializeRomsInDatabaseForSystem_Arg arg);
+        public void DelegateInitializeRomsInDatabaseForSystem(Form_Main form_Main, InitializeRomsInDatabaseForSystem_Arg arg) => form_Main.InitializeRomsInDatabaseForSystem(arg);
+        public delegate void MyDelegateSetControlText(System.Windows.Forms.Control myControl, string text);
+        public void DelegateSetControlText(System.Windows.Forms.Control myControl, string text)
+        {
+            myControl.Text = text;
+            myControl.Update();
+            myControl.Refresh();
+            Application.DoEvents();
+        }
+        public delegate void MyDelegateSetTextBoxText(System.Windows.Forms.TextBox myControl, string text);
+        public void DelegateSetTextBoxText(System.Windows.Forms.TextBox myControl, string text)
+        {
+            myControl.Text = text;
+            myControl.Update();
+            myControl.Refresh();
+            Application.DoEvents();
+        }
+        public delegate void MyDelegateSetLabelText(System.Windows.Forms.Label myControl, string text);
+        public void DelegateSetLabelText(System.Windows.Forms.Label myControl, string text)
+        {
+            myControl.Text = text;
+            myControl.Update();
+            myControl.Refresh();
+            Application.DoEvents();
+        }
+        public object[] GetDelegateAction(object control, object arg)
+        {
+            object[] myArray = new object[2];
+            myArray[0] = control;
+            myArray[1] = arg;
+            return myArray;
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private int CreateSqlTables()
+        {
+            SqliteCommand command = new SqliteCommand(SQL_CREATETABLES, connection);
+            int x = command.ExecuteNonQuery();
+            return x;
+        }
         private string ConvertToSimplifiedName(string name,
                 bool removeNumbers = false, bool doHighCompres = false, bool removeBracesAndSuffixData = true, 
                 bool trimSpaces = true, bool removeRomPrefixIndexes = true, bool removeApostropheEs = true, 
@@ -243,76 +608,84 @@ namespace GameLauncher
             return x > 0;
         }
         private int GetImageIndexByPath(string FilePath) => GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{FilePath}\"");
-        private (int, string) GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed)
+        private (int, string) GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed, string emulatorDir)
         {
-            string sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\"";
+            string sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\" and FilePath like \"{emulatorDir}%\"";
             string imgPath = "";
             int idx = 0;
             (idx, imgPath) = GetIntAndStr(sql);
-            if (idx < 0)
-            {
-                // Lets try something else to find a matching image file.
-                if (NameOrg.Contains("-"))
-                {
-                    string NameAfterHyphen = NameOrg.Substring(NameOrg.IndexOf("-") + 1);
-                    string NameAfterHyphenSimple = ConvertToSimplifiedName(NameAfterHyphen);
-                    sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameAfterHyphenSimple}\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                    if (idx < 0)
-                    {
-                        string nameWithNoNumbers = ConvertToSimplifiedName(NameAfterHyphen, true);
-                        sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbers}\"";
-                        (idx, imgPath) = GetIntAndStr(sql);
-                    }
-                }
-                if (idx < 0)
-                {
-                    string nameWithNoNumbers = ConvertToSimplifiedName(NameSimplified, true); // Remove numbers from the name. It's better to have an image to the older version of the game, than non at all.
-                    if (!nameWithNoNumbers.Equals(NameSimplified))
-                    {
-                        sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbers}\"";
-                        (idx, imgPath) = GetIntAndStr(sql);
-                    }
-                }
+            if (idx > -1)
+                return (idx, imgPath);
 
-                if (idx < 0 && NameOrg.StartsWith("A ", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    string Name = NameOrg.Substring(1);
-                    sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
-                if (idx < 0 && NameOrg.StartsWith("The ", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    string Name = NameOrg.Substring(3);
-                    sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
-                if (idx < 0)
-                {
-                    sql = $"SELECT ID, FilePath FROM Images WHERE NameOrg like \"{NameOrg}\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
-                if (idx < 0)
-                {
-                    sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameOrg}\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
-                if (idx < 0)
-                {
-                    sql = $"SELECT ID, FilePath FROM Images WHERE Compressed like \"{Compressed}\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
-                if (idx < 0)
-                {
-                    sql = $"SELECT ID, FilePath FROM Images WHERE Compressed like \"%{Compressed}%\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
-                if (idx < 0)
-                {
-                    sql = $"SELECT ID, FilePath FROM Images WHERE NameOrg like \"%{Title}%\"";
-                    (idx, imgPath) = GetIntAndStr(sql);
-                }
+            sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\"";
+            (idx, imgPath) = GetIntAndStr(sql);
+            if (idx > -1)
+                return (idx, imgPath);
+
+            if (NameOrg.Contains("-"))
+            {
+                string NameAfterHyphen = NameOrg.Substring(NameOrg.IndexOf("-") + 1);
+                string NameAfterHyphenSimple = ConvertToSimplifiedName(NameAfterHyphen);
+                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameAfterHyphenSimple}\"";
+                (idx, imgPath) = GetIntAndStr(sql);
+                if (idx > -1)
+                    return (idx, imgPath);
+ 
+                string nameWithNoNumbersNameAfterHyphen = ConvertToSimplifiedName(NameAfterHyphen, true);
+                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbersNameAfterHyphen}\"";
+                (idx, imgPath) = GetIntAndStr(sql);
+                if (idx > -1)
+                    return (idx, imgPath);
             }
+            string nameWithNoNumbers = ConvertToSimplifiedName(NameSimplified, true); // Remove numbers from the name. It's better to have an image to the older version of the game, than non at all.
+            if (!nameWithNoNumbers.Equals(NameSimplified))
+            {
+                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbers}\"";
+                (idx, imgPath) = GetIntAndStr(sql);
+                if (idx > -1)
+                    return (idx, imgPath);
+            }
+
+            if (NameOrg.StartsWith("A ", StringComparison.CurrentCultureIgnoreCase))
+            {
+                string Name = NameOrg.Substring(1);
+                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
+                (idx, imgPath) = GetIntAndStr(sql);
+                if (idx > -1)
+                    return (idx, imgPath);
+            }
+
+            if (NameOrg.StartsWith("The ", StringComparison.CurrentCultureIgnoreCase))
+            {
+                string Name = NameOrg.Substring(3);
+                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
+                (idx, imgPath) = GetIntAndStr(sql);
+                if (idx > -1)
+                    return (idx, imgPath);
+            }
+
+            sql = $"SELECT ID, FilePath FROM Images WHERE NameOrg like \"{NameOrg}\"";
+            (idx, imgPath) = GetIntAndStr(sql);
+            if (idx > -1)
+                return (idx, imgPath);
+
+            sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameOrg}\"";
+            (idx, imgPath) = GetIntAndStr(sql);
+            if (idx > -1)
+                return (idx, imgPath);
+
+            sql = $"SELECT ID, FilePath FROM Images WHERE Compressed like \"{Compressed}\"";
+            (idx, imgPath) = GetIntAndStr(sql);
+            if (idx > -1)
+                return (idx, imgPath);
+
+            sql = $"SELECT ID, FilePath FROM Images WHERE Compressed like \"%{Compressed}%\"";
+            (idx, imgPath) = GetIntAndStr(sql);
+            if (idx > -1)
+                return (idx, imgPath);
+
+            sql = $"SELECT ID, FilePath FROM Images WHERE NameOrg like \"%{Title}%\"";
+            (idx, imgPath) = GetIntAndStr(sql);
             return (idx, imgPath);
         }
         private int GetSystemIndex(string Name) => GetFirstColInt($"SELECT ID FROM GameSystems WHERE Name = \"{Name}\"");
@@ -335,33 +708,34 @@ namespace GameLauncher
             return id;
         }
         private int GetImageID(string imgFile) => AddImageToDb(imgFile, true);
-        private void GetImages(string imgPath)
+        private bool CancelButtonPressed()
+        {
+            Application.DoEvents(); 
+            return cancelScan;
+        }
+        private void GetImages(string imgPath, bool isMainThread = false)
         {
             if (Directory.Exists(imgPath))
             {
-                string[] imgFiles = Directory.GetFiles(imgPath, "*.png");
-                foreach (string f in imgFiles)
-                    AddImageToDb(f);
+                if (isMainThread)
+                {
+                    string[] imgFiles = Directory.GetFiles(imgPath, "*.png");
+                    ResetProgressBar(imgFiles.Length, isMainThread);
+                    foreach (var imgFile in imgFiles)
+                    {
+                        if (CancelButtonPressed())
+                            return;
+                        IncrementProgressBar(progressBar_ROMs, isMainThread);
+                        AddImageToDb(imgFile);
+                    }
+                }
+                else
+                {
+                    string tempimgPath = imgPath;
+                    Parallel.ForEach(Directory.GetFiles(tempimgPath, "*.png"), imgFile => AddImageToDb(imgFile));
+                }
             }
         }
-        public static string GetShortcutTargetFile(string shortcutFilename)
-        {
-            string pathOnly = System.IO.Path.GetDirectoryName(shortcutFilename);
-            string filenameOnly = System.IO.Path.GetFileName(shortcutFilename);
-
-            // This requires a COM Reference to Shell32 (Microsoft Shell Controls And Automation).
-            Shell shell = new Shell();
-            Folder folder = shell.NameSpace(pathOnly);
-            FolderItem folderItem = folder.ParseName(filenameOnly);
-            if (folderItem != null && folderItem.IsLink)
-            {
-                Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
-                return link.Path;
-            }
-
-            return null;
-        }
-
         private EmulatorExecutables GetEmulatorPaths(string path)
         {
             EmulatorExecutables emulatorPaths = new EmulatorExecutables();
@@ -388,19 +762,6 @@ namespace GameLauncher
             }
             return index == 0 ? null : emulatorPaths;
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        private int CreateSqlTables()
-        {////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            const string sql =
-                    "CREATE TABLE \"GameSystems\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\t\"RomDirPath\"\tTEXT NOT NULL,\r\n\t\"ImageDirPath\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath1\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath2\"\tTEXT,\r\n\t\"EmulatorPath3\"\tTEXT,\r\n\t\"EmulatorPath4\"\tTEXT,\r\n\t\"EmulatorPath5\"\tTEXT,\r\n\t\"EmulatorPath6\"\tTEXT,\r\n\t\"EmulatorPath7\"\tTEXT,\r\n\t\"EmulatorPath8\"\tTEXT,\r\n\t\"EmulatorPath9\"\tTEXT,\r\n\t\"EmulatorPath10\"\tTEXT,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
-                    "CREATE TABLE \"Images\" (\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
-                    "CREATE TABLE \"PersistenceVariables\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Value\"\tTEXT,\r\n\t\"ValueInt\"\tINTEGER,\r\n\tPRIMARY KEY(\"Name\")\r\n);\r\n" +
-                    "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImageID\"\tINTEGER DEFAULT -1,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
-                    "\r\n";
-            SqliteCommand command = new SqliteCommand(sql, connection);
-            int x = command.ExecuteNonQuery();
-            return x;
-        }////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         private void EraseDbContent()
         { // ToDo: Add warning message here
             const string sql = "DELETE FROM Roms;\r\nDELETE FROM Images;\r\nDELETE FROM GameSystems;";
@@ -458,8 +819,8 @@ namespace GameLauncher
             }
             return ReturnStr;
         }
-        private Rom GetRomDetails(string romFilePath, int systemIndex, long RomSize)
-        {// ToDo: This function is too big, and should be split into multiple functions
+        private Rom GetRomDetails(string romFilePath, int systemIndex, string emulatorDir, long RomSize)
+        {// ToDo: This function is too big, and should be split into multiple sub functions
             string NameOrg = Path.GetFileNameWithoutExtension(romFilePath); // f.Substring(imgPath.Length + 1);
             string NameSimplified = ConvertToSimplifiedName(NameOrg);
             string Compressed = ConvertToSimplifiedName(NameOrg, true, true);
@@ -471,7 +832,7 @@ namespace GameLauncher
             string NotesCore = "";
             int imageID = 0;
             string imagePath = "";
-            (imageID, imagePath) = GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed);
+            (imageID, imagePath) = GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed, emulatorDir);
             string Region = "unknown";
             string Language = "";
             if (NameOrg.Contains("(U)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(USA)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("_USA_", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(NTSC)", StringComparison.OrdinalIgnoreCase))
@@ -716,34 +1077,114 @@ namespace GameLauncher
             SqliteCommand command = new SqliteCommand(sql, connection);
             command.ExecuteNonQuery();
         }
-        public const int MINIMUM_ROM_SIZE = 10000; // NES has "Demo Boy 2" which is 1948 bytes. Next smallest is "NES PowerPad Test Cart" at 2,598 bytes.
-        public const int MINIMUM_ZIP_SIZE = 1000;
-        private string romSubFolderName = @"\roms";
-        private string imageSubFolderName = @"\images";
-        private void InitializeRomsInDatabaseForSystem(string emulatorDir, EmulatorExecutables emulatorPaths)
+        private void IncrementProgressBar(System.Windows.Forms.ProgressBar progressbar, bool isMainThread, int MaxLenReset = -1)
+        {
+            if (isMainThread)
+            {
+                progressbar.PerformStep();
+                if (MaxLenReset != -1 && progressbar.Value >= MaxLenReset)
+                    progressbar.Value = 0;
+                progressbar.Update();
+            }
+            else 
+                BeginInvoke(new MyDelegateInitProgressBar(DelegateInitProgressBarPerformStep), GetDelegateAction(progressbar, MaxLenReset));
+            Application.DoEvents();
+        }
+        private void UpdateGroupBoxText(bool isMainThread, string newText)
+        {
+            if (isMainThread)
+            {
+                label_RomScanLabel.Text = newText;
+                label_RomScanLabel.Update();
+                label_RomScanLabel.Refresh();
+            }
+            else
+                BeginInvoke(new MyDelegateSetLabelText(DelegateSetLabelText), GetDelegateAction(label_RomScanLabel, newText));
+            Application.DoEvents();
+        }
+        private void UpdateText(System.Windows.Forms.Control control, string newText, bool isMainThread)
+        {
+            if (isMainThread)
+            {
+                control.Text = newText;
+                control.Update();
+            }
+            else
+                BeginInvoke(new MyDelegateSetControlText(DelegateSetControlText), GetDelegateAction(control, newText));
+            Application.DoEvents();
+        }
+        private void UpdateTextBoxText(System.Windows.Forms.TextBox control, string newText, bool isMainThread)
+        {
+            if (isMainThread)
+            {
+                control.Text = newText;
+                control.Update();
+            }
+            else
+                BeginInvoke(new MyDelegateSetTextBoxText(DelegateSetTextBoxText), GetDelegateAction(control, newText));
+            Application.DoEvents();
+        }
+        private void ResetProgressBar(int max, bool isMainThread)
+        {
+            if (isMainThread)
+            {
+                //progressBar_ROMs.Enabled = false;
+                //progressBar_ROMs.Visible = false;
+                //progressBar_ROMs.Update();
+                progressBar_ROMs.Minimum = 1;
+                progressBar_ROMs.Maximum = max;
+                progressBar_ROMs.Step = 1;
+                progressBar_ROMs.Value = 1;
+                //progressBar_ROMs.ResetText();
+                progressBar_ROMs.Enabled = true;
+                progressBar_ROMs.Visible = true;
+                progressBar_ROMs.Update();
+            }
+            else
+                BeginInvoke(new MyDelegateInitProgressBar(DelegateInitProgressBar), GetDelegateAction(progressBar_ROMs, max));
+            Application.DoEvents();
+        }
+        public void SendStatus(string Msg, bool isMainThread = true)
+        {
+            Console.WriteLine(Msg);
+            UpdateTextBoxText(textBoxStatus,Msg,isMainThread);
+            Application.DoEvents();
+        }
+        public void InitializeRomsInDatabaseForSystem(InitializeRomsInDatabaseForSystem_Arg arg) => InitializeRomsInDatabaseForSystem(arg.emulatorDir, arg.emulatorExecutables, arg.isMainThread, arg.scanImageDir, arg.hideGroup);
+
+        private void InitializeRomsInDatabaseForSystem(string emulatorDir, EmulatorExecutables emulatorPaths, bool isMainThread = false, bool scanImageDir = true, bool hideGroup = false)
         {
             string romPath = emulatorDir + romSubFolderName;
             string imgPath = emulatorDir + imageSubFolderName;
             if (Directory.Exists(romPath) && emulatorPaths != null)
             {
                 string Name = Path.GetFileName(emulatorDir);
-                var sql = $"INSERT OR REPLACE INTO GameSystems (Name, RomDirPath, ImageDirPath, EmulatorPath1, EmulatorPath2, EmulatorPath3, EmulatorPath4, EmulatorPath5, EmulatorPath6, EmulatorPath7, EmulatorPath8, EmulatorPath9, EmulatorPath10) VALUES " +
+                string sql = $"INSERT OR REPLACE INTO GameSystems (Name, RomDirPath, ImageDirPath, EmulatorPath1, EmulatorPath2, EmulatorPath3, EmulatorPath4, EmulatorPath5, EmulatorPath6, EmulatorPath7, EmulatorPath8, EmulatorPath9, EmulatorPath10) VALUES " +
                     $"(\"{Name}\", \"{romPath}\", \"{imgPath}\", \"{emulatorPaths.EmulatorPaths[0]}\", \"{emulatorPaths.EmulatorPaths[1]}\", \"{emulatorPaths.EmulatorPaths[2]}\", \"{emulatorPaths.EmulatorPaths[3]}\", \"{emulatorPaths.EmulatorPaths[4]}\", \"{emulatorPaths.EmulatorPaths[5]}\", \"{emulatorPaths.EmulatorPaths[6]}\", \"{emulatorPaths.EmulatorPaths[7]}\", \"{emulatorPaths.EmulatorPaths[8]}\", \"{emulatorPaths.EmulatorPaths[9]}\")";
-                var command = new SqliteCommand(sql, connection);
-                var x = command.ExecuteNonQuery();
+                SqliteCommand command = new SqliteCommand(sql, connection);
+                int x = command.ExecuteNonQuery();
                 int systemIndex = GetSystemIndex(Name);
-                Console.WriteLine($"The game system '{Name}' has been created successfully into row {systemIndex}");
-                if (Directory.Exists(imgPath))
-                    GetImages(imgPath);
-
+                SendStatus($"The game system '{Name}' has been created successfully into row {systemIndex}", isMainThread);
+                if (scanImageDir)
+                {
+                    UpdateGroupBoxText(isMainThread, $"Performing image scan on \"{imgPath}\"");
+                    if (Directory.Exists(imgPath))
+                        GetImages(imgPath, isMainThread);
+                }
+                UpdateGroupBoxText(isMainThread, $"Starting ROM scan on \"{romPath}\"");
                 string[] romFiles = Directory.GetFiles(romPath);
+                ResetProgressBar(romFiles.Length, isMainThread);
                 foreach (string f in romFiles)
                 {
+                    if (CancelButtonPressed())
+                        break;
+                    IncrementProgressBar(progressBar_ROMs, isMainThread);
+                    UpdateGroupBoxText(isMainThread, $"Processing ROM {f}");
                     long RomSize = new System.IO.FileInfo(f).Length;
                     string ext = Path.GetExtension(f).ToLower().TrimStart('.');
                     if (ext.Equals("sav"))
                         continue;
-                    if (!validRoms.Contains(ext.ToLower()) && RomSize < MINIMUM_ROM_SIZE)
+                    if (!VALID_ROMS.Contains(ext.ToLower()) && RomSize < MINIMUM_ROM_SIZE)
                     {
                         if (ext.Equals("zip") || ext.Equals("bin"))
                         { // There are some Atari ROM's that are smaller than 2K
@@ -753,10 +1194,15 @@ namespace GameLauncher
                         else
                             continue;
                     }
-                    UpdateRomInDb(GetRomDetails(f, systemIndex, RomSize));
+                    UpdateRomInDb(GetRomDetails(f, systemIndex, emulatorDir, RomSize));
                 }
-                GetMultiplayerRomData(emulatorDir);
+                if (!cancelScan)
+                    GetMultiplayerRomData(emulatorDir);
+                if (isMainThread)
+                    UpdateGroupBoxText(isMainThread, $"ROM scan complete for \"{romPath}\"");
             }
+            if (hideGroup)
+                BeginInvoke(new MyDelegateForm_Main(DelegateDisplayOrHideProgressGroup), GetDelegateAction(this, false));
         }
         private List<string> GetSystemNames(bool updateComboBoxSystem = true)
         {
@@ -795,10 +1241,47 @@ namespace GameLauncher
                 comboBoxSystem.Text = systemNames[0];
             return systemNames;
         }
-        class SystemScanTaskData
+        private void DisplayOrHideProgressGroup(bool display, int Maximum = 0)
         {
-            public string emulatorDir;
-            public EmulatorExecutables emulatorExecutables;
+            groupBox_ProgressBar.Enabled = groupBox_ProgressBar.Visible = display;
+            label_GameConsoleLabel.Enabled = label_GameConsoleLabel.Visible = display;
+            label_RomScanLabel.Enabled = label_RomScanLabel.Visible = display;
+            progressBar_ROMs.Enabled = display;
+            button_CancelScan.Enabled = display;
+            myListView.Enabled = myListView.Visible  = display == false;
+            comboBoxSystem.Enabled  = display == false;
+            comboBoxIconDisplay.Enabled  = display == false;
+            button_Util.Enabled  = display == false;
+            button_Settings.Enabled  = display == false;
+            if (display)
+            {
+                if (Maximum > 0)
+                {
+                    progressBar1.Enabled = progressBar1.Visible = display;
+                    progressBar1.Minimum = 1;
+                    progressBar1.Maximum = Maximum;
+                    progressBar1.Step = 1;
+                    progressBar1.Value = 1;
+                    progressBar1.Show();
+                }
+                groupBox_ProgressBar.Show();
+                label_GameConsoleLabel.Show();
+                label_RomScanLabel.Show();
+                progressBar_ROMs.Show();
+                button_CancelScan.Show();
+                cancelScan = false;
+            }
+            else
+            {
+                groupBox_ProgressBar.Hide();
+                label_GameConsoleLabel.Hide();
+                progressBar1.Hide();
+                label_RomScanLabel.Hide();
+                progressBar_ROMs.Hide();
+                button_CancelScan.Hide();
+            }
+            Show();
+            Update();
         }
         private List<string> InitializeRomsInDatabase(string startingPath = @"C:\Emulators", string romSubFolder = @"\roms", string imageSubFolder = @"\images", bool createTables = false, int doMultithread = 0)
         {
@@ -806,32 +1289,42 @@ namespace GameLauncher
             imageSubFolderName = imageSubFolder;
             Stopwatch totalProcessWatch = System.Diagnostics.Stopwatch.StartNew();
             Stopwatch databaseCollectionWatch = System.Diagnostics.Stopwatch.StartNew();
+            textBoxStatus.Text = $"Getting top directories from \"{startingPath}\"";
+            string[] emulatorDirs = Directory.GetDirectories(startingPath, "*", SearchOption.TopDirectoryOnly);
+            if (doMultithread == 0)
+                DisplayOrHideProgressGroup(true, emulatorDirs.Length);
             if (createTables) 
                 CreateSqlTables();
             // Check for master image path. Note: These images can apply to any game in any system which matches truncated name
             string masterImgPath = startingPath + imageSubFolderName;
             if (Directory.Exists(masterImgPath))
+            {
+                textBoxStatus.Text = $"Processing images in path {masterImgPath}";
+                label_GameConsoleLabel.Text = $"Processing images in path {masterImgPath}";
                 GetImages(masterImgPath);
+            }
 
-            string[] emulatorDirs = Directory.GetDirectories(startingPath, "*", SearchOption.TopDirectoryOnly);
+            textBoxStatus.Text = $"Creating {emulatorDirs.Length} SystemScanTaskData.";
             SystemScanTaskData[] systemScanTaskDatas = new SystemScanTaskData[emulatorDirs.Length];
             Stopwatch findEmulatorExecuteProcessWatch = System.Diagnostics.Stopwatch.StartNew();
             for (int i = 0; i < emulatorDirs.Length; ++i)
             {
                 systemScanTaskDatas[i] = new SystemScanTaskData();
+                systemScanTaskDatas[i].systemName = Path.GetFileName(emulatorDirs[i]);
                 systemScanTaskDatas[i].emulatorDir = emulatorDirs[i];
                 systemScanTaskDatas[i].emulatorExecutables = GetEmulatorPaths(emulatorDirs[i]);
             }
             findEmulatorExecuteProcessWatch.Stop();
             TimeSpan findEmulatorExecuteElapsed = findEmulatorExecuteProcessWatch.Elapsed;
-            // Note: Not finding improvement in performance for either thread methods.
+            // Note: Not finding improvement in performance for either multithread methods.
             if (doMultithread == 1)
             {
                 Task[] tasks = new Task[emulatorDirs.Length];
                 for (int i = 0; i < emulatorDirs.Length; ++i)
                 {
                     int ii = i;
-                    tasks[i] = Task.Run(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
+                    //tasks[ii] = Task.Run(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
+                    tasks[ii] = Task.Factory.StartNew(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
                 }
                 Task.WaitAll(tasks);
             }
@@ -839,9 +1332,18 @@ namespace GameLauncher
                 Parallel.ForEach(systemScanTaskDatas, systemScanTaskData => InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables));
             else
             {
+                textBoxStatus.Text = $"Processing {emulatorDirs.Length} game console systems.";
                 foreach (SystemScanTaskData systemScanTaskData in systemScanTaskDatas)
                 {
-                    InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables);
+                    if (CancelButtonPressed())
+                        break;
+                    IncrementProgressBar(progressBar1, true);
+                    label_GameConsoleLabel.Text = $"Processing game console {systemScanTaskData.systemName}";
+                    label_GameConsoleLabel.Update();
+                    progressBar1.Update();
+                    InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables, true);
+                    textBoxStatus.Text = $"Process complete for game console {systemScanTaskData.systemName}";
+                    textBoxStatus.Update();
                 }
             }
             databaseCollectionWatch.Stop();
@@ -852,12 +1354,15 @@ namespace GameLauncher
             totalProcessWatch.Stop();
             TimeSpan imageListCollectionElapsed = imageListCollectionWatch.Elapsed;
             TimeSpan totalProcessElapsed = totalProcessWatch.Elapsed;
-            MessageBox.Show($"Completed data collection DB collection time = {databaseCollectionElapsed.ToString(@"hh\:mm\:ss")} and ImageList time = {imageListCollectionElapsed.ToString(@"mm\:ss")}\nTotal time = {totalProcessElapsed.ToString(@"hh\:mm\:ss")}\nfindEmulatorExecuteElapsed={findEmulatorExecuteElapsed.ToString(@"hh\:mm\:ss")}", "Process Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (doMultithread == 0)
+                DisplayOrHideProgressGroup(false);
+            if (!cancelScan)
+                MessageBox.Show($"Completed data collection DB collection time = {databaseCollectionElapsed.ToString(@"hh\:mm\:ss")} and ImageList time = {imageListCollectionElapsed.ToString(@"mm\:ss")}\nTotal time = {totalProcessElapsed.ToString(@"hh\:mm\:ss")}\nfindEmulatorExecuteElapsed={findEmulatorExecuteElapsed.ToString(@"hh\:mm\:ss")}", "Process Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return systemNames;
         }
         private int GetRoms(string SystemName)
         {
-            RomList = new List<Rom>();
+            romList = new List<Rom>();
             int SystemID = GetSystemIndex(SystemName);
             if (SystemID < 0)
                 return -1;
@@ -895,13 +1400,13 @@ namespace GameLauncher
                         ImagePath = defaultImagePath;
                     }
 
-                    RomList.Add(new Rom(NameSimplified, System,FilePath, NameOrg, Title, Compressed, ImageID,
+                    romList.Add(new Rom(NameSimplified, System,FilePath, NameOrg, Title, Compressed, ImageID,
                         PreferredEmulator, ImagePath, QtyPlayers, Region, 
                         Developer, RomSize, Genre, NotesCore, NotesUser, 
                         FileFormat, ReleaseDate, Status, Version, Description, Language));
                 }
             }
-            return RomList.Count;
+            return romList.Count;
         }
         private string GetGameSystemRomPath(string systemName = null)
         {
@@ -953,10 +1458,6 @@ namespace GameLauncher
             SerializableImageList.Save(previousCollectedImages.list1, imageList1Path);
             SerializableImageList.Save(previousCollectedImages.list2, imageList2Path);
         }
-        private string dataDirPath = null;
-        private string binDirPath = null;
-        private string defaultImagePath = null;
-        private Dictionary<string, PreviousCollectedData> previousCollections = new Dictionary<string, PreviousCollectedData>();
         private void TaskToProcessImageList(int setId, int listID, int startPos, int lastPos)
         {
             if (tmpImageList1 == null || tmpImageList2 == null)
@@ -965,9 +1466,9 @@ namespace GameLauncher
             for (int i = startPos; i < lastPos; i++)
             {
                 if (setId == 0)
-                    tmpImageList1[listID].Images.Add(System.Drawing.Image.FromFile(RomList[index: i].ImagePath));
+                    tmpImageList1[listID].Images.Add(System.Drawing.Image.FromFile(romList[index: i].ImagePath));
                 else
-                    tmpImageList2[listID].Images.Add(System.Drawing.Image.FromFile(RomList[i].ImagePath));
+                    tmpImageList2[listID].Images.Add(System.Drawing.Image.FromFile(romList[i].ImagePath));
 
             }
             if (setId == 0)
@@ -975,140 +1476,157 @@ namespace GameLauncher
             else
                 Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList2[listID].Images.Count}.");
         }
-        private ImageList[] tmpImageList1 = null;
-        private ImageList[] tmpImageList2 = null;
-        private List<int> StartPosList = null;
-        // Note: Below results show that there's very little difference when using more than 6 threads
-        // Performance for 1959 Roms (NES)
-        // 1  Threads = 26.56 seconds
-        // 2  Threads = 17.51 seconds
-        // 4  Threads = 15.56 seconds
-        // 6  Threads = 14.46 seconds
-        // 8  Threads = 14.44 seconds
-        // 10 Threads = 14.44 seconds
-        // ToDo: Make usePreviousCollectionCache user configurable
-        public bool DisplaySystemIcons(string systemName)
+        public bool DisplaySystemIcons(string systemName, int multithread = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
         {
-            textBoxStatus.Text = $"Collecting ROM data for {systemName}. Please standby....";
-            if (Properties.Settings.Default.usePreviousCollectionCache && previousCollections.ContainsKey(systemName))
+            using (new CursorWait())
             {
-                //Now assigning First imageList as LargeImageList to the ListView...
-                myListView.LargeImageList = previousCollections[systemName].list1;
-                //assigning the second imageList as SmallImageList to the ListView...   
-                myListView.SmallImageList = previousCollections[systemName].list2;
-                RomList = previousCollections[systemName].roms;
-            }
-            else
-            {
-                if (GetRoms(systemName) < 1)
-                    return false;
-                PreviousCollectedImages previousCollectedImages = GetSavedCollectionData(systemName);
-                if (previousCollectedImages != null && previousCollectedImages.list1.Images.Count == RomList.Count)
+                // Note: Below results show that there's very little difference when using more than 6 threads for Properties.Settings.Default.MaxNumberOfPairThreadsPerList
+                // Performance for 1959 Roms (NES)
+                // 1  Threads = 26.56 seconds
+                // 2  Threads = 17.51 seconds
+                // 4  Threads = 15.56 seconds
+                // 6  Threads = 14.46 seconds
+                // 8  Threads = 14.44 seconds
+                // 10 Threads = 14.44 seconds
+                textBoxStatus.Text = $"Collecting ROM data for {systemName}. Please standby....";
+                if (Properties.Settings.Default.usePreviousCollectionCache && previousCollections.ContainsKey(systemName))
                 {
-                    myListView.LargeImageList = previousCollectedImages.list1;
-                    myListView.SmallImageList = previousCollectedImages.list2;
+                    //Now assigning First imageList as LargeImageList to the ListView...
+                    myListView.LargeImageList = previousCollections[systemName].list1;
+                    //assigning the second imageList as SmallImageList to the ListView...   
+                    myListView.SmallImageList = previousCollections[systemName].list2;
+                    romList = previousCollections[systemName].roms;
                 }
-                else 
+                else
                 {
-                    System.Windows.Forms.ImageList myImageList1 = new ImageList();
-                    myImageList1.ImageSize = new Size(Properties.Settings.Default.largeIconSize, Properties.Settings.Default.largeIconSize);
-                    System.Windows.Forms.ImageList myImageList2 = new ImageList();
-                    myImageList2.ImageSize = new Size(Properties.Settings.Default.smallIconSize, Properties.Settings.Default.smallIconSize);
-                    if (Properties.Settings.Default.MaxNumberOfPairThreadsPerList > 0 && RomList.Count > Properties.Settings.Default.MaxNumberOfPairThreadsPerList * 3)
+                    if (GetRoms(systemName) < 1)
+                        return false;
+                    PreviousCollectedImages previousCollectedImages = GetSavedCollectionData(systemName);
+                    if (previousCollectedImages != null && previousCollectedImages.list1.Images.Count == romList.Count)
                     {
-                        StartPosList = new List<int>();
-                        tmpImageList1 = new ImageList[Properties.Settings.Default.MaxNumberOfPairThreadsPerList];
-                        tmpImageList2 = new ImageList[Properties.Settings.Default.MaxNumberOfPairThreadsPerList];
-                        for (int i = 0; i < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; ++i)
-                        {
-                            StartPosList.Add(RomList.Count / Properties.Settings.Default.MaxNumberOfPairThreadsPerList * i);
-
-                            ImageList tmpImage1 = new ImageList();
-                            tmpImage1.ImageSize = new Size(Properties.Settings.Default.largeIconSize, Properties.Settings.Default.largeIconSize);
-                            tmpImageList1[i] = tmpImage1;
-                            ImageList tmpImage2 = new ImageList();
-                            tmpImage2.ImageSize = new Size(Properties.Settings.Default.smallIconSize, Properties.Settings.Default.smallIconSize);
-                            tmpImageList2[i] = tmpImage2;
-                        }
-                        StartPosList.Add(RomList.Count);
-                        Task[] tasks = new Task[Properties.Settings.Default.MaxNumberOfPairThreadsPerList * 2];
-                        for (int i = 0; i < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; ++i)
-                        {
-                            int idx = i; // Need to use temporary variable for Task thread logic to work.
-                            tasks[idx] = Task.Factory.StartNew(() => TaskToProcessImageList(0, idx, StartPosList[idx], StartPosList[idx + 1]));
-                            tasks[idx + Properties.Settings.Default.MaxNumberOfPairThreadsPerList] = Task.Factory.StartNew(() => TaskToProcessImageList(1, idx, StartPosList[idx], StartPosList[idx + 1]));
-                        }
-                        Task.WaitAll(tasks);
-                        for (int i = 0; i < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; ++i)
-                        {
-                            foreach (System.Drawing.Image img in tmpImageList1[i].Images)
-                                myImageList1.Images.Add(img);
-                            foreach (System.Drawing.Image img in tmpImageList2[i].Images)
-                                myImageList2.Images.Add(img);
-                        }
+                        myListView.LargeImageList = previousCollectedImages.list1;
+                        myListView.SmallImageList = previousCollectedImages.list2;
                     }
                     else
                     {
-                        // Implementation to do this without multithreading when there's only a few ROM's to process.
-                        for (int i = 0; i < RomList.Count; i++)
-                            myImageList1.Images.Add(System.Drawing.Image.FromFile(RomList[i].ImagePath));
-                        for (int i = 0; i < RomList.Count; i++)
-                            myImageList2.Images.Add(System.Drawing.Image.FromFile(RomList[i].ImagePath));
-                    }
-                    //Now assigning First imageList as LargeImageList to the ListView...
-                    myListView.LargeImageList = myImageList1;
-                    //assigning the second imageList as SmallImageList to the ListView...
-                    myListView.SmallImageList = myImageList2;
-                }
-                PreviousCollectedData previousCollectedData = new PreviousCollectedData();
-                previousCollectedData.list1 = myListView.LargeImageList;
-                previousCollectedData.list2 = myListView.SmallImageList;
-                previousCollectedData.roms = RomList;
-                if (Properties.Settings.Default.usePreviousCollectionCache)
-                    previousCollections[systemName] = previousCollectedData;
-                if (previousCollectedImages == null || previousCollectedImages.list1.Images.Count != RomList.Count)
-                    SaveCollectionData(systemName, previousCollectedData);
-            }
+                        System.Windows.Forms.ImageList myImageList1 = new ImageList();
+                        myImageList1.ImageSize = new Size(Properties.Settings.Default.largeIconSize, Properties.Settings.Default.largeIconSize);
+                        System.Windows.Forms.ImageList myImageList2 = new ImageList();
+                        myImageList2.ImageSize = new Size(Properties.Settings.Default.smallIconSize, Properties.Settings.Default.smallIconSize);
+                        if (Properties.Settings.Default.MaxNumberOfPairThreadsPerList > 0 && romList.Count > Properties.Settings.Default.MaxNumberOfPairThreadsPerList * 3)
+                        {
+                            startPosList = new List<int>();
+                            tmpImageList1 = new ImageList[Properties.Settings.Default.MaxNumberOfPairThreadsPerList];
+                            tmpImageList2 = new ImageList[Properties.Settings.Default.MaxNumberOfPairThreadsPerList];
+                            for (int i = 0; i < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; ++i)
+                            {
+                                startPosList.Add(romList.Count / Properties.Settings.Default.MaxNumberOfPairThreadsPerList * i);
 
-            textBoxStatus.Text = $"Setting titles for the {RomList.Count} games (ROM's) found for {systemName}";
-            myListView.Items.Clear();
-            // Here's the bottleneck.
-            // ToDo: Need logic to improve performance here..
-            for (int i = 0; i < RomList.Count; i++)
-                 myListView.Items.Add(RomList[i].Title, i);
-            textBoxStatus.Text = $"{RomList.Count} GamSqliteCommand(ROM's) found for {systemName}";
+                                ImageList tmpImage1 = new ImageList();
+                                tmpImage1.ImageSize = new Size(Properties.Settings.Default.largeIconSize, Properties.Settings.Default.largeIconSize);
+                                tmpImageList1[i] = tmpImage1;
+                                ImageList tmpImage2 = new ImageList();
+                                tmpImage2.ImageSize = new Size(Properties.Settings.Default.smallIconSize, Properties.Settings.Default.smallIconSize);
+                                tmpImageList2[i] = tmpImage2;
+                            }
+                            startPosList.Add(romList.Count);
+                            if (multithread == 0)
+                            {
+                                for (int idx = 0; idx < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; idx++)
+                                {
+                                    TaskToProcessImageList(0, idx, startPosList[idx], startPosList[idx + 1]);
+                                    TaskToProcessImageList(1, idx, startPosList[idx], startPosList[idx + 1]);
+                                }
+                            }
+                            else if (multithread == 1)
+                            {
+                                Parallel.For(0, Properties.Settings.Default.MaxNumberOfPairThreadsPerList, idx =>
+                                {
+                                    TaskToProcessImageList(0, idx, startPosList[idx], startPosList[idx + 1]);
+                                    TaskToProcessImageList(1, idx, startPosList[idx], startPosList[idx + 1]);
+                                });
+                            }
+                            else
+                            {
+                                Task[] tasks = new Task[Properties.Settings.Default.MaxNumberOfPairThreadsPerList * 2];
+                                for (int i = 0; i < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; ++i)
+                                {
+                                    int idx = i; // Need to use temporary variable for Task thread logic to work.
+                                    tasks[idx] = Task.Factory.StartNew(() => TaskToProcessImageList(0, idx, startPosList[idx], startPosList[idx + 1]));
+                                    tasks[idx + Properties.Settings.Default.MaxNumberOfPairThreadsPerList] = Task.Factory.StartNew(() => TaskToProcessImageList(1, idx, startPosList[idx], startPosList[idx + 1]));
+                                }
+                                Task.WaitAll(tasks);
+                            }
+                            for (int i = 0; i < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; ++i)
+                            {
+                                foreach (System.Drawing.Image img in tmpImageList1[i].Images)
+                                    myImageList1.Images.Add(img);
+                                foreach (System.Drawing.Image img in tmpImageList2[i].Images)
+                                    myImageList2.Images.Add(img);
+                            }
+                        }
+                        else
+                        {
+                            // Implementation to do this without multithreading when there's only a few ROM's to process.
+                            for (int i = 0; i < romList.Count; i++)
+                                myImageList1.Images.Add(System.Drawing.Image.FromFile(romList[i].ImagePath));
+                            for (int i = 0; i < romList.Count; i++)
+                                myImageList2.Images.Add(System.Drawing.Image.FromFile(romList[i].ImagePath));
+                        }
+                        //Now assigning First imageList as LargeImageList to the ListView...
+                        myListView.LargeImageList = myImageList1;
+                        //assigning the second imageList as SmallImageList to the ListView...
+                        myListView.SmallImageList = myImageList2;
+                    }
+                    PreviousCollectedData previousCollectedData = new PreviousCollectedData();
+                    previousCollectedData.list1 = myListView.LargeImageList;
+                    previousCollectedData.list2 = myListView.SmallImageList;
+                    previousCollectedData.roms = romList;
+                    if (Properties.Settings.Default.usePreviousCollectionCache)
+                        previousCollections[systemName] = previousCollectedData;
+                    if (previousCollectedImages == null || previousCollectedImages.list1.Images.Count != romList.Count)
+                        SaveCollectionData(systemName, previousCollectedData);
+                }
+
+                textBoxStatus.Text = $"Setting titles for the {romList.Count} games (ROM's) found for {systemName}";
+                myListView.Items.Clear();
+                // Here's the bottleneck.
+                // ToDo: Need logic to improve performance here..
+                for (int i = 0; i < romList.Count; i++)
+                    myListView.Items.Add(romList[i].Title, i);
+                textBoxStatus.Text = $"{romList.Count} GamSqliteCommand(ROM's) found for {systemName}";
+            }
             return true;
         }
         public bool InitializeDbConnection(string dbPath)
         {
-            if (dbPath == null || !File.Exists(dbPath))
+            using (new CursorWait())
             {
-                MessageBox.Show($"Error: Can not find {GameLauncherDbName}.\nExpected to find file in following path\n{dbPath}\nPlease select option to set database ({GameLauncherDbName}) location.", "Missing database", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            connection = new SqliteConnection($"Filename={dbPath}");
-            connection.Open();
-            List<string> SystemNames = GetSystemNames();
-            if (SystemNames.Count < 1)
-            {
-                SystemNames = InitializeRomsInDatabase(GetEmulatorsBasePath());
-                if (SystemNames.Count < 1)
-                {//ToDo: Add error message here.
+                if (dbPath == null || !File.Exists(dbPath))
+                {
+                    MessageBox.Show($"Error: Can not find {GAMELAUNCHER_DB_NAME}.\nExpected to find file in following path\n{dbPath}\nPlease select option to set database ({GAMELAUNCHER_DB_NAME}) location.", "Missing database", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
+                connection = new SqliteConnection($"Filename={dbPath}");
+                connection.Open();
+                List<string> SystemNames = GetSystemNames();
+                if (SystemNames.Count < 1)
+                {
+                    SystemNames = InitializeRomsInDatabase(GetEmulatorsBasePath());
+                    if (SystemNames.Count < 1)
+                    {//ToDo: Add error message here.
+                        return false;
+                    }
+                }
+                else
+                    GetEmulatorsBasePath(); // Call this to set Properties.Settings.Default.EmulatorsBasePath
+                string LastSystemSelected = GetPersistenceVariable("comboBoxSystem");
+                comboBoxSystem.Text = LastSystemSelected != null && LastSystemSelected.Length != 0 ? LastSystemSelected : SystemNames[0];
+                string LastIconDisplaySelected = GetPersistenceVariable("comboBoxIconDisplay");
+                comboBoxIconDisplay.Text = LastIconDisplaySelected != null && LastIconDisplaySelected.Length != 0 ? LastIconDisplaySelected : "Large Icons";
             }
-            else
-                GetEmulatorsBasePath(); // Call this to set Properties.Settings.Default.EmulatorsBasePath
-            string LastSystemSelected = GetPersistenceVariable("comboBoxSystem");
-            comboBoxSystem.Text = LastSystemSelected != null && LastSystemSelected.Length != 0 ? LastSystemSelected : SystemNames[0];
-            string LastIconDisplaySelected = GetPersistenceVariable("comboBoxIconDisplay");
-            comboBoxIconDisplay.Text = LastIconDisplaySelected != null && LastIconDisplaySelected.Length != 0 ? LastIconDisplaySelected : "Large Icons";
             return true;
         }
-        public static readonly string[] CommonEmulatorPaths = { @"C:\Emulator", @"C:\GameEmulator", @"C:\RetroGameEmulator", @"C:\RetroEmulator", @"C:\Game", @"C:\Retro", @"C:\RetroGame", @"C:\GameRetro" };
-        public static readonly string DATA_SUBPATH = @"data\";
-        public static readonly string GameLauncher_SUBPATH = @"GameLauncher\";
-        public const string GameLauncherDbName = "GameLauncher.db";
         public string GetDbPath_sub()
         {
             if (Properties.Settings.Default.DbPath != null && Properties.Settings.Default.DbPath.Length > 0)
@@ -1116,33 +1634,33 @@ namespace GameLauncher
                 if (File.Exists(Properties.Settings.Default.DbPath))
                     return Properties.Settings.Default.DbPath;
             }
-            string dbPath = Path.Combine($"{binDirPath}{DATA_SUBPATH}", GameLauncherDbName);
+            string dbPath = Path.Combine($"{binDirPath}{DATA_SUBPATH}", GAMELAUNCHER_DB_NAME);
             if (File.Exists(dbPath))
                 return dbPath;
-            foreach (var path in CommonEmulatorPaths)
+            foreach (var path in COMMON_EMULATOR_PATHS)
             {
-                dbPath = Path.Combine(path, GameLauncherDbName);
+                dbPath = Path.Combine(path, GAMELAUNCHER_DB_NAME);
                 if (File.Exists(dbPath))
                     return dbPath;
-                dbPath = Path.Combine($"{path}s", GameLauncherDbName);
-                if (File.Exists(dbPath))
-                    return dbPath;
-
-                dbPath = Path.Combine(path, $"{DATA_SUBPATH}{GameLauncherDbName}");
-                if (File.Exists(dbPath))
-                    return dbPath;
-                dbPath = Path.Combine($"{path}s", $"{DATA_SUBPATH}{GameLauncherDbName}");
+                dbPath = Path.Combine($"{path}s", GAMELAUNCHER_DB_NAME);
                 if (File.Exists(dbPath))
                     return dbPath;
 
-                dbPath = Path.Combine(path, $"{GameLauncher_SUBPATH}{DATA_SUBPATH}{GameLauncherDbName}");
+                dbPath = Path.Combine(path, $"{DATA_SUBPATH}{GAMELAUNCHER_DB_NAME}");
                 if (File.Exists(dbPath))
                     return dbPath;
-                dbPath = Path.Combine($"{path}s", $"{GameLauncher_SUBPATH}{DATA_SUBPATH}{GameLauncherDbName}");
+                dbPath = Path.Combine($"{path}s", $"{DATA_SUBPATH}{GAMELAUNCHER_DB_NAME}");
+                if (File.Exists(dbPath))
+                    return dbPath;
+
+                dbPath = Path.Combine(path, $"{GAMELAUNCHER_SUBPATH}{DATA_SUBPATH}{GAMELAUNCHER_DB_NAME}");
+                if (File.Exists(dbPath))
+                    return dbPath;
+                dbPath = Path.Combine($"{path}s", $"{GAMELAUNCHER_SUBPATH}{DATA_SUBPATH}{GAMELAUNCHER_DB_NAME}");
                 if (File.Exists(dbPath))
                     return dbPath;
             }
-            dbPath = Path.Combine(dataDirPath, GameLauncherDbName);
+            dbPath = Path.Combine(dataDirPath, GAMELAUNCHER_DB_NAME);
             return dbPath;
         }
         public string GetDbPath()
@@ -1159,7 +1677,7 @@ namespace GameLauncher
                 if (Directory.Exists(Properties.Settings.Default.EmulatorsBasePath))
                     return Properties.Settings.Default.EmulatorsBasePath;
             }
-            foreach (var path in CommonEmulatorPaths)
+            foreach (var path in COMMON_EMULATOR_PATHS)
             {
                 if (File.Exists(path))
                     return path;
@@ -1201,7 +1719,7 @@ namespace GameLauncher
                 Properties.Settings.Default.DefaultImagePath = defaultImagePath;
             return defaultImagePath;
         }
-        private bool RedoDbInit(string warningMessage = "", string messageTitle = "", MessageBoxIcon messageBoxIcon = MessageBoxIcon.Error)
+        public bool RedoDbInit(string warningMessage = "", string messageTitle = "", MessageBoxIcon messageBoxIcon = MessageBoxIcon.Error)
         {
             if (warningMessage.Length > 0) 
             {
@@ -1213,8 +1731,36 @@ namespace GameLauncher
             InitializeDbConnection(Properties.Settings.Default.DbPath);
             return true;
         }
-        public static Thread threadJoyStick = null;
-        public static bool threadJoyStickAborting = false;
+        public void RescanSelectedSystem(string systemName = null, bool doImageScan = false)
+        {
+            if (systemName == null)
+                systemName = comboBoxSystem.Text;
+            string romDir = GetGameSystemRomPath(systemName);
+            string systemPath = romDir == null ? "" : Path.GetDirectoryName(romDir);
+            if (romDir == null || !Directory.Exists(systemPath))
+            {
+                MessageBox.Show($"Can not perform a scan for emulator {systemName} because invalid path\n\"{systemPath}\"", "Path Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            DeleteImageList(systemName);
+            EmulatorExecutables emulatorExecutables = GetEmulatorPaths(systemPath);
+            label_GameConsoleLabel.Text = $"Rescanning path {systemPath} for new ROM's";
+            textBoxStatus.Text = $"Rescanning path {systemPath} for new ROM's";
+            textBoxStatus.Update();
+            DisplayOrHideProgressGroup(true);
+            InitializeRomsInDatabaseForSystem_Arg arg = new InitializeRomsInDatabaseForSystem_Arg();
+            arg.emulatorDir = systemPath;
+            arg.emulatorExecutables = emulatorExecutables;
+            arg.isMainThread = false;
+            arg.scanImageDir = doImageScan;
+            arg.hideGroup = true;
+            BeginInvoke(new MyDelegateInitializeRomsInDatabaseForSystem(DelegateInitializeRomsInDatabaseForSystem), GetDelegateAction(this, arg));
+        }
+        public void ScanForNewRomsOnAllSystems(bool doImageScan = false)
+        {
+            foreach(var systemName in comboBoxSystem.Items)
+                RescanSelectedSystem(systemName.ToString(), doImageScan);
+        }
         public bool ValidatePropertiesSettings(bool checkPathsExists = false)
         {
             bool validationSuccess = true;
@@ -1292,267 +1838,29 @@ namespace GameLauncher
                 Properties.Settings.Default.Save();
             return validationSuccess;
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public Form1()
-        {
-            InitializeComponent();
-            ValidatePropertiesSettings();
-            comboBoxIconDisplay.Items.Add("Large Icons");
-            comboBoxIconDisplay.Items.Add("Small Icons");
-            comboBoxIconDisplay.Items.Add("Tiles");
-            comboBoxIconDisplay.Text = "Large Icons";
-            binDirPath = AppDomain.CurrentDomain.BaseDirectory;
-            dataDirPath = AppDomain.CurrentDomain.BaseDirectory;
-            string dbPath = GetDbPath();
-            if (dbPath != null && Directory.Exists(System.IO.Path.GetDirectoryName(dbPath)))
-                dataDirPath = System.IO.Path.GetDirectoryName(dbPath);
-            defaultImagePath = GetDefaultImagePath(dbPath); // Make sure to do this before InitializeDbConnection
-            InitializeDbConnection(dbPath);
-            Properties.Settings.Default.Save();
-            if (Properties.Settings.Default.useJoystickController)
-            {
-                threadJoyStick = new Thread(PollJoystick);
-                threadJoyStick.Start();
-            }
-            if (Properties.Settings.Default.Maximised)
-            {
-                WindowState = FormWindowState.Maximized;
-            }
-            SetAdvanceOptions();
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         private void SetAdvanceOptions()
         {
             if (Properties.Settings.Default.disableAdvanceOptions)
             {
-                button_Rescan.Enabled = false;
+                button_Util.Enabled = false;
                 contextMenuStrip1.Enabled = false;
             }
             else
             {
-                button_Rescan.Enabled = true;
+                button_Util.Enabled = true;
                 contextMenuStrip1.Enabled = true;
-            }
-        }
-
-        public static string MiscData = "";
-        public static readonly int GamePadDown  = 18000;
-        public static readonly int GamePadUp    = 0;
-        public static readonly int GamePadLeft  = 27000;
-        public static readonly int GamePadRight = 9000;
-        private static Dictionary<string, long> dictAvoidRepeat = new Dictionary<string, long>();
-        private static bool IsRepeat(string keys, long MaxSecondsToWait = MaxSecondsToWaitDefault)
-        {
-            keys = $"__{keys}";
-            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-            long now = dto.ToUnixTimeSeconds();
-            if (dictAvoidRepeat.ContainsKey(keys) && dictAvoidRepeat[keys] + MaxSecondsToWait > now)
-                return true;
-            dictAvoidRepeat[keys] = now;
-            return false;
-        }
-        private static bool Send_Keys(string keys, long MaxSecondsToWait = MaxSecondsToWaitDefault)
-        {
-            DateTimeOffset dto = new DateTimeOffset(DateTime.Now);
-            long now = dto.ToUnixTimeSeconds();
-            if (dictAvoidRepeat.ContainsKey(keys) && dictAvoidRepeat[keys] + MaxSecondsToWait > now)
-                return false;
-            dictAvoidRepeat[keys] = now;
-            SendKeys.SendWait(keys);
-            return true;
-        }
-        public static void PollJoystick()
-        {
-            // https://stackoverflow.com/questions/18416039/joystick-acquisition-with-sharpdx
-            //var directInput = new DirectInput();
-            // To simulate cursor and keys see following: https://gamedev.stackexchange.com/questions/19906/how-do-i-simulate-the-mouse-and-keyboard-using-c-or-c
-            DirectInput directInput = new DirectInput();
-
-            List<Joystick> sticks = new List<Joystick>();
-            foreach (DeviceInstance device in directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
-            {
-                Joystick stick = new Joystick(directInput, device.InstanceGuid);
-                stick.Acquire();
-
-                foreach (DeviceObjectInstance deviceObject in stick.GetObjects(DeviceObjectTypeFlags.Axis))
-                {
-                    stick.GetObjectPropertiesById(deviceObject.ObjectId).Range = new InputRange(-100, 100);
-                }
-                sticks.Add(stick);
-            }
-
-            Guid joystickGuid = Guid.Empty;
-            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AttachedOnly))
-                joystickGuid = deviceInstance.InstanceGuid;
-            // If Gamepad not found, look for a Joystick
-            if (joystickGuid == Guid.Empty)
-                foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AttachedOnly))
-                    joystickGuid = deviceInstance.InstanceGuid;
-
-            if (joystickGuid == Guid.Empty)
-                foreach (var deviceInstance in directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly))
-                    joystickGuid = deviceInstance.InstanceGuid;
-
-            // If Joystick not found, throws an error
-            if (joystickGuid == Guid.Empty)
-            {
-                Console.WriteLine("No joystick/Gamepad found.");
-                threadJoyStickAborting = true;
-                return;
-                //Console.ReadKey();
-                //Environment.Exit(1);
-            }
-
-            Joystick joystick = new Joystick(directInput, joystickGuid);
-            joystick.Properties.BufferSize = 128;
-            joystick.Acquire();
-            while (threadJoyStickAborting == false)
-            {
-                joystick.Poll();
-                if (threadJoyStickAborting == true && Properties.Settings.Default.useJoystickController == false)
-                    return;
-                if (WaitingShellExecuteToComplete)
-                    continue;
-                //foreach (Joystick js in sticks) 
-                //{
-                //    JoystickUpdate lastState = js.GetBufferedData().Last();
-                //    if (lastState.Offset == JoystickOffset.X)
-                //    {
-                //        form1.textBoxStatus.Text = lastState.Value.ToString();
-                //    }
-                //}
-                MiscData = "";
-                var data = joystick.GetBufferedData();
-                foreach (JoystickUpdate state in data)
-                {
-                    if (state.Offset == JoystickOffset.X)
-                    {
-                        MiscData += "[x]"; // 1st Joystick left and down
-                    }
-                    else if (state.Offset == JoystickOffset.Y)
-                    {
-                        MiscData += "[y]"; // 1st Joystick right and up
-                    }
-                    else if (state.Offset == JoystickOffset.Z)
-                    {
-                        MiscData += "[z]"; // Lower trigger [left]val=34000>, [right]val=31000>
-                        if (state.Value > 34000)
-                        {
-                            if (!Send_Keys("{END}"))
-                                break;
-                        }
-                        else
-                        {
-                            if (!Send_Keys("{F9}"))
-                                break;
-                        }
-                    }
-                    else if (state.Offset == JoystickOffset.RotationX)
-                    {
-                        MiscData += "[RotationX]"; // 2nd Joystick left and right
-                    }
-                    else if (state.Offset == JoystickOffset.RotationY)
-                    {
-                        MiscData += "[RotationY]";// 2nd Joystick up and down
-                    }
-                    else if (state.Offset == JoystickOffset.RotationZ)
-                    {
-                        MiscData += "[RotationZ]";
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons0)
-                    {
-                        MiscData += "[Buttons0]"; // A button
-                        if (!Send_Keys("{F5}", MaxSecondsToWait_F5))
-                            break;
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons1)
-                    {
-                        MiscData += "[Buttons1]"; // B button
-                        if (!Send_Keys("{TAB}"))
-                            break;
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons2)
-                    {
-                        MiscData += "[Buttons2]"; // X button
-                        Send_Keys("{PGDN}");
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons3)
-                    {
-                        MiscData += "[Buttons3]"; // Y button
-                        Send_Keys("{PGUP}");
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons4)
-                    {
-                        MiscData += "[Buttons4]"; // Left upper trigger
-                        if (!Send_Keys("{HOME}"))
-                            break;
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons5)
-                    {
-                        MiscData += "[Buttons5]"; // Right upper trigger
-                        if (!Send_Keys("{F8}"))
-                            break;
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons6)
-                    {
-                        MiscData += "[Buttons6]"; // Back/Select button
-                        System.Windows.Forms.Application.Exit();
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons7)
-                    {
-                        MiscData += "[Buttons7]"; // Start button
-                        if (!Send_Keys("{F5}", MaxSecondsToWait_F5))
-                            break;
-                    }
-                    else if (state.Offset == JoystickOffset.PointOfViewControllers0)
-                    { // PointOfViewControllers0, [up]val=0, [down]val=18000,[left]val=27000,[right]val=9000
-                        MiscData += $"[PointOfViewControllers0 {state.Value}]";
-                        if (GamePadUp == state.Value)
-                            SendKeys.SendWait("{UP}");
-                        else if (GamePadDown == state.Value)
-                            SendKeys.SendWait("{DOWN}");
-                        else if (GamePadLeft == state.Value)
-                            SendKeys.SendWait("{LEFT}");
-                        else if (GamePadRight == state.Value)
-                            SendKeys.SendWait("{RIGHT}");
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons8)
-                    {
-                        MiscData += "[Buttons8]"; // 1st Joystick center button
-                        if (!Send_Keys("{F6}"))
-                            break;
-                    }
-                    else if (state.Offset == JoystickOffset.Buttons9)
-                    {
-                        MiscData += "[Buttons9]"; // 2nd Joystick center button
-                        if (!Send_Keys("{F4}"))
-                            break;
-                    }
-                    else
-                    {
-                        MiscData += "[misc]";
-                    }
-                }
             }
         }
         private string GetEmulatorStartScanPath()
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = "Enter base path to start emulator scanning.";
-
             return fbd.ShowDialog() == DialogResult.OK ? fbd.SelectedPath : null;
         }
         private Rom GetSelectedROM()
         {
-            //List<int> selectedRoms = new List<int>();
-            //foreach (ListViewItem item in myListView.SelectedItems)
-            //{
-            //    selectedRoms.Add(item.Index);
-            //}
             foreach (ListViewItem item in myListView.SelectedItems)
-                return RomList[item.Index];
+                return romList[item.Index];
             return null;
         }
         private int GetSelectedRomIndex()
@@ -1561,39 +1869,34 @@ namespace GameLauncher
                 return item.Index;
             return -1;
         }
-        public static bool WaitingShellExecuteToComplete = false;
         private void PlaySelectedRom()
         {
+            Rom rom = GetSelectedROM();
             lock (myListView)
             {
-                WaitingShellExecuteToComplete = true;
-                foreach (ListViewItem item in myListView.SelectedItems)
-                {// ToDo: Add logic so that when a ROM file has been renamed via context menu, that the rom.FilePath is fetched from the DB until GameLauncher has restarted or selected game console has changed.
-                    Rom rom = RomList[item.Index];
-                    if (!File.Exists(rom.FilePath))
-                    {
-                        MessageBox.Show($"Error: The selected ROM file no longer exists:\n'{rom.FilePath}'", "ROM not exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
-                    string emulatorExecutable = GetEmulatorExecutable(comboBoxSystem.Text, preferredEmulator);
-                    string execCommand = $"\"{emulatorExecutable}\" \"{rom.FilePath}\"";
-                    var prevWinState = this.WindowState;
-                    this.WindowState = FormWindowState.Minimized;
-                    Process process = Process.Start(new ProcessStartInfo($"\"{emulatorExecutable}\"", $"\"{rom.FilePath}\"")
-                    {
-                        UseShellExecute = true
-                    });
-                    process.WaitForExit();
-                    WaitingShellExecuteToComplete = false;
-                    this.WindowState = prevWinState;
-                    break; // Only get the first item....
+                waitingShellExecuteToComplete = true;
+                if (!File.Exists(rom.FilePath))
+                {
+                    MessageBox.Show($"Error: The selected ROM file no longer exists:\n'{rom.FilePath}'", "ROM not exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+                int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
+                string emulatorExecutable = GetEmulatorExecutable(comboBoxSystem.Text, preferredEmulator);
+                string execCommand = $"\"{emulatorExecutable}\" \"{rom.FilePath}\"";
+                var prevWinState = this.WindowState;
+                this.WindowState = FormWindowState.Minimized;
+                Process process = Process.Start(new ProcessStartInfo($"\"{emulatorExecutable}\"", $"\"{rom.FilePath}\"")
+                {
+                    UseShellExecute = true
+                });
+                process.WaitForExit();
+                waitingShellExecuteToComplete = false;
+                this.WindowState = prevWinState;
             }
         }
         private void myListView_ItemMouseHover(Object sender, ListViewItemMouseHoverEventArgs e)
         {
-            Rom rom = RomList[e.Item.Index];
+            Rom rom = romList[e.Item.Index];
             e.Item.ToolTipText = $"FileName='{rom.FilePath}'";
             string QtyPlayers = "";
             if (rom.QtyPlayers > 1)
@@ -1662,7 +1965,7 @@ namespace GameLauncher
             }
         }
         private void myListViewContextMenu_AssignPreferredEmulator_Click(object sender, EventArgs e)
-        {// ToDo:
+        {
             Rom rom = GetSelectedROM();
             if (rom == null)
                 return;
@@ -1719,27 +2022,6 @@ namespace GameLauncher
                 rom.PreferredEmulatorID = emulatorIndex;
                 UpdateRomInDb(rom);
                 MessageBox.Show($"Emulator updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-        private void myListView_button_Rescan_Click(object sender, EventArgs e)
-        {
-            string romDir = GetGameSystemRomPath();
-            DialogResult results = MessageBox.Show($"Click Yes to erase GameLauncher database and rescan emulator path \"{Properties.Settings.Default.EmulatorsBasePath}\"\nClick NO to only rescan path \"{romDir}\" for new ROM's\nOr click CANCEL to exit rescan option.","Rescan?", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Question);
-            if (results == DialogResult.Yes) 
-            {
-                RedoDbInit();
-            }
-            else if (results == DialogResult.No)
-            {
-                string systemPath = romDir == null ? "" : Path.GetDirectoryName(romDir);
-                if (romDir == null || !Directory.Exists(systemPath))
-                {
-                    MessageBox.Show($"Can not perform a scan for emulator {comboBoxSystem.Text} because invalid path\n\"{systemPath}\"", "Path Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                DeleteImageList(comboBoxSystem.Text);
-                EmulatorExecutables emulatorExecutables = GetEmulatorPaths(systemPath);
-                InitializeRomsInDatabaseForSystem(systemPath, emulatorExecutables);
             }
         }
         private void myListViewContextMenu_ChangeAssignedImage_Click(object sender, EventArgs e)
@@ -1816,15 +2098,12 @@ namespace GameLauncher
                 myListView.View = View.Tile;
 
         }
-
         private void myListView_OnFormClosing(object sender, FormClosingEventArgs e)
         {
             threadJoyStickAborting = true;
             Properties.Settings.Default.Maximised = WindowState == FormWindowState.Maximized;
             Properties.Settings.Default.Save();
         }
-        const long MaxSecondsToWait_F5 = 5;
-        const long MaxSecondsToWaitDefault = 2;
         private void myListView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F2)
@@ -1843,7 +2122,7 @@ namespace GameLauncher
             }
             else if (e.KeyCode == Keys.F5)
             {
-                if (IsRepeat("F5", MaxSecondsToWait_F5))
+                if (IsRepeat("F5", MAX_SECONDS_TO_WAIT_F5))
                     return;
                 PlaySelectedRom();
             }
@@ -1886,8 +2165,9 @@ namespace GameLauncher
                 comboBoxIconDisplay.SelectedIndex = 1;
             else if (e.KeyCode == Keys.F12)
                 comboBoxIconDisplay.SelectedIndex = 2;
+            else if (e.KeyCode == Keys.Escape)
+                cancelScan = true;
         }
-
         private void button_Settings_Click(object sender, EventArgs e)
         {
             Form_Settings form_Settings = new Form_Settings();
@@ -1898,7 +2178,20 @@ namespace GameLauncher
                 RedoDbInit($"Emulator path has changed to\n\"{Properties.Settings.Default.EmulatorsBasePath}\"\nDo you want to erase GameLauncher database and perform a new scan?","Rescan?", MessageBoxIcon.Question);
             SetAdvanceOptions();
         }
-    }
+        private void myListView_button_Utility_Click(object sender, EventArgs e)
+        {
+            FormUtil formUtil = new FormUtil(this);
+            formUtil.ShowDialog();
+        }
+
+        private void button_CancelScan_Click(object sender, EventArgs e)
+        {
+            cancelScan = true;
+        }
+    }// End of Form1 class
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public class PreviousCollectedImages
     {
         public ImageList list1;
@@ -1991,6 +2284,14 @@ namespace GameLauncher
             Language = language;
         }
     }
+    public class InitializeRomsInDatabaseForSystem_Arg
+    {
+        public string emulatorDir;
+        public EmulatorExecutables emulatorExecutables;
+        public bool isMainThread;
+        public bool scanImageDir;
+        public bool hideGroup;
+    }
     public class GameImage
     {
         public string NameSimplified;
@@ -2005,6 +2306,21 @@ namespace GameLauncher
             NameOrg = nameOrg;
             Compressed = compressed;
             ImageID = id;
+        }
+    }
+    public class CursorWait : IDisposable
+    {
+        public CursorWait(bool appStarting = false, bool applicationCursor = false)
+        {
+            Cursor.Current = appStarting ? Cursors.AppStarting : Cursors.WaitCursor;
+            if (applicationCursor) 
+                Application.UseWaitCursor = true;
+        }
+
+        public void Dispose()
+        {
+            Cursor.Current = Cursors.Default;
+            Application.UseWaitCursor = false;
         }
     }
     [Serializable()]
