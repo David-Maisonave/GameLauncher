@@ -52,5 +52,19 @@ namespace GameLauncher
             form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateRescanSelectedSystem), form_Main.GetDelegateAction(form_Main, null));
             this.Close();
         }
+
+        private void button_ResetImageListCache_Click(object sender, EventArgs e)
+        {
+            form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateCreateCacheForDisplaySystemIcons), form_Main.GetDelegateAction(form_Main, null));
+            this.Close();
+        }
+
+        private void button_DelImgFilesNotInDb_Click(object sender, EventArgs e)
+        {
+            DialogResult results = MessageBox.Show($"Do you want to delete all image files that are not in the GameLauncher database?\nClick YES for silent deletion.\nClick NO to DELETE the image files but give a prompt before each deletion.\nClick CANCEL to exit this option (No Deletions).", "Delete Image", MessageBoxButtons.YesNoCancel);
+            if (results == DialogResult.Cancel)
+                return;
+            form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteImageFilesNotInDatabase), form_Main.GetDelegateAction(form_Main, results == DialogResult.Yes));
+        }
     }
 }

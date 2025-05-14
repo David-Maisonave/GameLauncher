@@ -120,12 +120,4 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="button_DelImgFilesNotInDb.ToolTip" xml:space="preserve">
-    <value>Delete images not in DB.
-This option is only useful if image checksum option is enabled in the settings option.
-When checksum option is enabled, files with the same checksum are not added to the DB, because they're duplicates.
-This means files not in DB are most likely duplicate files.
-
-Warning: Backup all image files before using this option!!!!</value>
-  </data>
 </root>

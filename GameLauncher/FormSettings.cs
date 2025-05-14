@@ -35,6 +35,9 @@ namespace GameLauncher
             checkBox_useJoystickController.Checked = Properties.Settings.Default.useJoystickController;
             checkBox_disableAdvanceOptions.Checked = Properties.Settings.Default.disableAdvanceOptions;
 
+            checkBox_EnableRomChecksum.Checked = Properties.Settings.Default.DoRomChecksum;
+            checkBox_EnableImageChecksum.Checked = Properties.Settings.Default.DoImageChecksum;
+
             InitialLargeIconSize = Properties.Settings.Default.largeIconSize;
             InitialSmallIconSize = Properties.Settings.Default.smallIconSize;
             PreviousLargeIconSize = Properties.Settings.Default.largeIconSize;
@@ -56,6 +59,8 @@ namespace GameLauncher
             }
             if (!AllowedSmallIconSize.Contains((int)numericUpDown_smallIconSize.Value))
                 numericUpDown_largeIconSize.Value = numericUpDown_smallIconSize.Value > 32 ? 64 : 32;
+            Properties.Settings.Default.DoImageChecksum = checkBox_EnableImageChecksum.Checked;
+            Properties.Settings.Default.DoRomChecksum = checkBox_EnableRomChecksum.Checked;
             Properties.Settings.Default.disableAdvanceOptions = checkBox_disableAdvanceOptions.Checked;
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
             Properties.Settings.Default.usePreviousCollectionCache = checkBox_usePreviousCollectionCache.Checked;

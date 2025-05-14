@@ -1,9 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
-
 using SharpDX.DirectInput;
-
 using Shell32;
-
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
@@ -16,9 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Security.Cryptography;
 
 namespace GameLauncher
 {
@@ -31,10 +26,10 @@ namespace GameLauncher
         // const or readonly variables
         private const string SQL_CREATETABLES =
                 "CREATE TABLE \"GameSystems\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\t\"RomDirPath\"\tTEXT NOT NULL,\r\n\t\"ImageDirPath\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath1\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath2\"\tTEXT,\r\n\t\"EmulatorPath3\"\tTEXT,\r\n\t\"EmulatorPath4\"\tTEXT,\r\n\t\"EmulatorPath5\"\tTEXT,\r\n\t\"EmulatorPath6\"\tTEXT,\r\n\t\"EmulatorPath7\"\tTEXT,\r\n\t\"EmulatorPath8\"\tTEXT,\r\n\t\"EmulatorPath9\"\tTEXT,\r\n\t\"EmulatorPath10\"\tTEXT,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
-                "CREATE TABLE \"Images\" (\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
+                "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\t\"Checksum\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
+                "CREATE TABLE \"Images\" (\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Checksum\"\tTEXT\r\n);\r\n" +
                 "CREATE TABLE \"PersistenceVariables\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Value\"\tTEXT,\r\n\t\"ValueInt\"\tINTEGER,\r\n\tPRIMARY KEY(\"Name\")\r\n);\r\n" +
-                "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImageID\"\tINTEGER DEFAULT -1,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
-                "CREATE TABLE \"Roms_UserChanges\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImageID\"\tINTEGER DEFAULT -1,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
+                "CREATE TABLE \"Roms_UserChanges\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
                 "\r\n";
         public readonly string[] VALID_ROMS = { "3ds", "app", "bin", "car", "dsi", "gb", "gba", "gbc", "gcm", "gen", "gg", "ids", "iso", "md", "n64", "nds", "ngc", "ngp", "nsp", "pce", "rom", "sfc", "smc", "smd", "sms", "srl", "v64", "vpk", "wad", "xci", "xiso", "z64" };
         public readonly string[] COMMON_EMULATOR_PATHS = { @"C:\Emulator", @"C:\GameEmulator", @"C:\RetroGameEmulator", @"C:\RetroEmulator", @"C:\Game", @"C:\Retro", @"C:\RetroGame", @"C:\GameRetro" };
@@ -85,7 +80,6 @@ namespace GameLauncher
         // -------------------------------------------------------------------------------------------------------------------------------------
         // Modifiable variables
         private List<Rom> romList = new List<Rom>();
-        private SqliteConnection connection = null;
         private string romSubFolderName = @"\roms"; // ToDo: Make this user modifiable via settings form
         private string imageSubFolderName = @"\images"; // ToDo: Make this user modifiable via settings form
         private string dataDirPath = null;
@@ -95,14 +89,21 @@ namespace GameLauncher
         private ImageList[] tmpImageList1 = null;
         private ImageList[] tmpImageList2 = null;
         private List<int> startPosList = null;
+        private int miscQty = 0;
         // -------------------------------------------------------------------------------------------------------------------------------------
-        // Modifiable static variables used by static methods (mostly joystick related functions)
+        // Modifiable static variables used by static methods
+        // -----------------------------------
+        // BEGIN -- joystick related
         private static Thread threadJoyStick = null;
         private static bool threadJoyStickAborting = false;
         private static string miscData = "";
         private static bool waitingShellExecuteToComplete = false;
         private static Dictionary<string, long> dictAvoidRepeat = new Dictionary<string, long>();
+        // END -- joystick related
+        // -----------------------------------
         private static bool cancelScan = false;
+        public static SqliteConnection connection { get; private set; } = null;
+        public static MD5 md5 { get; private set; } = MD5.Create();
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Class types
@@ -140,9 +141,7 @@ namespace GameLauncher
                 threadJoyStick.Start();
             }
             if (Properties.Settings.Default.Maximised)
-            {
                 WindowState = FormWindowState.Maximized;
-            }
             SetAdvanceOptions();
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,6 +159,8 @@ namespace GameLauncher
                     File.Move(f, newName);
             }
         }
+        public static byte[] GetChecksum(string filePath) => md5.ComputeHash(File.ReadAllBytes(filePath));
+        public static string GetChecksumStr(string filePath) => Convert.ToBase64String(GetChecksum(filePath));
         public static string GetShortcutTargetFile(string shortcutFilename)
         {
             string pathOnly = System.IO.Path.GetDirectoryName(shortcutFilename);
@@ -396,12 +397,15 @@ namespace GameLauncher
                 myControl.Value = 0;
             myControl.Update();
             myControl.Refresh();
-            Application.DoEvents();
+            //Application.DoEvents();
         }
         public delegate void MyDelegateForm_Main(Form_Main form_Main, bool arg);
         public void DelegateDisplayOrHideProgressGroup(Form_Main form_Main, bool display) => form_Main.DisplayOrHideProgressGroup(display);
         public void DelegateScanForNewRomsOnAllSystems(Form_Main form_Main, bool arg) => form_Main.ScanForNewRomsOnAllSystems(arg);
         public void DelegateRescanSelectedSystem(Form_Main form_Main, bool arg) => form_Main.RescanSelectedSystem();
+        public void DelegateDeleteImageList(Form_Main form_Main, bool arg) => form_Main.DeleteImageList();
+        public void DelegateCreateCacheForDisplaySystemIcons(Form_Main form_Main, bool arg) => form_Main.CreateCacheForDisplaySystemIcons();
+        public void DelegateDeleteImageFilesNotInDatabase(Form_Main form_Main, bool arg) => form_Main.DeleteImageFilesNotInDatabase(arg);
         public void DelegateRedoDbInit(Form_Main form_Main, bool arg) => form_Main.RedoDbInit("Are you sure you want to rescan all ROM's?\nThis will take about 15-60 minutes.", "Rescan?", MessageBoxIcon.Question);
         public delegate void MyDelegateInitializeRomsInDatabaseForSystem(Form_Main form_Main, InitializeRomsInDatabaseForSystem_Arg arg);
         public void DelegateInitializeRomsInDatabaseForSystem(Form_Main form_Main, InitializeRomsInDatabaseForSystem_Arg arg) => form_Main.InitializeRomsInDatabaseForSystem(arg);
@@ -411,7 +415,7 @@ namespace GameLauncher
             myControl.Text = text;
             myControl.Update();
             myControl.Refresh();
-            Application.DoEvents();
+            //Application.DoEvents();
         }
         public delegate void MyDelegateSetTextBoxText(System.Windows.Forms.TextBox myControl, string text);
         public void DelegateSetTextBoxText(System.Windows.Forms.TextBox myControl, string text)
@@ -419,7 +423,7 @@ namespace GameLauncher
             myControl.Text = text;
             myControl.Update();
             myControl.Refresh();
-            Application.DoEvents();
+            //Application.DoEvents();
         }
         public delegate void MyDelegateSetLabelText(System.Windows.Forms.Label myControl, string text);
         public void DelegateSetLabelText(System.Windows.Forms.Label myControl, string text)
@@ -427,7 +431,7 @@ namespace GameLauncher
             myControl.Text = text;
             myControl.Update();
             myControl.Refresh();
-            Application.DoEvents();
+            //Application.DoEvents();
         }
         public object[] GetDelegateAction(object control, object arg)
         {
@@ -607,133 +611,198 @@ namespace GameLauncher
             var x = command.ExecuteNonQuery();
             return x > 0;
         }
-        private int GetImageIndexByPath(string FilePath) => GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{FilePath}\"");
-        private (int, string) GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed, string emulatorDir)
-        {
-            string sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\" and FilePath like \"{emulatorDir}%\"";
-            string imgPath = "";
-            int idx = 0;
-            (idx, imgPath) = GetIntAndStr(sql);
-            if (idx > -1)
-                return (idx, imgPath);
+        public static bool NotEmpty(string str) => str != null && str.Length > 0;
+        public static bool IsEmpty(string str) => str == null || str.Length == 0;
 
-            sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\"";
-            (idx, imgPath) = GetIntAndStr(sql);
-            if (idx > -1)
-                return (idx, imgPath);
+        private int GetImageIndexByPath(string FilePath) => GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{FilePath}\"");
+        private string GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed, string emulatorDir)
+        {
+            string sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\" and FilePath like \"{emulatorDir}%\"";
+            string imgPath = "";
+            imgPath = GetFirstColStr(sql);
+            if (NotEmpty(imgPath))
+                return imgPath;
+
+            sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\"";
+            imgPath = GetFirstColStr(sql);
+            if (NotEmpty(imgPath))
+                return imgPath;
 
             if (NameOrg.Contains("-"))
             {
                 string NameAfterHyphen = NameOrg.Substring(NameOrg.IndexOf("-") + 1);
                 string NameAfterHyphenSimple = ConvertToSimplifiedName(NameAfterHyphen);
-                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameAfterHyphenSimple}\"";
-                (idx, imgPath) = GetIntAndStr(sql);
-                if (idx > -1)
-                    return (idx, imgPath);
+                sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameAfterHyphenSimple}\"";
+                imgPath = GetFirstColStr(sql);
+                if (NotEmpty(imgPath))
+                    return imgPath;
  
                 string nameWithNoNumbersNameAfterHyphen = ConvertToSimplifiedName(NameAfterHyphen, true);
-                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbersNameAfterHyphen}\"";
-                (idx, imgPath) = GetIntAndStr(sql);
-                if (idx > -1)
-                    return (idx, imgPath);
+                sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbersNameAfterHyphen}\"";
+                imgPath = GetFirstColStr(sql);
+                if (NotEmpty(imgPath))
+                    return imgPath;
             }
             string nameWithNoNumbers = ConvertToSimplifiedName(NameSimplified, true); // Remove numbers from the name. It's better to have an image to the older version of the game, than non at all.
             if (!nameWithNoNumbers.Equals(NameSimplified))
             {
-                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbers}\"";
-                (idx, imgPath) = GetIntAndStr(sql);
-                if (idx > -1)
-                    return (idx, imgPath);
+                sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbers}\"";
+                imgPath = GetFirstColStr(sql);
+                if (NotEmpty(imgPath))
+                    return imgPath;
             }
 
             if (NameOrg.StartsWith("A ", StringComparison.CurrentCultureIgnoreCase))
             {
                 string Name = NameOrg.Substring(1);
-                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
-                (idx, imgPath) = GetIntAndStr(sql);
-                if (idx > -1)
-                    return (idx, imgPath);
+                sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
+                imgPath = GetFirstColStr(sql);
+                if (NotEmpty(imgPath))
+                    return imgPath;
             }
 
             if (NameOrg.StartsWith("The ", StringComparison.CurrentCultureIgnoreCase))
             {
                 string Name = NameOrg.Substring(3);
-                sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
-                (idx, imgPath) = GetIntAndStr(sql);
-                if (idx > -1)
-                    return (idx, imgPath);
+                sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
+                imgPath = GetFirstColStr(sql);
+                if (NotEmpty(imgPath))
+                    return imgPath;
             }
 
-            sql = $"SELECT ID, FilePath FROM Images WHERE NameOrg like \"{NameOrg}\"";
-            (idx, imgPath) = GetIntAndStr(sql);
-            if (idx > -1)
-                return (idx, imgPath);
+            sql = $"SELECT FilePath FROM Images WHERE NameOrg like \"{NameOrg}\"";
+            imgPath = GetFirstColStr(sql);
+            if (NotEmpty(imgPath))
+                return imgPath;
 
-            sql = $"SELECT ID, FilePath FROM Images WHERE NameSimplified like \"{NameOrg}\"";
-            (idx, imgPath) = GetIntAndStr(sql);
-            if (idx > -1)
-                return (idx, imgPath);
+            sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameOrg}\"";
+            imgPath = GetFirstColStr(sql);
+            if (NotEmpty(imgPath))
+                return imgPath;
 
-            sql = $"SELECT ID, FilePath FROM Images WHERE Compressed like \"{Compressed}\"";
-            (idx, imgPath) = GetIntAndStr(sql);
-            if (idx > -1)
-                return (idx, imgPath);
+            sql = $"SELECT FilePath FROM Images WHERE Compressed like \"{Compressed}\"";
+            imgPath = GetFirstColStr(sql);
+            if (NotEmpty(imgPath))
+                return imgPath;
 
-            sql = $"SELECT ID, FilePath FROM Images WHERE Compressed like \"%{Compressed}%\"";
-            (idx, imgPath) = GetIntAndStr(sql);
-            if (idx > -1)
-                return (idx, imgPath);
+            sql = $"SELECT FilePath FROM Images WHERE Compressed like \"%{Compressed}%\"";
+            imgPath = GetFirstColStr(sql);
+            if (NotEmpty(imgPath))
+                return imgPath;
 
-            sql = $"SELECT ID, FilePath FROM Images WHERE NameOrg like \"%{Title}%\"";
-            (idx, imgPath) = GetIntAndStr(sql);
-            return (idx, imgPath);
+            sql = $"SELECT FilePath FROM Images WHERE NameOrg like \"%{Title}%\"";
+            imgPath = GetFirstColStr(sql);
+            return imgPath;
         }
         private int GetSystemIndex(string Name) => GetFirstColInt($"SELECT ID FROM GameSystems WHERE Name = \"{Name}\"");
-        private int AddImageToDb(string imgFile, bool checkIfInDb = false, bool checkIfExists = false)
+        private string GetImageChecksum(string imagePath) => Properties.Settings.Default.DoImageChecksum ? GetChecksumStr(imagePath) : "";
+        private string GetRomChecksum(string imagePath) => Properties.Settings.Default.DoRomChecksum ? GetChecksumStr(imagePath) : "";
+        private string AddImagePasthToDb(string imgFile, bool incProgressBar, bool isMainThread , bool checkIfInDb = false, bool checkIfExists = false)
         {
+            if (incProgressBar)
+                IncrementProgressBar(progressBar_ROMs, isMainThread, $"Adding {imgFile}");
             if (checkIfExists && !File.Exists(imgFile))
-                return -1;
+                return "";
             if (checkIfInDb) 
             {
-                int imageID = GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{imgFile}\"");
-                return imageID;
+                string imagePath = GetFirstColStr($"SELECT FilePath FROM Images WHERE FilePath like \"{imgFile}\"");
+                if (NotEmpty(imagePath))
+                    return imagePath;
+            }
+            string Checksum = GetImageChecksum(imgFile);
+            if (Properties.Settings.Default.DoImageChecksum)
+            {
+                string imagePath = GetFirstColStr($"SELECT FilePath FROM Images WHERE Checksum = \"{Checksum}\"");
+                if (NotEmpty(imagePath))
+                    return imagePath;
             }
             string NameOrg = Path.GetFileNameWithoutExtension(imgFile);
             string NameSimplified = ConvertToSimplifiedName(NameOrg);
             string Compressed = ConvertToSimplifiedName(NameOrg, true, true);
-            string sql = $"INSERT OR REPLACE INTO Images (NameSimplified, NameOrg, Compressed, FilePath) VALUES (\"{NameSimplified}\", \"{NameOrg}\", \"{Compressed}\", \"{imgFile}\")";
+            string sql = $"INSERT OR REPLACE INTO Images (NameSimplified, NameOrg, Compressed, FilePath, Checksum) VALUES (\"{NameSimplified}\", \"{NameOrg}\", \"{Compressed}\", \"{imgFile}\", \"{Checksum}\")";
             SqliteCommand command = new SqliteCommand(sql, connection);
             int x = command.ExecuteNonQuery();
-            int id = GetImageIndexByPath(imgFile);
-            return id;
+            return imgFile;
         }
-        private int GetImageID(string imgFile) => AddImageToDb(imgFile, true);
+        private string GetImagePathInDb(string imgFile) => AddImagePasthToDb(imgFile, false, true,true);
+        private void GetImages(string imgPath, bool isMainThread = false)
+        {
+            if (Directory.Exists(imgPath))
+            {
+                string[] imgFiles = Directory.GetFiles(imgPath, "*.png");
+                ResetProgressBar(imgFiles.Length, isMainThread);
+                if (isMainThread)
+                {
+                    foreach (var imgFile in imgFiles)
+                    {
+                        if (CancelButtonPressed())
+                            return;
+                        AddImagePasthToDb(imgFile, true , isMainThread);
+                    }
+                }
+                else
+                    Parallel.ForEach(imgFiles, imgFile => AddImagePasthToDb(imgFile, true, false));
+            }
+        }
         private bool CancelButtonPressed()
         {
             Application.DoEvents(); 
             return cancelScan;
         }
-        private void GetImages(string imgPath, bool isMainThread = false)
+        public void DeleteImageFilesNotInDatabase(bool doSilentDelete)
         {
-            if (Directory.Exists(imgPath))
+            if (!Properties.Settings.Default.DoImageChecksum)
             {
-                if (isMainThread)
-                {
-                    string[] imgFiles = Directory.GetFiles(imgPath, "*.png");
-                    ResetProgressBar(imgFiles.Length, isMainThread);
-                    foreach (var imgFile in imgFiles)
-                    {
-                        if (CancelButtonPressed())
-                            return;
-                        IncrementProgressBar(progressBar_ROMs, isMainThread);
-                        AddImageToDb(imgFile);
-                    }
-                }
+                MessageBox.Show("Image checksum option is disabled, and this option is not available unless image checksum is enabled.  See Settings option.");
+                return;
+            }
+            cancelScan = false;
+            miscQty = 0;
+            string tempstr = Properties.Settings.Default.EmulatorsBasePath;
+            string imagePath = Path.Combine(tempstr, imageSubFolderName.TrimStart('\\'));
+            DeleteImageFilesNotInDatabase(imagePath, doSilentDelete);
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT ImageDirPath FROM GameSystems ORDER BY Name";
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (!cancelScan && reader.Read())
+                    DeleteImageFilesNotInDatabase(reader.GetString(0), doSilentDelete);
+            }
+            if (cancelScan)
+                MessageBox.Show($"Finish scanning for duplicate file images, and deleted {miscQty} duplicate files.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public void DeleteImageFilesNotInDatabase(string path, bool doSilentDelete)
+        {
+            using (new CursorWait())
+            {
+                string[] imgFiles = Directory.GetFiles(path, "*.png");
+                if (doSilentDelete)
+                    Parallel.ForEach(imgFiles, imgFile => DeleteImageFileNotInDatabase(imgFile, doSilentDelete));
                 else
+                    foreach (string imgFile in imgFiles)
+                        DeleteImageFileNotInDatabase(imgFile, doSilentDelete);
+            }
+        }
+        public void DeleteImageFileNotInDatabase(string imgFile, bool doSilentDelete)
+        {
+            if (cancelScan)
+                return;
+            string path = GetFirstColStr($"SELECT FilePath FROM Images where FilePath like \"{imgFile}\"");
+            if (IsEmpty(path))
+            {
+                if (!doSilentDelete)
                 {
-                    string tempimgPath = imgPath;
-                    Parallel.ForEach(Directory.GetFiles(tempimgPath, "*.png"), imgFile => AddImageToDb(imgFile));
+                    string Checksum = GetImageChecksum(imgFile);
+                    string existingImgFile = GetFirstColStr($"SELECT FilePath FROM Images where Checksum = \"{Checksum}\"");
+                    Form_ImageDeletionPrompt form_ImageDeletionPrompt = new Form_ImageDeletionPrompt(imgFile, existingImgFile);
+                    form_ImageDeletionPrompt.ShowDialog();
+                    if (form_ImageDeletionPrompt.CancelAll)
+                        cancelScan = true;
+                    if (!form_ImageDeletionPrompt.Yes)
+                        return;
                 }
+                miscQty++;
+                File.Delete(imgFile);
             }
         }
         private EmulatorExecutables GetEmulatorPaths(string path)
@@ -830,9 +899,8 @@ namespace GameLauncher
                 true);
             string Status = "";
             string NotesCore = "";
-            int imageID = 0;
             string imagePath = "";
-            (imageID, imagePath) = GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed, emulatorDir);
+            imagePath = GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed, emulatorDir);
             string Region = "unknown";
             string Language = "";
             if (NameOrg.Contains("(U)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(USA)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("_USA_", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(NTSC)", StringComparison.OrdinalIgnoreCase))
@@ -1037,10 +1105,11 @@ namespace GameLauncher
             if (NameOrg.Contains("(Proto)", StringComparison.OrdinalIgnoreCase))
                 Version += "[Prototype ]";
 
+            string Checksum = GetRomChecksum(romFilePath);
             // ToDo: Add logic to read Project64.rdb and Project64.rdx to get rom details
             //       Add logic to read file MultiplayerGameList.txt to get quantity of player details.
 
-            Rom rom = new Rom(NameSimplified, systemIndex, romFilePath, NameOrg, Title, Compressed, imageID,0,imagePath,0,Region,"", RomSize, "", NotesCore, "","","",Status,Version,"",Language);
+            Rom rom = new Rom(NameSimplified, systemIndex, romFilePath, NameOrg, Title, Compressed, 0,imagePath,0,Region,"", RomSize, "", NotesCore, "","","",Status,Version,"",Language, Checksum);
             return rom;
         }
         private void GetMultiplayerRomData(string SystemDirPath)
@@ -1072,12 +1141,13 @@ namespace GameLauncher
         {
             if (rom == null)
                 return;
-            string sql = $"INSERT OR REPLACE INTO Roms (NameSimplified, System, FilePath, NameOrg, Title, Compressed, ImageID, ImagePath, Region, Language, Status, Version, NotesCore, RomSize, PreferredEmulator, QtyPlayers, Developer, ReleaseDate, Genre, NotesUser, FileFormat, Description) VALUES" +
-            $" (\"{rom.NameSimplified}\", {rom.System}, \"{rom.FilePath}\", \"{rom.NameOrg}\", \"{rom.Title}\", \"{rom.Compressed}\", {rom.ImageID}, \"{rom.ImagePath}\", \"{rom.Region}\", \"{rom.Language}\", \"{rom.Status}\", \"{rom.Version}\", \"{rom.NotesCore}\", {rom.RomSize}, {rom.PreferredEmulatorID}, {rom.QtyPlayers}, \"{rom.Developer}\", \"{rom.ReleaseDate}\", \"{rom.Genre}\", \"{rom.NotesUser}\", \"{rom.FileFormat}\", \"{rom.Description}\")";
+            string sql = $"INSERT OR REPLACE INTO Roms (NameSimplified, System, FilePath, NameOrg, Title, Compressed, ImagePath, Region, Language, Status, Version, NotesCore, RomSize, PreferredEmulator, QtyPlayers, Developer, ReleaseDate, Genre, NotesUser, FileFormat, Description, Checksum) VALUES" +
+            $" (\"{rom.NameSimplified}\", {rom.System}, \"{rom.FilePath}\", \"{rom.NameOrg}\", \"{rom.Title}\", \"{rom.Compressed}\", \"{rom.ImagePath}\", \"{rom.Region}\", \"{rom.Language}\", \"{rom.Status}\", \"{rom.Version}\", \"{rom.NotesCore}\", {rom.RomSize}, {rom.PreferredEmulatorID}, " +
+            $"{rom.QtyPlayers}, \"{rom.Developer}\", \"{rom.ReleaseDate}\", \"{rom.Genre}\", \"{rom.NotesUser}\", \"{rom.FileFormat}\", \"{rom.Description}\", \"{rom.Checksum}\")";
             SqliteCommand command = new SqliteCommand(sql, connection);
             command.ExecuteNonQuery();
         }
-        private void IncrementProgressBar(System.Windows.Forms.ProgressBar progressbar, bool isMainThread, int MaxLenReset = -1)
+        private void IncrementProgressBar(System.Windows.Forms.ProgressBar progressbar, bool isMainThread, string newText = "", int MaxLenReset = -1)
         {
             if (isMainThread)
             {
@@ -1086,8 +1156,12 @@ namespace GameLauncher
                     progressbar.Value = 0;
                 progressbar.Update();
             }
-            else 
+            else
+            {
                 BeginInvoke(new MyDelegateInitProgressBar(DelegateInitProgressBarPerformStep), GetDelegateAction(progressbar, MaxLenReset));
+            }
+            if (newText.Length > 0)
+                UpdateGroupBoxText(isMainThread, newText);
             Application.DoEvents();
         }
         private void UpdateGroupBoxText(bool isMainThread, string newText)
@@ -1178,8 +1252,7 @@ namespace GameLauncher
                 {
                     if (CancelButtonPressed())
                         break;
-                    IncrementProgressBar(progressBar_ROMs, isMainThread);
-                    UpdateGroupBoxText(isMainThread, $"Processing ROM {f}");
+                    IncrementProgressBar(progressBar_ROMs, isMainThread, $"Processing ROM {f}");
                     long RomSize = new System.IO.FileInfo(f).Length;
                     string ext = Path.GetExtension(f).ToLower().TrimStart('.');
                     if (ext.Equals("sav"))
@@ -1367,43 +1440,43 @@ namespace GameLauncher
             if (SystemID < 0)
                 return -1;
             var command = connection.CreateCommand();
-            string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImageID, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed";
+            string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum";
             command.CommandText = $"SELECT {fieldNames} FROM Roms WHERE System = \"{SystemID}\" ORDER BY NameSimplified";
             using (var reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    string NameSimplified = reader.GetString(0);
-                    string NameOrg = reader.GetString(1);
-                    int System = reader.GetInt32(2);
-                    string FilePath = reader.GetString(3);
-                    int PreferredEmulator = reader.GetInt32(4);
-                    int ImageID = reader.GetInt32(5);
-                    string ImagePath = reader.GetString(6);
-                    int QtyPlayers = reader.GetInt32(7);
-                    string Status = reader.GetString(8);
-                    string Region = reader.GetString(9);
-                    string Developer = reader.GetString(10);
-                    string ReleaseDate = reader.GetString(11);
-                    int RomSize = reader.GetInt32(12);
-                    string Genre = reader.GetString(13);
-                    string NotesCore = reader.GetString(14);
-                    string NotesUser = reader.GetString(15);
-                    string FileFormat = reader.GetString(16);
-                    string Version = reader.GetString(17);
-                    string Description = reader.GetString(18);
-                    string Language = reader.GetString(19);
-                    string Title = reader.GetString(20);
-                    string Compressed = reader.GetString(21);
-                    if (ImageID < 0 || ImagePath.Length == 0)
-                    {
+                    int i = 0;
+                    string NameSimplified = reader.GetString(i++);
+                    string NameOrg = reader.GetString(i++);
+                    int System = reader.GetInt32(i++);
+                    string FilePath = reader.GetString(i++);
+                    int PreferredEmulator = reader.GetInt32(i++);
+                    string ImagePath = reader.GetString(i++);
+                    int QtyPlayers = reader.GetInt32(i++);
+                    string Status = reader.GetString(i++);
+                    string Region = reader.GetString(i++);
+                    string Developer = reader.GetString(i++);
+                    string ReleaseDate = reader.GetString(i++);
+                    int RomSize = reader.GetInt32(i++);
+                    string Genre = reader.GetString(i++);
+                    string NotesCore = reader.GetString(i++);
+                    string NotesUser = reader.GetString(i++);
+                    string FileFormat = reader.GetString(i++);
+                    string Version = reader.GetString(i++);
+                    string Description = reader.GetString(i++);
+                    string Language = reader.GetString(i++);
+                    string Title = reader.GetString(i++);
+                    string Compressed = reader.GetString(i++);
+                    string Checksum = reader.GetString(i++);
+                    if (ImagePath.Length == 0)
                         ImagePath = defaultImagePath;
-                    }
 
-                    romList.Add(new Rom(NameSimplified, System,FilePath, NameOrg, Title, Compressed, ImageID,
+                    romList.Add(new Rom(NameSimplified, System,FilePath, NameOrg, Title, Compressed,
                         PreferredEmulator, ImagePath, QtyPlayers, Region, 
                         Developer, RomSize, Genre, NotesCore, NotesUser, 
-                        FileFormat, ReleaseDate, Status, Version, Description, Language));
+                        FileFormat, ReleaseDate, Status, Version,
+                        Description, Language, Checksum));
                 }
             }
             return romList.Count;
@@ -1476,7 +1549,7 @@ namespace GameLauncher
             else
                 Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList2[listID].Images.Count}.");
         }
-        public bool DisplaySystemIcons(string systemName, int multithread = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
+        public bool DisplaySystemIcons(string systemName, int multithreadMethod = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
         {
             using (new CursorWait())
             {
@@ -1530,7 +1603,7 @@ namespace GameLauncher
                                 tmpImageList2[i] = tmpImage2;
                             }
                             startPosList.Add(romList.Count);
-                            if (multithread == 0)
+                            if (multithreadMethod == 0)
                             {
                                 for (int idx = 0; idx < Properties.Settings.Default.MaxNumberOfPairThreadsPerList; idx++)
                                 {
@@ -1538,7 +1611,7 @@ namespace GameLauncher
                                     TaskToProcessImageList(1, idx, startPosList[idx], startPosList[idx + 1]);
                                 }
                             }
-                            else if (multithread == 1)
+                            else if (multithreadMethod == 1)
                             {
                                 Parallel.For(0, Properties.Settings.Default.MaxNumberOfPairThreadsPerList, idx =>
                                 {
@@ -1695,9 +1768,10 @@ namespace GameLauncher
         }
         public string GetDefaultImagePath_sub(string dbPath)
         {
+            string imgPath = Properties.Settings.Default.DefaultImagePath;
             if (Properties.Settings.Default.DefaultImagePath != null && Properties.Settings.Default.DefaultImagePath.Length > 0)
             {
-                if (Directory.Exists(Properties.Settings.Default.DefaultImagePath))
+                if (File.Exists(Properties.Settings.Default.DefaultImagePath))
                     return Properties.Settings.Default.DefaultImagePath;
             }
             const string DEFAULTIMAGEFILENAME = "GameController.png";
@@ -2047,8 +2121,6 @@ namespace GameLauncher
                 MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            int imageID = GetImageID(saveFileDialog.FileName);
-            rom.ImageID = imageID;
             rom.ImagePath = saveFileDialog.FileName;
             UpdateRomInDb(rom);
             MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
@@ -2243,7 +2315,6 @@ namespace GameLauncher
         public int System;
         public string FilePath;
         public int PreferredEmulatorID;
-        public int ImageID;
         public string ImagePath;
         public int QtyPlayers;
         public string Region;
@@ -2258,7 +2329,8 @@ namespace GameLauncher
         public string Version;
         public string Description;
         public string Language;
-        public Rom(string nameTruncated, int systemID, string path, string nameOrg, string title, string compressed, int id = -1, int preferredEmulatorID = 0, string imagePath = null, int qtyPlayers = 0, string region = null, string developer = null, long romSize = 0, string genre = null, string notesCore = null, string notesUser = null, string fileFormat = null, string releaseDate = null, string status = null, string version = null, string description = null, string language = null)
+        public string Checksum;
+        public Rom(string nameTruncated, int systemID, string path, string nameOrg, string title, string compressed, int preferredEmulatorID = 0, string imagePath = null, int qtyPlayers = 0, string region = null, string developer = null, long romSize = 0, string genre = null, string notesCore = null, string notesUser = null, string fileFormat = null, string releaseDate = null, string status = null, string version = null, string description = null, string language = null, string checksum = null)
         {
             NameSimplified = nameTruncated;
             System = systemID;
@@ -2266,7 +2338,6 @@ namespace GameLauncher
             NameOrg = nameOrg;
             Title = title;
             Compressed = compressed;
-            ImageID = id;
             PreferredEmulatorID = preferredEmulatorID;
             ImagePath = imagePath;
             QtyPlayers = qtyPlayers;
@@ -2282,6 +2353,7 @@ namespace GameLauncher
             Version = version;
             Description = description;
             Language = language;
+            Checksum = checksum;
         }
     }
     public class InitializeRomsInDatabaseForSystem_Arg
@@ -2298,14 +2370,14 @@ namespace GameLauncher
         public string NameOrg;
         public string Compressed;
         public string FilePath;
-        public int ImageID;
-        public GameImage(string nameTruncated, string path, string nameOrg, string compressed, int id = -1)
+        public string Checksum;
+        public GameImage(string nameTruncated, string path, string nameOrg, string compressed, string checksum)
         {
             NameSimplified = nameTruncated;
             FilePath = path;
             NameOrg = nameOrg;
             Compressed = compressed;
-            ImageID = id;
+            Checksum = checksum;
         }
     }
     public class CursorWait : IDisposable

@@ -187,13 +187,14 @@
             // 
             // button_Util
             // 
+            this.button_Util.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_Util.Location = new System.Drawing.Point(356, 1);
             this.button_Util.Margin = new System.Windows.Forms.Padding(2);
             this.button_Util.Name = "button_Util";
             this.button_Util.Size = new System.Drawing.Size(105, 28);
             this.button_Util.TabIndex = 8;
             this.button_Util.TabStop = false;
-            this.button_Util.Text = "&Utility";
+            this.button_Util.Text = "&Advance";
             this.toolTip_Info.SetToolTip(this.button_Util, "Advance options.");
             this.button_Util.UseVisualStyleBackColor = true;
             this.button_Util.Click += new System.EventHandler(this.myListView_button_Utility_Click);

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Settings));
             this.checkBox_usePreviousCollectionCache = new System.Windows.Forms.CheckBox();
             this.checkBox_useJoystickController = new System.Windows.Forms.CheckBox();
             this.textBox_DbPath = new System.Windows.Forms.TextBox();
@@ -51,6 +52,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.linkLabel_Github_GameLauncher = new System.Windows.Forms.LinkLabel();
             this.checkBox_disableAdvanceOptions = new System.Windows.Forms.CheckBox();
+            this.checkBox_EnableImageChecksum = new System.Windows.Forms.CheckBox();
+            this.checkBox_EnableRomChecksum = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_largeIconSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).BeginInit();
@@ -291,7 +294,7 @@
             // button_Ok
             // 
             this.button_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Ok.Location = new System.Drawing.Point(220, 258);
+            this.button_Ok.Location = new System.Drawing.Point(220, 328);
             this.button_Ok.Margin = new System.Windows.Forms.Padding(2);
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(67, 26);
@@ -303,7 +306,7 @@
             // button_Cancel
             // 
             this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Cancel.Location = new System.Drawing.Point(314, 258);
+            this.button_Cancel.Location = new System.Drawing.Point(314, 328);
             this.button_Cancel.Margin = new System.Windows.Forms.Padding(2);
             this.button_Cancel.Name = "button_Cancel";
             this.button_Cancel.Size = new System.Drawing.Size(75, 28);
@@ -317,7 +320,7 @@
             this.linkLabel_Github_GameLauncher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel_Github_GameLauncher.AutoSize = true;
-            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 223);
+            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 293);
             this.linkLabel_Github_GameLauncher.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel_Github_GameLauncher.Name = "linkLabel_Github_GameLauncher";
             this.linkLabel_Github_GameLauncher.Size = new System.Drawing.Size(375, 20);
@@ -339,11 +342,37 @@
             this.toolTip1.SetToolTip(this.checkBox_disableAdvanceOptions, "When checked, context menu option and rescan options are disabled.");
             this.checkBox_disableAdvanceOptions.UseVisualStyleBackColor = true;
             // 
+            // checkBox_EnableImageChecksum
+            // 
+            this.checkBox_EnableImageChecksum.AutoSize = true;
+            this.checkBox_EnableImageChecksum.Location = new System.Drawing.Point(319, 239);
+            this.checkBox_EnableImageChecksum.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_EnableImageChecksum.Name = "checkBox_EnableImageChecksum";
+            this.checkBox_EnableImageChecksum.Size = new System.Drawing.Size(206, 24);
+            this.checkBox_EnableImageChecksum.TabIndex = 24;
+            this.checkBox_EnableImageChecksum.Text = "Enable Image Checksum";
+            this.toolTip1.SetToolTip(this.checkBox_EnableImageChecksum, resources.GetString("checkBox_EnableImageChecksum.ToolTip"));
+            this.checkBox_EnableImageChecksum.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_EnableRomChecksum
+            // 
+            this.checkBox_EnableRomChecksum.AutoSize = true;
+            this.checkBox_EnableRomChecksum.Location = new System.Drawing.Point(319, 208);
+            this.checkBox_EnableRomChecksum.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_EnableRomChecksum.Name = "checkBox_EnableRomChecksum";
+            this.checkBox_EnableRomChecksum.Size = new System.Drawing.Size(198, 24);
+            this.checkBox_EnableRomChecksum.TabIndex = 23;
+            this.checkBox_EnableRomChecksum.Text = "Enable ROM Checksum";
+            this.toolTip1.SetToolTip(this.checkBox_EnableRomChecksum, resources.GetString("checkBox_EnableRomChecksum.ToolTip"));
+            this.checkBox_EnableRomChecksum.UseVisualStyleBackColor = true;
+            // 
             // Form_Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 291);
+            this.ClientSize = new System.Drawing.Size(604, 361);
+            this.Controls.Add(this.checkBox_EnableImageChecksum);
+            this.Controls.Add(this.checkBox_EnableRomChecksum);
             this.Controls.Add(this.linkLabel_Github_GameLauncher);
             this.Controls.Add(this.button_Cancel);
             this.Controls.Add(this.button_Ok);
@@ -367,9 +396,9 @@
             this.Controls.Add(this.checkBox_usePreviousCollectionCache);
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1200, 330);
+            this.MaximumSize = new System.Drawing.Size(1200, 400);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(620, 330);
+            this.MinimumSize = new System.Drawing.Size(620, 400);
             this.Name = "Form_Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).EndInit();
@@ -404,5 +433,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.LinkLabel linkLabel_Github_GameLauncher;
         private System.Windows.Forms.CheckBox checkBox_disableAdvanceOptions;
+        private System.Windows.Forms.CheckBox checkBox_EnableImageChecksum;
+        private System.Windows.Forms.CheckBox checkBox_EnableRomChecksum;
     }
 }

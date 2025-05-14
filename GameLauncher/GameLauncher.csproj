@@ -132,6 +132,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form_ImageDeletionPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageDeletionPrompt.Designer.cs">
+      <DependentUpon>Form_ImageDeletionPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +170,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form_ImageDeletionPrompt.resx">
+      <DependentUpon>Form_ImageDeletionPrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_Main.resx">
       <DependentUpon>Form_Main.cs</DependentUpon>
     </EmbeddedResource>

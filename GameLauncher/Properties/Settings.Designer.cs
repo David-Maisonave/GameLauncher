@@ -178,5 +178,29 @@ namespace GameLauncher.Properties {
                 this["RegexRenameFilesReplace"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DoRomChecksum {
+            get {
+                return ((bool)(this["DoRomChecksum"]));
+            }
+            set {
+                this["DoRomChecksum"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DoImageChecksum {
+            get {
+                return ((bool)(this["DoImageChecksum"]));
+            }
+            set {
+                this["DoImageChecksum"] = value;
+            }
+        }
     }
 }

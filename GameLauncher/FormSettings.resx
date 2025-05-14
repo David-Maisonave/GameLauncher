@@ -123,4 +123,15 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="checkBox_EnableImageChecksum.ToolTip" xml:space="preserve">
+    <value>When checked, performs a checksum value to all images before adding them to the database.
+Change only applies to new full scan.
+Warning: When enable, this will increase the time it takes to do a full scan when initializing the GameLauncher database.</value>
+  </data>
+  <data name="checkBox_EnableRomChecksum.ToolTip" xml:space="preserve">
+    <value>When checked, performs a checksum value to all ROM's before adding them to the database.
+Change only applies to new full scan.
+Warning: When enable, this will increase the time it takes to do a full scan when initializing the GameLauncher database.
+</value>
+  </data>
 </root>
