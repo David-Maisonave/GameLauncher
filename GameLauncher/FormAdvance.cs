@@ -12,10 +12,10 @@ using static GameLauncher.Form_Main;
 
 namespace GameLauncher
 {
-    public partial class FormUtil : Form
+    public partial class FormAdvance : Form
     {
         private Form_Main form_Main = null;
-        public FormUtil(Form_Main form_main)
+        public FormAdvance(Form_Main form_main)
         {
             form_Main = form_main;
             InitializeComponent();
@@ -65,6 +65,15 @@ namespace GameLauncher
             if (results == DialogResult.Cancel)
                 return;
             form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteImageFilesNotInDatabase), form_Main.GetDelegateAction(form_Main, results == DialogResult.Yes));
+        }
+
+        private void button_DelRomFilesInDb_Click(object sender, EventArgs e)
+        {
+            //DialogResult results = MessageBox.Show($"Do you want to delete duplicate ROM files that have the same checksum in GameLauncher database?\nClick YES for silent deletion.\nClick NO to DELETE the ROM files but give a prompt before each deletion.\nClick CANCEL to exit this option (No Deletions).", "Delete ROM", MessageBoxButtons.YesNoCancel);
+            //if (results == DialogResult.Cancel)
+            //    return;
+            //form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, results == DialogResult.Yes));
+            form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, true));
         }
     }
 }

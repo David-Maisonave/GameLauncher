@@ -54,9 +54,13 @@
             this.checkBox_disableAdvanceOptions = new System.Windows.Forms.CheckBox();
             this.checkBox_EnableImageChecksum = new System.Windows.Forms.CheckBox();
             this.checkBox_EnableRomChecksum = new System.Windows.Forms.CheckBox();
+            this.groupBox_Checksum = new System.Windows.Forms.GroupBox();
+            this.checkBox_EnableZipChecksum = new System.Windows.Forms.CheckBox();
+            this.checkBox_SHA256OverMD5 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_largeIconSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).BeginInit();
+            this.groupBox_Checksum.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBox_usePreviousCollectionCache
@@ -294,7 +298,7 @@
             // button_Ok
             // 
             this.button_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Ok.Location = new System.Drawing.Point(220, 328);
+            this.button_Ok.Location = new System.Drawing.Point(220, 355);
             this.button_Ok.Margin = new System.Windows.Forms.Padding(2);
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(67, 26);
@@ -306,7 +310,7 @@
             // button_Cancel
             // 
             this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Cancel.Location = new System.Drawing.Point(314, 328);
+            this.button_Cancel.Location = new System.Drawing.Point(314, 355);
             this.button_Cancel.Margin = new System.Windows.Forms.Padding(2);
             this.button_Cancel.Name = "button_Cancel";
             this.button_Cancel.Size = new System.Drawing.Size(75, 28);
@@ -320,7 +324,7 @@
             this.linkLabel_Github_GameLauncher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel_Github_GameLauncher.AutoSize = true;
-            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 293);
+            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 320);
             this.linkLabel_Github_GameLauncher.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel_Github_GameLauncher.Name = "linkLabel_Github_GameLauncher";
             this.linkLabel_Github_GameLauncher.Size = new System.Drawing.Size(375, 20);
@@ -345,19 +349,21 @@
             // checkBox_EnableImageChecksum
             // 
             this.checkBox_EnableImageChecksum.AutoSize = true;
-            this.checkBox_EnableImageChecksum.Location = new System.Drawing.Point(319, 239);
+            this.checkBox_EnableImageChecksum.Location = new System.Drawing.Point(5, 60);
             this.checkBox_EnableImageChecksum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_EnableImageChecksum.Name = "checkBox_EnableImageChecksum";
             this.checkBox_EnableImageChecksum.Size = new System.Drawing.Size(206, 24);
             this.checkBox_EnableImageChecksum.TabIndex = 24;
             this.checkBox_EnableImageChecksum.Text = "Enable Image Checksum";
-            this.toolTip1.SetToolTip(this.checkBox_EnableImageChecksum, resources.GetString("checkBox_EnableImageChecksum.ToolTip"));
+            this.toolTip1.SetToolTip(this.checkBox_EnableImageChecksum, "When checked, performs a checksum value to all images before adding them to the d" +
+        "atabase.");
             this.checkBox_EnableImageChecksum.UseVisualStyleBackColor = true;
+            this.checkBox_EnableImageChecksum.CheckedChanged += new System.EventHandler(this.checkBox_EnableImageChecksum_CheckedChanged);
             // 
             // checkBox_EnableRomChecksum
             // 
             this.checkBox_EnableRomChecksum.AutoSize = true;
-            this.checkBox_EnableRomChecksum.Location = new System.Drawing.Point(319, 208);
+            this.checkBox_EnableRomChecksum.Location = new System.Drawing.Point(5, 29);
             this.checkBox_EnableRomChecksum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_EnableRomChecksum.Name = "checkBox_EnableRomChecksum";
             this.checkBox_EnableRomChecksum.Size = new System.Drawing.Size(198, 24);
@@ -365,14 +371,53 @@
             this.checkBox_EnableRomChecksum.Text = "Enable ROM Checksum";
             this.toolTip1.SetToolTip(this.checkBox_EnableRomChecksum, resources.GetString("checkBox_EnableRomChecksum.ToolTip"));
             this.checkBox_EnableRomChecksum.UseVisualStyleBackColor = true;
+            this.checkBox_EnableRomChecksum.CheckedChanged += new System.EventHandler(this.checkBox_EnableRomChecksum_CheckedChanged);
+            // 
+            // groupBox_Checksum
+            // 
+            this.groupBox_Checksum.Controls.Add(this.checkBox_EnableZipChecksum);
+            this.groupBox_Checksum.Controls.Add(this.checkBox_SHA256OverMD5);
+            this.groupBox_Checksum.Controls.Add(this.checkBox_EnableRomChecksum);
+            this.groupBox_Checksum.Controls.Add(this.checkBox_EnableImageChecksum);
+            this.groupBox_Checksum.Location = new System.Drawing.Point(19, 208);
+            this.groupBox_Checksum.Name = "groupBox_Checksum";
+            this.groupBox_Checksum.Size = new System.Drawing.Size(578, 96);
+            this.groupBox_Checksum.TabIndex = 25;
+            this.groupBox_Checksum.TabStop = false;
+            this.groupBox_Checksum.Text = "Checksum Options";
+            this.toolTip1.SetToolTip(this.groupBox_Checksum, resources.GetString("groupBox_Checksum.ToolTip"));
+            // 
+            // checkBox_EnableZipChecksum
+            // 
+            this.checkBox_EnableZipChecksum.AutoSize = true;
+            this.checkBox_EnableZipChecksum.Location = new System.Drawing.Point(295, 29);
+            this.checkBox_EnableZipChecksum.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_EnableZipChecksum.Name = "checkBox_EnableZipChecksum";
+            this.checkBox_EnableZipChecksum.Size = new System.Drawing.Size(183, 24);
+            this.checkBox_EnableZipChecksum.TabIndex = 25;
+            this.checkBox_EnableZipChecksum.Text = "Enable Zip Checksum";
+            this.toolTip1.SetToolTip(this.checkBox_EnableZipChecksum, "When checked, performs a checksum value to all ZIP files before adding them to th" +
+        "e database.\r\n");
+            this.checkBox_EnableZipChecksum.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_SHA256OverMD5
+            // 
+            this.checkBox_SHA256OverMD5.AutoSize = true;
+            this.checkBox_SHA256OverMD5.Location = new System.Drawing.Point(295, 60);
+            this.checkBox_SHA256OverMD5.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_SHA256OverMD5.Name = "checkBox_SHA256OverMD5";
+            this.checkBox_SHA256OverMD5.Size = new System.Drawing.Size(189, 24);
+            this.checkBox_SHA256OverMD5.TabIndex = 26;
+            this.checkBox_SHA256OverMD5.Text = "Do SHA256 Over MD5";
+            this.toolTip1.SetToolTip(this.checkBox_SHA256OverMD5, resources.GetString("checkBox_SHA256OverMD5.ToolTip"));
+            this.checkBox_SHA256OverMD5.UseVisualStyleBackColor = true;
             // 
             // Form_Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 361);
-            this.Controls.Add(this.checkBox_EnableImageChecksum);
-            this.Controls.Add(this.checkBox_EnableRomChecksum);
+            this.ClientSize = new System.Drawing.Size(604, 388);
+            this.Controls.Add(this.groupBox_Checksum);
             this.Controls.Add(this.linkLabel_Github_GameLauncher);
             this.Controls.Add(this.button_Cancel);
             this.Controls.Add(this.button_Ok);
@@ -396,14 +441,14 @@
             this.Controls.Add(this.checkBox_usePreviousCollectionCache);
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1200, 400);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(620, 400);
             this.Name = "Form_Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_largeIconSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).EndInit();
+            this.groupBox_Checksum.ResumeLayout(false);
+            this.groupBox_Checksum.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -435,5 +480,8 @@
         private System.Windows.Forms.CheckBox checkBox_disableAdvanceOptions;
         private System.Windows.Forms.CheckBox checkBox_EnableImageChecksum;
         private System.Windows.Forms.CheckBox checkBox_EnableRomChecksum;
+        private System.Windows.Forms.GroupBox groupBox_Checksum;
+        private System.Windows.Forms.CheckBox checkBox_EnableZipChecksum;
+        private System.Windows.Forms.CheckBox checkBox_SHA256OverMD5;
     }
 }

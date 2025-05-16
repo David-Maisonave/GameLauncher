@@ -202,5 +202,53 @@ namespace GameLauncher.Properties {
                 this["DoImageChecksum"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int MaxRetryDbExecute {
+            get {
+                return ((int)(this["MaxRetryDbExecute"]));
+            }
+            set {
+                this["MaxRetryDbExecute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int DbRetryTimeoutInSeconds {
+            get {
+                return ((int)(this["DbRetryTimeoutInSeconds"]));
+            }
+            set {
+                this["DbRetryTimeoutInSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SHA256OverMD5 {
+            get {
+                return ((bool)(this["SHA256OverMD5"]));
+            }
+            set {
+                this["SHA256OverMD5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DoZipChecksum {
+            get {
+                return ((bool)(this["DoZipChecksum"]));
+            }
+            set {
+                this["DoZipChecksum"] = value;
+            }
+        }
     }
 }

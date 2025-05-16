@@ -1,6 +1,6 @@
 ﻿namespace GameLauncher
 {
-    partial class FormUtil
+    partial class FormAdvance
     {
         /// <summary>
         /// Required designer variable.
@@ -29,16 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUtil));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAdvance));
             this.button_Rescan = new System.Windows.Forms.Button();
             this.button_ScanSelectedSystemRoms = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.button_ScanForNewRomsOnAllSystems = new System.Windows.Forms.Button();
             this.button_ScanSelectedSystemRomsAndImages = new System.Windows.Forms.Button();
             this.button_ResetImageListCache = new System.Windows.Forms.Button();
+            this.button_DelImgFilesNotInDb = new System.Windows.Forms.Button();
+            this.button_DelRomFilesInDb = new System.Windows.Forms.Button();
             this.button_RegexRenameFiles = new System.Windows.Forms.Button();
             this.button_Close = new System.Windows.Forms.Button();
-            this.button_DelImgFilesNotInDb = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_Rescan
@@ -104,6 +105,28 @@
             this.button_ResetImageListCache.UseVisualStyleBackColor = true;
             this.button_ResetImageListCache.Click += new System.EventHandler(this.button_ResetImageListCache_Click);
             // 
+            // button_DelImgFilesNotInDb
+            // 
+            this.button_DelImgFilesNotInDb.Location = new System.Drawing.Point(11, 215);
+            this.button_DelImgFilesNotInDb.Name = "button_DelImgFilesNotInDb";
+            this.button_DelImgFilesNotInDb.Size = new System.Drawing.Size(441, 29);
+            this.button_DelImgFilesNotInDb.TabIndex = 51;
+            this.button_DelImgFilesNotInDb.Text = "Delete duplicate image files not in database";
+            this.toolTip1.SetToolTip(this.button_DelImgFilesNotInDb, resources.GetString("button_DelImgFilesNotInDb.ToolTip"));
+            this.button_DelImgFilesNotInDb.UseVisualStyleBackColor = true;
+            this.button_DelImgFilesNotInDb.Click += new System.EventHandler(this.button_DelImgFilesNotInDb_Click);
+            // 
+            // button_DelRomFilesInDb
+            // 
+            this.button_DelRomFilesInDb.Location = new System.Drawing.Point(12, 250);
+            this.button_DelRomFilesInDb.Name = "button_DelRomFilesInDb";
+            this.button_DelRomFilesInDb.Size = new System.Drawing.Size(441, 29);
+            this.button_DelRomFilesInDb.TabIndex = 52;
+            this.button_DelRomFilesInDb.Text = "Delete duplicate ROM\'s files";
+            this.toolTip1.SetToolTip(this.button_DelRomFilesInDb, resources.GetString("button_DelRomFilesInDb.ToolTip"));
+            this.button_DelRomFilesInDb.UseVisualStyleBackColor = true;
+            this.button_DelRomFilesInDb.Click += new System.EventHandler(this.button_DelRomFilesInDb_Click);
+            // 
             // button_RegexRenameFiles
             // 
             this.button_RegexRenameFiles.Location = new System.Drawing.Point(12, 180);
@@ -117,7 +140,7 @@
             // button_Close
             // 
             this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Close.Location = new System.Drawing.Point(188, 258);
+            this.button_Close.Location = new System.Drawing.Point(188, 294);
             this.button_Close.Name = "button_Close";
             this.button_Close.Size = new System.Drawing.Size(86, 28);
             this.button_Close.TabIndex = 50;
@@ -125,22 +148,12 @@
             this.button_Close.UseVisualStyleBackColor = true;
             this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
             // 
-            // button_DelImgFilesNotInDb
-            // 
-            this.button_DelImgFilesNotInDb.Location = new System.Drawing.Point(11, 215);
-            this.button_DelImgFilesNotInDb.Name = "button_DelImgFilesNotInDb";
-            this.button_DelImgFilesNotInDb.Size = new System.Drawing.Size(441, 29);
-            this.button_DelImgFilesNotInDb.TabIndex = 51;
-            this.button_DelImgFilesNotInDb.Text = "Delete image files not in database";
-            this.toolTip1.SetToolTip(this.button_DelImgFilesNotInDb, resources.GetString("button_DelImgFilesNotInDb.ToolTip"));
-            this.button_DelImgFilesNotInDb.UseVisualStyleBackColor = true;
-            this.button_DelImgFilesNotInDb.Click += new System.EventHandler(this.button_DelImgFilesNotInDb_Click);
-            // 
-            // FormUtil
+            // FormAdvance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 295);
+            this.ClientSize = new System.Drawing.Size(464, 331);
+            this.Controls.Add(this.button_DelRomFilesInDb);
             this.Controls.Add(this.button_DelImgFilesNotInDb);
             this.Controls.Add(this.button_ResetImageListCache);
             this.Controls.Add(this.button_ScanSelectedSystemRomsAndImages);
@@ -153,7 +166,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormUtil";
+            this.Name = "FormAdvance";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Advance Options";
             this.ResumeLayout(false);
@@ -171,5 +184,6 @@
         private System.Windows.Forms.Button button_ScanSelectedSystemRomsAndImages;
         private System.Windows.Forms.Button button_ResetImageListCache;
         private System.Windows.Forms.Button button_DelImgFilesNotInDb;
+        private System.Windows.Forms.Button button_DelRomFilesInDb;
     }
 }

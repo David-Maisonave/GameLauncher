@@ -115,6 +115,17 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -135,6 +146,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormRomsToDelete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRomsToDelete.Designer.cs">
+      <DependentUpon>FormRomsToDelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_ImageDeletionPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,11 +176,11 @@
     <Compile Include="FormInput.Designer.cs">
       <DependentUpon>FormInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormUtil.cs">
+    <Compile Include="FormAdvance.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormUtil.Designer.cs">
-      <DependentUpon>FormUtil.cs</DependentUpon>
+    <Compile Include="FormAdvance.Designer.cs">
+      <DependentUpon>FormAdvance.cs</DependentUpon>
     </Compile>
     <Compile Include="FormRegexRenameFiles.cs">
       <SubType>Form</SubType>
@@ -173,6 +190,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TempDirStorage.cs" />
+    <EmbeddedResource Include="FormRomsToDelete.resx">
+      <DependentUpon>FormRomsToDelete.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageDeletionPrompt.resx">
       <DependentUpon>Form_ImageDeletionPrompt.cs</DependentUpon>
     </EmbeddedResource>
@@ -185,8 +206,8 @@
     <EmbeddedResource Include="FormInput.resx">
       <DependentUpon>FormInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormUtil.resx">
-      <DependentUpon>FormUtil.cs</DependentUpon>
+    <EmbeddedResource Include="FormAdvance.resx">
+      <DependentUpon>FormAdvance.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRegexRenameFiles.resx">
       <DependentUpon>FormRegexRenameFiles.cs</DependentUpon>

@@ -37,6 +37,8 @@ namespace GameLauncher
 
             checkBox_EnableRomChecksum.Checked = Properties.Settings.Default.DoRomChecksum;
             checkBox_EnableImageChecksum.Checked = Properties.Settings.Default.DoImageChecksum;
+            checkBox_EnableZipChecksum.Checked = Properties.Settings.Default.DoZipChecksum;
+            checkBox_SHA256OverMD5.Checked = Properties.Settings.Default.SHA256OverMD5;
 
             InitialLargeIconSize = Properties.Settings.Default.largeIconSize;
             InitialSmallIconSize = Properties.Settings.Default.smallIconSize;
@@ -61,6 +63,8 @@ namespace GameLauncher
                 numericUpDown_largeIconSize.Value = numericUpDown_smallIconSize.Value > 32 ? 64 : 32;
             Properties.Settings.Default.DoImageChecksum = checkBox_EnableImageChecksum.Checked;
             Properties.Settings.Default.DoRomChecksum = checkBox_EnableRomChecksum.Checked;
+            Properties.Settings.Default.DoZipChecksum = checkBox_EnableZipChecksum.Checked;
+            Properties.Settings.Default.SHA256OverMD5 = checkBox_SHA256OverMD5.Checked;
             Properties.Settings.Default.disableAdvanceOptions = checkBox_disableAdvanceOptions.Checked;
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
             Properties.Settings.Default.usePreviousCollectionCache = checkBox_usePreviousCollectionCache.Checked;
@@ -78,7 +82,6 @@ namespace GameLauncher
                 EmulatorsBasePathChanged = true;
             this.Close();
         }
-
         private void button_Cancel_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -165,6 +168,17 @@ namespace GameLauncher
         {
             linkLabel_Github_GameLauncher.LinkVisited = true;
             System.Diagnostics.Process.Start("https://github.com/David-Maisonave/GameLauncher");
+        }
+
+        private void checkBox_EnableRomChecksum_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBox_EnableZipChecksum.Enabled = checkBox_EnableRomChecksum.Checked;
+            checkBox_SHA256OverMD5.Enabled = (checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked);
+        }
+
+        private void checkBox_EnableImageChecksum_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBox_SHA256OverMD5.Enabled = (checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked);
         }
     }
 }
