@@ -1237,16 +1237,18 @@ namespace GameLauncher
             }
             if (!cancelScan)
             {
+                const string TreeNodeText = "TreeNode: ";
                 FormRomsToDelete formRomsToDelete = new FormRomsToDelete(roms);
                 formRomsToDelete.ShowDialog();
                 if (formRomsToDelete.RomSeletedToDelete.Count > 0)
                 {
                     if (MessageBox.Show($"Are you sure you want to delete {formRomsToDelete.RomSeletedToDelete.Count} ROM files?", $"Delete {formRomsToDelete.RomSeletedToDelete.Count} Files",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                        DialogResult.OK)
+                        DialogResult.Yes)
                     {
-                        foreach(string fileToDelete in formRomsToDelete.RomSeletedToDelete)
+                        foreach(string f in formRomsToDelete.RomSeletedToDelete)
                         {
+                            string fileToDelete = f.StartsWith(TreeNodeText) ? f.Substring(TreeNodeText.Length) : f;
                             File.Delete(fileToDelete);
                             DeleteRomFromDb(fileToDelete);
                         }
@@ -2552,7 +2554,7 @@ namespace GameLauncher
         {
             int xi = x.FilePath.Length;
             int yi = y.FilePath.Length;
-            return xi.CompareTo(yi);
+            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : xi.CompareTo(yi);
         }
     }
     public class SortRomByFilePathLenRev : IComparer<Rom>
@@ -2561,7 +2563,7 @@ namespace GameLauncher
         {
             int xi = x.FilePath.Length;
             int yi = y.FilePath.Length;
-            return yi.CompareTo(xi);
+            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : yi.CompareTo(xi);
         }
     }
     public class SortRomByFileSizeLen : IComparer<Rom>
@@ -2570,7 +2572,12 @@ namespace GameLauncher
         {
             long xi = x.RomSize;
             long yi = y.RomSize;
-            return xi.CompareTo(yi);
+            if (xi == yi)
+            {
+                xi = x.FilePath.Length;
+                yi = y.FilePath.Length;
+            }
+            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : xi.CompareTo(yi);
         }
     }
     public class SortRomByFileSizeLenRev : IComparer<Rom>
@@ -2579,7 +2586,12 @@ namespace GameLauncher
         {
             long xi = x.RomSize;
             long yi = y.RomSize;
-            return yi.CompareTo(xi);
+            if (xi == yi)
+            {
+                xi = x.FilePath.Length;
+                yi = y.FilePath.Length;
+            }
+            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : yi.CompareTo(xi);
         }
     }
     public class InitializeRomsInDatabaseForSystem_Arg
