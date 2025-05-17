@@ -56,7 +56,8 @@ It doesn't work on emulators like (NeoRAGEx.exe) which fail to take command line
 ### ROM and Image search
 GameLauncher creates a SQLite database that contains all the ROM and image files found in the filesystem from a given base directory.
 It sets a title for each ROM base of the ROM file name excluding common ROM codes.
-Example: Auto-Upturn (Sachen) [U][!].zip, would get a title of **Auto-Upturn**
+* Example: Auto-Upturn (Sachen) [U][!].zip, would get a title of **Auto-Upturn**
+
 The database also store a compress title name, which removes non-alphanum characters. It does this for both the ROM files and the image files so that it's easier to find matching image file for associated ROM files.
 GameLauncher searches for image files under each game console system directory, and it aslo searches for image files under the main directory. ``C:\Emulators\Images``.
 It will try to match a ROM file first with it's associated game console image directory, and if it doesn't find it there, it will then look under the common image directory.
