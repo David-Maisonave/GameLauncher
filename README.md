@@ -58,8 +58,8 @@ GameLauncher creates a SQLite database that contains all the ROM and image files
 It sets a title for each ROM base of the ROM file name excluding common ROM codes.
 * Example: Auto-Upturn (Sachen) [U][!].zip, would get a title of **Auto-Upturn**
 
-The database also store a compress title name, which removes non-alphanum characters. It does this for both the ROM files and the image files so that it's easier to find matching image file for associated ROM files.
-GameLauncher searches for image files under each game console system directory, and it aslo searches for image files under the main directory. ``C:\Emulators\Images``.
+The database also store a compress title name, which removes non-alphanumeric characters. It does this for both the ROM files and the image files so that it's easier to find matching image file for associated ROM files.
+GameLauncher searches for image files under each game console system directory, and it also searches for image files under the main directory. ``C:\Emulators\Images``.
 It will try to match a ROM file first with it's associated game console image directory, and if it doesn't find it there, it will then look under the common image directory.
 Users can optionally just have one image directory for all the game console systems.
 ### Emulator executable search
@@ -106,8 +106,8 @@ The advance option window can be used to perform a full rescan as well as other 
 
 <img width="233" alt="AdvanceOptions" src="https://github.com/user-attachments/assets/bec48139-a431-43f0-b5ed-390a5068b78a" />
 
-Most of the options are self explanitory.
-The checksum options are used to help detect duplicate image and ROM files. Changes to these options don't take affect until a full rescan is performmed.
+Most of the options are self explanatory.
+The checksum options are used to help detect duplicate image and ROM files. Changes to these options don't take affect until a full rescan is performed.
 
 ## ToDo
 Below are future plan updates.
