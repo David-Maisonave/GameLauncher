@@ -405,6 +405,7 @@ namespace GameLauncher
             myControl.Refresh();
             //Application.DoEvents();
         }
+        public delegate void MyDelegateForm_Main_DeleteDuplicateBy(Form_Main form_Main, DeleteDuplicateBy arg);
         public delegate void MyDelegateForm_Main(Form_Main form_Main, bool arg);
         public void DelegateDisplayOrHideProgressGroup(Form_Main form_Main, bool display) => form_Main.DisplayOrHideProgressGroup(display);
         public void DelegateScanForNewRomsOnAllSystems(Form_Main form_Main, bool arg) => form_Main.ScanForNewRomsOnAllSystems(arg);
@@ -412,7 +413,7 @@ namespace GameLauncher
         public void DelegateDeleteImageList(Form_Main form_Main, bool arg) => form_Main.DeleteImageList();
         public void DelegateCreateCacheForDisplaySystemIcons(Form_Main form_Main, bool arg) => form_Main.CreateCacheForDisplaySystemIcons();
         public void DelegateDeleteImageFilesNotInDatabase(Form_Main form_Main, bool arg) => form_Main.DeleteImageFilesNotInDatabase(arg);
-        public void DelegateDeleteDuplicateRomFilesInDatabase(Form_Main form_Main, bool arg) => form_Main.DeleteDuplicateRomFilesInDatabase(arg);
+        public void DelegateDeleteDuplicateRomFilesInDatabase(Form_Main form_Main, DeleteDuplicateBy arg) => form_Main.DeleteDuplicateRomFilesInDatabase(arg);
         public void DelegateRedoDbInit(Form_Main form_Main, bool arg) => form_Main.RedoDbInit("Are you sure you want to rescan all ROM's?\nThis will take about 15-60 minutes.", "Rescan?", MessageBoxIcon.Question);
         public delegate void MyDelegateInitializeRomsInDatabaseForSystem(Form_Main form_Main, InitializeRomsInDatabaseForSystem_Arg arg);
         public void DelegateInitializeRomsInDatabaseForSystem(Form_Main form_Main, InitializeRomsInDatabaseForSystem_Arg arg) => form_Main.InitializeRomsInDatabaseForSystem(arg);
@@ -470,7 +471,7 @@ namespace GameLauncher
             }
             return false;
         }
-        private string GetFirstColStr(string sql, string defaultValue = "")
+        private static string GetFirstColStr(string sql, string defaultValue = "")
         {
             // On failure, returns default value
             SqliteCommand command = new SqliteCommand(sql, connection);
@@ -482,7 +483,7 @@ namespace GameLauncher
             }
             return defaultValue;
         }
-        private int GetFirstColInt(string sql, int defaultValue = -1)
+        private static int GetFirstColInt(string sql, int defaultValue = -1)
         {
             // On failure, returns default value
             SqliteCommand command = new SqliteCommand(sql, connection);
@@ -509,6 +510,7 @@ namespace GameLauncher
         }
         private int GetImageIndexByPath(string FilePath) => GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{FilePath}\"");
         private int GetSystemIndex(string Name) => GetFirstColInt($"SELECT ID FROM GameSystems WHERE Name = \"{Name}\"");
+        public static string GetSystemNameByID(int id) => GetFirstColStr($"SELECT Name FROM GameSystems WHERE ID = \"{id}\"");
         private void EraseDbContent() => UpdateDB("DELETE FROM Roms;\r\nDELETE FROM Images;\r\nDELETE FROM GameSystems;");
         public string GetPersistenceVariable(string name, string defaultValue = "") => GetFirstColStr($"SELECT Value FROM PersistenceVariables WHERE Name = \"{name}\"", defaultValue);
         public int GetPersistenceVariable(string name, int defaultValue)=> GetFirstColInt($"SELECT ValueInt FROM PersistenceVariables WHERE Name = \"{name}\"", defaultValue);
@@ -1179,58 +1181,81 @@ namespace GameLauncher
             Application.DoEvents(); 
             return cancelScan;
         }
-        public void DeleteDuplicateRomFilesInDatabase(bool doSilentDelete)
+        public void DeleteDuplicateRomFilesInDatabase(DeleteDuplicateBy deleteDuplicateBy)
         {
-            if (!Properties.Settings.Default.DoRomChecksum)
-            {
-                MessageBox.Show("ROM's checksum option is disabled, and this option is not available unless ROM checksum is enabled.  See Settings option.");
-                return;
-            }
             cancelScan = false;
             miscQty = 0;
             List<Rom> roms = new List<Rom>();
             using (new CursorWait())
             {
-                if (!cancelScan && Properties.Settings.Default.DoRomChecksum)
+
+                if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum)
                 {
-                    SqliteCommand command = connection.CreateCommand();
-                    command.CommandText = "SELECT FilePath, Checksum FROM roms WHERE Checksum IN (SELECT * FROM (SELECT Checksum FROM roms GROUP BY Checksum HAVING COUNT(Checksum) > 1) AS a) order by Checksum, length(FilePath) desc;";
-                    using (SqliteDataReader reader = command.ExecuteReader())
+                    if (!Properties.Settings.Default.DoRomChecksum)
                     {
-                        while (!cancelScan && reader.Read())
+                        MessageBox.Show("ROM's checksum option is disabled, and this option is not available unless ROM checksum is enabled.  See Settings option.");
+                        return;
+                    }
+                    if (!cancelScan && Properties.Settings.Default.DoRomChecksum)
+                    {
+                        SqliteCommand command = connection.CreateCommand();
+                        command.CommandText = "SELECT FilePath, Checksum FROM roms WHERE Checksum IN (SELECT * FROM (SELECT Checksum FROM roms GROUP BY Checksum HAVING COUNT(Checksum) > 1) AS a) order by Checksum, length(FilePath) desc;";
+                        using (SqliteDataReader reader = command.ExecuteReader())
                         {
-                            string filePath = reader.GetString(0);
-                            string checksum = reader.GetString(1);
-                            if (string.IsNullOrEmpty(checksum))
-                                continue;
-                            Rom rom = GetRom(filePath);
-                            if (rom == null)
-                                Console.WriteLine($"Failed to get file {filePath}");
-                            else
-                                roms.Add(rom);
+                            while (!cancelScan && reader.Read())
+                            {
+                                string filePath = reader.GetString(0);
+                                string checksum = reader.GetString(1);
+                                if (string.IsNullOrEmpty(checksum))
+                                    continue;
+                                Rom rom = GetRom(filePath);
+                                if (rom == null)
+                                    Console.WriteLine($"Failed to get file {filePath}");
+                                else
+                                    roms.Add(rom);
+                            }
+                        }
+                    }
+                    if (!cancelScan && Properties.Settings.Default.DoZipChecksum)
+                    {
+                        SqliteCommand command = connection.CreateCommand();
+                        command.CommandText = "SELECT FilePath, CompressChecksum FROM roms WHERE CompressChecksum IN (SELECT * FROM (SELECT CompressChecksum FROM roms GROUP BY CompressChecksum HAVING COUNT(CompressChecksum) > 1) AS a) order by CompressChecksum, length(FilePath) desc;";
+                        using (SqliteDataReader reader = command.ExecuteReader())
+                        {
+                            while (!cancelScan && reader.Read())
+                            {
+                                string filePath = reader.GetString(0);
+                                string compressChecksum = reader.GetString(1);
+                                if (string.IsNullOrEmpty(compressChecksum))
+                                    continue;
+                                Rom rom = GetRom(filePath);
+                                if (rom == null)
+                                    Console.WriteLine($"Failed to get file {filePath}");
+                                else
+                                {
+                                    rom.Checksum = compressChecksum;
+                                    roms.Add(rom);
+                                }
+                            }
                         }
                     }
                 }
-                if (!cancelScan && Properties.Settings.Default.DoZipChecksum)
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem)
                 {
                     SqliteCommand command = connection.CreateCommand();
-                    command.CommandText = "SELECT FilePath, CompressChecksum FROM roms WHERE CompressChecksum IN (SELECT * FROM (SELECT CompressChecksum FROM roms GROUP BY CompressChecksum HAVING COUNT(CompressChecksum) > 1) AS a) order by CompressChecksum, length(FilePath) desc;";
+                    command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem ? 
+                        "SELECT FilePath, Title, RomSize FROM roms WHERE Title IN (SELECT * FROM (SELECT Title FROM roms GROUP BY Title HAVING COUNT(Title) > 1) AS a) order by Title, RomSize desc;" :
+                        "SELECT FilePath, Title, RomSize FROM roms WHERE Title IN (SELECT * FROM (SELECT Title FROM roms GROUP BY Title,System HAVING COUNT(*) > 1) AS a) order by Title, RomSize desc;";
                     using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         while (!cancelScan && reader.Read())
                         {
                             string filePath = reader.GetString(0);
-                            string compressChecksum = reader.GetString(1);
-                            if (string.IsNullOrEmpty(compressChecksum))
-                                continue;
                             Rom rom = GetRom(filePath);
                             if (rom == null)
                                 Console.WriteLine($"Failed to get file {filePath}");
                             else
-                            {
-                                rom.Checksum = compressChecksum;
                                 roms.Add(rom);
-                            }
                         }
                     }
                 }
@@ -1238,19 +1263,22 @@ namespace GameLauncher
             if (!cancelScan)
             {
                 const string TreeNodeText = "TreeNode: ";
-                FormRomsToDelete formRomsToDelete = new FormRomsToDelete(roms);
+                FormRomsToDelete formRomsToDelete = new FormRomsToDelete(roms, deleteDuplicateBy);
                 formRomsToDelete.ShowDialog();
-                if (formRomsToDelete.RomSeletedToDelete.Count > 0)
+                if (formRomsToDelete.RomSelectedToDelete.Count > 0)
                 {
-                    if (MessageBox.Show($"Are you sure you want to delete {formRomsToDelete.RomSeletedToDelete.Count} ROM files?", $"Delete {formRomsToDelete.RomSeletedToDelete.Count} Files",
+                    if (MessageBox.Show($"Are you sure you want to delete {formRomsToDelete.RomSelectedToDelete.Count} ROM files?", $"Delete {formRomsToDelete.RomSelectedToDelete.Count} Files",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
                         DialogResult.Yes)
                     {
-                        foreach(string f in formRomsToDelete.RomSeletedToDelete)
+                        using (new CursorWait())
                         {
-                            string fileToDelete = f.StartsWith(TreeNodeText) ? f.Substring(TreeNodeText.Length) : f;
-                            File.Delete(fileToDelete);
-                            DeleteRomFromDb(fileToDelete);
+                            foreach (string f in formRomsToDelete.RomSelectedToDelete)
+                            {
+                                string fileToDelete = f.StartsWith(TreeNodeText) ? f.Substring(TreeNodeText.Length) : f;
+                                File.Delete(fileToDelete);
+                                DeleteRomFromDb(fileToDelete);
+                            }
                         }
                     }
                 }
@@ -2547,7 +2575,13 @@ namespace GameLauncher
             return base.GetHashCode();  // HashCode.Combine(FilePath);
         }
     }
-
+    public enum DeleteDuplicateBy
+    {
+        None = 0,
+        DuplicateChecksum,
+        DuplicateTitleInAnySystem,
+        DuplicateTitleInSameSystem
+    }
     public class SortRomByFilePathLen : IComparer<Rom>
     {
         public int Compare(Rom x, Rom y)
@@ -2592,6 +2626,22 @@ namespace GameLauncher
                 yi = y.FilePath.Length;
             }
             return xi == yi ? x.FilePath.CompareTo(y.FilePath) : yi.CompareTo(xi);
+        }
+    }
+    public class SortRomByFileVersion : IComparer<Rom>
+    {
+        public int Compare(Rom x, Rom y)
+        {
+            if (!x.Version.Equals(y.Version))
+                return y.Version.CompareTo(x.Version);
+            long xi = x.RomSize;
+            long yi = y.RomSize;
+            if (xi == yi)
+            {
+                xi = x.FilePath.Length;
+                yi = y.FilePath.Length;
+            }
+            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : xi.CompareTo(yi);
         }
     }
     public class InitializeRomsInDatabaseForSystem_Arg

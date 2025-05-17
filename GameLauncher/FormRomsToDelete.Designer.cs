@@ -43,6 +43,7 @@
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deselectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllButFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rOMVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,7 +96,8 @@
             this.longestFileNameToolStripMenuItem,
             this.shortestFileNameToolStripMenuItem,
             this.largestFileSizeToolStripMenuItem,
-            this.smallestFileSizeToolStripMenuItem});
+            this.smallestFileSizeToolStripMenuItem,
+            this.rOMVersionToolStripMenuItem});
             this.sortOrderToolStripMenuItem.Name = "sortOrderToolStripMenuItem";
             this.sortOrderToolStripMenuItem.Size = new System.Drawing.Size(123, 20);
             this.sortOrderToolStripMenuItem.Text = "Sort Order (Sub Set)";
@@ -141,23 +143,30 @@
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
             // deselectAllToolStripMenuItem
             // 
             this.deselectAllToolStripMenuItem.Name = "deselectAllToolStripMenuItem";
-            this.deselectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deselectAllToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.deselectAllToolStripMenuItem.Text = "Deselect All";
             this.deselectAllToolStripMenuItem.Click += new System.EventHandler(this.deselectAllToolStripMenuItem_Click);
             // 
             // selectAllButFirstToolStripMenuItem
             // 
             this.selectAllButFirstToolStripMenuItem.Name = "selectAllButFirstToolStripMenuItem";
-            this.selectAllButFirstToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectAllButFirstToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.selectAllButFirstToolStripMenuItem.Text = "Select All But First";
             this.selectAllButFirstToolStripMenuItem.Click += new System.EventHandler(this.selectAllButFirstToolStripMenuItem_Click);
+            // 
+            // rOMVersionToolStripMenuItem
+            // 
+            this.rOMVersionToolStripMenuItem.Name = "rOMVersionToolStripMenuItem";
+            this.rOMVersionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rOMVersionToolStripMenuItem.Text = "ROM Version";
+            this.rOMVersionToolStripMenuItem.Click += new System.EventHandler(this.rOMVersionToolStripMenuItem_Click);
             // 
             // FormRomsToDelete
             // 
@@ -193,5 +202,6 @@
         private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deselectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectAllButFirstToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rOMVersionToolStripMenuItem;
     }
 }

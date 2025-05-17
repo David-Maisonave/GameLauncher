@@ -120,6 +120,9 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="button_DelImgFilesNotInDb.ToolTip" xml:space="preserve">
     <value>Delete images not in DB.
 This option is only useful if image checksum option is enabled in the settings option.
@@ -128,7 +131,21 @@ This means files not in DB are most likely duplicate files.
 
 Warning: Backup all image files before using this option!!!!</value>
   </data>
-  <data name="button_DelRomFilesInDb.ToolTip" xml:space="preserve">
+  <data name="button_DeleteDuplicateRomsByChecksum.ToolTip" xml:space="preserve">
+    <value>Delete duplicate ROM's.
+This option is only useful if ROM checksum option is enabled in the settings option.
+Only ROM's having the same checksum are candidates for deletion.
+
+Warning: Backup all ROM's files before using this option!!!!</value>
+  </data>
+  <data name="button_DeleteDuplicateRomsByTitleInSameSystem.ToolTip" xml:space="preserve">
+    <value>Delete duplicate ROM's.
+This option is only useful if ROM checksum option is enabled in the settings option.
+Only ROM's having the same checksum are candidates for deletion.
+
+Warning: Backup all ROM's files before using this option!!!!</value>
+  </data>
+  <data name="button_DeleteDuplicateRomsByTitleInAnySystem.ToolTip" xml:space="preserve">
     <value>Delete duplicate ROM's.
 This option is only useful if ROM checksum option is enabled in the settings option.
 Only ROM's having the same checksum are candidates for deletion.

@@ -66,14 +66,8 @@ namespace GameLauncher
                 return;
             form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteImageFilesNotInDatabase), form_Main.GetDelegateAction(form_Main, results == DialogResult.Yes));
         }
-
-        private void button_DelRomFilesInDb_Click(object sender, EventArgs e)
-        {
-            //DialogResult results = MessageBox.Show($"Do you want to delete duplicate ROM files that have the same checksum in GameLauncher database?\nClick YES for silent deletion.\nClick NO to DELETE the ROM files but give a prompt before each deletion.\nClick CANCEL to exit this option (No Deletions).", "Delete ROM", MessageBoxButtons.YesNoCancel);
-            //if (results == DialogResult.Cancel)
-            //    return;
-            //form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, results == DialogResult.Yes));
-            form_Main.BeginInvoke(new MyDelegateForm_Main(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, true));
-        }
+        private void button_DelRomFilesInDb_Click(object sender, EventArgs e) => form_Main.BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, DeleteDuplicateBy.DuplicateChecksum));
+        private void button_DeleteDuplicateRomsByTitleInSameSystem_Click(object sender, EventArgs e)=> form_Main.BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, DeleteDuplicateBy.DuplicateTitleInSameSystem));
+        private void button_DeleteDuplicateRomsByTitleInAnySystem_Click(object sender, EventArgs e) => form_Main.BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(form_Main.DelegateDeleteDuplicateRomFilesInDatabase), form_Main.GetDelegateAction(form_Main, DeleteDuplicateBy.DuplicateTitleInAnySystem));
     }
 }

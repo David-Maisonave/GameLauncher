@@ -15,7 +15,8 @@ namespace GameLauncher
 {
     public partial class FormRomsToDelete : Form
     {
-        public List<string> RomSeletedToDelete { get; private set; } = new List<string>();
+        public List<string> RomSelectedToDelete { get; private set; } = new List<string>();
+        private DeleteDuplicateBy deleteDuplicateBy;
         private List<Rom> RomCandidatesToDelete = new List<Rom>();
         private Dictionary<string, SortedSet<Rom>> Candidates = new Dictionary<string, SortedSet<Rom>>();
         enum SortTypeSelected
@@ -24,7 +25,8 @@ namespace GameLauncher
             PathLenRev = 1,
             PathLen = 2,
             RomSizeRev = 3,
-            RomSize = 4
+            RomSize = 4,
+            RomVersion = 5,
         }
         private SortTypeSelected sortTypeSelected = SortTypeSelected.PathLenRev;
         private IComparer<Rom> GetComparisonType()
@@ -41,30 +43,49 @@ namespace GameLauncher
                     return new SortRomByFileSizeLenRev();
                 case SortTypeSelected.RomSize:
                     return new SortRomByFileSizeLen();
+                case SortTypeSelected.RomVersion:
+                    return new SortRomByFileVersion();
             }
             return new SortRomByFilePathLenRev();
         }
         private void PopulateTreeView(SortTypeSelected select = SortTypeSelected.None)
         {
+            string KeyName = deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum ? "Checksum" : "Title";
             if (select != SortTypeSelected.None)
                 sortTypeSelected = select;
-            //treeView1.CollapseAll(); 
             treeView1.Nodes.Clear();
             Candidates.Clear();
             for (int i = 0; i < RomCandidatesToDelete.Count; i++)
             {
-                if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Checksum))
-                    Candidates[RomCandidatesToDelete[i].Checksum] = new SortedSet<Rom>(GetComparisonType());
-                Candidates[RomCandidatesToDelete[i].Checksum].Add(RomCandidatesToDelete[i]);
+                if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum)
+                {
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Checksum))
+                        Candidates[RomCandidatesToDelete[i].Checksum] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].Checksum].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem)
+                {
+                    string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
+                    if (!Candidates.ContainsKey($"{system}-{RomCandidatesToDelete[i].Title}"))
+                        Candidates[$"{system}-{RomCandidatesToDelete[i].Title}"] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[$"{system}-{RomCandidatesToDelete[i].Title}"].Add(RomCandidatesToDelete[i]);
+                }
+                else
+                {
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Title))
+                        Candidates[RomCandidatesToDelete[i].Title] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].Title].Add(RomCandidatesToDelete[i]);
+                }
             }
             treeView1.CheckBoxes = true;
             TreeNode parentNode = treeView1.Nodes.Add("Duplicates");
             TreeNode firstChildNode = null;
             TreeNode lastChildNode = null;
-            //toolTip1.SetToolTip(treeView1, "Checkbox for parent node is ignore. Only use checkbox at file name level.");
             foreach (string key in Candidates.Keys)
             {
-                TreeNode childNode = treeView1.Nodes[0].Nodes.Add($"Checksum={key}");
+                if (Candidates[key].Count < 2)
+                    continue;
+                TreeNode childNode = treeView1.Nodes[0].Nodes.Add($"{KeyName}={key}");
                 if (firstChildNode == null)
                     firstChildNode = childNode;
                 lastChildNode = childNode;
@@ -77,19 +98,20 @@ namespace GameLauncher
                     else
                         cc.Checked = true;
                     string tip = $"Size={rom.RomSize}\nTitle={rom.Title}\nRegion={rom.Region}\nStatus={rom.Status}\nNotesCore={rom.NotesCore}\nNotesUser={rom.NotesUser}\nDescription={rom.Description}\nLanguage={rom.Language}";
-                    //toolTip1.SetToolTip(cc.TreeView, tip);
                     cc.ToolTipText = tip;
                 }
             }
-            //if (lastChildNode != null)
-            //    lastChildNode.EnsureVisible();
             treeView1.ExpandAll();
         }
-        public FormRomsToDelete(List<Rom> romCandidatesToDelete)
+        public FormRomsToDelete(List<Rom> romCandidatesToDelete, DeleteDuplicateBy delete_duplicate_by)
         {
             InitializeComponent();
             RomCandidatesToDelete = romCandidatesToDelete;
-            PopulateTreeView();
+            deleteDuplicateBy = delete_duplicate_by;
+            if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum)
+                PopulateTreeView();
+            else
+                PopulateTreeView(SortTypeSelected.RomVersion);
         }
 
         private void button_Cancel_Click(object sender, EventArgs e)
@@ -103,7 +125,7 @@ namespace GameLauncher
             {
                 if (aNode.Checked)
                 {
-                    // Populate RomSeletedToDelete with all contents of RomCandidatesToDelete
+                    // Populate RomSelectedToDelete with all contents of RomCandidatesToDelete
                     // Give warning first.
                 }
                 else
@@ -115,7 +137,7 @@ namespace GameLauncher
                             if (accNode.Checked)
                             {
                                 string fileToDelete = accNode.ToString();
-                                RomSeletedToDelete.Add(fileToDelete);
+                                RomSelectedToDelete.Add(fileToDelete);
                             }
                         }
                     }
@@ -138,6 +160,7 @@ namespace GameLauncher
         private void shortestFileNameToolStripMenuItem_Click(object sender, EventArgs e) => PopulateTreeView(SortTypeSelected.PathLen);
         private void largestFileSizeToolStripMenuItem_Click(object sender, EventArgs e) => PopulateTreeView(SortTypeSelected.RomSize);
         private void smallestFileSizeToolStripMenuItem_Click(object sender, EventArgs e) => PopulateTreeView(SortTypeSelected.RomSizeRev);
+        private void rOMVersionToolStripMenuItem_Click(object sender, EventArgs e) => PopulateTreeView(SortTypeSelected.RomVersion);
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) => ChangeSelection(true);
         private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e) => ChangeSelection(false);
         private void selectAllButFirstToolStripMenuItem_Click(object sender, EventArgs e) => PopulateTreeView();

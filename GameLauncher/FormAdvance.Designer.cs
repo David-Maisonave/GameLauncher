@@ -37,9 +37,11 @@
             this.button_ScanSelectedSystemRomsAndImages = new System.Windows.Forms.Button();
             this.button_ResetImageListCache = new System.Windows.Forms.Button();
             this.button_DelImgFilesNotInDb = new System.Windows.Forms.Button();
-            this.button_DelRomFilesInDb = new System.Windows.Forms.Button();
+            this.button_DeleteDuplicateRomsByChecksum = new System.Windows.Forms.Button();
             this.button_RegexRenameFiles = new System.Windows.Forms.Button();
             this.button_Close = new System.Windows.Forms.Button();
+            this.button_DeleteDuplicateRomsByTitleInSameSystem = new System.Windows.Forms.Button();
+            this.button_DeleteDuplicateRomsByTitleInAnySystem = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_Rescan
@@ -116,16 +118,16 @@
             this.button_DelImgFilesNotInDb.UseVisualStyleBackColor = true;
             this.button_DelImgFilesNotInDb.Click += new System.EventHandler(this.button_DelImgFilesNotInDb_Click);
             // 
-            // button_DelRomFilesInDb
+            // button_DeleteDuplicateRomsByChecksum
             // 
-            this.button_DelRomFilesInDb.Location = new System.Drawing.Point(12, 250);
-            this.button_DelRomFilesInDb.Name = "button_DelRomFilesInDb";
-            this.button_DelRomFilesInDb.Size = new System.Drawing.Size(441, 29);
-            this.button_DelRomFilesInDb.TabIndex = 52;
-            this.button_DelRomFilesInDb.Text = "Delete duplicate ROM\'s files";
-            this.toolTip1.SetToolTip(this.button_DelRomFilesInDb, resources.GetString("button_DelRomFilesInDb.ToolTip"));
-            this.button_DelRomFilesInDb.UseVisualStyleBackColor = true;
-            this.button_DelRomFilesInDb.Click += new System.EventHandler(this.button_DelRomFilesInDb_Click);
+            this.button_DeleteDuplicateRomsByChecksum.Location = new System.Drawing.Point(12, 250);
+            this.button_DeleteDuplicateRomsByChecksum.Name = "button_DeleteDuplicateRomsByChecksum";
+            this.button_DeleteDuplicateRomsByChecksum.Size = new System.Drawing.Size(441, 29);
+            this.button_DeleteDuplicateRomsByChecksum.TabIndex = 52;
+            this.button_DeleteDuplicateRomsByChecksum.Text = "Delete duplicate ROM\'s by checksum";
+            this.toolTip1.SetToolTip(this.button_DeleteDuplicateRomsByChecksum, resources.GetString("button_DeleteDuplicateRomsByChecksum.ToolTip"));
+            this.button_DeleteDuplicateRomsByChecksum.UseVisualStyleBackColor = true;
+            this.button_DeleteDuplicateRomsByChecksum.Click += new System.EventHandler(this.button_DelRomFilesInDb_Click);
             // 
             // button_RegexRenameFiles
             // 
@@ -140,7 +142,7 @@
             // button_Close
             // 
             this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Close.Location = new System.Drawing.Point(188, 294);
+            this.button_Close.Location = new System.Drawing.Point(188, 366);
             this.button_Close.Name = "button_Close";
             this.button_Close.Size = new System.Drawing.Size(86, 28);
             this.button_Close.TabIndex = 50;
@@ -148,12 +150,36 @@
             this.button_Close.UseVisualStyleBackColor = true;
             this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
             // 
+            // button_DeleteDuplicateRomsByTitleInSameSystem
+            // 
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.Location = new System.Drawing.Point(11, 285);
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.Name = "button_DeleteDuplicateRomsByTitleInSameSystem";
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.Size = new System.Drawing.Size(441, 29);
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.TabIndex = 53;
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.Text = "Delete duplicate ROM\'s by title in same system";
+            this.toolTip1.SetToolTip(this.button_DeleteDuplicateRomsByTitleInSameSystem, resources.GetString("button_DeleteDuplicateRomsByTitleInSameSystem.ToolTip"));
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.UseVisualStyleBackColor = true;
+            this.button_DeleteDuplicateRomsByTitleInSameSystem.Click += new System.EventHandler(this.button_DeleteDuplicateRomsByTitleInSameSystem_Click);
+            // 
+            // button_DeleteDuplicateRomsByTitleInAnySystem
+            // 
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.Location = new System.Drawing.Point(11, 320);
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.Name = "button_DeleteDuplicateRomsByTitleInAnySystem";
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.Size = new System.Drawing.Size(441, 29);
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.TabIndex = 54;
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.Text = "Delete duplicate ROM\'s by title in any system";
+            this.toolTip1.SetToolTip(this.button_DeleteDuplicateRomsByTitleInAnySystem, resources.GetString("button_DeleteDuplicateRomsByTitleInAnySystem.ToolTip"));
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.UseVisualStyleBackColor = true;
+            this.button_DeleteDuplicateRomsByTitleInAnySystem.Click += new System.EventHandler(this.button_DeleteDuplicateRomsByTitleInAnySystem_Click);
+            // 
             // FormAdvance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 331);
-            this.Controls.Add(this.button_DelRomFilesInDb);
+            this.ClientSize = new System.Drawing.Size(464, 403);
+            this.Controls.Add(this.button_DeleteDuplicateRomsByTitleInAnySystem);
+            this.Controls.Add(this.button_DeleteDuplicateRomsByTitleInSameSystem);
+            this.Controls.Add(this.button_DeleteDuplicateRomsByChecksum);
             this.Controls.Add(this.button_DelImgFilesNotInDb);
             this.Controls.Add(this.button_ResetImageListCache);
             this.Controls.Add(this.button_ScanSelectedSystemRomsAndImages);
@@ -184,6 +210,8 @@
         private System.Windows.Forms.Button button_ScanSelectedSystemRomsAndImages;
         private System.Windows.Forms.Button button_ResetImageListCache;
         private System.Windows.Forms.Button button_DelImgFilesNotInDb;
-        private System.Windows.Forms.Button button_DelRomFilesInDb;
+        private System.Windows.Forms.Button button_DeleteDuplicateRomsByChecksum;
+        private System.Windows.Forms.Button button_DeleteDuplicateRomsByTitleInSameSystem;
+        private System.Windows.Forms.Button button_DeleteDuplicateRomsByTitleInAnySystem;
     }
 }
