@@ -71,6 +71,25 @@ Right clicking the image will display the following context menu:
 
 ![ContextMenu](https://github.com/user-attachments/assets/36276ce7-7621-4529-8321-aed9479664d3)
 
+The combobox in the upper left corner is used to select the desired game console system.
+
+![SystemSelectionMenuOption](https://github.com/user-attachments/assets/528c9673-7114-4f3c-aebd-eb5ba18c61c0)
+
+The second combobox is used to select the desired icon size and image view structure.
+
+![IconViewOption](https://github.com/user-attachments/assets/db29ca0d-71ae-4697-9eaf-b0f4c64425ac)
+
+Example image view with small icon selected:
+
+![smallIconImageView](https://github.com/user-attachments/assets/0341e286-3d55-4150-b8a3-5893a183abe3)
+
+Using the 'Settings' option the user can change the small icons to display between 8x8 to 64x64.
+Example 64x64 size.
+
+![smallIconImageViewAt64x64](https://github.com/user-attachments/assets/373e05bf-69a4-49cd-a5a5-39a670848366)
+
+Using the 'Settings' option the user can change the large icons to display between 64x64 to 256x256.
+
 ### Settings
 The settings dialog window can be used to change emulator starting directory search path and other associated options.
 Most of these options do not take affect until a full Rescan is performed.
