@@ -1,7 +1,6 @@
 # GameLauncher
-Frontend emulator displaying associated game boxart image for each game.
+A frontend emulator displaying associated game boxart image for each game.
 
-GameLauncher displays image associated with the ROM file.
 ![GameLauncher](https://github.com/user-attachments/assets/38fbb66d-529f-4a70-9aee-a7458131300d)
 
 It can associate over 90% of the avialble images with the ROM files found listed under the emulator even if the names are not an exact match.
