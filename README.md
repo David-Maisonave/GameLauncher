@@ -64,6 +64,13 @@ Users can optionally just have one image directory for all the game console syst
 GameLauncher searches for either an executable or a link file under each game console system directory.  This is done durring the initial filesystem scan.
 It will store up to 10 different emulators in the database, and by default, it will use the first executable or link file found to launch associated ROM file.
 If a game console system directory does not have any executables or links, the directory will be ignored, and no ROM's will be scanned.
+### Main Window Usage
+The main window displays an alphabetical image list. Double clicking the image will launch the emulator an pass the associated ROM.
+Hovering the mouse corsor over the image will cause the status bar in the bottom of the screen to get updated with the ROM details.
+Right clicking ther image will display the following context menu:
+
+![ContextMenu](https://github.com/user-attachments/assets/36276ce7-7621-4529-8321-aed9479664d3)
+
 ### Settings
 The settings dialog window can be used to change emulator starting directory search path and other associated options.
 Most of these options do not take affect until a full Rescan is performmed.
@@ -76,4 +83,8 @@ The advance option window can be used to perform a full rescan as well as other 
 
 <img width="233" alt="AdvanceOptions" src="https://github.com/user-attachments/assets/bec48139-a431-43f0-b5ed-390a5068b78a" />
 
+## ToDo
+Below are future plan updates.
+* Add option under advance option to change the default emulator for a given game console system.
+* ROM details editor.
 
