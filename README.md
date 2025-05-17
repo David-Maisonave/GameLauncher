@@ -1,6 +1,6 @@
 # GameLauncher
 * A free frontend emulator displaying associated game boxart image for each game.
-* GameLauncher can be controlled using standard xbox controller.
+* GameLauncher can be controlled using standard Xbox controller.
 * This launcher is similar to [SimpleLauncher](https://github.com/drpetersonfernandes/SimpleLauncher), but GameLauncher has more automation for finding matching images associated with ROM's.
 * GameLauncher does NOT try to install emulators, ROM's, or associated images. It can find image matches for over 90% of the available ROM's even if the file names are not an exact match.
 
