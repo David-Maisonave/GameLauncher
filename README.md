@@ -64,10 +64,13 @@ If a game console system directory does not have any executables or links, the d
 ### Settings
 The settings dialog window can be used to change emulator starting directory search path and other associated options.
 Most of these options do not take affect until a full Rescan is performmed.
+
 <img width="303" alt="Settings" src="https://github.com/user-attachments/assets/11cb39ce-9167-4f67-a6f7-40d64bccfce2" />
+
 When setting up this menu for children, "Disable Advance Options" should be checked.
 ### Advance Options
 The advance option window can be used to perform a full rescan as well as other more advance options.
+
 <img width="233" alt="AdvanceOptions" src="https://github.com/user-attachments/assets/bec48139-a431-43f0-b5ed-390a5068b78a" />
 
 
