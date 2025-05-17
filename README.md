@@ -65,8 +65,8 @@ GameLauncher searches for either an executable or a link file under each game co
 It will store up to 10 different emulators in the database, and by default, it will use the first executable or link file found to launch associated ROM file.
 If a game console system directory does not have any executables or links, the directory will be ignored, and no ROM's will be scanned.
 ### Main Window Usage
-The main window displays an alphabetical image list. Double clicking the image will launch the emulator an pass the associated ROM.
-Hovering the mouse corsor over the image will cause the status bar in the bottom of the screen to get updated with the ROM details.
+The main window displays an alphabetical image list. Double clicking the image will launch the emulator and pass the associated ROM.
+Hovering the mouse cursor over the image will cause the status bar in the bottom of the screen to get updated with the ROM details.
 Right clicking ther image will display the following context menu:
 
 ![ContextMenu](https://github.com/user-attachments/assets/36276ce7-7621-4529-8321-aed9479664d3)
