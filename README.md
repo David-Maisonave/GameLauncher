@@ -96,11 +96,16 @@ Most of these options do not take affect until a full Rescan is performed.
 
 <img width="303" alt="Settings" src="https://github.com/user-attachments/assets/11cb39ce-9167-4f67-a6f7-40d64bccfce2" />
 
+
+
 When setting up this menu for children, "Disable Advance Options" should be checked.
 ### Advance Options
 The advance option window can be used to perform a full rescan as well as other more advance options.
 
 <img width="233" alt="AdvanceOptions" src="https://github.com/user-attachments/assets/bec48139-a431-43f0-b5ed-390a5068b78a" />
+
+Most of the options are self explanitory.
+The checksum options are used to help detect duplicate image and ROM files. Changes to these options don't take affect until a full rescan is performmed.
 
 ## ToDo
 Below are future plan updates.
