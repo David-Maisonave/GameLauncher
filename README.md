@@ -56,7 +56,7 @@ It doesn't work on emulators like (NeoRAGEx.exe) which fail to take command line
 ### ROM and Image search
 GameLauncher creates a SQLite database that contains all the ROM and image files found in the filesystem from a given base directory.
 It sets a title for each ROM base of the ROM file name excluding common ROM codes.
-Example: Auto-Upturn (Sachen) [U][!].zip, would get a title of 'Auto-Upturn'
+Example: Auto-Upturn (Sachen) [U][!].zip, would get a title of **Auto-Upturn**
 The database also store a compress title name, which removes non-alphanum characters. It does this for both the ROM files and the image files so that it's easier to find matching image file for associated ROM files.
 GameLauncher searches for image files under each game console system directory, and it aslo searches for image files under the main directory. ``C:\Emulators\Images``.
 It will try to match a ROM file first with it's associated game console image directory, and if it doesn't find it there, it will then look under the common image directory.
@@ -84,12 +84,12 @@ Example image view with small icon selected:
 
 ![smallIconImageView](https://github.com/user-attachments/assets/0341e286-3d55-4150-b8a3-5893a183abe3)
 
-Using the 'Settings' option the user can change the small icons to display between 8x8 to 64x64.
+Using the **Settings** option the user can change the small icons to display between 8x8 to 64x64.
 Example 64x64 size.
 
 ![smallIconImageViewAt64x64](https://github.com/user-attachments/assets/373e05bf-69a4-49cd-a5a5-39a670848366)
 
-Using the 'Settings' option the user can change the large icons to display between 64x64 to 256x256.
+Using the **Settings** option the user can change the large icons to display between 64x64 to 256x256.
 
 ### Settings
 The settings dialog window can be used to change emulator starting directory search path and other associated options.
@@ -112,4 +112,5 @@ The checksum options are used to help detect duplicate image and ROM files. Chan
 Below are future plan updates.
 * Add option under advance option to change the default emulator for a given game console system.
 * ROM details editor.
+* Add option to Settings to allow changing default **images** and **roms** sub folder.
 
