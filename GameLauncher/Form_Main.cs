@@ -18,7 +18,6 @@ using System.Windows.Forms;
 
 namespace GameLauncher
 {
-    #region Form_Main class
     public partial class Form_Main : Form
     {
         #region const or readonly variables
@@ -655,7 +654,7 @@ namespace GameLauncher
             imgPath = GetFirstColStr(sql);
             return imgPath;
         }
-        private string AddImagePasthToDb(string imgFile, bool incProgressBar, bool isMainThread, bool checkIfInDb = false, bool checkIfExists = false)
+        private string AddImagePathToDb(string imgFile, bool incProgressBar, bool isMainThread, bool checkIfInDb = false, bool checkIfExists = false)
         {
             if (incProgressBar)
                 IncrementProgressBar(progressBar_ROMs, isMainThread, $"Adding {imgFile}");
@@ -681,7 +680,7 @@ namespace GameLauncher
             UpdateDB(sql);
             return imgFile;
         }
-        private string GetImagePathInDb(string imgFile) => AddImagePasthToDb(imgFile, false, true, true);
+        private string GetImagePathInDb(string imgFile) => AddImagePathToDb(imgFile, false, true, true);
         private void GetImages(string imgPath, bool isMainThread = false)
         {
             if (Directory.Exists(imgPath))
@@ -694,11 +693,11 @@ namespace GameLauncher
                     {
                         if (DidCancelButtonGetPressed())
                             return;
-                        AddImagePasthToDb(imgFile, true, isMainThread);
+                        AddImagePathToDb(imgFile, true, isMainThread);
                     }
                 }
                 else
-                    Parallel.ForEach(imgFiles, imgFile => AddImagePasthToDb(imgFile, true, false));
+                    Parallel.ForEach(imgFiles, imgFile => AddImagePathToDb(imgFile, true, false));
             }
         }
         public void InitializeRomsInDatabaseForSystem(InitializeRomsInDatabaseForSystem_Arg arg) => InitializeRomsInDatabaseForSystem(arg.emulatorDir, arg.emulatorExecutables, arg.isMainThread, arg.scanImageDir, arg.hideGroup);
@@ -1015,7 +1014,35 @@ namespace GameLauncher
             string sql = $"SELECT RomDirPath FROM GameSystems WHERE Name like \"{systemName}\"";
             return GetFirstColStr(sql);
         }
+        private void SetEmulatorExecute(string system, string emulatorExecutable, int emulatorIndex = 1) => UpdateDB($"UPDATE GameSystems SET EmulatorPath{emulatorIndex} = \"{emulatorExecutable}\" WHERE Name = \"{system}\"");
         #endregion
+        #region Misc Methods
+        private void SetEmulatorExecute(string systemName)
+        {
+            if (systemName == null)
+                systemName = comboBoxSystem.Text;
+            string emulatorExecutable = GetEmulatorExecutable(systemName, 1);
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = $"Emulator Executable File (*.exe)|*.exe|All Files (*.*)|*.*";
+            saveFileDialog.Title = "Select preferred emulator executable";
+            saveFileDialog.FileName = emulatorExecutable;
+            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(emulatorExecutable);
+            saveFileDialog.CheckFileExists = true;
+            DialogResult results = saveFileDialog.ShowDialog();
+            if (results == DialogResult.Cancel)
+                return;
+            if (saveFileDialog.FileName == "" || !File.Exists(saveFileDialog.FileName))
+            {
+                MessageBox.Show($"Error: Entered invalid file name for emulator", "Invalid Name!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (saveFileDialog.FileName.ToLower().Equals(emulatorExecutable.ToLower()))
+            {
+                MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            SetEmulatorExecute(systemName, saveFileDialog.FileName);
+        }
         public Rom GetRomFromList(string romFilePath)
         {
             foreach (Rom rom in romList) 
@@ -1245,7 +1272,7 @@ namespace GameLauncher
                     SqliteCommand command = connection.CreateCommand();
                     command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem ? 
                         "SELECT FilePath, Title, RomSize FROM roms WHERE Title IN (SELECT * FROM (SELECT Title FROM roms GROUP BY Title HAVING COUNT(Title) > 1) AS a) order by Title, RomSize desc;" :
-                        "SELECT FilePath, Title, RomSize FROM roms WHERE Title IN (SELECT * FROM (SELECT Title FROM roms GROUP BY Title,System HAVING COUNT(*) > 1) AS a) order by Title, RomSize desc;";
+                        "SELECT FilePath, Title, System, RomSize FROM roms WHERE Title || System  IN (SELECT Title || System FROM roms GROUP BY Title,System HAVING COUNT(*) > 1) order by Title, RomSize desc;";
                     using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         while (!cancelScan && reader.Read())
@@ -2157,6 +2184,7 @@ namespace GameLauncher
                 this.WindowState = prevWinState;
             }
         }
+        #endregion
         #region Event merthods
         private void myListView_ItemMouseHover(Object sender, ListViewItemMouseHoverEventArgs e)
         {
@@ -2456,7 +2484,6 @@ namespace GameLauncher
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    #endregion
     #region Misc supporting classes
     public class PreviousCollectedImages
     {

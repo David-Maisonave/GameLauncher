@@ -83,7 +83,7 @@ namespace GameLauncher
             TreeNode lastChildNode = null;
             foreach (string key in Candidates.Keys)
             {
-                if (Candidates[key].Count < 2)
+                if (Candidates[key].Count < 2)  // This should not be needed unless there's a bug in the code
                     continue;
                 TreeNode childNode = treeView1.Nodes[0].Nodes.Add($"{KeyName}={key}");
                 if (firstChildNode == null)
