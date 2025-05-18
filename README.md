@@ -117,4 +117,5 @@ Below are future plan updates.
 * Add option under advance option to change the default emulator for a given game console system.
 * ROM details editor.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
+* Add option to password protected advance option.
 
