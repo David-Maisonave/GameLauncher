@@ -7,7 +7,10 @@
 ![GameLauncher](https://github.com/user-attachments/assets/38fbb66d-529f-4a70-9aee-a7458131300d)
 
 #### Image Files
-The current version of GameLauncher depends on users downloading the images which can be found in the following links:
+A full collection of ROM associated image files can be downloaed using the following link:
+[Images.zip](http://axter.com/GameLauncher/Images.zip)
+
+Image files can also be downloaded from the following links:
 https://github.com/libretro-thumbnails/libretro-thumbnails
 https://www.osboxes.org/virtualbox-images/
 
@@ -114,4 +117,5 @@ Below are future plan updates.
 * Add option under advance option to change the default emulator for a given game console system.
 * ROM details editor.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
+* Add option to password protected advance option.
 
