@@ -118,4 +118,4 @@ Below are future plan updates.
 * ROM details editor.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
-
+* Add decompression option for emulators like DuckStation which don't support ZIP files.
