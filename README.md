@@ -119,3 +119,4 @@ Below are future plan updates.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
 * Add decompression option for emulators like DuckStation which don't support ZIP files.
+* Filter out string "2-in-1 - ","3-in-1 - " from compressed name for ROM's in DB.
