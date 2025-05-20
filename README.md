@@ -113,10 +113,13 @@ Most of the options are self explanatory.
 The checksum options are used to help detect duplicate image and ROM files. Changes to these options don't take affect until a full rescan is performed.
 
 ## ToDo
-Below are future plan updates.
+Below are possible future plan updates.
 * Add option under advance option to change the default emulator for a given game console system.
 * ROM details editor.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
 * Add decompression option for emulators like DuckStation which don't support ZIP files.
 * Filter out string "2-in-1 - ","3-in-1 - " from compressed name for ROM's in DB.
+* Add filter and search buttons. (See playnite example)
+* Add option to context menu to open link to launchbox-app.com with the ROM title name, or open google link with title. Example: https://www.google.com/search?q=Disney+Aladdin+site%253Alaunchbox-app.com
+* Convert main window combobox to menu strip.
