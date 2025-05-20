@@ -123,3 +123,4 @@ Below are possible future plan updates.
 * Add filter and search buttons. (See playnite example)
 * Add option to context menu to open link to launchbox-app.com with the ROM title name, or open google link with title. Example: https://www.google.com/search?q=Disney+Aladdin+site%253Alaunchbox-app.com
 * Convert main window combobox to menu strip.
+* Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
