@@ -12,12 +12,13 @@ namespace GameLauncher
         /// Initializes a new instance of the <see cref="TempDirStorage"/> class.
         /// </summary>
         /// <param name="path">The path to use as temp storage.</param>
-        public TempDirStorage(string path = null)
+        public TempDirStorage(string path = null, bool deleteIfExistingContent = true)
         {
             if (path == null)
                 path = Path.Combine(System.IO.Path.GetTempPath(), $"{System.Windows.Forms.Application.ProductName}_temporary_directory");
             this.tempDir = path;
-            this.Clear();
+            if (deleteIfExistingContent)
+                this.Clear();
             this.Create();
         }
         public string tempDir { get; private set; }

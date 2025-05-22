@@ -14,7 +14,7 @@ namespace GameLauncher
 {
     public partial class FormAdvance : Form
     {
-        private Form_Main form_Main = null;
+        private readonly Form_Main form_Main = null;
         public FormAdvance(Form_Main form_main)
         {
             form_Main = form_main;

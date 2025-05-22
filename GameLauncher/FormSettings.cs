@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -50,6 +51,11 @@ namespace GameLauncher
         int[] AllowedSmallIconSize = {8, 16, 24, 32, 64 };
         private void button_Ok_Click(object sender, EventArgs e)
         {
+            if (!Directory.Exists(textBox_EmulatorsBasePath.Text))
+            {
+                MessageBox.Show($"Directory \"{textBox_EmulatorsBasePath.Text}\" does not exists.\nPlease select an existing directory for emulator directory before closing this window.", "Invalid Emulator Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (!AllowedLargeIconSize.Contains((int)numericUpDown_largeIconSize.Value))
             {
                 if (numericUpDown_largeIconSize.Value > 512)
@@ -111,7 +117,7 @@ namespace GameLauncher
             saveFileDialog.Title = "Select database file";
             saveFileDialog.FileName = textBox_DbPath.Text;
             saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(textBox_DbPath.Text);
-            saveFileDialog.CheckFileExists = true;
+            saveFileDialog.CheckFileExists = false;
             saveFileDialog.OverwritePrompt = false;
             DialogResult results = saveFileDialog.ShowDialog();
             if (results == DialogResult.Cancel)
@@ -173,12 +179,12 @@ namespace GameLauncher
         private void checkBox_EnableRomChecksum_CheckedChanged(object sender, EventArgs e)
         {
             checkBox_EnableZipChecksum.Enabled = checkBox_EnableRomChecksum.Checked;
-            checkBox_SHA256OverMD5.Enabled = (checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked);
+            checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
         }
 
         private void checkBox_EnableImageChecksum_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox_SHA256OverMD5.Enabled = (checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked);
+            checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
         }
     }
 }
