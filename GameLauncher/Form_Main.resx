@@ -136,13 +136,14 @@ Note: The change is not reflected on the list until after restarting GameLaunche
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>351, 17</value>
   </metadata>
-  <data name="toolStripTextBox_Filter.ToolTipText" xml:space="preserve">
+  <data name="toolStripMenuItem_FilterLabel.ToolTipText" xml:space="preserve">
     <value>Filter List.
 Only display ROM files having the specified text within the title.
 REGEX search:
 If text starts with ^ character, than only ROM's starting with the search criteria will be displayed.
 If text ends with $ character, than only ROM's ending with the search criteria will be displayed.
 Use | character to search for two different patterns. Example: Donkey|Monkey
+
 </value>
   </data>
 </root>

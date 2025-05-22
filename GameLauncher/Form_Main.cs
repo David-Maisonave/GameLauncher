@@ -2366,6 +2366,7 @@ namespace GameLauncher
                 return;
             toolStripTextBox_Filter.AutoCompleteCustomSource.Add(text);
             // Maybe ToDo: Consider adding a counter or timestamp to table FilterAutoCompleteCustomSource, so as to remove value not used recently or often
+            // ToDo: Add spell checker like Hunspell to check spelling before adding text to DB
             UpdateDB($"INSERT OR REPLACE INTO FilterAutoCompleteCustomSource (Source) VALUES (\"{text}\")");
         }
         #endregion /////////////////////////////////////////////////////////////////////////////////
