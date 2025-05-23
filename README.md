@@ -37,7 +37,8 @@ If not found in above paths, user can change the search folder using the Setting
 #### Expected Filesystem Tree
 GameLauncher expects the following file system tree structure:
 
-![EmulatorFileTree](https://github.com/user-attachments/assets/ac1f01ca-5fde-41e1-94eb-3bd1f3f9ca47)
+![DirTreeExample](https://github.com/user-attachments/assets/feb879b8-f919-420c-b936-1dc0eafceda1)
+
 
 #### Tested Emulators 
 GameLauncher has been tested with the following game console systems and associated emulators:
