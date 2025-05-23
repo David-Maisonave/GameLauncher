@@ -129,3 +129,4 @@ Below are possible future plan updates.
 * Add support for multiple source paths for searching games.
 * Add decompression support for 7z files.
 * Add decompression support for rar files.
+* Add option to advance menu to compress all ROM files to zip.
