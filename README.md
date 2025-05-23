@@ -127,3 +127,5 @@ Below are possible future plan updates.
 * Add pagination to game console systems having over 2000 ROM's.
 * Move advance option dialog to the main menu.
 * Add support for multiple source paths for searching games.
+* Add decompression support for 7z files.
+* Add decompression support for rar files.
