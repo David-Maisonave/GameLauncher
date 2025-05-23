@@ -124,4 +124,5 @@ Below are possible future plan updates.
 * Add option to password protected advance option.
 * Filter out string "2-in-1 - ","3-in-1 - " from compressed name for ROM's in DB.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
-* Add pagination to game console systems having over 2000 ROM's. 
+* Add pagination to game console systems having over 2000 ROM's.
+* Move advance option dialog to the main menu.
