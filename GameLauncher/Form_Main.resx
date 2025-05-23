@@ -123,7 +123,9 @@
   <data name="toolStripMenuItemDeleteROM.ToolTipText" xml:space="preserve">
     <value>Delete the ROM (Game) file from the file system.  
 Warning: This permanently deletes the file!!!
-Note: The change is not reflected on the list until after restarting GameLauncher or after changing the selected game console system.</value>
+Note: The change is not reflected on the list until after restarting GameLauncher or after changing the selected game console system.
+
+Pressing ctrl while selecting this option will bypass warning message.</value>
   </data>
   <data name="toolStripMenuItemChangeTitle.ToolTipText" xml:space="preserve">
     <value>Change the title displayed for the selected ROM. The title change only effects GameLauncher, and the change is NOT seen by the emulator.
@@ -144,6 +146,46 @@ If text starts with ^ character, than only ROM's starting with the search criter
 If text ends with $ character, than only ROM's ending with the search criteria will be displayed.
 Use | character to search for two different patterns. Example: Donkey|Monkey
 
+</value>
+  </data>
+  <data name="toolStripTextBox_Filter.ToolTipText" xml:space="preserve">
+    <value>Only display ROM files having the specified text within the title.
+
+Double click text field to force full scan.
+Using any of the following chracters will force a REGEX search.
+$,^,|,*,.,?,+,[,],(,),\
+</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="toolStripMenuItemSearchAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
 </value>
   </data>
 </root>

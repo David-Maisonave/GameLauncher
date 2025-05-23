@@ -636,7 +636,8 @@ namespace GameLauncher
             SavePersistenceVariable("largeIconSize", Properties.Settings.Default.largeIconSize);
             SavePersistenceVariable("smallIconSize", Properties.Settings.Default.smallIconSize);
         }
-        public string GetEmulatorExecutable(string systemName, int emulatorID) => GetFirstColStr($"SELECT EmulatorPath{emulatorID} FROM GameSystems WHERE Name = \"{systemName}\"");
+        public string GetEmulatorExecutable(string systemName, int emulatorID = 1) => GetFirstColStr($"SELECT EmulatorPath{emulatorID} FROM GameSystems WHERE Name = \"{systemName}\"");
+        public string GetEmulatorExecutable(int systemId, int emulatorID = 1) => GetFirstColStr($"SELECT EmulatorPath{emulatorID} FROM GameSystems WHERE ID = \"{systemId}\"");
         private void DeleteRomFromDb(string filePath) => UpdateDB($"DELETE FROM Roms WHERE FilePath = \"{filePath}\"");
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Database related methods
@@ -1017,13 +1018,20 @@ namespace GameLauncher
         }
         private int GetRoms(string SystemName)
         {
-            romList = new List<Rom>();
             int SystemID = GetSystemIndex(SystemName);
+            return SystemID < 0 ? -1 : GetRoms(SystemID, ref romList);
+        }
+        private int GetRoms(int SystemID, ref List<Rom> myRomList, string titleSearch = "")
+        {
+            myRomList = new List<Rom>();
+            string where = $"WHERE System = \"{SystemID}\" ";
             if (SystemID < 0)
-                return -1;
+            {
+                where = titleSearch.Length > 0 ? $"WHERE Title like \"{titleSearch}\"" : "";
+            }
             var command = connection.CreateCommand();
             string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum";
-            command.CommandText = $"SELECT {fieldNames} FROM Roms WHERE System = \"{SystemID}\" ORDER BY NameSimplified";
+            command.CommandText = $"SELECT {fieldNames} FROM Roms {where} ORDER BY NameSimplified";
             using (var reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -1054,14 +1062,14 @@ namespace GameLauncher
                     if (ImagePath.Length == 0)
                         ImagePath = defaultImagePath;
 
-                    romList.Add(new Rom(NameSimplified, System, FilePath, NameOrg, Title, Compressed,
+                    myRomList.Add(new Rom(NameSimplified, System, FilePath, NameOrg, Title, Compressed,
                         PreferredEmulator, ImagePath, QtyPlayers, Region,
                         Developer, RomSize, Genre, NotesCore, NotesUser,
                         FileFormat, ReleaseDate, Status, Version,
                         Description, Language, Checksum));
                 }
             }
-            return romList.Count;
+            return myRomList.Count;
         }
         private Rom GetRom(string filePath)
         {
@@ -1135,7 +1143,7 @@ namespace GameLauncher
         {
             if (systemName == null)
                 systemName = toolStripComboBoxSystem.Text;
-            string emulatorExecutable = GetEmulatorExecutable(systemName, 1);
+            string emulatorExecutable = GetEmulatorExecutable(systemName);
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = $"Emulator Executable File (*.exe)|*.exe|All Files (*.*)|*.*";
             saveFileDialog.Title = "Select preferred emulator executable";
@@ -1990,7 +1998,7 @@ namespace GameLauncher
                 // 8  Threads = 14.44 seconds
                 // 10 Threads = 14.44 seconds
                 textBoxStatus.Text = $"Collecting ROM data for {systemName}. Please standby....";
-                if (Properties.Settings.Default.usePreviousCollectionCache && previousCollections.ContainsKey(systemName))
+                if (systemName.Length > 0 && Properties.Settings.Default.usePreviousCollectionCache && previousCollections.ContainsKey(systemName))
                 {
                     //Now assigning First imageList as LargeImageList to the ListView...
                     myListView.LargeImageList = previousCollections[systemName].list1;
@@ -2000,7 +2008,7 @@ namespace GameLauncher
                 }
                 else
                 {
-                    if (GetRoms(systemName) < 1)
+                    if (systemName.Length > 0 && GetRoms(systemName) < 1)
                         return false;
                     PreviousCollectedImages previousCollectedImages = GetSavedCollectionData(systemName);
                     if (previousCollectedImages != null && previousCollectedImages.list1.Images.Count == romList.Count)
@@ -2302,7 +2310,7 @@ namespace GameLauncher
                     return;
                 }
                 int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
-                string emulatorExecutable = GetEmulatorExecutable(toolStripComboBoxSystem.Text, preferredEmulator);
+                string emulatorExecutable = GetEmulatorExecutable(rom.System, preferredEmulator);
                 FormWindowState prevWinState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
                 if (EmulatorRequiresDecompression(emulatorExecutable) && IsSupportedCompressFile(rom.FilePath))
@@ -2364,7 +2372,10 @@ namespace GameLauncher
         {
             if (text.Length < 3 || myListView.Items.Count == 0)
                 return;
-            toolStripTextBox_Filter.AutoCompleteCustomSource.Add(text);
+
+            // The follow line keeps triggering a random crash.
+            // toolStripTextBox_Filter.AutoCompleteCustomSource.Add(text);
+
             // Maybe ToDo: Consider adding a counter or timestamp to table FilterAutoCompleteCustomSource, so as to remove value not used recently or often
             // ToDo: Add spell checker like Hunspell to check spelling before adding text to DB
             UpdateDB($"INSERT OR REPLACE INTO FilterAutoCompleteCustomSource (Source) VALUES (\"{text}\")");
@@ -2447,7 +2458,7 @@ namespace GameLauncher
             if (rom == null)
                 return;
             int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
-            string emulatorExecutable = GetEmulatorExecutable(toolStripComboBoxSystem.Text, preferredEmulator);
+            string emulatorExecutable = GetEmulatorExecutable(rom.System, preferredEmulator);
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = $"Emulator Executable File (*.exe)|*.exe|All Files (*.*)|*.*";
             saveFileDialog.Title = "Select preferred emulator executable";
@@ -2674,7 +2685,7 @@ namespace GameLauncher
             else if (toolStripComboBoxIconDisplay.SelectedIndex == 2)
                 myListView.View = View.Tile;
         }
-        private void FilterOutRomsFromList(bool redisplayImageListFirst, bool useRegex)
+        private void FilterOutRomsFromList(bool redisplayImageListFirst, bool useRegex, bool searchAllRomsInAllSystems = false)
         {
             Console.WriteLine($"FilterOutRomsFromList (redisplayImageListFirst = \"{redisplayImageListFirst}\", useRegex = \"{useRegex}\")..");
             try
@@ -2710,7 +2721,7 @@ namespace GameLauncher
             lastSearchStr = toolStripTextBox_Filter.Text;
             Console.WriteLine($"FilterOutRomsFromList Done..");
         }
-        private void FilterOutRomsFromList(bool alwaysRedisplayImageListFirst = false)
+        private void FilterOutRomsFromList(bool alwaysRedisplayImageListFirst = false, bool searchAllRomsInAllSystems = false)
         {
             Console.WriteLine($"FilterOutRomsFromList (alwaysRedisplayImageListFirst = \"{alwaysRedisplayImageListFirst}\")..");
             try
@@ -2730,7 +2741,7 @@ namespace GameLauncher
                         break;
                     }
                 }
-                FilterOutRomsFromList(redisplayImageListFirst, useRegex);
+                FilterOutRomsFromList(redisplayImageListFirst, useRegex, searchAllRomsInAllSystems);
             }
             catch (Exception ex)
             {
@@ -2759,10 +2770,30 @@ namespace GameLauncher
 
         private void searchImageAtLaunchBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // https://www.google.com/search?q=Disney+Aladdin+site:launchbox-app.com
             Rom rom = GetSelectedROM();
             string title = System.Text.Encodings.Web.UrlEncoder.Default.Encode(rom.Title);
             System.Diagnostics.Process.Start($"https://www.google.com/search?q={title}+site:launchbox-app.com");
+        }
+
+        private void toolStripMenuItemSearchAll_Click(object sender, EventArgs e) 
+        {
+            System.Windows.Forms.Keys mods = System.Windows.Forms.Control.ModifierKeys;
+            bool useRegex = (mods & System.Windows.Forms.Keys.Control) > 0;
+            List<Rom> romListAllSystem = new List<Rom>();
+            GetRoms(-1, ref romListAllSystem, $"%{toolStripTextBox_Filter.Text}%");
+            const int MaxAllowedResults = 1000;
+            if (romListAllSystem.Count > MaxAllowedResults)
+            {
+                MessageBox.Show($"Found too many results ({romListAllSystem.Count}) for text \"{toolStripTextBox_Filter.Text}\"\nMax allowed is {MaxAllowedResults}.", $"Found {romListAllSystem.Count}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (romListAllSystem.Count == 0) 
+            {
+                MessageBox.Show($"No results found for text \"{toolStripTextBox_Filter.Text}\"", "Found 0", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; 
+            }
+            romList = romListAllSystem;
+            DisplaySystemIcons("");
         }
     }// End of Form1 class
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
