@@ -126,3 +126,4 @@ Below are possible future plan updates.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
 * Add pagination to game console systems having over 2000 ROM's.
 * Move advance option dialog to the main menu.
+* Add support for multiple source paths for searching games.
