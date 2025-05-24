@@ -37,7 +37,7 @@ If not found in above paths, user can change the search folder using the Setting
 #### Expected Filesystem Tree
 GameLauncher expects the following file system tree structure:
 
-![EmulatorFileTree](https://github.com/user-attachments/assets/ac1f01ca-5fde-41e1-94eb-3bd1f3f9ca47)
+![DirTreeExample](https://github.com/user-attachments/assets/ab5ab245-5e7d-427a-b590-af84cd24904f)
 
 #### Tested Emulators 
 GameLauncher has been tested with the following game console systems and associated emulators:
@@ -119,8 +119,14 @@ Below are possible future plan updates.
 * [0.9.1] Add decompression option for emulators like DuckStation which don't support ZIP files.
 * [0.9.1] Add filter option.
 * [0.9.1] Add option to context menu to open link to launchbox-app.com with the ROM title name, or open google link with title. Example: https://www.google.com/search?q=Disney+Aladdin+site%253Alaunchbox-app.com
+* [0.9.1] Add decompression support for ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz"
+* [0.9.1 ???] Add support for multiple source paths for searching games.
 * ROM details editor.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
 * Filter out string "2-in-1 - ","3-in-1 - " from compressed name for ROM's in DB.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
+* Add pagination to game console systems having over 2000 ROM's.
+* Move advance option dialog to the main menu.
+* Add option to advance menu to compress all ROM files to zip.
+* Add option to view preview/play image over box-art image.
