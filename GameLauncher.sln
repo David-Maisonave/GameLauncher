@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32630.194
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36017.23 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLauncher", "GameLauncher\GameLauncher.csproj", "{0623B1F4-F652-4F29-B4AE-1ECDB0FE47F6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E39545C9-23CB-4DB2-9B47-C44EEE464987} = {E39545C9-23CB-4DB2-9B47-C44EEE464987}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsolidateFiles", "ConsolidateFiles\ConsolidateFiles\ConsolidateFiles.vcxproj", "{E39545C9-23CB-4DB2-9B47-C44EEE464987}"
 EndProject
