@@ -51,7 +51,7 @@ namespace GameLauncher
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"duckstation\", 1, 0, \".cue\");\r\n" +
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"NeoRAGE\",0, 1, \"\");\r\n" +
                 "\r\n";
-        public readonly string[] SUPPORTED_COMPRESSION_FILE = { ".zip", ".7z", ".7zip", ".rar", ".tar", ".gzip", ".bz2", ".lzip" };
+        public readonly string[] SUPPORTED_COMPRESSION_FILE = { ".zip", ".7z", ".7zip", ".rar", ".tar", ".gz", ".gzip", ".bz2", ".bzip", ".bzip2", ".lz", ".lzip" };
         public readonly string[] SUPPORTED_IMAGE_FILES = { "*.png", "*.bmp", "*.jpg", "*.jpeg", "*.tif" }; // These are the supported types according to following link: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.image.fromfile?view=windowsdesktop-9.0&redirectedfrom=MSDN#overloads
         public readonly string[] VALID_ROMS = { "3ds", "app", "bin", "car", "dsi", "gb", "gba", "gbc", "gcm", "gen", "gg", "ids", "iso", "md", "n64", "nds", "ngc", "ngp", "nsp", "pce", "rom", "sfc", "smc", "smd", "sms", "srl", "v64", "vpk", "wad", "xci", "xiso", "z64" };
         public readonly string[] COMMON_EMULATOR_PATHS = { @"C:\Emulator", @"C:\GameEmulator", @"C:\RetroGameEmulator", @"C:\RetroEmulator", @"C:\Game", @"C:\Retro", @"C:\RetroGame", @"C:\GameRetro" };
@@ -3296,11 +3296,11 @@ namespace GameLauncher
             if (ext.Equals(".tar"))
                 return new TarCompressArchive(new TarArchive(fileName));
             // The following three types will only work to call ExtractToDirectory, and do not fully support GetNames()
-            if (ext.Equals(".gzip"))
+            if (ext.Equals(".gz") || ext.Equals(".gzip"))
                 return new GzipCompressArchive(new GzipArchive(fileName));
             if (ext.Equals(".bz2") || ext.Equals(".bzip") || ext.Equals(".bzip2"))
                 return new Bzip2CompressArchive(new Bzip2Archive(fileName));
-            if (ext.Equals(".lzip"))
+            if (ext.Equals(".lz") || ext.Equals(".lzip"))
                 return new LzipCompressArchive(new LzipArchive(fileName));
 
             // ".zip", ".7z", ".7zip", ".rar", ".tar" 
