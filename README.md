@@ -130,3 +130,4 @@ Below are possible future plan updates.
 * Move advance option dialog to the main menu.
 * Add option to advance menu to compress all ROM files to zip.
 * Add option to view preview/play image over box-art image.
+* Add multithreading progressbar code for when database is initialized. Each system scan should have two threads. One for ROM scans and the other for image scans.
