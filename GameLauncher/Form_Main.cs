@@ -1,4 +1,12 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Aspose.Zip;
+using Aspose.Zip.Bzip2;
+using Aspose.Zip.Gzip;
+using Aspose.Zip.Lzip;
+using Aspose.Zip.Rar;
+using Aspose.Zip.SevenZip;
+using Aspose.Zip.Tar;
+
+using Microsoft.Data.Sqlite;
 
 using SharpDX.DirectInput;
 
@@ -17,9 +25,9 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Web;
 
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -43,7 +51,7 @@ namespace GameLauncher
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"duckstation\", 1, 0, \".cue\");\r\n" +
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"NeoRAGE\",0, 1, \"\");\r\n" +
                 "\r\n";
-        public readonly string[] SUPPORTED_COMPRESSION_FILE = { ".zip" }; // ToDo: Add 7z and rar support
+        public readonly string[] SUPPORTED_COMPRESSION_FILE = { ".zip", ".7z", ".7zip", ".rar", ".tar", ".gzip", ".bz2", ".lzip" };
         public readonly string[] SUPPORTED_IMAGE_FILES = { "*.png", "*.bmp", "*.jpg", "*.jpeg", "*.tif" }; // These are the supported types according to following link: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.image.fromfile?view=windowsdesktop-9.0&redirectedfrom=MSDN#overloads
         public readonly string[] VALID_ROMS = { "3ds", "app", "bin", "car", "dsi", "gb", "gba", "gbc", "gcm", "gen", "gg", "ids", "iso", "md", "n64", "nds", "ngc", "ngp", "nsp", "pce", "rom", "sfc", "smc", "smd", "sms", "srl", "v64", "vpk", "wad", "xci", "xiso", "z64" };
         public readonly string[] COMMON_EMULATOR_PATHS = { @"C:\Emulator", @"C:\GameEmulator", @"C:\RetroGameEmulator", @"C:\RetroEmulator", @"C:\Game", @"C:\Retro", @"C:\RetroGame", @"C:\GameRetro" };
@@ -82,6 +90,7 @@ namespace GameLauncher
         public const int MAXIMUM_PROGRESSBAR = 1000;
         public const long MAX_SECONDS_TO_WAIT_F5 = 5;
         public const long MAX_SECONDS_TO_WAIT_DEFAULT = 2;
+        public const string DEFAULTIMAGEFILENAME = "GameController.png";
         public const string GAMELAUNCHER_DB_NAME = "GameLauncher.db";
         public const string DATA_SUBPATH = @"data\";
         public const string GAMELAUNCHER_SUBPATH = @"GameLauncher\";
@@ -206,7 +215,7 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"GetChecksum exception thrown \"{ex.Message}\"!");
+                Console.WriteLine($"GetChecksum exception thrown \"{ex.Message}\" for file {filePath}!");
                 // DbErrorLogging("GetChecksum", $"GetChecksum exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Error with filePath = {filePath}");
             }
             byte[] emptyBytes = {0};
@@ -220,7 +229,7 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"GetChecksumStr exception thrown \"{ex.Message}\"!");
+                Console.WriteLine($"GetChecksumStr exception thrown \"{ex.Message}\" for file {filePath}!");
                 //DbErrorLogging("GetChecksum", $"GetChecksum exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Error with filePath = {filePath}");
             }
             return "";
@@ -929,6 +938,14 @@ namespace GameLauncher
                 MessageBox.Show($"Completed data collection DB collection time = {databaseCollectionElapsed.ToString(@"hh\:mm\:ss")} and ImageList time = {imageListCollectionElapsed.ToString(@"mm\:ss")}\nTotal time = {totalProcessElapsed.ToString(@"hh\:mm\:ss")}\nfindEmulatorExecuteElapsed={findEmulatorExecuteElapsed.ToString(@"hh\:mm\:ss")}", "Process Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return systemNames;
         }
+        private string GetPropertyDataPath(string propertyFileName)
+        {
+            string strAppPath = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            string strFilePath = Path.Combine(strAppPath, "Properties");
+            string strFullFilename = Path.Combine(strFilePath, propertyFileName);
+            return strFullFilename;
+        }
+        public string GetDefaultDbPath() => GetPropertyDataPath(GAMELAUNCHER_DB_NAME);
         public string GetDbPath_sub()
         {
             if (Properties.Settings.Default.DbPath != null && Properties.Settings.Default.DbPath.Length > 0)
@@ -936,7 +953,10 @@ namespace GameLauncher
                 if (File.Exists(Properties.Settings.Default.DbPath))
                     return Properties.Settings.Default.DbPath;
             }
-            string dbPath = Path.Combine($"{binDirPath}{DATA_SUBPATH}", GAMELAUNCHER_DB_NAME);
+            string dbPath = GetDefaultDbPath();
+            if (File.Exists(dbPath))
+                return dbPath;
+            dbPath = Path.Combine($"{binDirPath}{DATA_SUBPATH}", GAMELAUNCHER_DB_NAME);
             if (File.Exists(dbPath))
                 return dbPath;
             foreach (var path in COMMON_EMULATOR_PATHS)
@@ -1305,27 +1325,46 @@ namespace GameLauncher
             int qtyFilesInZip = 0;
             try
             {
-                string ext = Path.GetExtension(filePath).ToLower();
-                if (ext.Equals(".zip"))
+                string extRom = Path.GetExtension(filePath).ToLower();
+                //if (extRom.Equals(".zip"))
+                //{
+                //    using (TempDirStorage tempDirStorage = new TempDirStorage())
+                //    {
+                //        using (ZipArchive archive = ZipFile.OpenRead(filePath))
+                //        {
+                //            foreach (ZipArchiveEntry entry in archive.Entries)
+                //            {
+                //                if (!entry.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) //Skip text files
+                //                {
+                //                    string destinationPath = Path.GetFullPath(Path.Combine(tempDirStorage.tempDir, entry.FullName));
+                //                    string parentDir = Path.GetDirectoryName(destinationPath);
+                //                    if (!Directory.Exists(parentDir))
+                //                        Directory.CreateDirectory(parentDir);
+                //                    if (entry.FullName.EndsWith("\\") || entry.FullName.EndsWith("/"))
+                //                        continue;
+                //                    entry.ExtractToFile(destinationPath);
+                //                    returnValue = GetRomChecksum(destinationPath);
+                //                    ++qtyFilesInZip;
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else 
+                if (SUPPORTED_COMPRESSION_FILE.Contains(extRom))
                 {
                     using (TempDirStorage tempDirStorage = new TempDirStorage())
                     {
-                        using (ZipArchive archive = ZipFile.OpenRead(filePath))
+                        using (CompressArchiveInterface archive = CreateCompressArchiveInterface.Create(filePath))
                         {
-                            foreach (ZipArchiveEntry entry in archive.Entries)
+                            archive.ExtractToDirectory(tempDirStorage.tempDir);
+                            foreach (var name in archive.GetNames())
                             {
-                                if (!entry.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) //Skip text files
-                                {
-                                    string destinationPath = Path.GetFullPath(Path.Combine(tempDirStorage.tempDir, entry.FullName));
-                                    string parentDir = Path.GetDirectoryName(destinationPath);
-                                    if (!Directory.Exists(parentDir))
-                                        Directory.CreateDirectory(parentDir);
-                                    if (entry.FullName.EndsWith("\\") || entry.FullName.EndsWith("/"))
-                                        continue;
-                                    entry.ExtractToFile(destinationPath);
-                                    returnValue = GetRomChecksum(destinationPath);
-                                    ++qtyFilesInZip;
-                                }
+                                string destinationPath = Path.GetFullPath(Path.Combine(tempDirStorage.tempDir, name));
+                                if (Directory.Exists(destinationPath))
+                                    continue;
+                                returnValue = GetRomChecksum(destinationPath);
+                                ++qtyFilesInZip;
                             }
                         }
                     }
@@ -1458,16 +1497,20 @@ namespace GameLauncher
             miscQty = 0;
             using (new CursorWait())
             {
-                string tempstr = Properties.Settings.Default.EmulatorsBasePath;
-                string imagePath = Path.Combine(tempstr, imageSubFolderName.TrimStart('\\'));
-                DeleteImageFilesNotInDatabase(imagePath, doSilentDelete);
-                SqliteCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT ImageDirPath FROM GameSystems ORDER BY Name";
-                using (SqliteDataReader reader = command.ExecuteReader())
-                {
-                    while (!cancelScan && reader.Read())
-                        DeleteImageFilesNotInDatabase(reader.GetString(0), doSilentDelete);
-                }
+                string[] directories = GetEmulatorsBasePaths();
+                foreach (var dir in directories)
+                    if (Directory.Exists(dir))
+                    {
+                        string imagePath = Path.Combine(dir, imageSubFolderName.TrimStart('\\'));
+                        DeleteImageFilesNotInDatabase(imagePath, doSilentDelete);
+                        SqliteCommand command = connection.CreateCommand();
+                        command.CommandText = "SELECT ImageDirPath FROM GameSystems ORDER BY Name";
+                        using (SqliteDataReader reader = command.ExecuteReader())
+                        {
+                            while (!cancelScan && reader.Read())
+                                DeleteImageFilesNotInDatabase(reader.GetString(0), doSilentDelete);
+                        }
+                    }
             }
             if (cancelScan)
                 MessageBox.Show($"Finish scanning for duplicate file images, and deleted {miscQty} duplicate files.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1969,24 +2012,44 @@ namespace GameLauncher
         }
         private void TaskToProcessImageList(int setId, int listID, int startPos, int lastPos)
         {
-            if (tmpImageList1 == null || tmpImageList2 == null)
-                return;
-            Console.WriteLine($"Starting set{setId} with list{listID}. Start pos={startPos} and last pos={lastPos}.");
-            for (int i = startPos; i < lastPos; i++)
+            string imgFile = "";
+            int i = 0;
+            try
             {
-                if (setId == 0)
-                    tmpImageList1[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(romList[index: i].ImagePath));
-                else
-                    tmpImageList2[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(romList[i].ImagePath));
+                if (tmpImageList1 == null || tmpImageList2 == null)
+                    return;
+                Console.WriteLine($"Starting set{setId} with list{listID}. Start pos={startPos} and last pos={lastPos}.");
+                for (i = startPos; i < lastPos; i++)
+                {
+                    imgFile = romList[index: i].ImagePath;
+                    if (setId == 0)
+                        tmpImageList1[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(imgFile));
+                    else
+                        tmpImageList2[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(imgFile));
 
+                }
+                if (setId == 0)
+                    Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList1[listID].Images.Count}.");
+                else
+                    Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList2[listID].Images.Count}.");
             }
-            if (setId == 0)
-                Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList1[listID].Images.Count}.");
-            else
-                Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList2[listID].Images.Count}.");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"TaskToProcessImageList exception thrown \"{ex.Message}\" while processing image file {imgFile} {i} of {lastPos}!");
+                Form_Main.DbErrorLogging("TaskToProcessImageList", $"TaskToProcessImageList exception thrown \"{ex.Message}\" while processing image file {imgFile}!", ex.StackTrace, $"Var(setId={setId}, listID={listID}, startPos={startPos}, lastPos={lastPos}, imgFile={imgFile}, i={i})");
+            }
         }
         public bool DisplaySystemIcons(string systemName, int multithreadMethod = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
         {
+            if (systemName.Length == 0)
+            {
+                toolStripMenuItemChangeDefaultEmulator.Enabled = false;
+                advancedOptionsToolStripMenuItem.Enabled = false;
+            }
+            else
+            {
+                SetAdvanceOptions();
+            }
             using (new CursorWait())
             {
                 // Note: Below results show that there's very little difference when using more than 6 threads for Properties.Settings.Default.MaxNumberOfPairThreadsPerList
@@ -2109,13 +2172,42 @@ namespace GameLauncher
             }
             return true;
         }
+        public string[] GetEmulatorsBasePaths()
+        {
+            if (Properties.Settings.Default.EmulatorsBasePath.Contains(";"))
+                return Properties.Settings.Default.EmulatorsBasePath.Split(';');
+            if (Properties.Settings.Default.EmulatorsBasePath.Contains(","))
+                return Properties.Settings.Default.EmulatorsBasePath.Split(',');
+            string[] dirs = new string[1];
+            dirs[0] = Properties.Settings.Default.EmulatorsBasePath;
+            return dirs;
+        }
+        public bool DirectoriesExists(string dirs)
+        {
+            if (dirs == null || dirs.Length == 0)
+                return false;
+            if (dirs.Contains(";"))
+            {
+                string[] directories = dirs.Split(';');
+                foreach (var dir in directories)
+                    if (Directory.Exists(dir))
+                        return true;
+            }
+            if (dirs.Contains(","))
+            {
+                string[] directories = dirs.Split(',');
+                foreach (var dir in directories)
+                    if (Directory.Exists(dir))
+                        return true;
+            }
+            else
+                return Directory.Exists(dirs);
+            return false;
+        }
         public string GetEmulatorsBasePath_sub()
         {
-            if (Properties.Settings.Default.EmulatorsBasePath != null && Properties.Settings.Default.EmulatorsBasePath.Length > 0)
-            {
-                if (Directory.Exists(Properties.Settings.Default.EmulatorsBasePath))
-                    return Properties.Settings.Default.EmulatorsBasePath;
-            }
+            if (DirectoriesExists(Properties.Settings.Default.EmulatorsBasePath))
+                return Properties.Settings.Default.EmulatorsBasePath;
             foreach (var path in COMMON_EMULATOR_PATHS)
             {
                 if (File.Exists(path))
@@ -2132,6 +2224,7 @@ namespace GameLauncher
                 Properties.Settings.Default.EmulatorsBasePath = emulatorsBasePath;
             return emulatorsBasePath;
         }
+        public string GetDefaultImageBuildPath() => GetPropertyDataPath(DEFAULTIMAGEFILENAME);
         public string GetDefaultImagePath_sub(string dbPath)
         {
             string imgPath = Properties.Settings.Default.DefaultImagePath;
@@ -2140,8 +2233,7 @@ namespace GameLauncher
                 if (File.Exists(Properties.Settings.Default.DefaultImagePath))
                     return Properties.Settings.Default.DefaultImagePath;
             }
-            const string DEFAULTIMAGEFILENAME = "GameController.png";
-            string defaultImagePath = Path.Combine(dataDirPath, DEFAULTIMAGEFILENAME);  // This allows user defined default image
+            string defaultImagePath = GetDefaultImageBuildPath(); 
             if (File.Exists(defaultImagePath))
                 return defaultImagePath;
             string dbPathDir = Path.GetDirectoryName(dbPath);
@@ -2240,11 +2332,11 @@ namespace GameLauncher
                     Properties.Settings.Default.DefaultImagePath = GetDefaultImagePath(Properties.Settings.Default.DbPath);
                     updatePropertiesSettings = true;
                 }
-                if (!Directory.Exists(Properties.Settings.Default.EmulatorsBasePath))
+                if (!DirectoriesExists(Properties.Settings.Default.EmulatorsBasePath))
                 {
                     string badEmulatorsBasePath = Properties.Settings.Default.EmulatorsBasePath;
                     Properties.Settings.Default.EmulatorsBasePath = GetEmulatorsBasePath();
-                    if (Directory.Exists(Properties.Settings.Default.EmulatorsBasePath))
+                    if (DirectoriesExists(Properties.Settings.Default.EmulatorsBasePath))
                     {
                         if (!RedoDbInit($"Emulator path does NOT exists\n\"{badEmulatorsBasePath}\"\nDo you want to erase GameLauncher database and perform a rescan using the following path:\n\"{Properties.Settings.Default.EmulatorsBasePath}\"", "Invalid Emulator Path!!!"))
                         {
@@ -2271,11 +2363,13 @@ namespace GameLauncher
             {
                 advancedOptionsToolStripMenuItem.Enabled = false;
                 contextMenuStrip1.Enabled = false;
+                toolStripMenuItemChangeDefaultEmulator.Enabled = false;
             }
             else
             {
                 advancedOptionsToolStripMenuItem.Enabled = true;
                 contextMenuStrip1.Enabled = true;
+                toolStripMenuItemChangeDefaultEmulator.Enabled = true;
             }
         }
         private string GetEmulatorStartScanPath()
@@ -2344,20 +2438,42 @@ namespace GameLauncher
             string preferredExtension = EmulatorPreferredExtension(emulatorExecutable);
             string firstFileExtracted = null;
             string romFile = null;
+            string extRom = Path.GetExtension(romZipFile).ToLower();
             using (TempDirStorage tempDirStorage = new TempDirStorage())
             {
-                using (ZipArchive archive = ZipFile.OpenRead(romZipFile))
+                //if (extRom.Equals(".zip"))
+                //    using (ZipArchive archive = ZipFile.OpenRead(romZipFile))
+                //    {
+                //        archive.ExtractToDirectory(tempDirStorage.tempDir);
+                //        foreach (var entry in archive.Entries)
+                //        {
+                //            string destinationPath = Path.GetFullPath(Path.Combine(tempDirStorage.tempDir, entry.FullName));
+                //            if (firstFileExtracted == null)
+                //                firstFileExtracted = destinationPath;
+                //            string ext = Path.GetExtension(destinationPath);
+                //            if (ext.Equals(preferredExtension, StringComparison.OrdinalIgnoreCase))
+                //                romFile = destinationPath;
+                //            ++qtyFilesInZip;
+                //        }
+                //    }
+                //else 
+                if (SUPPORTED_COMPRESSION_FILE.Contains(extRom))
                 {
-                    archive.ExtractToDirectory(tempDirStorage.tempDir);
-                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    using (CompressArchiveInterface archive = CreateCompressArchiveInterface.Create(romZipFile))
                     {
-                        string destinationPath = Path.GetFullPath(Path.Combine(tempDirStorage.tempDir, entry.FullName));
-                        if (firstFileExtracted == null)
-                            firstFileExtracted = destinationPath;
-                        string ext = Path.GetExtension(destinationPath);
-                        if (ext.Equals(preferredExtension, StringComparison.OrdinalIgnoreCase))
-                            romFile = destinationPath;
-                        ++qtyFilesInZip;
+                        archive.ExtractToDirectory(tempDirStorage.tempDir);
+                        foreach (var name in archive.GetNames())
+                        {
+                            string destinationPath = Path.GetFullPath(Path.Combine(tempDirStorage.tempDir, name));
+                            if (Directory.Exists(destinationPath))
+                                continue;
+                            if (firstFileExtracted == null)
+                                firstFileExtracted = destinationPath;
+                            string ext = Path.GetExtension(destinationPath);
+                            if (ext.Equals(preferredExtension, StringComparison.OrdinalIgnoreCase))
+                                romFile = destinationPath;
+                            ++qtyFilesInZip;
+                        }
                     }
                 }
                 if (romFile == null && firstFileExtracted != null)
@@ -2372,9 +2488,8 @@ namespace GameLauncher
         {
             if (text.Length < 3 || myListView.Items.Count == 0)
                 return;
-
-            // The follow line keeps triggering a random crash.
-            // toolStripTextBox_Filter.AutoCompleteCustomSource.Add(text);
+            if (Properties.Settings.Default.AutoCompleteCustomSourceLiveUpdate)
+                toolStripTextBox_Filter.AutoCompleteCustomSource.Add(text); //This keeps randomly triggering crash, so it's disabled by default
 
             // Maybe ToDo: Consider adding a counter or timestamp to table FilterAutoCompleteCustomSource, so as to remove value not used recently or often
             // ToDo: Add spell checker like Hunspell to check spelling before adding text to DB
@@ -2777,6 +2892,8 @@ namespace GameLauncher
 
         private void toolStripMenuItemSearchAll_Click(object sender, EventArgs e) 
         {
+            if (toolStripTextBox_Filter.Text.Length == 0)
+                return;
             System.Windows.Forms.Keys mods = System.Windows.Forms.Control.ModifierKeys;
             bool useRegex = (mods & System.Windows.Forms.Keys.Control) > 0;
             List<Rom> romListAllSystem = new List<Rom>();
@@ -3008,6 +3125,186 @@ namespace GameLauncher
             NameOrg = nameOrg;
             Compressed = compressed;
             Checksum = checksum;
+        }
+    }
+    public interface CompressArchiveInterface : System.IDisposable
+    {
+        void ExtractToDirectory(string dirName);
+        string[] GetNames();
+    }
+    public class ZipAltCompressArchive : CompressArchiveInterface
+    {
+        private ZipArchive archive;
+        public ZipAltCompressArchive(ZipArchive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames()
+        {
+            string[] names = new string[archive.Entries.Count];
+            for (int i = 0; i < archive.Entries.Count; i++)
+            {
+                names[i] = archive.Entries[i].FullName;
+            }
+            return names;
+        }
+        public void Dispose() => archive.Dispose();
+    }
+    public class RarCompressArchive : CompressArchiveInterface
+    {
+        private RarArchive archive;
+        public RarCompressArchive(RarArchive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames()
+        {
+            string[] names = new string[archive.Entries.Count];
+            for (int i = 0; i < archive.Entries.Count; i++)
+            {
+                names[i] = archive.Entries[i].Name;
+                // ToDo: Make sure suffix / if is directory
+            }
+            return names;
+        }
+        public void Dispose() => archive.Dispose();
+    }
+    public class SevenZipCompressArchive : CompressArchiveInterface
+    {
+        private SevenZipArchive archive;
+        public SevenZipCompressArchive(SevenZipArchive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames()
+        {
+            string[] names = new string[archive.Entries.Count];
+            for (int i = 0; i < archive.Entries.Count; i++)
+            {
+                names[i] = archive.Entries[i].Name;
+                // ToDo: Make sure suffix / if is directory
+            }
+            return names;
+        }
+        public void Dispose() => archive.Dispose();
+    }
+    public class TarCompressArchive : CompressArchiveInterface
+    {
+        private TarArchive archive;
+        public TarCompressArchive(TarArchive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames()
+        {
+            string[] names = new string[archive.Entries.Count];
+            for (int i = 0; i < archive.Entries.Count; i++)
+            {
+                names[i] = archive.Entries[i].Name;
+                // ToDo: Make sure suffix / if is directory
+            }
+            return names;
+        }
+        public void Dispose() => archive.Dispose();
+    }
+    public class CompressArchiveClass
+    {
+        protected string dirExtractedPath;
+        public string[] GetNamesFromDir()
+        {
+            string[] files = Directory.GetFiles(dirExtractedPath, "*", SearchOption.AllDirectories);
+            string[] names = new string[files.Length];
+            for(int i = 0; i < files.Length;++i)
+            {
+                names[i] = files[i].Substring(dirExtractedPath.Length);
+            }
+            return names;
+        }
+    }
+    public class GzipCompressArchive : CompressArchiveClass, CompressArchiveInterface
+    {
+        private GzipArchive archive;
+        public GzipCompressArchive(GzipArchive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName)
+        {
+            dirExtractedPath = dirName;
+            archive.ExtractToDirectory(dirName);
+        }
+        public string[] GetNames() => GetNamesFromDir();
+        public void Dispose() => archive.Dispose();
+    }
+    public class Bzip2CompressArchive : CompressArchiveClass, CompressArchiveInterface
+    {
+        private Bzip2Archive archive;
+        public Bzip2CompressArchive(Bzip2Archive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames() => GetNamesFromDir();
+        public void Dispose() => archive.Dispose();
+    }
+    public class LzipCompressArchive : CompressArchiveClass, CompressArchiveInterface
+    {
+        private LzipArchive archive;
+        public LzipCompressArchive(LzipArchive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames() => GetNamesFromDir();
+        public void Dispose() => archive.Dispose();
+    }
+    public class ZipCompressArchive : CompressArchiveInterface
+    {
+        private Archive archive;
+        public ZipCompressArchive(Archive _archive)
+        {
+            archive = _archive;
+        }
+        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public string[] GetNames()
+        {
+            string[] names = new string[archive.Entries.Count];
+            for (int i = 0; i < archive.Entries.Count; i++)
+            {
+                names[i] = archive.Entries[i].Name;
+                // ToDo: Make sure suffix / if is directory
+            }
+            return names;
+        }
+        public void Dispose() => archive.Dispose();
+    }
+    public class CreateCompressArchiveInterface 
+    {
+        public static CompressArchiveInterface Create(string fileName)
+        {
+            string ext = Path.GetExtension(fileName).ToLower();
+            if (ext.Equals(".zip"))
+                return new ZipCompressArchive(new Archive(fileName));
+            if (ext.Equals(".7z") || ext.Equals(".7zip"))
+                return new SevenZipCompressArchive(new SevenZipArchive(fileName));
+            if (ext.Equals(".rar"))
+                return new RarCompressArchive(new RarArchive(fileName));
+            if (ext.Equals(".tar"))
+                return new TarCompressArchive(new TarArchive(fileName));
+            // The following three types will only work to call ExtractToDirectory, and do not fully support GetNames()
+            if (ext.Equals(".gzip"))
+                return new GzipCompressArchive(new GzipArchive(fileName));
+            if (ext.Equals(".bz2") || ext.Equals(".bzip") || ext.Equals(".bzip2"))
+                return new Bzip2CompressArchive(new Bzip2Archive(fileName));
+            if (ext.Equals(".lzip"))
+                return new LzipCompressArchive(new LzipArchive(fileName));
+
+            // ".zip", ".7z", ".7zip", ".rar", ".tar" 
+            return null;
         }
     }
     public class CursorWait : IDisposable

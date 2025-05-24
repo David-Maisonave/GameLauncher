@@ -35,6 +35,7 @@ namespace GameLauncher
             checkBox_usePreviousCollectionCache.Checked = Properties.Settings.Default.usePreviousCollectionCache;
             checkBox_useJoystickController.Checked = Properties.Settings.Default.useJoystickController;
             checkBox_disableAdvanceOptions.Checked = Properties.Settings.Default.disableAdvanceOptions;
+            checkBox_AutoCompleteCustomSourceLiveUpdate.Checked = Properties.Settings.Default.AutoCompleteCustomSourceLiveUpdate;
 
             checkBox_EnableRomChecksum.Checked = Properties.Settings.Default.DoRomChecksum;
             checkBox_EnableImageChecksum.Checked = Properties.Settings.Default.DoImageChecksum;
@@ -72,6 +73,7 @@ namespace GameLauncher
             Properties.Settings.Default.DoZipChecksum = checkBox_EnableZipChecksum.Checked;
             Properties.Settings.Default.SHA256OverMD5 = checkBox_SHA256OverMD5.Checked;
             Properties.Settings.Default.disableAdvanceOptions = checkBox_disableAdvanceOptions.Checked;
+            Properties.Settings.Default.AutoCompleteCustomSourceLiveUpdate = checkBox_AutoCompleteCustomSourceLiveUpdate.Checked;
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
             Properties.Settings.Default.usePreviousCollectionCache = checkBox_usePreviousCollectionCache.Checked;
             Properties.Settings.Default.DbPath = textBox_DbPath.Text;
@@ -134,8 +136,7 @@ namespace GameLauncher
             }
             textBox_DbPath.Text = saveFileDialog.FileName;
         }
-
-        private void button_EmulatorsBasePath_Click(object sender, EventArgs e)
+        private void SetEmulatorsBasePath(bool addToExistingPath)
         {
             FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
             folderBrowserDialog1.Description = "Select root (base) directory containing emulators and associated ROM files.";
@@ -143,9 +144,9 @@ namespace GameLauncher
             folderBrowserDialog1.SelectedPath = textBox_EmulatorsBasePath.Text;
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
-                textBox_EmulatorsBasePath.Text = folderBrowserDialog1.SelectedPath;
+                textBox_EmulatorsBasePath.Text = addToExistingPath ? $"{textBox_EmulatorsBasePath.Text};{folderBrowserDialog1.SelectedPath}" : folderBrowserDialog1.SelectedPath;
         }
-
+        private void button_EmulatorsBasePath_Click(object sender, EventArgs e) => SetEmulatorsBasePath(false);
         private void button_DefaultImagePath_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -186,5 +187,7 @@ namespace GameLauncher
         {
             checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
         }
+
+        private void button_EmulatorsBasePath_Add_Click(object sender, EventArgs e) => SetEmulatorsBasePath(true);
     }
 }

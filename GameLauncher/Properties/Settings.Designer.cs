@@ -250,5 +250,17 @@ namespace GameLauncher.Properties {
                 this["DoZipChecksum"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoCompleteCustomSourceLiveUpdate {
+            get {
+                return ((bool)(this["AutoCompleteCustomSourceLiveUpdate"]));
+            }
+            set {
+                this["AutoCompleteCustomSourceLiveUpdate"] = value;
+            }
+        }
     }
 }

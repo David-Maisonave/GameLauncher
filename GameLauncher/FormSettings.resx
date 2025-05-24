@@ -120,9 +120,11 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="textBox_EmulatorsBasePath.ToolTip" xml:space="preserve">
+    <value>This is the base directory where all the emulators are stored. Changing this can trigger a full ROM rescan.
+To enter multiple paths, separate each path with semicolon.
+Example: C:\Games;C:\Emulators;C:\Retro\Nintendo</value>
+  </data>
   <data name="checkBox_EnableRomChecksum.ToolTip" xml:space="preserve">
     <value>When checked, performs a checksum value to all ROM's before adding them to the database.
 Change only applies to new full scan.
