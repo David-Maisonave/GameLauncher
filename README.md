@@ -121,6 +121,7 @@ Below are possible future plan updates.
 * [0.9.1] Add option to context menu to open link to launchbox-app.com with the ROM title name, or open google link with title. Example: https://www.google.com/search?q=Disney+Aladdin+site%253Alaunchbox-app.com
 * [0.9.1] Add decompression support for ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz"
 * [0.9.1] ROM details editor.
+* [0.9.1] GameSystem editor.
 * [0.9.1 ???] Add support for multiple source paths for searching games.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
