@@ -36,9 +36,12 @@
             this.toolStripMenuItemPlayRom = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemRenameROM = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemDeleteROM = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripMenuItemChangeViewROMDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAssignPreferredEmulator = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemChangeAssignedImage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemChangeTitle = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.searchImageAtLaunchBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip_Info = new System.Windows.Forms.ToolTip(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -51,14 +54,29 @@
             this.toolStripComboBoxSystem = new System.Windows.Forms.ToolStripComboBox();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBoxIconDisplay = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.changeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemChangeDefaultEmulator = new System.Windows.Forms.ToolStripMenuItem();
-            this.advancedOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_ROMParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemRescanAllRoms = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemScanNewRomsAllSystems = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemScanSelectedSystemNewRoms = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemDeleteRomsParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByChecksum = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ImagesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CreateImageListCache = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupImagesNotInDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_MiscUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_RegexRenameFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_FilterLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -103,19 +121,20 @@
             this.toolStripMenuItemRenameROM,
             this.toolStripMenuItemDeleteROM,
             this.toolStripSeparator1,
+            this.ToolStripMenuItemChangeViewROMDetails,
             this.toolStripMenuItemAssignPreferredEmulator,
             this.toolStripMenuItemChangeAssignedImage,
             this.toolStripMenuItemChangeTitle,
             this.toolStripSeparator2,
             this.searchImageAtLaunchBoxToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(220, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(220, 192);
             // 
             // toolStripMenuItemPlayRom
             // 
             this.toolStripMenuItemPlayRom.Name = "toolStripMenuItemPlayRom";
             this.toolStripMenuItemPlayRom.Size = new System.Drawing.Size(219, 22);
-            this.toolStripMenuItemPlayRom.Text = "Play ROM (Game)";
+            this.toolStripMenuItemPlayRom.Text = "&Play ROM (Game)";
             this.toolStripMenuItemPlayRom.Click += new System.EventHandler(this.myListViewContextMenu_Play_Click);
             // 
             // toolStripMenuItemRenameROM
@@ -123,7 +142,7 @@
             this.toolStripMenuItemRenameROM.AutoToolTip = true;
             this.toolStripMenuItemRenameROM.Name = "toolStripMenuItemRenameROM";
             this.toolStripMenuItemRenameROM.Size = new System.Drawing.Size(219, 22);
-            this.toolStripMenuItemRenameROM.Text = "Rename ROM (Game)";
+            this.toolStripMenuItemRenameROM.Text = "&Rename ROM";
             this.toolStripMenuItemRenameROM.ToolTipText = "Rename the ROM file on the file system.";
             this.toolStripMenuItemRenameROM.Click += new System.EventHandler(this.myListViewContextMenu_RenameROM_Click);
             // 
@@ -132,16 +151,28 @@
             this.toolStripMenuItemDeleteROM.AutoToolTip = true;
             this.toolStripMenuItemDeleteROM.Name = "toolStripMenuItemDeleteROM";
             this.toolStripMenuItemDeleteROM.Size = new System.Drawing.Size(219, 22);
-            this.toolStripMenuItemDeleteROM.Text = "Delete ROM (Game)";
+            this.toolStripMenuItemDeleteROM.Text = "&Delete ROM";
             this.toolStripMenuItemDeleteROM.ToolTipText = resources.GetString("toolStripMenuItemDeleteROM.ToolTipText");
             this.toolStripMenuItemDeleteROM.Click += new System.EventHandler(this.myListViewContextMenu_DeleteROM_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(216, 6);
+            // 
+            // ToolStripMenuItemChangeViewROMDetails
+            // 
+            this.ToolStripMenuItemChangeViewROMDetails.Name = "ToolStripMenuItemChangeViewROMDetails";
+            this.ToolStripMenuItemChangeViewROMDetails.Size = new System.Drawing.Size(219, 22);
+            this.ToolStripMenuItemChangeViewROMDetails.Text = "Edit \\ &View ROM Details";
+            this.ToolStripMenuItemChangeViewROMDetails.Click += new System.EventHandler(this.ToolStripMenuItemChangeViewROMDetails_Click);
             // 
             // toolStripMenuItemAssignPreferredEmulator
             // 
             this.toolStripMenuItemAssignPreferredEmulator.AutoToolTip = true;
             this.toolStripMenuItemAssignPreferredEmulator.Name = "toolStripMenuItemAssignPreferredEmulator";
             this.toolStripMenuItemAssignPreferredEmulator.Size = new System.Drawing.Size(219, 22);
-            this.toolStripMenuItemAssignPreferredEmulator.Text = "Assign Preferred Emulator";
+            this.toolStripMenuItemAssignPreferredEmulator.Text = "&Assign Preferred Emulator";
             this.toolStripMenuItemAssignPreferredEmulator.ToolTipText = "Assign preferred emulator for the selected ROM.";
             this.toolStripMenuItemAssignPreferredEmulator.Click += new System.EventHandler(this.myListViewContextMenu_AssignPreferredEmulator_Click);
             // 
@@ -150,7 +181,7 @@
             this.toolStripMenuItemChangeAssignedImage.AutoToolTip = true;
             this.toolStripMenuItemChangeAssignedImage.Name = "toolStripMenuItemChangeAssignedImage";
             this.toolStripMenuItemChangeAssignedImage.Size = new System.Drawing.Size(219, 22);
-            this.toolStripMenuItemChangeAssignedImage.Text = "Change Assigned Image";
+            this.toolStripMenuItemChangeAssignedImage.Text = "Change Assigned &Image";
             this.toolStripMenuItemChangeAssignedImage.ToolTipText = "Change image associated with selected ROM file.\r\nNote: The change is not reflecte" +
     "d on the list until after restarting GameLauncher or after changing the selected" +
     " game console system.\r\n";
@@ -161,15 +192,20 @@
             this.toolStripMenuItemChangeTitle.AutoToolTip = true;
             this.toolStripMenuItemChangeTitle.Name = "toolStripMenuItemChangeTitle";
             this.toolStripMenuItemChangeTitle.Size = new System.Drawing.Size(219, 22);
-            this.toolStripMenuItemChangeTitle.Text = "Change ROM Title";
+            this.toolStripMenuItemChangeTitle.Text = "Change ROM &Title";
             this.toolStripMenuItemChangeTitle.ToolTipText = resources.GetString("toolStripMenuItemChangeTitle.ToolTipText");
             this.toolStripMenuItemChangeTitle.Click += new System.EventHandler(this.myListViewContextMenu_ChangeTitle_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(216, 6);
             // 
             // searchImageAtLaunchBoxToolStripMenuItem
             // 
             this.searchImageAtLaunchBoxToolStripMenuItem.Name = "searchImageAtLaunchBoxToolStripMenuItem";
             this.searchImageAtLaunchBoxToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.searchImageAtLaunchBoxToolStripMenuItem.Text = "Search Image at LaunchBox";
+            this.searchImageAtLaunchBoxToolStripMenuItem.Text = "Search Image at &LaunchBox";
             this.searchImageAtLaunchBoxToolStripMenuItem.Click += new System.EventHandler(this.searchImageAtLaunchBoxToolStripMenuItem_Click);
             // 
             // toolTip_Info
@@ -185,9 +221,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(6, 53);
+            this.progressBar1.Location = new System.Drawing.Point(6, 46);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(548, 23);
             this.progressBar1.Step = 1;
@@ -203,9 +239,9 @@
             this.groupBox_ProgressBar.Controls.Add(this.progressBar1);
             this.groupBox_ProgressBar.Controls.Add(this.label_GameConsoleLabel);
             this.groupBox_ProgressBar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.groupBox_ProgressBar.Location = new System.Drawing.Point(12, 117);
+            this.groupBox_ProgressBar.Location = new System.Drawing.Point(12, 107);
             this.groupBox_ProgressBar.Name = "groupBox_ProgressBar";
-            this.groupBox_ProgressBar.Size = new System.Drawing.Size(560, 196);
+            this.groupBox_ProgressBar.Size = new System.Drawing.Size(560, 190);
             this.groupBox_ProgressBar.TabIndex = 90;
             this.groupBox_ProgressBar.TabStop = false;
             this.groupBox_ProgressBar.Text = "Progress on initial ROM database creation";
@@ -213,7 +249,9 @@
             // 
             // button_CancelScan
             // 
-            this.button_CancelScan.Location = new System.Drawing.Point(252, 155);
+            this.button_CancelScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_CancelScan.Location = new System.Drawing.Point(252, 147);
             this.button_CancelScan.Name = "button_CancelScan";
             this.button_CancelScan.Size = new System.Drawing.Size(75, 35);
             this.button_CancelScan.TabIndex = 101;
@@ -224,9 +262,9 @@
             // 
             // progressBar_ROMs
             // 
-            this.progressBar_ROMs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar_ROMs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar_ROMs.Location = new System.Drawing.Point(6, 115);
+            this.progressBar_ROMs.Location = new System.Drawing.Point(6, 108);
             this.progressBar_ROMs.Name = "progressBar_ROMs";
             this.progressBar_ROMs.Size = new System.Drawing.Size(548, 23);
             this.progressBar_ROMs.Step = 1;
@@ -236,10 +274,8 @@
             // 
             // label_RomScanLabel
             // 
-            this.label_RomScanLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label_RomScanLabel.AutoSize = true;
-            this.label_RomScanLabel.Location = new System.Drawing.Point(8, 92);
+            this.label_RomScanLabel.Location = new System.Drawing.Point(8, 85);
             this.label_RomScanLabel.Name = "label_RomScanLabel";
             this.label_RomScanLabel.Size = new System.Drawing.Size(89, 13);
             this.label_RomScanLabel.TabIndex = 100;
@@ -248,10 +284,8 @@
             // 
             // label_GameConsoleLabel
             // 
-            this.label_GameConsoleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label_GameConsoleLabel.AutoSize = true;
-            this.label_GameConsoleLabel.Location = new System.Drawing.Point(8, 29);
+            this.label_GameConsoleLabel.Location = new System.Drawing.Point(8, 22);
             this.label_GameConsoleLabel.Name = "label_GameConsoleLabel";
             this.label_GameConsoleLabel.Size = new System.Drawing.Size(146, 13);
             this.label_GameConsoleLabel.TabIndex = 99;
@@ -269,8 +303,9 @@
             this.toolStripMenuItemSearchAll});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
             this.menuStrip1.ShowItemToolTips = true;
-            this.menuStrip1.Size = new System.Drawing.Size(584, 32);
+            this.menuStrip1.Size = new System.Drawing.Size(584, 30);
             this.menuStrip1.TabIndex = 91;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -287,8 +322,13 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBoxIconDisplay,
+            this.toolStripSeparator4,
+            this.changeViewToolStripMenuItem,
             this.toolStripMenuItemChangeDefaultEmulator,
-            this.advancedOptionsToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.toolStripMenuItem_ROMParentMenu,
+            this.toolStripMenuItem_ImagesParentMenu,
+            this.toolStripMenuItem_MiscUtilParentMenu,
             this.settingsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 28);
@@ -302,28 +342,155 @@
             this.toolStripComboBoxIconDisplay.ToolTipText = "Select list icon size and format.";
             this.toolStripComboBoxIconDisplay.SelectedIndexChanged += new System.EventHandler(this.Display_Change);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(248, 6);
+            // 
+            // changeViewToolStripMenuItem
+            // 
+            this.changeViewToolStripMenuItem.Name = "changeViewToolStripMenuItem";
+            this.changeViewToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.changeViewToolStripMenuItem.Text = "&Edit \\ View Game Console System";
+            this.changeViewToolStripMenuItem.Click += new System.EventHandler(this.changeViewToolStripMenuItem_Click);
+            // 
             // toolStripMenuItemChangeDefaultEmulator
             // 
             this.toolStripMenuItemChangeDefaultEmulator.AutoToolTip = true;
             this.toolStripMenuItemChangeDefaultEmulator.Name = "toolStripMenuItemChangeDefaultEmulator";
-            this.toolStripMenuItemChangeDefaultEmulator.Size = new System.Drawing.Size(207, 22);
-            this.toolStripMenuItemChangeDefaultEmulator.Text = "Change Default Emulator";
+            this.toolStripMenuItemChangeDefaultEmulator.Size = new System.Drawing.Size(251, 22);
+            this.toolStripMenuItemChangeDefaultEmulator.Text = "&Change Default Emulator";
             this.toolStripMenuItemChangeDefaultEmulator.ToolTipText = "Change the default emulator executable for the currently selected game console sy" +
     "stem.";
             this.toolStripMenuItemChangeDefaultEmulator.Click += new System.EventHandler(this.toolStripMenuItemChangeDefaultEmulator_Click);
             // 
-            // advancedOptionsToolStripMenuItem
+            // toolStripSeparator3
             // 
-            this.advancedOptionsToolStripMenuItem.Name = "advancedOptionsToolStripMenuItem";
-            this.advancedOptionsToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.advancedOptionsToolStripMenuItem.Text = "Advanced Options";
-            this.advancedOptionsToolStripMenuItem.Click += new System.EventHandler(this.advancedOptionsToolStripMenuItem_Click);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(248, 6);
+            // 
+            // toolStripMenuItem_ROMParentMenu
+            // 
+            this.toolStripMenuItem_ROMParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemRescanAllRoms,
+            this.toolStripMenuItemScanNewRomsAllSystems,
+            this.toolStripMenuItemScanSelectedSystemNewRoms,
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms,
+            this.toolStripMenuItemDeleteRomsParentMenu});
+            this.toolStripMenuItem_ROMParentMenu.Name = "toolStripMenuItem_ROMParentMenu";
+            this.toolStripMenuItem_ROMParentMenu.Size = new System.Drawing.Size(251, 22);
+            this.toolStripMenuItem_ROMParentMenu.Text = "&ROM\'s";
+            // 
+            // toolStripMenuItemRescanAllRoms
+            // 
+            this.toolStripMenuItemRescanAllRoms.Name = "toolStripMenuItemRescanAllRoms";
+            this.toolStripMenuItemRescanAllRoms.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemRescanAllRoms.Text = "Rescan All ROM\'s";
+            this.toolStripMenuItemRescanAllRoms.Click += new System.EventHandler(this.toolStripMenuItemRescanAllRoms_Click);
+            // 
+            // toolStripMenuItemScanNewRomsAllSystems
+            // 
+            this.toolStripMenuItemScanNewRomsAllSystems.Name = "toolStripMenuItemScanNewRomsAllSystems";
+            this.toolStripMenuItemScanNewRomsAllSystems.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemScanNewRomsAllSystems.Text = "Scan for new ROM\'s on all systems";
+            this.toolStripMenuItemScanNewRomsAllSystems.Click += new System.EventHandler(this.toolStripMenuItemScanNewRomsAllSystems_Click);
+            // 
+            // toolStripMenuItemScanSelectedSystemNewRoms
+            // 
+            this.toolStripMenuItemScanSelectedSystemNewRoms.Name = "toolStripMenuItemScanSelectedSystemNewRoms";
+            this.toolStripMenuItemScanSelectedSystemNewRoms.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemScanSelectedSystemNewRoms.Text = "Scan selected system for new ROM\'s";
+            this.toolStripMenuItemScanSelectedSystemNewRoms.Click += new System.EventHandler(this.toolStripMenuItemScanSelectedSystemNewRoms_Click);
+            // 
+            // toolStripMenuItem_CleanScanSelectedSystemNewRoms
+            // 
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Name = "toolStripMenuItem_CleanScanSelectedSystemNewRoms";
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Text = "Clean and scan selected system for new ROM\'s";
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Click += new System.EventHandler(this.toolStripMenuItem_CleanScanSelectedSystemNewRoms_Click);
+            // 
+            // toolStripMenuItemDeleteRomsParentMenu
+            // 
+            this.toolStripMenuItemDeleteRomsParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem,
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem,
+            this.toolStripMenuItem_DeleteDupRomsByChecksum});
+            this.toolStripMenuItemDeleteRomsParentMenu.Name = "toolStripMenuItemDeleteRomsParentMenu";
+            this.toolStripMenuItemDeleteRomsParentMenu.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemDeleteRomsParentMenu.Text = "Delete Duplicate ROM\'s";
+            // 
+            // toolStripMenuItem_DeleteDupRomsByTitleSameSystem
+            // 
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Name = "toolStripMenuItem_DeleteDupRomsByTitleSameSystem";
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Size = new System.Drawing.Size(320, 22);
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Text = "Delete duplicate ROM\'s by title in same system";
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem_Click);
+            // 
+            // toolStripMenuItem_DeleteDupRomsByTitleAnySystem
+            // 
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Name = "toolStripMenuItem_DeleteDupRomsByTitleAnySystem";
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Size = new System.Drawing.Size(320, 22);
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Text = "Delete duplicate ROM\'s by title in any system";
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem_Click);
+            // 
+            // toolStripMenuItem_DeleteDupRomsByChecksum
+            // 
+            this.toolStripMenuItem_DeleteDupRomsByChecksum.Name = "toolStripMenuItem_DeleteDupRomsByChecksum";
+            this.toolStripMenuItem_DeleteDupRomsByChecksum.Size = new System.Drawing.Size(320, 22);
+            this.toolStripMenuItem_DeleteDupRomsByChecksum.Text = "Delete duplicate ROM\'s by checksum";
+            this.toolStripMenuItem_DeleteDupRomsByChecksum.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByChecksum_Click);
+            // 
+            // toolStripMenuItem_ImagesParentMenu
+            // 
+            this.toolStripMenuItem_ImagesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_CreateImageListCache,
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages,
+            this.toolStripMenuItem_DeleteDupImagesNotInDB});
+            this.toolStripMenuItem_ImagesParentMenu.Name = "toolStripMenuItem_ImagesParentMenu";
+            this.toolStripMenuItem_ImagesParentMenu.Size = new System.Drawing.Size(251, 22);
+            this.toolStripMenuItem_ImagesParentMenu.Text = "&Images";
+            // 
+            // toolStripMenuItem_CreateImageListCache
+            // 
+            this.toolStripMenuItem_CreateImageListCache.Name = "toolStripMenuItem_CreateImageListCache";
+            this.toolStripMenuItem_CreateImageListCache.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_CreateImageListCache.Text = "Create Image-List Cache";
+            this.toolStripMenuItem_CreateImageListCache.Click += new System.EventHandler(this.toolStripMenuItem_CreateImageListCache_Click);
+            // 
+            // toolStripMenuItem_ScanSelectedSystemRomsAndImages
+            // 
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Name = "toolStripMenuItem_ScanSelectedSystemRomsAndImages";
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Text = "Scan selected system for new ROM\'s and images";
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Click += new System.EventHandler(this.toolStripMenuItem_ScanSelectedSystemRomsAndImages_Click);
+            // 
+            // toolStripMenuItem_DeleteDupImagesNotInDB
+            // 
+            this.toolStripMenuItem_DeleteDupImagesNotInDB.Name = "toolStripMenuItem_DeleteDupImagesNotInDB";
+            this.toolStripMenuItem_DeleteDupImagesNotInDB.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_DeleteDupImagesNotInDB.Text = "Delete duplicate image files not in database";
+            this.toolStripMenuItem_DeleteDupImagesNotInDB.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupImagesNotInDB_Click);
+            // 
+            // toolStripMenuItem_MiscUtilParentMenu
+            // 
+            this.toolStripMenuItem_MiscUtilParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_RegexRenameFiles});
+            this.toolStripMenuItem_MiscUtilParentMenu.Name = "toolStripMenuItem_MiscUtilParentMenu";
+            this.toolStripMenuItem_MiscUtilParentMenu.Size = new System.Drawing.Size(251, 22);
+            this.toolStripMenuItem_MiscUtilParentMenu.Text = "&Misc Util";
+            // 
+            // toolStripMenuItem_RegexRenameFiles
+            // 
+            this.toolStripMenuItem_RegexRenameFiles.Name = "toolStripMenuItem_RegexRenameFiles";
+            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_RegexRenameFiles.Text = "Regex Rename Files";
+            this.toolStripMenuItem_RegexRenameFiles.Click += new System.EventHandler(this.toolStripMenuItem_RegexRenameFiles_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.settingsToolStripMenuItem.Text = "&Settings";
             this.settingsToolStripMenuItem.ToolTipText = "Select changes to default settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -361,16 +528,6 @@
     "games.\r\nSupports SQL wild characters like % and _.\r\nNo REGEX support!\r\n";
             this.toolStripMenuItemSearchAll.Click += new System.EventHandler(this.toolStripMenuItemSearchAll_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(216, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(216, 6);
-            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -381,7 +538,7 @@
             this.Controls.Add(this.textBoxStatus);
             this.Controls.Add(this.myListView);
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(598, 394);
             this.Name = "Form_Main";
             this.Text = "Game Launcher [Ver-0.9.1] by David Maisonave Sr";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.myListView_OnFormClosing);
@@ -418,7 +575,6 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxSystem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxIconDisplay;
-        private System.Windows.Forms.ToolStripMenuItem advancedOptionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemChangeDefaultEmulator;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox_Filter;
@@ -427,6 +583,25 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSearchAll;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemChangeViewROMDetails;
+        private System.Windows.Forms.ToolStripMenuItem changeViewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ROMParentMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRescanAllRoms;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemScanNewRomsAllSystems;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemScanSelectedSystemNewRoms;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeleteRomsParentMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByChecksum;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByTitleSameSystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByTitleAnySystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ImagesParentMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CreateImageListCache;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ScanSelectedSystemRomsAndImages;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupImagesNotInDB;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MiscUtilParentMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RegexRenameFiles;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CleanScanSelectedSystemNewRoms;
     }
 }
 

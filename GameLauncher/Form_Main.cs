@@ -17,9 +17,11 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -29,6 +31,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
+using static System.Windows.Forms.ListViewItem;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace GameLauncher
@@ -157,12 +160,84 @@ namespace GameLauncher
             binDirPath = AppDomain.CurrentDomain.BaseDirectory;
             dataDirPath = AppDomain.CurrentDomain.BaseDirectory;
         }
+        //void deleteMeCodeTempForTesting(string key, string name, int value)
+        //{
+        //    ListViewItem lvi = new ListViewItem();
+        //    System.Windows.Forms.ProgressBar pb = new System.Windows.Forms.ProgressBar();
+        //    lvi.SubItems[0].Text = name;
+        //    lvi.SubItems.Add(name);
+        //    lvi.SubItems.Add(value.ToString());
+        //    lvi.SubItems.Add("---");
+        //    lvi.SubItems.Add(key);            // LV has 3 cols; this wont show
+        //    lvi.BackColor = SystemColors.ScrollBar;
+        //    lvi.SubItems[1].Text = value.ToString();
+        //    lvi.SubItems[2].Text = key;
+        //    ListViewSubItem lvsi = new ListViewSubItem();
+        //    lvsi.Text = key;
+        //    lvi.SubItems.Add(lvsi);
+        //    listView_ProgressBarList.Items.Add(lvi);
+
+        //    Rectangle r = lvi.SubItems[2].Bounds;
+        //    pb.SetBounds(r.X, r.Y, r.Width, r.Height);
+        //    pb.Minimum = 1;
+        //    pb.Maximum = 10;
+        //    pb.Value = value;
+        //    pb.Name = key;
+        //    pb.Visible = true;
+        //    listView_ProgressBarList.Controls.Add(pb);
+        //    pb.Parent = listView_ProgressBarList;
+        //    pb.Show();
+        //    pb.Update();
+        //    listView_ProgressBarList.Update();
+        //}
+        //public System.Windows.Forms.ProgressBar LvAddProgB(System.Windows.Forms.ListView LV, int LVII, int LVColI, string lvName)
+        //{
+        //    Rectangle SizeR = default(Rectangle);
+        //    System.Windows.Forms.ProgressBar ProgBar = new System.Windows.Forms.ProgressBar();
+
+        //    SizeR = LV.Items[LVII].Bounds;
+        //    SizeR.Width = LV.Columns[LVColI].Width;
+        //    if (LVColI > 0)
+        //    {
+        //        SizeR.X = SizeR.X + LV.Columns[LVColI - 1].Width;
+        //    }
+        //    ProgBar.Parent = LV;
+        //    ProgBar.Name = lvName;
+        //    ProgBar.SetBounds(SizeR.X, SizeR.Y, SizeR.Width, SizeR.Height);
+        //    ProgBar.Visible = true;
+        //    ProgBar.Maximum = 1000;
+        //    ProgBar.Step = 1;
+
+        //    return ProgBar;
+        //}
+        //void deleteMeCodeTempForTesting()
+        //{
+        //    DisplayOrHideProgressGroup(true);
+        //    //deleteMeCodeTempForTesting("A", "Ziggy", 1);
+        //    //deleteMeCodeTempForTesting("B", "Zacky", 2);
+        //    //deleteMeCodeTempForTesting("C", "Zoey", 3);
+        //    //deleteMeCodeTempForTesting("D", "Zeke", 4);
+        //    for (int x = 0; x < 3; ++x)
+        //    {
+        //        ListViewItem item = new ListViewItem();
+        //        item.Text = "d.Name";
+        //        item.SubItems.Add("                 ");
+        //        listView_ProgressBarList.Items.Add(item);
+        //        listView_ProgressBarList.Controls.Add(LvAddProgB(listView_ProgressBarList, item.Position.X + item.Bounds.Width, item.Position.Y, "Lview" + x.ToString()));
+        //    }
+        //}
         private void Form1_Shown(object sender, EventArgs e)
         {
             string dbPath = GetDbPath();
             if (dbPath != null && Directory.Exists(System.IO.Path.GetDirectoryName(dbPath)))
                 dataDirPath = System.IO.Path.GetDirectoryName(dbPath);
             defaultImagePath = GetDefaultImagePath(dbPath); // Make sure to do this before InitializeDbConnection
+            ///////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////
+            // Must-Do:Delete the following code before check in!!!!!!!!!!!!!!!!!!!
+            //deleteMeCodeTempForTesting();
+            ///////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////
             InitializeDbConnection(dbPath);
             GetPropertySettingsFromDB();
             Properties.Settings.Default.Save();
@@ -648,6 +723,7 @@ namespace GameLauncher
         public string GetEmulatorExecutable(string systemName, int emulatorID = 1) => GetFirstColStr($"SELECT EmulatorPath{emulatorID} FROM GameSystems WHERE Name = \"{systemName}\"");
         public string GetEmulatorExecutable(int systemId, int emulatorID = 1) => GetFirstColStr($"SELECT EmulatorPath{emulatorID} FROM GameSystems WHERE ID = \"{systemId}\"");
         private void DeleteRomFromDb(string filePath) => UpdateDB($"DELETE FROM Roms WHERE FilePath = \"{filePath}\"");
+        private void DeleteSystemRomFromDb(int systemID) => UpdateDB($"DELETE FROM Roms WHERE System = \"{systemID}\"");
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Database related methods
         ////////////////////////////////////////////////////////////////////////////////////////
@@ -851,7 +927,7 @@ namespace GameLauncher
                         else
                             continue;
                     }
-                    UpdateRomInDb(GetRomDetails(f, systemIndex, emulatorDir, RomSize));
+                    UpdateInDb(GetRomDetails(f, systemIndex, emulatorDir, RomSize));
                 }
                 if (!cancelScan)
                     GetMultiplayerRomData(emulatorDir);
@@ -861,6 +937,31 @@ namespace GameLauncher
             if (hideGroup)
                 BeginInvoke(new MyDelegateForm_Main(DelegateDisplayOrHideProgressGroup), GetDelegateAction(this, false));
         }
+        private string[] GetEmulatorDirs(string dirs)
+        {
+            string[] directories = null;
+            if (dirs.Contains(";"))
+                directories = dirs.Split(';');
+            else if (dirs.Contains(","))
+                directories = dirs.Split(',');
+
+            if (directories == null)
+                return Directory.GetDirectories(dirs, "*", SearchOption.TopDirectoryOnly);
+
+            string[] emulatorDirs = new string[0];
+            foreach (string dir in directories)
+            {
+                string romPath = dir + romSubFolderName;
+                if (Directory.Exists(romPath))
+                {
+                    string[] thisDir = { dir};
+                    emulatorDirs.Concat(thisDir);
+                }
+                else
+                    emulatorDirs.Concat(Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly));
+            }
+            return emulatorDirs;
+        }
         private List<string> InitializeRomsInDatabase(string startingPath = @"C:\Emulators", string romSubFolder = @"\roms", string imageSubFolder = @"\images", bool createTables = false, int doMultithread = 0)
         {
             romSubFolderName = romSubFolder;
@@ -868,9 +969,8 @@ namespace GameLauncher
             Stopwatch totalProcessWatch = System.Diagnostics.Stopwatch.StartNew();
             Stopwatch databaseCollectionWatch = System.Diagnostics.Stopwatch.StartNew();
             textBoxStatus.Text = $"Getting top directories from \"{startingPath}\"";
-            string[] emulatorDirs = Directory.GetDirectories(startingPath, "*", SearchOption.TopDirectoryOnly);
-            if (doMultithread == 0)
-                DisplayOrHideProgressGroup(true, emulatorDirs.Length);
+            string[] emulatorDirs = GetEmulatorDirs(startingPath);
+            DisplayOrHideProgressGroup(true, emulatorDirs.Length);
             if (createTables)
                 CreateAndInitSqlTables();
             // Check for master image path. Note: These images can apply to any game in any system which matches truncated name
@@ -895,20 +995,7 @@ namespace GameLauncher
             findEmulatorExecuteProcessWatch.Stop();
             TimeSpan findEmulatorExecuteElapsed = findEmulatorExecuteProcessWatch.Elapsed;
             // Note: Not finding improvement in performance for either multithread methods.
-            if (doMultithread == 1)
-            {
-                Task[] tasks = new Task[emulatorDirs.Length];
-                for (int i = 0; i < emulatorDirs.Length; ++i)
-                {
-                    int ii = i;
-                    //tasks[ii] = Task.Run(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
-                    tasks[ii] = Task.Factory.StartNew(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
-                }
-                Task.WaitAll(tasks);
-            }
-            else if (doMultithread == 2)
-                Parallel.ForEach(systemScanTaskDatas, systemScanTaskData => InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables));
-            else
+            if (doMultithread == 0)
             {
                 textBoxStatus.Text = $"Processing {emulatorDirs.Length} game console systems.";
                 foreach (SystemScanTaskData systemScanTaskData in systemScanTaskDatas)
@@ -924,6 +1011,22 @@ namespace GameLauncher
                     textBoxStatus.Update();
                 }
             }
+            else
+            {
+                if (doMultithread == 1)
+                {
+                    Task[] tasks = new Task[emulatorDirs.Length];
+                    for (int i = 0; i < emulatorDirs.Length; ++i)
+                    {
+                        int ii = i;
+                        //tasks[ii] = Task.Run(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
+                        tasks[ii] = Task.Factory.StartNew(() => InitializeRomsInDatabaseForSystem(emulatorDirs[ii], systemScanTaskDatas[ii].emulatorExecutables));
+                    }
+                    Task.WaitAll(tasks);
+                }
+                else if (doMultithread == 2)
+                    Parallel.ForEach(systemScanTaskDatas, systemScanTaskData => InitializeRomsInDatabaseForSystem(systemScanTaskData.emulatorDir, systemScanTaskData.emulatorExecutables));
+            }
             databaseCollectionWatch.Stop();
             TimeSpan databaseCollectionElapsed = databaseCollectionWatch.Elapsed;
             Stopwatch imageListCollectionWatch = System.Diagnostics.Stopwatch.StartNew();
@@ -932,8 +1035,7 @@ namespace GameLauncher
             totalProcessWatch.Stop();
             TimeSpan imageListCollectionElapsed = imageListCollectionWatch.Elapsed;
             TimeSpan totalProcessElapsed = totalProcessWatch.Elapsed;
-            if (doMultithread == 0)
-                DisplayOrHideProgressGroup(false);
+            DisplayOrHideProgressGroup(false);
             if (!cancelScan)
                 MessageBox.Show($"Completed data collection DB collection time = {databaseCollectionElapsed.ToString(@"hh\:mm\:ss")} and ImageList time = {imageListCollectionElapsed.ToString(@"mm\:ss")}\nTotal time = {totalProcessElapsed.ToString(@"hh\:mm\:ss")}\nfindEmulatorExecuteElapsed={findEmulatorExecuteElapsed.ToString(@"hh\:mm\:ss")}", "Process Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return systemNames;
@@ -948,12 +1050,18 @@ namespace GameLauncher
         public string GetDefaultDbPath() => GetPropertyDataPath(GAMELAUNCHER_DB_NAME);
         public string GetDbPath_sub()
         {
+            string dbPath;
+#if DEBUG
+            dbPath = $"C:\\Emulators\\GameLauncher\\Properties\\{GAMELAUNCHER_DB_NAME}";
+            if (File.Exists(dbPath))
+                return dbPath;
+#endif
             if (Properties.Settings.Default.DbPath != null && Properties.Settings.Default.DbPath.Length > 0)
             {
                 if (File.Exists(Properties.Settings.Default.DbPath))
                     return Properties.Settings.Default.DbPath;
             }
-            string dbPath = GetDefaultDbPath();
+            dbPath = GetDefaultDbPath();
             if (File.Exists(dbPath))
                 return dbPath;
             dbPath = Path.Combine($"{binDirPath}{DATA_SUBPATH}", GAMELAUNCHER_DB_NAME);
@@ -1005,13 +1113,22 @@ namespace GameLauncher
             InitializeDbConnection(Properties.Settings.Default.DbPath);
             return true;
         }
-        private void UpdateRomInDb(Rom rom)
+        private void UpdateInDb(Rom rom)
         {
             if (rom == null)
                 return;
             string sql = $"INSERT OR REPLACE INTO Roms (NameSimplified, System, FilePath, NameOrg, Title, Compressed, ImagePath, Region, Language, Status, Version, NotesCore, RomSize, PreferredEmulator, QtyPlayers, Developer, ReleaseDate, Genre, NotesUser, FileFormat, Description, Checksum, CompressChecksum) VALUES" +
             $" (\"{rom.NameSimplified}\", {rom.System}, \"{rom.FilePath}\", \"{rom.NameOrg}\", \"{rom.Title}\", \"{rom.Compressed}\", \"{rom.ImagePath}\", \"{rom.Region}\", \"{rom.Language}\", \"{rom.Status}\", \"{rom.Version}\", \"{rom.NotesCore}\", {rom.RomSize}, {rom.PreferredEmulatorID}, " +
             $"{rom.QtyPlayers}, \"{rom.Developer}\", \"{rom.ReleaseDate}\", \"{rom.Genre}\", \"{rom.NotesUser}\", \"{rom.FileFormat}\", \"{rom.Description}\", \"{rom.Checksum}\", \"{rom.CompressChecksum}\")";
+            UpdateDB(sql);
+        }
+        private void UpdateInDb(GameSystem gameSystem)
+        {
+            if (gameSystem == null)
+                return;
+            string sql = $"INSERT OR REPLACE INTO GameSystems (Name, ID, ImageDirPath, RomDirPath, EmulatorPath1, EmulatorPath2, EmulatorPath3, EmulatorPath4, EmulatorPath5, EmulatorPath6, EmulatorPath7, EmulatorPath8, EmulatorPath9, EmulatorPath10) VALUES" +
+            $" (\"{gameSystem.Name}\", {gameSystem.ID}, \"{gameSystem.ImageDirPath}\", \"{gameSystem.RomDirPath}\", \"{gameSystem.EmulatorPaths[0]}\", \"{gameSystem.EmulatorPaths[1]}\", \"{gameSystem.EmulatorPaths[2]}\", \"{gameSystem.EmulatorPaths[3]}\", \"{gameSystem.EmulatorPaths[4]}\", " +
+            $"\"{gameSystem.EmulatorPaths[5]}\", \"{gameSystem.EmulatorPaths[6]}\", \"{gameSystem.EmulatorPaths[7]}\", \"{gameSystem.EmulatorPaths[8]}\", \"{gameSystem.EmulatorPaths[9]}\")";
             UpdateDB(sql);
         }
         private List<string> GetSystemNames(bool updateComboBoxSystem = true)
@@ -1312,7 +1429,9 @@ namespace GameLauncher
                 if (trimSpaces == true)
                     name = name.Trim(' ');//IE: "GameName " to "GameName"
             }
- 
+
+            name = Regex.Replace(name, @"\.[a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]?$", "");
+
             return name;
         }
         private string GetImageChecksum(string filePath) => Properties.Settings.Default.DoImageChecksum ? GetChecksumStr(filePath) : "";
@@ -1556,6 +1675,8 @@ namespace GameLauncher
                 string execFilePath = GetShortcutTargetFile(f);
                 if (execFilePath != null)
                 {
+                    if (!File.Exists(execFilePath))
+                        continue;
                     emulatorPaths.EmulatorPaths[index] = execFilePath;
                     index += 1;
                     if (index == EmulatorExecutables.MAX_EMULATOR_EXECUTABLES)
@@ -1565,6 +1686,8 @@ namespace GameLauncher
             string[] execFiles = Directory.GetFiles(path, "*.exe", SearchOption.AllDirectories);
             foreach (string f in execFiles)
             {
+                if (f.Contains("setup") || f.Contains("install") || f.Contains("unins00"))
+                    continue;
                 emulatorPaths.EmulatorPaths[index] = f;
                 index += 1;
                 if (index == EmulatorExecutables.MAX_EMULATOR_EXECUTABLES)
@@ -1588,9 +1711,16 @@ namespace GameLauncher
             }
             return ReturnStr;
         }
+        public static string GetFileNameWithoutExtensionAndWithoutBin(string path)
+        {
+            path = Path.GetFileNameWithoutExtension(path);
+            if (path != null && path.Contains("."))
+                path = Regex.Replace(path, @"\.[a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]?$", "");
+            return path;
+        }
         private Rom GetRomDetails(string romFilePath, int systemIndex, string emulatorDir, long RomSize)
         {// ToDo: This function is too big, and should be split into multiple sub functions
-            string NameOrg = Path.GetFileNameWithoutExtension(romFilePath); // f.Substring(imgPath.Length + 1);
+            string NameOrg = GetFileNameWithoutExtensionAndWithoutBin(romFilePath); // f.Substring(imgPath.Length + 1);
             string NameSimplified = ConvertToSimplifiedName(NameOrg);
             string Compressed = ConvertToSimplifiedName(NameOrg, true, true);
             string Title = ConvertToSimplifiedName(NameOrg, 
@@ -1935,7 +2065,9 @@ namespace GameLauncher
             myListView.Enabled = myListView.Visible  = display == false;
             toolStripComboBoxSystem.Enabled  = display == false;
             toolStripComboBoxIconDisplay.Enabled  = display == false;
-            advancedOptionsToolStripMenuItem.Enabled  = display == false;
+            toolStripMenuItem_ROMParentMenu.Enabled = display == false;
+            toolStripMenuItem_ImagesParentMenu.Enabled = display == false;
+            toolStripMenuItem_MiscUtilParentMenu.Enabled = display == false;
             settingsToolStripMenuItem.Enabled  = display == false;
             if (display)
             {
@@ -1974,6 +2106,8 @@ namespace GameLauncher
         }
         private void DeleteImageList(string systemName)
         {
+            if (systemName == null)
+                return;
             string imageList1Path = GetImageListFile(systemName, 1);
             string imageList2Path = GetImageListFile(systemName, 2);
             if (File.Exists(imageList1Path))
@@ -1982,6 +2116,7 @@ namespace GameLauncher
                 File.Delete(imageList2Path);
             previousCollections.Remove(systemName);
         }
+        private void DeleteImageList(int systemID) => DeleteImageList(GetSystemNameByID(systemID));
         private void DeleteImageList()
         {
             List<string> SystemNames = GetSystemNames(false);
@@ -2044,7 +2179,9 @@ namespace GameLauncher
             if (systemName.Length == 0)
             {
                 toolStripMenuItemChangeDefaultEmulator.Enabled = false;
-                advancedOptionsToolStripMenuItem.Enabled = false;
+                toolStripMenuItem_ROMParentMenu.Enabled = false;
+                toolStripMenuItem_ImagesParentMenu.Enabled = false;
+                toolStripMenuItem_MiscUtilParentMenu.Enabled = false;
             }
             else
             {
@@ -2361,13 +2498,17 @@ namespace GameLauncher
         {
             if (Properties.Settings.Default.disableAdvanceOptions)
             {
-                advancedOptionsToolStripMenuItem.Enabled = false;
+                toolStripMenuItem_ROMParentMenu.Enabled = false;
+                toolStripMenuItem_ImagesParentMenu.Enabled = false;
+                toolStripMenuItem_MiscUtilParentMenu.Enabled = false;
                 contextMenuStrip1.Enabled = false;
                 toolStripMenuItemChangeDefaultEmulator.Enabled = false;
             }
             else
             {
-                advancedOptionsToolStripMenuItem.Enabled = true;
+                toolStripMenuItem_ROMParentMenu.Enabled = true;
+                toolStripMenuItem_ImagesParentMenu.Enabled = true;
+                toolStripMenuItem_MiscUtilParentMenu.Enabled = true;
                 contextMenuStrip1.Enabled = true;
                 toolStripMenuItemChangeDefaultEmulator.Enabled = true;
             }
@@ -2387,6 +2528,39 @@ namespace GameLauncher
                 {
                     if (rom.FilePath == key)
                         return rom;
+                }
+            }
+            return null;
+        }
+        private GameSystem GetGameSystem(int systemID) => GetGameSystem(GetSystemNameByID(systemID));
+        private GameSystem GetGameSystem(string systemName = null)
+        {
+            if (systemName == null)
+                systemName = toolStripComboBoxSystem.Text;
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT Name, ImageDirPath, RomDirPath, ID, EmulatorPath1, EmulatorPath2, EmulatorPath3, EmulatorPath4, EmulatorPath5, EmulatorPath6, EmulatorPath7, EmulatorPath8, EmulatorPath9, EmulatorPath10 FROM GameSystems WHERE Name like \"{systemName}\"";
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int i = 0;
+                    string Name = reader.GetString(i++);
+                    string ImageDirPath = reader.GetString(i++);
+                    string RomDirPath = reader.GetString(i++);
+                    int ID = reader.GetInt32(ordinal: i++);
+                    EmulatorExecutables emulatorExecutables = new EmulatorExecutables();
+                    emulatorExecutables.EmulatorPaths[0] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[1] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[2] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[3] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[4] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[5] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[6] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[7] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[8] = reader.GetString(i++);
+                    emulatorExecutables.EmulatorPaths[9] = reader.GetString(i++);
+
+                    return new GameSystem( Name, RomDirPath, ImageDirPath, emulatorExecutables, ID);
                 }
             }
             return null;
@@ -2551,9 +2725,9 @@ namespace GameLauncher
                 DeleteRomFromDb(saveFileDialog.FileName);
             DeleteRomFromDb(rom.FilePath); // Do this to make sure old record is remove before insert
             rom.FilePath = saveFileDialog.FileName;
-            UpdateRomInDb(rom);
+            UpdateInDb(rom);
             MessageBox.Show($"ROM '{rom.Title}' renamed to '{saveFileDialog.FileName}'.");
-            DeleteImageList(toolStripComboBoxSystem.Text);
+            DeleteImageList(rom.System);
         }
         private void myListViewContextMenu_DeleteROM_Click(object sender, EventArgs e)
         {
@@ -2564,7 +2738,7 @@ namespace GameLauncher
             {
                 File.Delete(rom.FilePath);
                 DeleteRomFromDb(rom.FilePath);
-                DeleteImageList(toolStripComboBoxSystem.Text);
+                DeleteImageList(rom.System);
             }
         }
         private void myListViewContextMenu_AssignPreferredEmulator_Click(object sender, EventArgs e)
@@ -2623,7 +2797,7 @@ namespace GameLauncher
             if (emulatorIndex != -1)
             {
                 rom.PreferredEmulatorID = emulatorIndex;
-                UpdateRomInDb(rom);
+                UpdateInDb(rom);
                 MessageBox.Show($"Emulator updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -2651,9 +2825,9 @@ namespace GameLauncher
                 return;
             }
             rom.ImagePath = saveFileDialog.FileName;
-            UpdateRomInDb(rom);
+            UpdateInDb(rom);
             MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
-            DeleteImageList(toolStripComboBoxSystem.Text);
+            DeleteImageList(rom.System);
         }
         private void myListViewContextMenu_ChangeTitle_Click(object sender, EventArgs e)
         {
@@ -2663,8 +2837,8 @@ namespace GameLauncher
             if (inputForm.Ok)
             {
                 rom.Title = inputForm.Value; 
-                UpdateRomInDb(rom);
-                DeleteImageList(toolStripComboBoxSystem.Text);
+                UpdateInDb(rom);
+                DeleteImageList(rom.System);
             }
         }
         private void myListView_MouseClick(object sender, MouseEventArgs e)
@@ -2759,11 +2933,6 @@ namespace GameLauncher
         }
         #endregion /////////////////////////////////////////////////////////////////////////////////
 
-        private void advancedOptionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormAdvance formUtil = new FormAdvance(this);
-            formUtil.ShowDialog();
-        }
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form_Settings form_Settings = new Form_Settings();
@@ -2781,7 +2950,6 @@ namespace GameLauncher
             SetAdvanceOptions();
         }
         private void toolStripMenuItemChangeDefaultEmulator_Click(object sender, EventArgs e) => SetEmulatorExecute();
-
         private void System_Change(object sender, EventArgs e)
         {
             SavePersistenceVariable("toolStripComboBoxSystem", toolStripComboBoxSystem.Text);
@@ -2889,7 +3057,6 @@ namespace GameLauncher
             string title = System.Text.Encodings.Web.UrlEncoder.Default.Encode(rom.Title);
             System.Diagnostics.Process.Start($"https://www.google.com/search?q={title}+site:launchbox-app.com");
         }
-
         private void toolStripMenuItemSearchAll_Click(object sender, EventArgs e) 
         {
             if (toolStripTextBox_Filter.Text.Length == 0)
@@ -2912,6 +3079,55 @@ namespace GameLauncher
             romList = romListAllSystem;
             DisplaySystemIcons("");
         }
+        private void ToolStripMenuItemChangeViewROMDetails_Click(object sender, EventArgs e)
+        {
+            Rom rom = GetSelectedROM();
+            RomDetailsEditor romDetails = new RomDetailsEditor(rom);
+            romDetails.ShowDialog();
+            if (romDetails.Ok)
+            {
+                UpdateInDb(rom);
+                DeleteImageList(rom.System);
+            }
+        }
+        private void changeViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GameSystem gameSystem = GetGameSystem();
+            GameSystemEditor gameSystemEditor = new GameSystemEditor(gameSystem);
+            gameSystemEditor.ShowDialog();
+            if (gameSystemEditor.Ok)
+            {
+                UpdateInDb(gameSystem);
+            }
+        }
+        private void toolStripMenuItem_RegexRenameFiles_Click(object sender, EventArgs e)
+        {
+            FormRegexRenameFiles formRegexRenameFiles = new FormRegexRenameFiles();
+            formRegexRenameFiles.ShowDialog();
+        }
+        private void toolStripMenuItemRescanAllRoms_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateRedoDbInit), GetDelegateAction(this, null));
+        private void toolStripMenuItemScanNewRomsAllSystems_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateScanForNewRomsOnAllSystems), GetDelegateAction(this, false));
+        private void toolStripMenuItemScanSelectedSystemNewRoms_Click(object sender, EventArgs e)=> BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, null));
+        private void toolStripMenuItem_CleanScanSelectedSystemNewRoms_Click(object sender, EventArgs e)
+        {
+            DialogResult results = MessageBox.Show($"Are you sure you want to clean and rescan all ROM's for game console system {toolStripComboBoxSystem.Text}?\nThis will first remove all {toolStripComboBoxSystem.Text} ROM details from GameLauncher database, which may include any user edited information?", "Delete ROM's from DB", MessageBoxButtons.YesNo);
+            if (results == DialogResult.No)
+                return;
+            DeleteSystemRomFromDb(GetSystemIndex(toolStripComboBoxSystem.Text));
+            BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, null));
+        }
+        private void toolStripMenuItem_CreateImageListCache_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateCreateCacheForDisplaySystemIcons), GetDelegateAction(this, null));
+        private void toolStripMenuItem_ScanSelectedSystemRomsAndImages_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main(DelegateScanForNewRomsOnAllSystems), GetDelegateAction(this, true));
+        private void toolStripMenuItem_DeleteDupImagesNotInDB_Click(object sender, EventArgs e)
+        {
+            DialogResult results = MessageBox.Show($"Do you want to delete all image files that are not in the GameLauncher database?\nClick YES for silent deletion.\nClick NO to DELETE the image files but give a prompt before each deletion.\nClick CANCEL to exit this option (No Deletions).", "Delete Image", MessageBoxButtons.YesNoCancel);
+            if (results == DialogResult.Cancel)
+                return;
+            BeginInvoke(new MyDelegateForm_Main(DelegateDeleteImageFilesNotInDatabase), GetDelegateAction(this, results == DialogResult.Yes));
+        }
+        private void toolStripMenuItem_DeleteDupRomsByTitleSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInSameSystem));
+        private void toolStripMenuItem_DeleteDupRomsByTitleAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInAnySystem));
+        private void toolStripMenuItem_DeleteDupRomsByChecksum_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateChecksum));
     }// End of Form1 class
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2943,7 +3159,6 @@ namespace GameLauncher
         public string Name;
         public string RomDirPath;
         public string ImageDirPath;
-
         public int ID;
         public GameSystem(string name, string romPath, string imgPath, EmulatorExecutables paths, int id)
         {
@@ -3132,10 +3347,10 @@ namespace GameLauncher
         void ExtractToDirectory(string dirName);
         string[] GetNames();
     }
-    public class ZipAltCompressArchive : CompressArchiveInterface
+    public class ZipCompressArchive : CompressArchiveInterface
     {
         private ZipArchive archive;
-        public ZipAltCompressArchive(ZipArchive _archive)
+        public ZipCompressArchive(ZipArchive _archive)
         {
             archive = _archive;
         }
@@ -3262,10 +3477,10 @@ namespace GameLauncher
         public string[] GetNames() => GetNamesFromDir();
         public void Dispose() => archive.Dispose();
     }
-    public class ZipCompressArchive : CompressArchiveInterface
+    public class ZipAltCompressArchive : CompressArchiveInterface
     {
         private Archive archive;
-        public ZipCompressArchive(Archive _archive)
+        public ZipAltCompressArchive(Archive _archive)
         {
             archive = _archive;
         }
@@ -3284,11 +3499,13 @@ namespace GameLauncher
     }
     public class CreateCompressArchiveInterface 
     {
-        public static CompressArchiveInterface Create(string fileName)
+        public static CompressArchiveInterface Create(string fileName, bool doAltZip = false)
         {
             string ext = Path.GetExtension(fileName).ToLower();
+            if (ext.Equals(".zip") && doAltZip)
+                return new ZipAltCompressArchive(new Archive(fileName));
             if (ext.Equals(".zip"))
-                return new ZipCompressArchive(new Archive(fileName));
+                return new ZipCompressArchive(ZipFile.OpenRead(fileName));
             if (ext.Equals(".7z") || ext.Equals(".7zip"))
                 return new SevenZipCompressArchive(new SevenZipArchive(fileName));
             if (ext.Equals(".rar"))
