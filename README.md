@@ -122,8 +122,8 @@ Below are possible future plan updates.
 * [0.9.1] Add decompression support for ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz"
 * [0.9.1] ROM details editor.
 * [0.9.1] GameSystem editor.
-* [0.9.1 ???] Add support for multiple source paths for searching games.
 * [0.9.1] Move advance option dialog to the main menu.
+* [0.9.1 ???] Add support for multiple source paths for searching games.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
 * Filter out string "2-in-1 - ","3-in-1 - " from compressed name for ROM's in DB.
