@@ -259,6 +259,9 @@
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
+    <AdditionalFiles Include="e_sqlite3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
     <Content Include="GameController.png" />
     <Content Include="GameLauncher.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -119,6 +119,8 @@ namespace GameLauncher
         private List<int> startPosList = null;
         private int miscQty = 0;
         private string lastSearchStr = "";
+        private string lastDirSelected = "";
+        private bool gavePreviousWarningOnImageChangeNotTakeAffect = false;
         // -------------------------------------------------------------------------------------------------------------------------------------
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Modifiable static variables used by static methods
@@ -550,7 +552,7 @@ namespace GameLauncher
         public delegate void MyDelegateForm_Main(Form_Main form_Main, bool arg);
         public void DelegateDisplayOrHideProgressGroup(Form_Main form_Main, bool display) => form_Main.DisplayOrHideProgressGroup(display);
         public void DelegateScanForNewRomsOnAllSystems(Form_Main form_Main, bool arg) => form_Main.ScanForNewRomsOnAllSystems(arg);
-        public void DelegateRescanSelectedSystem(Form_Main form_Main, bool arg) => form_Main.RescanSelectedSystem();
+        public void DelegateRescanSelectedSystem(Form_Main form_Main, bool arg) => form_Main.RescanSelectedSystem(null, arg);
         public void DelegateDeleteImageList(Form_Main form_Main, bool arg) => form_Main.DeleteImageList();
         public void DelegateCreateCacheForDisplaySystemIcons(Form_Main form_Main, bool arg) => form_Main.CreateCacheForDisplaySystemIcons();
         public void DelegateDeleteImageFilesNotInDatabase(Form_Main form_Main, bool arg) => form_Main.DeleteImageFilesNotInDatabase(arg);
@@ -866,6 +868,14 @@ namespace GameLauncher
             return imgFile;
         }
         private string GetImagePathInDb(string imgFile) => AddImagePathToDb(imgFile, false, true, true);
+        private void GetImagesAndWait(string imagePath)
+        {
+            using (new CursorWait())
+            {
+                GetImages(imagePath, true);
+                MessageBox.Show($"Image scan complete for path {imagePath}");
+            }
+        }
         private void GetImages(string imgPath, bool isMainThread = false)
         {
             if (Directory.Exists(imgPath))
@@ -1257,6 +1267,14 @@ namespace GameLauncher
             if (systemName == null)
                 systemName = toolStripComboBoxSystem.Text;
             string sql = $"SELECT RomDirPath FROM GameSystems WHERE Name like \"{systemName}\"";
+            return GetFirstColStr(sql);
+        }
+        private string GetGameSystemImagePath(int systemID) => GetGameSystemImagePath(GetSystemNameByID(systemID));
+        private string GetGameSystemImagePath(string systemName = null)
+        {
+            if (systemName == null)
+                systemName = toolStripComboBoxSystem.Text;
+            string sql = $"SELECT ImageDirPath FROM GameSystems WHERE Name like \"{systemName}\"";
             return GetFirstColStr(sql);
         }
         private void SetEmulatorExecute(string system, string emulatorExecutable, int emulatorIndex = 1) => UpdateDB($"UPDATE GameSystems SET EmulatorPath{emulatorIndex} = \"{emulatorExecutable}\" WHERE Name = \"{system}\"");
@@ -2415,7 +2433,7 @@ namespace GameLauncher
         }
         public void ScanForNewRomsOnAllSystems(bool doImageScan = false)
         {
-            foreach(var systemName in toolStripComboBoxSystem.Items)
+            foreach (var systemName in toolStripComboBoxSystem.Items)
                 RescanSelectedSystem(systemName.ToString(), doImageScan);
         }
         public bool ValidatePropertiesSettings(bool checkPathsExists = false)
@@ -2809,6 +2827,11 @@ namespace GameLauncher
             saveFileDialog.Title = $"Select new image file to assign for ROM '{rom.Title}'";
             saveFileDialog.FileName = rom.ImagePath;
             saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(rom.ImagePath);
+            string romSystemImageDir = GetGameSystemImagePath(rom.System);
+            if (!saveFileDialog.InitialDirectory.Contains(romSystemImageDir, StringComparison.OrdinalIgnoreCase) && lastDirSelected.Length > 0)
+                saveFileDialog.InitialDirectory = lastDirSelected;
+            if (rom.ImagePath.Contains(DEFAULTIMAGEFILENAME))
+                saveFileDialog.FileName = $"{rom.Title}";
             saveFileDialog.CheckFileExists = true;
             saveFileDialog.OverwritePrompt = false;
             DialogResult results = saveFileDialog.ShowDialog();
@@ -2825,8 +2848,11 @@ namespace GameLauncher
                 return;
             }
             rom.ImagePath = saveFileDialog.FileName;
+            lastDirSelected = Path.GetDirectoryName(rom.ImagePath);
             UpdateInDb(rom);
-            MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
+            if (!gavePreviousWarningOnImageChangeNotTakeAffect)
+                MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
+            gavePreviousWarningOnImageChangeNotTakeAffect = true;
             DeleteImageList(rom.System);
         }
         private void myListViewContextMenu_ChangeTitle_Click(object sender, EventArgs e)
@@ -3107,17 +3133,27 @@ namespace GameLauncher
         }
         private void toolStripMenuItemRescanAllRoms_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateRedoDbInit), GetDelegateAction(this, null));
         private void toolStripMenuItemScanNewRomsAllSystems_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateScanForNewRomsOnAllSystems), GetDelegateAction(this, false));
-        private void toolStripMenuItemScanSelectedSystemNewRoms_Click(object sender, EventArgs e)=> BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, null));
+        private void toolStripMenuItemScanSelectedSystemNewRoms_Click(object sender, EventArgs e)=> BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, false));
         private void toolStripMenuItem_CleanScanSelectedSystemNewRoms_Click(object sender, EventArgs e)
         {
             DialogResult results = MessageBox.Show($"Are you sure you want to clean and rescan all ROM's for game console system {toolStripComboBoxSystem.Text}?\nThis will first remove all {toolStripComboBoxSystem.Text} ROM details from GameLauncher database, which may include any user edited information?", "Delete ROM's from DB", MessageBoxButtons.YesNo);
             if (results == DialogResult.No)
                 return;
             DeleteSystemRomFromDb(GetSystemIndex(toolStripComboBoxSystem.Text));
-            BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, null));
+            BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, false));
+        }
+        private void toolStripMenuItem_ScanSelectedSystemNewImages_Click(object sender, EventArgs e) => GetImagesAndWait(GetGameSystemImagePath());
+        private void toolStripMenuItem_ImageSearchSelectedDir_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = Properties.Settings.Default.EmulatorsBasePath;
+            fbd.Description = "Enter path to search images.";
+            if (fbd.ShowDialog() == DialogResult.OK)
+                GetImagesAndWait(fbd.SelectedPath);
         }
         private void toolStripMenuItem_CreateImageListCache_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateCreateCacheForDisplaySystemIcons), GetDelegateAction(this, null));
-        private void toolStripMenuItem_ScanSelectedSystemRomsAndImages_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main(DelegateScanForNewRomsOnAllSystems), GetDelegateAction(this, true));
+        private void toolStripMenuItem_ScanSelectedSystemRomsAndImages_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, true));
+        private void toolStripMenuItem_ScanAllSystemsNewRomsAndImages_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main(DelegateScanForNewRomsOnAllSystems), GetDelegateAction(this, true));
         private void toolStripMenuItem_DeleteDupImagesNotInDB_Click(object sender, EventArgs e)
         {
             DialogResult results = MessageBox.Show($"Do you want to delete all image files that are not in the GameLauncher database?\nClick YES for silent deletion.\nClick NO to DELETE the image files but give a prompt before each deletion.\nClick CANCEL to exit this option (No Deletions).", "Delete Image", MessageBoxButtons.YesNoCancel);
@@ -3128,6 +3164,7 @@ namespace GameLauncher
         private void toolStripMenuItem_DeleteDupRomsByTitleSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInSameSystem));
         private void toolStripMenuItem_DeleteDupRomsByTitleAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInAnySystem));
         private void toolStripMenuItem_DeleteDupRomsByChecksum_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateChecksum));
+
     }// End of Form1 class
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

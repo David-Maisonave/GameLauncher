@@ -69,6 +69,8 @@
             this.toolStripMenuItem_DeleteDupRomsByChecksum = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ImagesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateImageListCache = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ImageSearchSelectedDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ScanSelectedSystemNewImages = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DeleteDupImagesNotInDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_MiscUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +79,8 @@
             this.toolStripMenuItem_FilterLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -444,7 +448,11 @@
             // 
             this.toolStripMenuItem_ImagesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_CreateImageListCache,
+            this.toolStripMenuItem_ImageSearchSelectedDir,
+            this.toolStripMenuItem_ScanSelectedSystemNewImages,
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages,
+            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages,
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages,
             this.toolStripMenuItem_DeleteDupImagesNotInDB});
             this.toolStripMenuItem_ImagesParentMenu.Name = "toolStripMenuItem_ImagesParentMenu";
             this.toolStripMenuItem_ImagesParentMenu.Size = new System.Drawing.Size(251, 22);
@@ -456,6 +464,20 @@
             this.toolStripMenuItem_CreateImageListCache.Size = new System.Drawing.Size(330, 22);
             this.toolStripMenuItem_CreateImageListCache.Text = "Create Image-List Cache";
             this.toolStripMenuItem_CreateImageListCache.Click += new System.EventHandler(this.toolStripMenuItem_CreateImageListCache_Click);
+            // 
+            // toolStripMenuItem_ImageSearchSelectedDir
+            // 
+            this.toolStripMenuItem_ImageSearchSelectedDir.Name = "toolStripMenuItem_ImageSearchSelectedDir";
+            this.toolStripMenuItem_ImageSearchSelectedDir.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ImageSearchSelectedDir.Text = "Do image search in selected directory";
+            this.toolStripMenuItem_ImageSearchSelectedDir.Click += new System.EventHandler(this.toolStripMenuItem_ImageSearchSelectedDir_Click);
+            // 
+            // toolStripMenuItem_ScanSelectedSystemNewImages
+            // 
+            this.toolStripMenuItem_ScanSelectedSystemNewImages.Name = "toolStripMenuItem_ScanSelectedSystemNewImages";
+            this.toolStripMenuItem_ScanSelectedSystemNewImages.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ScanSelectedSystemNewImages.Text = "Scan selected system for new images";
+            this.toolStripMenuItem_ScanSelectedSystemNewImages.Click += new System.EventHandler(this.toolStripMenuItem_ScanSelectedSystemNewImages_Click);
             // 
             // toolStripMenuItem_ScanSelectedSystemRomsAndImages
             // 
@@ -482,7 +504,7 @@
             // toolStripMenuItem_RegexRenameFiles
             // 
             this.toolStripMenuItem_RegexRenameFiles.Name = "toolStripMenuItem_RegexRenameFiles";
-            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItem_RegexRenameFiles.Text = "Regex Rename Files";
             this.toolStripMenuItem_RegexRenameFiles.Click += new System.EventHandler(this.toolStripMenuItem_RegexRenameFiles_Click);
             // 
@@ -528,6 +550,19 @@
     "games.\r\nSupports SQL wild characters like % and _.\r\nNo REGEX support!\r\n";
             this.toolStripMenuItemSearchAll.Click += new System.EventHandler(this.toolStripMenuItemSearchAll_Click);
             // 
+            // toolStripMenuItem_ScanAllSystemNewRomsAndImages
+            // 
+            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Name = "toolStripMenuItem_ScanAllSystemNewRomsAndImages";
+            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Text = "Scan for new ROM\'s and images on all systems";
+            // 
+            // toolStripMenuItem_ScanAllSystemsNewRomsAndImages
+            // 
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Name = "toolStripMenuItem_ScanAllSystemsNewRomsAndImages";
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Text = "Scan all systems for new ROM\'s and images";
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Click += new System.EventHandler(this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages_Click);
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -540,7 +575,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(598, 394);
             this.Name = "Form_Main";
-            this.Text = "Game Launcher [Ver-0.9.1] by David Maisonave Sr";
+            this.Text = "Game Launcher [Ver-0.9.2] by David Maisonave Sr";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.myListView_OnFormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.contextMenuStrip1.ResumeLayout(false);
@@ -602,6 +637,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MiscUtilParentMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RegexRenameFiles;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CleanScanSelectedSystemNewRoms;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ImageSearchSelectedDir;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ScanSelectedSystemNewImages;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ScanAllSystemNewRomsAndImages;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ScanAllSystemsNewRomsAndImages;
     }
 }
 

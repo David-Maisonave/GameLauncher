@@ -14,6 +14,8 @@
 - Move options in advance option dialog to the main menu.
 - Support for multiple source paths for searching games. This is included in 0.9.1, but it has not be fully tested.
 ### 0.9.2
-- 
-- 
+- Fixed bug with missing sqlite DLL.
+- General image search
+- Selected system image search
+- Fixed bug with scan selected rom and image search where it was performing full scan.
 - 
