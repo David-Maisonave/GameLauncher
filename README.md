@@ -126,6 +126,8 @@ Below are possible future plan updates.
 * [0.9.1 ???] Add support for multiple source paths for searching games.
 * [1.0.0] Filter out string "2-in-1 - " and "3-in-1 - " from front of name in compressed name for ROM's in DB.
 * [1.0.0] Filter out string "Disney's" and "LEGO" from front of name in compressed name for ROM's in DB.
+* [1.0.0] Add Year to ROM database
+* [1.0.0] Add rating to ROM database
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
@@ -133,5 +135,3 @@ Below are possible future plan updates.
 * Add option to advance menu to compress all ROM files to zip.
 * Add option to view preview/play image over box-art image.
 * Add multithreading progressbar code for when database is initialized. Each system scan should have two threads. One for ROM scans and the other for image scans.
-* Add Year to ROM database
-* Add rating to ROM database
