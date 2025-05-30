@@ -124,9 +124,12 @@ Below are possible future plan updates.
 * [0.9.1] GameSystem editor.
 * [0.9.1] Move advance option dialog to the main menu.
 * [0.9.1 ???] Add support for multiple source paths for searching games.
+* [1.0.0] Filter out string "2-in-1 - " and "3-in-1 - " from front of name in compressed name for ROM's in DB.
+* [1.0.0] Filter out string "Disney's" and "LEGO" from front of name in compressed name for ROM's in DB.
+* [1.0.0] Add Year to ROM database
+* [1.0.0] Add rating to ROM database
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
-* Filter out string "2-in-1 - ","3-in-1 - " from compressed name for ROM's in DB.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
 * Add pagination to game console systems having over 2000 ROM's.
 * Add option to advance menu to compress all ROM files to zip.
