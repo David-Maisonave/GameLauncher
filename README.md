@@ -114,24 +114,15 @@ The checksum options are used to help detect duplicate image and ROM files. Chan
 
 ## ToDo
 Below are possible future plan updates.
-* [0.9.1] Add option under advance option to change the default emulator for a given game console system.
-* [0.9.1] Convert main window combobox to menu strip.
-* [0.9.1] Add decompression option for emulators like DuckStation which don't support ZIP files.
-* [0.9.1] Add filter option.
-* [0.9.1] Add option to context menu to open link to launchbox-app.com with the ROM title name, or open google link with title. Example: https://www.google.com/search?q=Disney+Aladdin+site%253Alaunchbox-app.com
-* [0.9.1] Add decompression support for ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz"
-* [0.9.1] ROM details editor.
-* [0.9.1] GameSystem editor.
-* [0.9.1] Move advance option dialog to the main menu.
-* [0.9.1 ???] Add support for multiple source paths for searching games.
+* [0.9.1 ???] Add support for multiple source paths for searching games. Item has been added but not tested.
 * [1.0.0] Filter out string "2-in-1 - " and "3-in-1 - " from front of name in compressed name for ROM's in DB.
 * [1.0.0] Filter out string "Disney's" and "LEGO" from front of name in compressed name for ROM's in DB.
 * [1.0.0] Add Year to ROM database
 * [1.0.0] Add rating to ROM database
+* [1.0.0 ???] Add pagination to game console systems having over 2000 ROM's.
+* Add option to view preview/play image over box-art image.
 * Add option to Settings to allow changing default **images** and **roms** sub folder.
 * Add option to password protected advance option.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
-* Add pagination to game console systems having over 2000 ROM's.
 * Add option to advance menu to compress all ROM files to zip.
-* Add option to view preview/play image over box-art image.
 * Add multithreading progressbar code for when database is initialized. Each system scan should have two threads. One for ROM scans and the other for image scans.
