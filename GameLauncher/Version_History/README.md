@@ -18,4 +18,13 @@
 - General image search
 - Selected system image search
 - Fixed bug with scan selected rom and image search where it was performing full scan.
+### 1.0
+- Added GameDetails.db database which contains ROM details pulled from other sources.
+- Made both options for delete duplicate roms by title deselect largest size ROM by default.
+- Added following options to menu [Misc Util]->[Database Util]
+    - Reset title and compress DB
+	- Reset compress names in ROM's and images DB
+	- Populate GameDetails DB
+	- Add GameDetails data to GameLauncher DB
+	- Search for image matches for games missing image
 - 

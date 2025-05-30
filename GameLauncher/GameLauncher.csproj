@@ -161,6 +161,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompressArchiveInterface.cs" />
     <Compile Include="FormRomsToDelete.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -191,32 +192,33 @@
     <Compile Include="FormInput.Designer.cs">
       <DependentUpon>FormInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAdvance.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormAdvance.Designer.cs">
-      <DependentUpon>FormAdvance.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormRegexRenameFiles.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormRegexRenameFiles.Designer.cs">
       <DependentUpon>FormRegexRenameFiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameDetails.cs" />
     <Compile Include="GameSystemEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GameSystemEditor.Designer.cs">
       <DependentUpon>GameSystemEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiscSupportingClasses.cs" />
+    <Compile Include="MiscSupportingClasses.Designer.cs">
+      <DependentUpon>MiscSupportingClasses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rom.cs" />
     <Compile Include="RomDetailsEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RomDetailsEditor.Designer.cs">
       <DependentUpon>RomDetailsEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerializableImageList.cs" />
     <Compile Include="TempDirStorage.cs" />
     <EmbeddedResource Include="FormRomsToDelete.resx">
       <DependentUpon>FormRomsToDelete.cs</DependentUpon>
@@ -232,9 +234,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormInput.resx">
       <DependentUpon>FormInput.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormAdvance.resx">
-      <DependentUpon>FormAdvance.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRegexRenameFiles.resx">
       <DependentUpon>FormRegexRenameFiles.cs</DependentUpon>
@@ -262,13 +261,16 @@
     <AdditionalFiles Include="e_sqlite3.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
-    <Content Include="GameController.png" />
-    <Content Include="GameLauncher.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
+    <Content Include="Properties\GameDetails.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\GameDetails.sqbpro" />
     <Content Include="Properties\GameLauncher.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\N64.rdx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">
@@ -332,11 +334,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.ico" />
+    <Content Include="program.ico" />
     <Content Include="Properties\GameController.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="program.ico" />
+    <Content Include="Properties\MultiplayerGameList.Atari.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\MultiplayerGameList.NES.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\MultiplayerGameList.Sega.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\MultiplayerGameList.SNES.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

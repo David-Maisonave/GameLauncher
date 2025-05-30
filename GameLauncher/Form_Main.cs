@@ -29,11 +29,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
 
 using static System.Windows.Forms.ListViewItem;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
 namespace GameLauncher
 {
     public partial class Form_Main : Form
@@ -41,7 +41,7 @@ namespace GameLauncher
         #region const or readonly variables
         private const string SQL_CREATETABLES =
                 "CREATE TABLE \"GameSystems\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\t\"RomDirPath\"\tTEXT NOT NULL,\r\n\t\"ImageDirPath\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath1\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath2\"\tTEXT,\r\n\t\"EmulatorPath3\"\tTEXT,\r\n\t\"EmulatorPath4\"\tTEXT,\r\n\t\"EmulatorPath5\"\tTEXT,\r\n\t\"EmulatorPath6\"\tTEXT,\r\n\t\"EmulatorPath7\"\tTEXT,\r\n\t\"EmulatorPath8\"\tTEXT,\r\n\t\"EmulatorPath9\"\tTEXT,\r\n\t\"EmulatorPath10\"\tTEXT,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
-                "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\t\"Checksum\"\tTEXT,\r\n\t\"CompressChecksum\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
+                "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\t\"Year\"\tINTEGER,\r\n\t\"Rating\"\tTEXT,\r\n\t\"Checksum\"\tTEXT,\r\n\t\"CompressChecksum\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
                 "CREATE TABLE \"Images\" (\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Checksum\"\tTEXT\r\n);\r\n" +
                 "CREATE TABLE \"PersistenceVariables\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Value\"\tTEXT,\r\n\t\"ValueInt\"\tINTEGER,\r\n\tPRIMARY KEY(\"Name\")\r\n);\r\n" +
                 "CREATE TABLE \"Roms_UserChanges\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
@@ -53,6 +53,9 @@ namespace GameLauncher
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"duckstation-qt-x64-ReleaseLTCG.exe\", 1, 0, \".cue\");\r\n" +
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"duckstation\", 1, 0, \".cue\");\r\n" +
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"NeoRAGE\",0, 1, \"\");\r\n" +
+                "\r\n";
+        private const string SQL_GAMEDETAILS_DB_CREATETABLES =
+                "CREATE TABLE \"GameDetails\" (\r\n\t\"System\"\tTEXT NOT NULL,\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"Year\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"Status\"\tTEXT,\r\n\t\"ImageFileName\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\t\"Rating\"\tTEXT,\r\n\tPRIMARY KEY(\"System\",\"Title\")\r\n);\r\n" +
                 "\r\n";
         public readonly string[] SUPPORTED_COMPRESSION_FILE = { ".zip", ".7z", ".7zip", ".rar", ".tar", ".gz", ".gzip", ".bz2", ".bzip", ".bzip2", ".lz", ".lzip" };
         public readonly string[] SUPPORTED_IMAGE_FILES = { "*.png", "*.bmp", "*.jpg", "*.jpeg", "*.tif" }; // These are the supported types according to following link: https://learn.microsoft.com/en-us/dotnet/api/system.drawing.image.fromfile?view=windowsdesktop-9.0&redirectedfrom=MSDN#overloads
@@ -95,6 +98,7 @@ namespace GameLauncher
         public const long MAX_SECONDS_TO_WAIT_DEFAULT = 2;
         public const string DEFAULTIMAGEFILENAME = "GameController.png";
         public const string GAMELAUNCHER_DB_NAME = "GameLauncher.db";
+        public const string GAMEDETAILS_DB_NAME = "GameDetails.db";
         public const string DATA_SUBPATH = @"data\";
         public const string GAMELAUNCHER_SUBPATH = @"GameLauncher\";
         // -------------------------------------------------------------------------------------------------------------------------------------
@@ -135,17 +139,10 @@ namespace GameLauncher
         // -----------------------------------
         private static bool cancelScan = false;
         public static SqliteConnection connection { get; private set; } = null;
+        public static SqliteConnection connection_GameDetails { get; private set; } = null;
         public static MD5 md5 { get; private set; } = MD5.Create();
         public static SHA256 sha256 { get; private set; } = SHA256.Create();
         // -------------------------------------------------------------------------------------------------------------------------------------
-        #endregion /////////////////////////////////////////////////////////////////////////////////
-        #region Class types
-        class SystemScanTaskData
-        {
-            public string systemName;
-            public string emulatorDir;
-            public EmulatorExecutables emulatorExecutables;
-        }
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Constructor and Form1_Shown
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -396,7 +393,7 @@ namespace GameLauncher
             while (threadJoyStickAborting == false)
             {
                 joystick.Poll();
-                if (threadJoyStickAborting == true && Properties.Settings.Default.useJoystickController == false)
+                if (threadJoyStickAborting && Properties.Settings.Default.useJoystickController == false)
                     return;
                 if (waitingShellExecuteToComplete)
                     continue;
@@ -594,15 +591,15 @@ namespace GameLauncher
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region SQL small supporting methods
         private bool CreateAndInitSqlTables() => UpdateDB(SQL_CREATETABLES) && UpdateDB(SQL_DB_INIT);
-        private static bool UpdateDB(string sql)
+        private static bool UpdateDB(string sql, SqliteConnection conn)
         {
-            if (connection == null)
+            if (conn == null)
                 return false;
             for (int i = 0; i < Properties.Settings.Default.MaxRetryDbExecute; ++i)
             {
                 try
                 {
-                    using (SqliteCommand command = new SqliteCommand(sql, connection))
+                    using (SqliteCommand command = new SqliteCommand(sql, conn))
                     {
                         int x = command.ExecuteNonQuery();
                         return x > 0;
@@ -610,20 +607,23 @@ namespace GameLauncher
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"UpdateDB exception thrown \"{ex.Message}\"!");
+                    Console.WriteLine($"UpdateDB exception thrown \"{ex.Message}\"!\nSQL={sql}");
                     Thread.Sleep(Properties.Settings.Default.DbRetryTimeoutInSeconds * 1000);
                 }
             }
             return false;
         }
+        private static bool UpdateDB(string sql) => UpdateDB(sql, connection);
         public static void DbErrorLogging(string processName, string message, string stack = "", string circumstances = "", int errorCode = 0) => UpdateDB($"INSERT OR REPLACE INTO ErrorLog (Process, Message, Code, Circumstances, Stack) VALUES (\"{processName}\", \"{message}\", {errorCode}, \"{circumstances}\", \"{stack}\")");
         private static void EraseOldErrorLogging(string processName = "%") => UpdateDB($"DELETE FROM ErrorLog WHERE Process like \"{processName}\"");
-        private static string GetFirstColStr(string sql, string defaultValue = "")
+        private static string GetFirstColStr(string sql, string defaultValue = "") => GetFirstColStr(sql, defaultValue, connection);
+        private static string GetFirstColStr(string sql, SqliteConnection conn) => GetFirstColStr(sql, "", conn);
+        private static string GetFirstColStr(string sql, string defaultValue, SqliteConnection conn)
         {
             // On failure, returns default value
             try
             {
-                using (SqliteCommand command = new SqliteCommand(sql, connection))
+                using (SqliteCommand command = new SqliteCommand(sql, conn))
                 {
                     using (SqliteDataReader reader = command.ExecuteReader())
                     {
@@ -641,12 +641,14 @@ namespace GameLauncher
             }
             return defaultValue;
         }
-        private static int GetFirstColInt(string sql, int defaultValue = -1)
+        private static int GetFirstColInt(string sql, int defaultValue = -1) => GetFirstColInt(sql, defaultValue, connection);
+        private static int GetFirstColInt(string sql, SqliteConnection conn) => GetFirstColInt(sql, -1, conn);
+        private static int GetFirstColInt(string sql, int defaultValue, SqliteConnection conn)
         {
             // On failure, returns default value
             try
             {
-                using (SqliteCommand command = new SqliteCommand(sql, connection))
+                using (SqliteCommand command = new SqliteCommand(sql, conn))
                 {
                     using (SqliteDataReader reader = command.ExecuteReader())
                     {
@@ -663,30 +665,6 @@ namespace GameLauncher
                 Console.WriteLine($"GetFirstColInt exception thrown \"{ex.Message}\"!");
             }
             return defaultValue;
-        }
-        private (int, string) GetIntAndStr(string sql, int defaultInt = -1, string defaultStr = null)
-        {
-            // On failure, returns default values
-            try 
-            { 
-                using (SqliteCommand command = new SqliteCommand(sql, connection))
-                {
-                    using (SqliteDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            int i = reader.GetInt32(0);
-                            string s = reader.GetString(1);
-                            return (i, s);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"GetIntAndStr exception thrown \"{ex.Message}\"!");
-            }
-            return (defaultInt, defaultStr);
         }
         private int GetImageIndexByPath(string FilePath) => GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{FilePath}\"");
         private int GetSystemIndex(string Name) => GetFirstColInt($"SELECT ID FROM GameSystems WHERE Name = \"{Name}\"");
@@ -743,6 +721,8 @@ namespace GameLauncher
                 connection.Open();
                 if (initDb)
                     CreateAndInitSqlTables();
+                connection_GameDetails = new SqliteConnection($"Filename={GetPropertyDataPath(GAMEDETAILS_DB_NAME)}");
+                connection_GameDetails.Open();
                 Properties.Settings.Default.DbPath = dbPath;
                 List<string> SystemNames = GetSystemNames();
                 if (SystemNames.Count < 1)
@@ -762,16 +742,28 @@ namespace GameLauncher
             }
             return true;
         }
-        private string GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed, string emulatorDir)
+        private string GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed, string emulatorDir) => GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed, emulatorDir, connection);
+        private string GetImageIndexByName(string NameSimplified, string NameOrg, string Title, string Compressed, string emulatorDir, SqliteConnection conn)
         {
-            string sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\" and FilePath like \"{emulatorDir}%\"";
+            string sql = $"SELECT FilePath FROM Images WHERE Title like \"{Title}\" and FilePath like \"{emulatorDir}%\"";
             string imgPath = "";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
+            if (NotEmpty(imgPath))
+                return imgPath;
+
+            sql = $"SELECT FilePath FROM Images WHERE Title like \"{Title}\"";
+            imgPath = GetFirstColStr(sql, conn);
+            if (NotEmpty(imgPath))
+                return imgPath;
+
+            sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\" and FilePath like \"{emulatorDir}%\"";
+            imgPath = "";
+            imgPath = GetFirstColStr(sql, conn);
             if (NotEmpty(imgPath))
                 return imgPath;
 
             sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameSimplified}\"";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
             if (NotEmpty(imgPath))
                 return imgPath;
 
@@ -780,13 +772,13 @@ namespace GameLauncher
                 string NameAfterHyphen = NameOrg.Substring(NameOrg.IndexOf("-") + 1);
                 string NameAfterHyphenSimple = ConvertToSimplifiedName(NameAfterHyphen);
                 sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameAfterHyphenSimple}\"";
-                imgPath = GetFirstColStr(sql);
+                imgPath = GetFirstColStr(sql, conn);
                 if (NotEmpty(imgPath))
                     return imgPath;
 
                 string nameWithNoNumbersNameAfterHyphen = ConvertToSimplifiedName(NameAfterHyphen, true);
                 sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbersNameAfterHyphen}\"";
-                imgPath = GetFirstColStr(sql);
+                imgPath = GetFirstColStr(sql, conn);
                 if (NotEmpty(imgPath))
                     return imgPath;
             }
@@ -794,7 +786,7 @@ namespace GameLauncher
             if (!nameWithNoNumbers.Equals(NameSimplified))
             {
                 sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{nameWithNoNumbers}\"";
-                imgPath = GetFirstColStr(sql);
+                imgPath = GetFirstColStr(sql, conn);
                 if (NotEmpty(imgPath))
                     return imgPath;
             }
@@ -803,7 +795,7 @@ namespace GameLauncher
             {
                 string Name = NameOrg.Substring(1);
                 sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
-                imgPath = GetFirstColStr(sql);
+                imgPath = GetFirstColStr(sql, conn);
                 if (NotEmpty(imgPath))
                     return imgPath;
             }
@@ -812,33 +804,33 @@ namespace GameLauncher
             {
                 string Name = NameOrg.Substring(3);
                 sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{Name}%\"";
-                imgPath = GetFirstColStr(sql);
+                imgPath = GetFirstColStr(sql, conn);
                 if (NotEmpty(imgPath))
                     return imgPath;
             }
 
             sql = $"SELECT FilePath FROM Images WHERE NameOrg like \"{NameOrg}\"";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
             if (NotEmpty(imgPath))
                 return imgPath;
 
             sql = $"SELECT FilePath FROM Images WHERE NameSimplified like \"{NameOrg}\"";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
             if (NotEmpty(imgPath))
                 return imgPath;
 
             sql = $"SELECT FilePath FROM Images WHERE Compressed like \"{Compressed}\"";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
             if (NotEmpty(imgPath))
                 return imgPath;
 
             sql = $"SELECT FilePath FROM Images WHERE Compressed like \"%{Compressed}%\"";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
             if (NotEmpty(imgPath))
                 return imgPath;
 
             sql = $"SELECT FilePath FROM Images WHERE NameOrg like \"%{Title}%\"";
-            imgPath = GetFirstColStr(sql);
+            imgPath = GetFirstColStr(sql, conn);
             return imgPath;
         }
         private string AddImagePathToDb(string imgFile, bool incProgressBar, bool isMainThread, bool checkIfInDb = false, bool checkIfExists = false)
@@ -862,8 +854,9 @@ namespace GameLauncher
             }
             string NameOrg = Path.GetFileNameWithoutExtension(imgFile);
             string NameSimplified = ConvertToSimplifiedName(NameOrg);
-            string Compressed = ConvertToSimplifiedName(NameOrg, true, true);
-            string sql = $"INSERT OR REPLACE INTO Images (NameSimplified, NameOrg, Compressed, FilePath, Checksum) VALUES (\"{NameSimplified}\", \"{NameOrg}\", \"{Compressed}\", \"{imgFile}\", \"{Checksum}\")";
+            string Compressed = ConvertToCompress(NameOrg);
+            string Title = ConvertToTitle(NameOrg);
+            string sql = $"INSERT OR REPLACE INTO Images (Title, NameSimplified, NameOrg, Compressed, FilePath, Checksum) VALUES (\"{Title}\", \"{NameSimplified}\", \"{NameOrg}\", \"{Compressed}\", \"{imgFile}\", \"{Checksum}\")";
             UpdateDB(sql);
             return imgFile;
         }
@@ -1141,6 +1134,14 @@ namespace GameLauncher
             $"\"{gameSystem.EmulatorPaths[5]}\", \"{gameSystem.EmulatorPaths[6]}\", \"{gameSystem.EmulatorPaths[7]}\", \"{gameSystem.EmulatorPaths[8]}\", \"{gameSystem.EmulatorPaths[9]}\")";
             UpdateDB(sql);
         }
+        private void UpdateInDb(GameImage gameImage)
+        {
+            if (gameImage == null)
+                return;
+            string sql = $"INSERT OR REPLACE INTO Images (Title, NameSimplified, NameOrg, Compressed, Checksum, FilePath) VALUES" +
+            $" (\"{gameImage.Title}\", \"{gameImage.NameSimplified}\", \"{gameImage.NameOrg}\", \"{gameImage.Compressed}\", \"{gameImage.Checksum}\", \"{gameImage.FilePath}\")";
+            UpdateDB(sql);
+        }
         private List<string> GetSystemNames(bool updateComboBoxSystem = true)
         {
             List<string> SystemNames = new List<string>();
@@ -1163,12 +1164,93 @@ namespace GameLauncher
             }
             return SystemNames;
         }
+        private Dictionary<int, string> GetSystemNamesAndID()
+        {
+            Dictionary<int, string> systemNamesAndID = new Dictionary<int, string>();
+            if (connection == null)
+                return systemNamesAndID;
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT Name,ID FROM GameSystems ORDER BY Name";
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string name = reader.GetString(0);
+                    int ID = reader.GetInt32(1);
+                    systemNamesAndID[ID] = name;
+                    Console.WriteLine($"System name={name}, ID={ID}!");
+                }
+            }
+            return systemNamesAndID;
+        }
+        private Dictionary<int, string> GetSystemDirAndID()
+        {
+            Dictionary<int, string> systemDirAndID = new Dictionary<int, string>();
+            if (connection == null)
+                return systemDirAndID;
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT RomDirPath,ID FROM GameSystems ORDER BY Name";
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string RomDirPath = reader.GetString(0);
+                    string emulatorDir = Path.GetDirectoryName(RomDirPath);
+                    int ID = reader.GetInt32(1);
+                    systemDirAndID[ID] = emulatorDir;
+                    Console.WriteLine($"System name={emulatorDir}, ID={ID}!");
+                }
+            }
+            return systemDirAndID;
+        }
+        private List<string> GetGameDetailsSystemNames()
+        {
+            List<string> SystemNames = new List<string>();
+            if (connection_GameDetails == null)
+                return SystemNames;
+            SqliteCommand command = connection_GameDetails.CreateCommand();
+            command.CommandText = @"SELECT System FROM GameDetails ORDER BY System";
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string name = reader.GetString(0);
+                    SystemNames.Add(name);
+                    Console.WriteLine($"System name , {name}!");
+                }
+            }
+            return SystemNames;
+        }
         private int GetRoms(string SystemName)
         {
             int SystemID = GetSystemIndex(SystemName);
             return SystemID < 0 ? -1 : GetRoms(SystemID, ref romList);
         }
-        private int GetRoms(int SystemID, ref List<Rom> myRomList, string titleSearch = "")
+        public static int GetInt32Safe(SqliteDataReader reader, int index, int defaultValue)
+        {
+            try
+            {
+                defaultValue = reader.GetInt32(index);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetInt32Safe exception thrown \"{ex.Message}\" for index {index}!");
+            }
+            return defaultValue;
+        }
+        public static string GetStringSafe(SqliteDataReader reader, int index, string defaultValue = "")
+        {
+            try
+            {
+                defaultValue = reader.GetString(index);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetStringSafe exception thrown \"{ex.Message}\" for index {index}!");
+            }
+            return defaultValue;
+        }
+        private int GetRoms(int SystemID, ref List<Rom> myRomList, string titleSearch = "", string Where = "")
         {
             myRomList = new List<Rom>();
             string where = $"WHERE System = \"{SystemID}\" ";
@@ -1176,10 +1258,12 @@ namespace GameLauncher
             {
                 where = titleSearch.Length > 0 ? $"WHERE Title like \"{titleSearch}\"" : "";
             }
+            if (Where.Length > 0)
+                where = Where;
             var command = connection.CreateCommand();
-            string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum";
+            string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum, Year, Rating";
             command.CommandText = $"SELECT {fieldNames} FROM Roms {where} ORDER BY NameSimplified";
-            using (var reader = command.ExecuteReader())
+            using (SqliteDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -1206,6 +1290,8 @@ namespace GameLauncher
                     string Title = reader.GetString(i++);
                     string Compressed = reader.GetString(i++);
                     string Checksum = reader.GetString(i++);
+                    int Year = GetInt32Safe(reader, i++, 0);
+                    string Rating = GetStringSafe(reader, i++);
                     if (ImagePath.Length == 0)
                         ImagePath = defaultImagePath;
 
@@ -1213,15 +1299,37 @@ namespace GameLauncher
                         PreferredEmulator, ImagePath, QtyPlayers, Region,
                         Developer, RomSize, Genre, NotesCore, NotesUser,
                         FileFormat, ReleaseDate, Status, Version,
-                        Description, Language, Checksum));
+                        Description, Language, Year, Rating, Checksum));
                 }
             }
             return myRomList.Count;
         }
+        private int GetGameImages(ref List<GameImage> gameImages, string where = "")
+        {
+            gameImages = new List<GameImage>();
+            var command = connection.CreateCommand();
+            string fieldNames = "Title, NameSimplified, NameOrg, Compressed, FilePath, Checksum";
+            command.CommandText = $"SELECT {fieldNames} FROM Images {where} ORDER BY NameSimplified";
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int i = 0;
+                    string Title = reader.GetString(i++);
+                    string NameSimplified = reader.GetString(i++);
+                    string NameOrg = reader.GetString(i++);
+                    string Compressed = reader.GetString(i++);
+                    string FilePath = reader.GetString(i++);
+                    string Checksum = reader.GetString(i++);
+                    gameImages.Add(new GameImage(Title, NameSimplified, FilePath, NameOrg,  Compressed, Checksum));
+                }
+            }
+            return gameImages.Count;
+        }
         private Rom GetRom(string filePath)
         {
             SqliteCommand command = connection.CreateCommand();
-            string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum";
+            string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum, Year, Rating";
             command.CommandText = $"SELECT {fieldNames} FROM Roms WHERE FilePath = \"{filePath}\"";
             using (var reader = command.ExecuteReader())
             {
@@ -1250,6 +1358,8 @@ namespace GameLauncher
                     string Title = reader.GetString(i++);
                     string Compressed = reader.GetString(i++);
                     string Checksum = reader.GetString(i++);
+                    int Year = GetInt32Safe(reader, i++, 0);
+                    string Rating = GetStringSafe(reader, i++);
                     if (ImagePath.Length == 0)
                         ImagePath = defaultImagePath;
 
@@ -1257,7 +1367,7 @@ namespace GameLauncher
                         PreferredEmulator, ImagePath, QtyPlayers, Region,
                         Developer, RomSize, Genre, NotesCore, NotesUser,
                         FileFormat, ReleaseDate, Status, Version,
-                        Description, Language, Checksum);
+                        Description, Language, Year, Rating, Checksum);
                 }
             }
             return null;
@@ -1294,6 +1404,126 @@ namespace GameLauncher
         }
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Misc Methods
+        private void AddN64RdxToGameDetails(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return;
+            StreamReader sr = new StreamReader(fileName);
+            int qtyChanges = 0;
+            string line;
+            string systemName = "Nintendo64";
+            int qtyPlayers = 0;
+            string title = "";
+            string developer = "";
+            string releaseDate = "";
+            int Year = 0;
+            string genre = "";
+            string forceFeedback;
+            const string GoodNamePrefix = "Good Name=";
+            const string PlayersPrefix = "Players=";
+            const string DeveloperPrefix = "Developer=";
+            const string ReleaseDatePrefix = "ReleaseDate=";
+            const string GenrePrefix = "Genre=";
+            const string ForceFeedbackPrefix = "ForceFeedback=";
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.StartsWith(GoodNamePrefix))
+                {
+                    title = line.Substring(GoodNamePrefix.Length);
+                    qtyPlayers = 0;
+                    developer = "";
+                    releaseDate = "";
+                    Year = 0;
+                    genre = "";
+                }
+                else if (line.StartsWith(PlayersPrefix))
+                {
+                    string qtyPlayerStr = line.Substring(PlayersPrefix.Length);
+                    if (qtyPlayerStr.Length > 0 && Char.IsDigit(qtyPlayerStr[0]) && Int32.Parse(qtyPlayerStr) > 0)
+                        qtyPlayers = Int32.Parse(qtyPlayerStr);
+                }
+                else if (line.StartsWith(DeveloperPrefix))
+                    developer = line.Substring(DeveloperPrefix.Length);
+                else if (line.StartsWith(ReleaseDatePrefix))
+                {
+                    releaseDate = line.Substring(ReleaseDatePrefix.Length);
+                    if (releaseDate.Length > 0 && Char.IsDigit(releaseDate[0]))
+                    {
+                        string year = Regex.Replace(releaseDate, "([0-9]{4}).*", "$1");
+                        // The IsDigit code should not be necessary, but there's a bug in Regex that's letting strings like "199x" get through.
+                        if (year.Length == 4 && Char.IsDigit(year[0]) && Char.IsDigit(year[1]) && Char.IsDigit(year[2]) && Char.IsDigit(year[3]))
+                            Year = Int32.Parse(year);
+                    }
+                    else
+                        releaseDate = "";
+                }
+                else if (line.StartsWith(GenrePrefix))
+                    genre = line.Substring(GenrePrefix.Length);
+                else if (line.StartsWith(ForceFeedbackPrefix))
+                {
+                    forceFeedback = line.Substring(ForceFeedbackPrefix.Length);
+                    title = ConvertToTitle(title);
+                    string NameSimplified = ConvertToSimplifiedName(title);
+                    string Compressed = ConvertToCompress(title);
+                    textBoxStatus.Text = $"Adding details for game {systemName}-{title}";
+                    textBoxStatus.Update();
+                    Application.DoEvents();
+                    UpdateDB("INSERT OR REPLACE INTO GameDetails " +
+                        "(System, Title, QtyPlayers, NameSimplified, Compressed, Developer, ReleaseDate, Genre, Year)" +
+                        " values" +
+                        $" (\"{systemName}\", \"{title}\", {qtyPlayers}, \"{NameSimplified}\", \"{Compressed}\", \"{developer}\", \"{releaseDate}\", \"{genre}\", {Year});",
+                        connection_GameDetails);
+                    ++qtyChanges;
+                }
+            }
+            textBoxStatus.Text = $"Updated {qtyChanges} items in DB";
+        }
+        private void AddMultiplayerDetailsToGameDetails(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return;
+            StreamReader sr = new StreamReader(fileName);
+            int qtyChanges = 0;
+            string line;
+            string systemName = null;
+            int qtyPlayers = 0;
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.StartsWith(";"))
+                {
+                    if (systemName == null)
+                        systemName = line.Substring(1);
+                    else
+                    {
+                        string qtyPlayerStr = line.Substring(1, 1);
+                        if (qtyPlayerStr.Length > 0 && Char.IsDigit(qtyPlayerStr[0]) && Int32.Parse(qtyPlayerStr) > 0)
+                            qtyPlayers = Int32.Parse(qtyPlayerStr);
+                        else
+                            break;
+                    }
+                    continue;
+                }
+                string title = ConvertToTitle(line);
+                string NameSimplified = ConvertToSimplifiedName(title);
+                string Compressed = ConvertToCompress(title);
+                UpdateDB("INSERT OR REPLACE INTO GameDetails " +
+                    "(System, Title, QtyPlayers, NameSimplified, Compressed)" +
+                    " values" +
+                    $" (\"{systemName}\", \"{title}\", {qtyPlayers}, \"{NameSimplified}\", \"{Compressed}\");",
+                    connection_GameDetails);
+                ++qtyChanges;
+            }
+            textBoxStatus.Text = $"Updated {qtyChanges} items in DB";
+        }
+        private string Contains(string nameToCheck, List<string> names)
+        {
+            foreach (var name in names)
+            {
+                if (nameToCheck.Contains(name, StringComparison.OrdinalIgnoreCase))
+                    return name;
+            }
+            return "";
+        }
         private void SetEmulatorExecute(string systemName = null)
         {
             if (systemName == null)
@@ -1329,14 +1559,16 @@ namespace GameLauncher
             }
             return null;
         }
+        private string ConvertToTitle(string name)=> ConvertToSimplifiedName(name,false, false, true, false, true,
+                        false, false, false, false, false,true, false, true, true);
+        private string ConvertToCompress(string name)=> ConvertToSimplifiedName(name, true, true);
         private string ConvertToSimplifiedName(string name,
-                bool removeNumbers = false, bool doHighCompres = false, bool removeBracesAndSuffixData = true, 
+                bool removeNumbers = false, bool doHighCompress = false, bool removeBracesAndSuffixData = true, 
                 bool trimSpaces = true, bool removeRomPrefixIndexes = true, bool removeApostropheEs = true, 
                 bool convertSuffixRomanNumToDec = true, bool removeNonAlphaNum = true, bool removeApostrophe = true, 
-                bool makeLowerCase = true, bool replaceUnderScoreWithSpace = false, bool removeRedundant = false, 
+                bool makeLowerCase = true, bool replaceUnderScoreWithSpace = false, bool removeRedundant = false, bool removeTrailingNonAlphaNumChar = false, bool swapTheA_ToFront = false,
                 string removeSpecificStrValue = "", string replacementStr = "") // removeSpecificStrValue and replacementStr is for possible future requirements, or for end user customization.
         {
-            // ToDo: Add logic to remove "Disney's", "2-in-1 - ", and , "3-in-1 - ", "LEGO" from front of name
             if (removeSpecificStrValue.Length > 0) // Keep this at the top because the other filters could hinder finding the specified string.
                 name = name.Replace(removeSpecificStrValue, replacementStr);
             
@@ -1359,13 +1591,13 @@ namespace GameLauncher
                 }
             }
             
-            if (removeRomPrefixIndexes == true) // Do before filtering spaces and non-alpha-num because that will hinder finding prefix index number
+            if (removeRomPrefixIndexes) // Do before filtering spaces and non-alpha-num because that will hinder finding prefix index number
                 name = Regex.Replace(name, @"^[0-9][0-9][0-9][0-9][\s_]-[\s_]", ""); // Remove prefix index numbers. IE: "1234 - GameName" to "GameName"
 
-            if (doHighCompres || replaceUnderScoreWithSpace)
+            if (doHighCompress || replaceUnderScoreWithSpace)
                 name = name.Replace("_", " ");
 
-            if (doHighCompres  || removeRedundant)
+            if (doHighCompress  || removeRedundant)
             {
                 name = Regex.Replace(name, @"(?i)[\s_]DSi?\+?([\s_\(\[])", "$1");
                 name = Regex.Replace(name, @"(?i)\sDS$", "");
@@ -1373,7 +1605,28 @@ namespace GameLauncher
                 name = Regex.Replace(name, @"(?i)3D", "");
                 name = Regex.Replace(name, @"(?i)^NES\s", "");
             }
-            if (doHighCompres)
+            if (doHighCompress || swapTheA_ToFront)
+            {
+                string nameWithOutTheA = Regex.Replace(name, @"(,\s?(A|The)$)|(,\s?(A|The)\s)", "");
+                if (!name.Equals(nameWithOutTheA))
+                {
+                    if (swapTheA_ToFront)
+                    {
+                        string nameWithTheA_Swap = Regex.Replace(name, @"^(.*),\s?(A|The)$", "$2 $1");
+                        if (name.Equals(nameWithTheA_Swap))
+                            nameWithTheA_Swap = Regex.Replace(name, @"^(.*),\s?(A|The)\s", "$2 $1 ");
+                        name = nameWithTheA_Swap;
+                    }
+                    else
+                    {
+                        string nameWithTheA_Swap = Regex.Replace(name, @"^(.*),\s?(A|The)$", "$1");
+                        if (name.Equals(nameWithTheA_Swap))
+                            nameWithTheA_Swap = Regex.Replace(name, @"^(.*),\s?(A|The)\s", "$1 ");
+                        name = nameWithTheA_Swap;
+                    }
+                }
+            }
+            if (doHighCompress)
             {
                 removeNumbers = true;
                 name = Regex.Replace(name, @"(?i)([a-zA-Z][a-zA-Z])'?s\b", "$1");
@@ -1388,9 +1641,23 @@ namespace GameLauncher
                 name = Regex.Replace(name, @"(?i)\sVersion\s", "");
                 name = Regex.Replace(name, @"(?i)\sEdition\s", "");
                 name = Regex.Replace(name, @"(?i)\sPart\s", "");
+                name = Regex.Replace(name, @"(?i)^[2-9]-in-1\s?-?\s?", ""); // Remove "2-in-1 - ", and , "3-in-1 - " from start of name
+                name = Regex.Replace(name, @"(?i)^Disney's\s", ""); // Remove Disney's from start of name
+                name = Regex.Replace(name, @"(?i)^Disney-Pixar\s", ""); // Remove Disney's from start of name
+                name = Regex.Replace(name, @"(?i)^Disney\s", ""); // Remove Disney's from start of name
+                name = Regex.Replace(name, @"(?i)^LEGO\s", ""); // Remove LEGO from start of name
+                string nameWithOutTheA = Regex.Replace(name, @"(,\s?(A|The)$)|(,\s?(A|The)\s)", "");
+                if (!name.Equals(nameWithOutTheA))
+                {
+                    string nameWithTheA_Swap = Regex.Replace(name, @"^(.*),\s?(A|The)$", "$1");
+                    if (name.Equals(nameWithTheA_Swap))
+                        nameWithTheA_Swap = Regex.Replace(name, @"^(.*),\s?(A|The)\s", "$1 ");
+                    name = nameWithTheA_Swap;
+                }
+                name = Regex.Replace(name, @"^(A|The)\s", "");
             }
 
-            if (convertSuffixRomanNumToDec == true)// Do before filtering spaces because it will hinder finding suffix roman numbers
+            if (convertSuffixRomanNumToDec)// Do before filtering spaces because it will hinder finding suffix roman numbers
             {
                 const string strStringContains5_Or_10 = "VXvx";
                 if (name.IndexOfAny(strStringContains5_Or_10.ToCharArray()) != -1)
@@ -1429,26 +1696,30 @@ namespace GameLauncher
                 }
             }
 
-            if (removeNumbers == true) // Do this after roman numeral conversion so that roman numerals are removed as well.
+            if (removeNumbers) // Do this after roman numeral conversion so that roman numerals are removed as well.
                 name = Regex.Replace(name, @"[0-9]", "");//IE: "GameName 2" to "GameName"
 
-            if (makeLowerCase == true)
+            if (makeLowerCase)
                 name = name.ToLower();
             
             if (removeApostropheEs) // Do before filtering non-alpha-num because that will hinder finding 's
                 name = name.Replace("'s", "");//IE: "Dini's Soccer" to "Dini Soccer"
 
-            if (removeNonAlphaNum == true)
+            if (removeNonAlphaNum)
                 name = Regex.Replace(name, @"[^0-9a-zA-Z]", "");//IE: "WarioWare - Touched!" to "WarioWareTouched"
             else
             {// There's no need to do this logic if removeNonAlphaNum==true, and non-alpha-num characters have been removed.
                 if (removeApostrophe)
                     name = name.Replace("'", "");//IE: "Baseball '99" to "Baseball 99"
-                if (trimSpaces == true)
+                if (trimSpaces)
                     name = name.Trim(' ');//IE: "GameName " to "GameName"
             }
 
             name = Regex.Replace(name, @"\.[a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]?$", "");
+            name = Regex.Replace(name, @"\s?\-?ntsc$", "");// Remove "-ntsc" and " ntsc" from end of name
+
+            if (removeTrailingNonAlphaNumChar)
+                name = Regex.Replace(name, "[^0-9a-zA-Z.!]$", "");
 
             return name;
         }
@@ -1713,7 +1984,7 @@ namespace GameLauncher
             }
             return index == 0 ? null : emulatorPaths;
         }
-        public string GetPattern(string value, string pattern, char trimLeftChars = '\0', char trimRightChars = '\0', bool defaultEmptyStr = false)
+        public static string GetPattern(string value, string pattern, char trimLeftChars = '\0', char trimRightChars = '\0', bool defaultEmptyStr = false)
         {
             string ReturnStr = defaultEmptyStr ? "" : null;
             Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -1736,20 +2007,91 @@ namespace GameLauncher
                 path = Regex.Replace(path, @"\.[a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]?$", "");
             return path;
         }
-        private Rom GetRomDetails(string romFilePath, int systemIndex, string emulatorDir, long RomSize)
-        {// ToDo: This function is too big, and should be split into multiple sub functions
-            string NameOrg = GetFileNameWithoutExtensionAndWithoutBin(romFilePath); // f.Substring(imgPath.Length + 1);
-            string NameSimplified = ConvertToSimplifiedName(NameOrg);
-            string Compressed = ConvertToSimplifiedName(NameOrg, true, true);
-            string Title = ConvertToSimplifiedName(NameOrg, 
-                false, false, true, false, true, 
-                false, false, false, false, false,
-                true);
-            string Status = "";
+        public static int GetYear(string name)
+        {
+            string YearOnly = Regex.Replace(name, @"\([0-9]*\-?[0-9]*\-?([0-9]{4})\)", "$1");
+            return YearOnly != null && YearOnly.Length > 0 ? Int32.Parse(YearOnly) : 0;
+        }
+        public static string GetVersion(string name)
+        {
+            string Version = GetPattern(name, @"\(V[0-9]+\.[0-9]+\)", '(', ')', true);
+            if (name.Contains("(REV", StringComparison.OrdinalIgnoreCase))
+            {
+                string RevInfo = GetPattern(name, @"\(REV[0-9]+\)", '(', ')');
+                if (RevInfo != null)
+                    Version += $"[REV{RevInfo}]";
+            }
+            if (name.Contains("(PRG", StringComparison.OrdinalIgnoreCase))
+            {
+                string RevInfo = GetPattern(name, @"\(PRG[0-9]+\)", '(', ')');
+                if (RevInfo != null)
+                    Version += $"[PRG-REV{RevInfo}]";
+            }
+            if (name.Contains("(Beta)", StringComparison.OrdinalIgnoreCase))
+                Version += "[Beta]";
+            if (name.Contains("(Proto)", StringComparison.OrdinalIgnoreCase))
+                Version += "[Prototype ]";
+            return Version;
+        }
+        public static string GetNotesCore(string NameOrg, ref string Status, ref string Language)
+        {
             string NotesCore = "";
-            string imagePath = "";
-            imagePath = GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed, emulatorDir);
-            string Region = "unknown";
+            if (NameOrg.Contains("[C]"))// Needs to be case sensitive because [c] is used for Checksum
+                NotesCore += "[Game Boy Color]";
+            if (NameOrg.Contains("(PD)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Public Domain : Free software]";
+            if (NameOrg.Contains("[h]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(Hack)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[f1C]", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Hacked]";
+            if (NameOrg.Contains("[p]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(Bootleg)", StringComparison.OrdinalIgnoreCase) || GetPattern(NameOrg, @"\[p[0-9]+\]") != null)
+                NotesCore += "[Pirate]";
+            if (GetPattern(NameOrg, @"\[a[0-9]+\]") != null)
+                NotesCore += $"[Alternate version {GetPattern(NameOrg, @"\[a[0-9]+\]")}]";
+            if (GetPattern(NameOrg, @"\[t[0-9]+\]") != null)
+                NotesCore += "[Trained. The ROM has been edited to alter stats or other gameplay mechanics]";
+            if (NameOrg.Contains("[T]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[TR]", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Translation]";
+            else if (NameOrg.Contains("[T +]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[T+]", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Newer translation]";
+            else if (NameOrg.Contains("[T-]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[T -]", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Older translation]";
+            else if (NameOrg.Contains("[i]", StringComparison.OrdinalIgnoreCase))
+                Status += "[Incomplete Translation]";
+            if (NameOrg.Contains("[n]", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[File Name Translated]";
+            if (NameOrg.Contains("(Unl)", StringComparison.OrdinalIgnoreCase))
+                Status += "[Unlicensed]";
+            if (NameOrg.Contains("(-)"))
+                NotesCore += "[Year unknown]";
+            if (NameOrg.Contains("(Taikenban)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Trial version]";
+            if (NameOrg.Contains("(Genteiban)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Limited Edition]";
+            if (NameOrg.Contains("(Shokai Genteiban)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Limited version]";
+            if (NameOrg.Contains("(old)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Old version]";
+            if (NameOrg.Contains("(Ch-Trad)", StringComparison.OrdinalIgnoreCase))
+                Language = "[Traditional Chinese]";
+            if (NameOrg.Contains("(Ch-Simple)", StringComparison.OrdinalIgnoreCase))
+                Language = "Standard Chinese";
+            if (NameOrg.Contains("(PAL)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[European-(PAL)]";
+            if (NameOrg.Contains("(NTSC)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[NTSC]";
+            if (NameOrg.Contains("(GC)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[GameCube]";
+            if (NameOrg.Contains("(4)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[USA & Brazil NTSC only]";
+            if (NameOrg.Contains("(5)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[NTSC only]";
+            if (NameOrg.Contains("(8)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[PAL only]";
+            if (NameOrg.Contains("(MP)", StringComparison.OrdinalIgnoreCase))
+                NotesCore += "[Mega Play]";
+            return NotesCore;
+        }
+        public static string GetLanguageAndRegion(string NameOrg, ref string Region)
+        {
             string Language = "";
             if (NameOrg.Contains("(U)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(USA)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("_USA_", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(NTSC)", StringComparison.OrdinalIgnoreCase))
             {
@@ -1850,7 +2192,10 @@ namespace GameLauncher
 
             if (NameOrg.Contains("(UE)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(U)(E)", StringComparison.OrdinalIgnoreCase))
                 Language = "English translation";
-
+            return Language;
+        }
+        public static bool GetGoodRomStatus(string NameOrg, ref string Status)
+        {
             bool isGoodRom = false;
             if (NameOrg.Contains("[!]") || NameOrg.Contains("(!)"))
             {
@@ -1881,84 +2226,37 @@ namespace GameLauncher
                 if (NameOrg.Contains("[o]", StringComparison.OrdinalIgnoreCase) || GetPattern(NameOrg, @"\[o[0-9]+\]") != null)
                     Status += "[Overdump - Possible Bad ROM]";
             }
-            if (NameOrg.Contains("[C]"))// Needs to be case sensitive because [c] is used for Checksum
-                NotesCore += "[Game Boy Color]";
-            if (NameOrg.Contains("(PD)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Public Domain : Free software]";
-            if (NameOrg.Contains("[h]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(Hack)", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[f1C]", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Hacked]";
-            if (NameOrg.Contains("[p]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("(Bootleg)", StringComparison.OrdinalIgnoreCase) || GetPattern(NameOrg, @"\[p[0-9]+\]") != null)
-                NotesCore += "[Pirate]";
-            if (GetPattern(NameOrg, @"\[a[0-9]+\]") != null)
-                NotesCore += $"[Alternate version {GetPattern(NameOrg, @"\[a[0-9]+\]")}]";
-            if (GetPattern(NameOrg, @"\[t[0-9]+\]") != null)
-                NotesCore += "[Trained. The ROM has been edited to alter stats or other gameplay mechanics]";
-            if (NameOrg.Contains("[T]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[TR]", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Translation]";
-            else if (NameOrg.Contains("[T +]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[T+]", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Newer translation]";
-            else if (NameOrg.Contains("[T-]", StringComparison.OrdinalIgnoreCase) || NameOrg.Contains("[T -]", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Older translation]";
-            else if (NameOrg.Contains("[i]", StringComparison.OrdinalIgnoreCase))
-                Status += "[Incomplete Translation]";
-            if (NameOrg.Contains("[n]", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[File Name Translated]";
-            if (NameOrg.Contains("(Unl)", StringComparison.OrdinalIgnoreCase))
-                Status += "[Unlicensed]";
-            if (NameOrg.Contains("(-)"))
-                NotesCore += "[Year unknown]";
-            if (NameOrg.Contains("(Taikenban)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Trial version]";
-            if (NameOrg.Contains("(Genteiban)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Limited Edition]";
-            if (NameOrg.Contains("(Shokai Genteiban)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Limited version]";
-            if (NameOrg.Contains("(old)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Old version]";
-            if (NameOrg.Contains("(Ch-Trad)", StringComparison.OrdinalIgnoreCase))
-                Language = "[Traditional Chinese]";
-            if (NameOrg.Contains("(Ch-Simple)", StringComparison.OrdinalIgnoreCase))
-                Language = "Standard Chinese";
-            if (NameOrg.Contains("(PAL)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[European-(PAL)]";
-            if (NameOrg.Contains("(NTSC)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[NTSC]";
-            if (NameOrg.Contains("(GC)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[GameCube]";
-            if (NameOrg.Contains("(4)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[USA & Brazil NTSC only]";
-            if (NameOrg.Contains("(5)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[NTSC only]";
-            if (NameOrg.Contains("(8)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[PAL only]";
-            if (NameOrg.Contains("(MP)", StringComparison.OrdinalIgnoreCase))
-                NotesCore += "[Mega Play]";
-
-            // Check if name includes ROM version
-            string Version = GetPattern(NameOrg, @"\(V[0-9]+\.[0-9]+\)", '(', ')', true);
-            if (NameOrg.Contains("(REV", StringComparison.OrdinalIgnoreCase))
-            {
-                string RevInfo = GetPattern(NameOrg, @"\(REV[0-9]+\)", '(', ')');
-                if (RevInfo != null)
-                    Version += $"[REV{RevInfo}]";
-            }
-            if (NameOrg.Contains("(PRG", StringComparison.OrdinalIgnoreCase))
-            {
-                string RevInfo = GetPattern(NameOrg, @"\(PRG[0-9]+\)", '(', ')');
-                if (RevInfo != null)
-                    Version += $"[PRG-REV{RevInfo}]";
-            }
-            if (NameOrg.Contains("(Beta)", StringComparison.OrdinalIgnoreCase))
-                Version += "[Beta]";
-            if (NameOrg.Contains("(Proto)", StringComparison.OrdinalIgnoreCase))
-                Version += "[Prototype ]";
-
-            string Checksum = GetRomChecksum(romFilePath);
-            string CompressChecksum = GetRomCompressChecksum(romFilePath);
+            return isGoodRom;
+        }
+        public static int GetQtyPlayers(string Title, string NameOrg)
+        {
             // ToDo: Add logic to read Project64.rdb and Project64.rdx to get rom details
             //       Add logic to read file MultiplayerGameList.txt to get quantity of player details.
+            int qtyPlayers = 0;
+            return qtyPlayers;
+        }
+        private Rom GetRomDetails(string romFilePath, int systemIndex, string emulatorDir, long RomSize)
+        {
+            string NameOrg = GetFileNameWithoutExtensionAndWithoutBin(romFilePath); // f.Substring(imgPath.Length + 1);
+            string NameSimplified = ConvertToSimplifiedName(NameOrg);
+            string Compressed = ConvertToCompress(NameOrg);
+            string Title = ConvertToTitle(NameOrg);
+            string Status = "";
+            string imagePath = GetImageIndexByName(NameSimplified, NameOrg, Title, Compressed, emulatorDir);
+            string Region = "unknown";
+            string Language = GetLanguageAndRegion(NameOrg, ref Region);
+            bool isGoodRom = GetGoodRomStatus(NameOrg, ref Status);
+            string NotesCore = GetNotesCore(NameOrg, ref Status, ref Language);
+            string Version = GetVersion(NameOrg);
+            string Rating = "";
+            string Checksum = GetRomChecksum(romFilePath);
+            string CompressChecksum = GetRomCompressChecksum(romFilePath);
+            int QtyPlayers = GetQtyPlayers(Title, NameOrg);
 
-            Rom rom = new Rom(NameSimplified, systemIndex, romFilePath, NameOrg, Title, Compressed, 0,imagePath,0,Region,"", RomSize, "", NotesCore, "","","",Status,Version,"",Language, Checksum, CompressChecksum);
+            Rom rom = new Rom(NameSimplified, systemIndex, romFilePath, NameOrg, Title, Compressed,
+                0,imagePath, QtyPlayers, Region,"", RomSize, "", NotesCore,
+                "","","",Status,Version,"",Language, GetYear(NameOrg), Rating,
+                Checksum, CompressChecksum);
             return rom;
         }
         private void GetMultiplayerRomData(string SystemDirPath)
@@ -2084,6 +2382,7 @@ namespace GameLauncher
             toolStripComboBoxSystem.Enabled  = display == false;
             toolStripComboBoxIconDisplay.Enabled  = display == false;
             toolStripMenuItem_ROMParentMenu.Enabled = display == false;
+            changeViewToolStripMenuItem.Enabled = display == false;
             toolStripMenuItem_ImagesParentMenu.Enabled = display == false;
             toolStripMenuItem_MiscUtilParentMenu.Enabled = display == false;
             settingsToolStripMenuItem.Enabled  = display == false;
@@ -2198,6 +2497,7 @@ namespace GameLauncher
             {
                 toolStripMenuItemChangeDefaultEmulator.Enabled = false;
                 toolStripMenuItem_ROMParentMenu.Enabled = false;
+                changeViewToolStripMenuItem.Enabled = false;
                 toolStripMenuItem_ImagesParentMenu.Enabled = false;
                 toolStripMenuItem_MiscUtilParentMenu.Enabled = false;
             }
@@ -2517,6 +2817,7 @@ namespace GameLauncher
             if (Properties.Settings.Default.disableAdvanceOptions)
             {
                 toolStripMenuItem_ROMParentMenu.Enabled = false;
+                changeViewToolStripMenuItem.Enabled = false;
                 toolStripMenuItem_ImagesParentMenu.Enabled = false;
                 toolStripMenuItem_MiscUtilParentMenu.Enabled = false;
                 contextMenuStrip1.Enabled = false;
@@ -2525,6 +2826,7 @@ namespace GameLauncher
             else
             {
                 toolStripMenuItem_ROMParentMenu.Enabled = true;
+                changeViewToolStripMenuItem.Enabled = true;
                 toolStripMenuItem_ImagesParentMenu.Enabled = true;
                 toolStripMenuItem_MiscUtilParentMenu.Enabled = true;
                 contextMenuStrip1.Enabled = true;
@@ -2831,7 +3133,12 @@ namespace GameLauncher
             if (!saveFileDialog.InitialDirectory.Contains(romSystemImageDir, StringComparison.OrdinalIgnoreCase) && lastDirSelected.Length > 0)
                 saveFileDialog.InitialDirectory = lastDirSelected;
             if (rom.ImagePath.Contains(DEFAULTIMAGEFILENAME))
+            {
                 saveFileDialog.FileName = $"{rom.Title}";
+                string jpgFile = $"{saveFileDialog.InitialDirectory}\\{saveFileDialog.FileName}.jpg";
+                if (File.Exists(jpgFile))
+                    saveFileDialog.FileName = jpgFile;
+            }
             saveFileDialog.CheckFileExists = true;
             saveFileDialog.OverwritePrompt = false;
             DialogResult results = saveFileDialog.ShowDialog();
@@ -2957,8 +3264,6 @@ namespace GameLauncher
         {
             cancelScan = true;
         }
-        #endregion /////////////////////////////////////////////////////////////////////////////////
-
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form_Settings form_Settings = new Form_Settings();
@@ -3081,6 +3386,7 @@ namespace GameLauncher
         {
             Rom rom = GetSelectedROM();
             string title = System.Text.Encodings.Web.UrlEncoder.Default.Encode(rom.Title);
+            Clipboard.SetText(rom.Title);
             System.Diagnostics.Process.Start($"https://www.google.com/search?q={title}+site:launchbox-app.com");
         }
         private void toolStripMenuItemSearchAll_Click(object sender, EventArgs e) 
@@ -3164,487 +3470,265 @@ namespace GameLauncher
         private void toolStripMenuItem_DeleteDupRomsByTitleSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInSameSystem));
         private void toolStripMenuItem_DeleteDupRomsByTitleAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInAnySystem));
         private void toolStripMenuItem_DeleteDupRomsByChecksum_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateChecksum));
-
-    }// End of Form1 class
-     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    #region Misc supporting classes
-    public class PreviousCollectedImages
-    {
-        public ImageList list1;
-        public ImageList list2;
-    }
-    public class PreviousCollectedData : PreviousCollectedImages
-    {
-        public List<Rom> roms;
-    }
-    public static class StringExtensions
-    {
-        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        private void toolStripMenuItem_PopulateGameDetailsDB_Click(object sender, EventArgs e)
         {
-            return source?.IndexOf(toCheck, comp) >= 0;
-        }
-    }
-    public class EmulatorExecutables
-    {
-        public const int MAX_EMULATOR_EXECUTABLES = 10;
-        public string[] EmulatorPaths = new string[MAX_EMULATOR_EXECUTABLES] { "", "", "", "", "", "", "", "", "", "" };
-    }
-    public class GameSystem : EmulatorExecutables
-    {
-        public string Name;
-        public string RomDirPath;
-        public string ImageDirPath;
-        public int ID;
-        public GameSystem(string name, string romPath, string imgPath, EmulatorExecutables paths, int id)
-        {
-            Name = name;
-            RomDirPath = romPath;
-            ImageDirPath = imgPath;
-            EmulatorPaths = paths.EmulatorPaths;
-            ID = id;
-        }
-    }
-    public class Rom : IComparable<Rom>, IEquatable<Rom>
-    {
-        public const string M3 = "English, Spanish, French";
-        public const string M4 = "English, Spanish, French, German";
-        public const string M5 = "English, Spanish, French, German, Italian";
-        public const string M6 = "English, Spanish, French, German, Italian, Japanese";
-
-        public string Title;
-        public string NameSimplified;
-        public string NameOrg;
-        public string Compressed; 
-        public int System;
-        public string FilePath;
-        public int PreferredEmulatorID;
-        public string ImagePath;
-        public int QtyPlayers;
-        public string Region;
-        public string Developer;
-        public long RomSize;
-        public string Genre;
-        public string NotesCore;
-        public string NotesUser;
-        public string FileFormat;
-        public string ReleaseDate;
-        public string Status;
-        public string Version;
-        public string Description;
-        public string Language;
-        public string Checksum;
-        public string CompressChecksum;
-        public Rom(string nameTruncated, int systemID, string path, string nameOrg, string title, string compressed, int preferredEmulatorID = 0, string imagePath = null, int qtyPlayers = 0, string region = null, string developer = null, long romSize = 0, string genre = null, string notesCore = null, string notesUser = null, string fileFormat = null, string releaseDate = null, string status = null, string version = null, string description = null, string language = null, string checksum = null, string compressChecksum = null)
-        {
-            NameSimplified = nameTruncated;
-            System = systemID;
-            FilePath = path;
-            NameOrg = nameOrg;
-            Title = title;
-            Compressed = compressed;
-            PreferredEmulatorID = preferredEmulatorID;
-            ImagePath = imagePath;
-            QtyPlayers = qtyPlayers;
-            Region = region;
-            Developer = developer;
-            RomSize = romSize;
-            Genre = genre;
-            NotesCore = notesCore;
-            NotesUser = notesUser;
-            FileFormat = fileFormat;
-            ReleaseDate = releaseDate;
-            Status = status;
-            Version = version;
-            Description = description;
-            Language = language;
-            Checksum = checksum;
-            CompressChecksum = compressChecksum;
-        }
-        public override bool Equals(object obj)
-        {
-            Rom rom = (Rom)obj;
-            return FilePath == rom.FilePath;
-        }
-        public bool Equals(Rom rom)
-        {
-            return rom != null && FilePath == rom.FilePath;
-        }
-        public int CompareTo(Rom rom)
-        {
-            return this.FilePath.CompareTo(rom.FilePath);
-        }
-
-        public override string ToString()
-        {
-            return FilePath;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();  // HashCode.Combine(FilePath);
-        }
-    }
-    public enum DeleteDuplicateBy
-    {
-        None = 0,
-        DuplicateChecksum,
-        DuplicateTitleInAnySystem,
-        DuplicateTitleInSameSystem
-    }
-    public class SortRomByFilePathLen : IComparer<Rom>
-    {
-        public int Compare(Rom x, Rom y)
-        {
-            int xi = x.FilePath.Length;
-            int yi = y.FilePath.Length;
-            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : xi.CompareTo(yi);
-        }
-    }
-    public class SortRomByFilePathLenRev : IComparer<Rom>
-    {
-        public int Compare(Rom x, Rom y)
-        {
-            int xi = x.FilePath.Length;
-            int yi = y.FilePath.Length;
-            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : yi.CompareTo(xi);
-        }
-    }
-    public class SortRomByFileSizeLen : IComparer<Rom>
-    {
-        public int Compare(Rom x, Rom y)
-        {
-            long xi = x.RomSize;
-            long yi = y.RomSize;
-            if (xi == yi)
+            using (new CursorWait())
             {
-                xi = x.FilePath.Length;
-                yi = y.FilePath.Length;
+                //string file_MultiplayerGameListPlaystation = GetPropertyDataPath("MultiplayerGameList.Playstation.txt");
+                //string file_MultiplayerGameListGB = GetPropertyDataPath("MultiplayerGameList.GB.txt");
+                //string file_MultiplayerGameListNeoGeo = GetPropertyDataPath("MultiplayerGameList.NeoGeo.txt");
+                //string file_MultiplayerGameListDS = GetPropertyDataPath("MultiplayerGameList.DS.txt");
+                //string file_MultiplayerGameListN64 = GetPropertyDataPath("MultiplayerGameList.N64.txt");
+                //string file_MultiplayerGameListXbox = GetPropertyDataPath("MultiplayerGameList.XBox.txt");
+                //string file_MultiplayerGameListGenesis = GetPropertyDataPath("MultiplayerGameList.Genesis.txt");
+                //string file_MultiplayerGameListMasterSystem = GetPropertyDataPath("MultiplayerGameList.MasterSystem.txt");
+                AddN64RdxToGameDetails(GetPropertyDataPath("N64.rdx"));
+                AddMultiplayerDetailsToGameDetails(GetPropertyDataPath("MultiplayerGameList.Atari.txt"));
+                AddMultiplayerDetailsToGameDetails(GetPropertyDataPath("MultiplayerGameList.NES.txt"));
+                AddMultiplayerDetailsToGameDetails(GetPropertyDataPath("MultiplayerGameList.Sega.txt"));
+                AddMultiplayerDetailsToGameDetails(GetPropertyDataPath("MultiplayerGameList.SNES.txt"));
             }
-            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : xi.CompareTo(yi);
         }
-    }
-    public class SortRomByFileSizeLenRev : IComparer<Rom>
-    {
-        public int Compare(Rom x, Rom y)
+        // ToDo: Move following function to DB section
+        private GameDetails GetGameDetails(string Where)
         {
-            long xi = x.RomSize;
-            long yi = y.RomSize;
-            if (xi == yi)
-            {
-                xi = x.FilePath.Length;
-                yi = y.FilePath.Length;
-            }
-            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : yi.CompareTo(xi);
-        }
-    }
-    public class SortRomByFileVersion : IComparer<Rom>
-    {
-        public int Compare(Rom x, Rom y)
-        {
-            if (!x.Version.Equals(y.Version))
-                return y.Version.CompareTo(x.Version);
-            long xi = x.RomSize;
-            long yi = y.RomSize;
-            if (xi == yi)
-            {
-                xi = x.FilePath.Length;
-                yi = y.FilePath.Length;
-            }
-            return xi == yi ? x.FilePath.CompareTo(y.FilePath) : xi.CompareTo(yi);
-        }
-    }
-    public class InitializeRomsInDatabaseForSystem_Arg
-    {
-        public string emulatorDir;
-        public EmulatorExecutables emulatorExecutables;
-        public bool isMainThread;
-        public bool scanImageDir;
-        public bool hideGroup;
-    }
-    public class GameImage
-    {
-        public string NameSimplified;
-        public string NameOrg;
-        public string Compressed;
-        public string FilePath;
-        public string Checksum;
-        public GameImage(string nameTruncated, string path, string nameOrg, string compressed, string checksum)
-        {
-            NameSimplified = nameTruncated;
-            FilePath = path;
-            NameOrg = nameOrg;
-            Compressed = compressed;
-            Checksum = checksum;
-        }
-    }
-    public interface CompressArchiveInterface : System.IDisposable
-    {
-        void ExtractToDirectory(string dirName);
-        string[] GetNames();
-    }
-    public class ZipCompressArchive : CompressArchiveInterface
-    {
-        private ZipArchive archive;
-        public ZipCompressArchive(ZipArchive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames()
-        {
-            string[] names = new string[archive.Entries.Count];
-            for (int i = 0; i < archive.Entries.Count; i++)
-            {
-                names[i] = archive.Entries[i].FullName;
-            }
-            return names;
-        }
-        public void Dispose() => archive.Dispose();
-    }
-    public class RarCompressArchive : CompressArchiveInterface
-    {
-        private RarArchive archive;
-        public RarCompressArchive(RarArchive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames()
-        {
-            string[] names = new string[archive.Entries.Count];
-            for (int i = 0; i < archive.Entries.Count; i++)
-            {
-                names[i] = archive.Entries[i].Name;
-                // ToDo: Make sure suffix / if is directory
-            }
-            return names;
-        }
-        public void Dispose() => archive.Dispose();
-    }
-    public class SevenZipCompressArchive : CompressArchiveInterface
-    {
-        private SevenZipArchive archive;
-        public SevenZipCompressArchive(SevenZipArchive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames()
-        {
-            string[] names = new string[archive.Entries.Count];
-            for (int i = 0; i < archive.Entries.Count; i++)
-            {
-                names[i] = archive.Entries[i].Name;
-                // ToDo: Make sure suffix / if is directory
-            }
-            return names;
-        }
-        public void Dispose() => archive.Dispose();
-    }
-    public class TarCompressArchive : CompressArchiveInterface
-    {
-        private TarArchive archive;
-        public TarCompressArchive(TarArchive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames()
-        {
-            string[] names = new string[archive.Entries.Count];
-            for (int i = 0; i < archive.Entries.Count; i++)
-            {
-                names[i] = archive.Entries[i].Name;
-                // ToDo: Make sure suffix / if is directory
-            }
-            return names;
-        }
-        public void Dispose() => archive.Dispose();
-    }
-    public class CompressArchiveClass
-    {
-        protected string dirExtractedPath;
-        public string[] GetNamesFromDir()
-        {
-            string[] files = Directory.GetFiles(dirExtractedPath, "*", SearchOption.AllDirectories);
-            string[] names = new string[files.Length];
-            for(int i = 0; i < files.Length;++i)
-            {
-                names[i] = files[i].Substring(dirExtractedPath.Length);
-            }
-            return names;
-        }
-    }
-    public class GzipCompressArchive : CompressArchiveClass, CompressArchiveInterface
-    {
-        private GzipArchive archive;
-        public GzipCompressArchive(GzipArchive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName)
-        {
-            dirExtractedPath = dirName;
-            archive.ExtractToDirectory(dirName);
-        }
-        public string[] GetNames() => GetNamesFromDir();
-        public void Dispose() => archive.Dispose();
-    }
-    public class Bzip2CompressArchive : CompressArchiveClass, CompressArchiveInterface
-    {
-        private Bzip2Archive archive;
-        public Bzip2CompressArchive(Bzip2Archive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames() => GetNamesFromDir();
-        public void Dispose() => archive.Dispose();
-    }
-    public class LzipCompressArchive : CompressArchiveClass, CompressArchiveInterface
-    {
-        private LzipArchive archive;
-        public LzipCompressArchive(LzipArchive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames() => GetNamesFromDir();
-        public void Dispose() => archive.Dispose();
-    }
-    public class ZipAltCompressArchive : CompressArchiveInterface
-    {
-        private Archive archive;
-        public ZipAltCompressArchive(Archive _archive)
-        {
-            archive = _archive;
-        }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
-        public string[] GetNames()
-        {
-            string[] names = new string[archive.Entries.Count];
-            for (int i = 0; i < archive.Entries.Count; i++)
-            {
-                names[i] = archive.Entries[i].Name;
-                // ToDo: Make sure suffix / if is directory
-            }
-            return names;
-        }
-        public void Dispose() => archive.Dispose();
-    }
-    public class CreateCompressArchiveInterface 
-    {
-        public static CompressArchiveInterface Create(string fileName, bool doAltZip = false)
-        {
-            string ext = Path.GetExtension(fileName).ToLower();
-            if (ext.Equals(".zip") && doAltZip)
-                return new ZipAltCompressArchive(new Archive(fileName));
-            if (ext.Equals(".zip"))
-                return new ZipCompressArchive(ZipFile.OpenRead(fileName));
-            if (ext.Equals(".7z") || ext.Equals(".7zip"))
-                return new SevenZipCompressArchive(new SevenZipArchive(fileName));
-            if (ext.Equals(".rar"))
-                return new RarCompressArchive(new RarArchive(fileName));
-            if (ext.Equals(".tar"))
-                return new TarCompressArchive(new TarArchive(fileName));
-            // The following three types will only work to call ExtractToDirectory, and do not fully support GetNames()
-            if (ext.Equals(".gz") || ext.Equals(".gzip"))
-                return new GzipCompressArchive(new GzipArchive(fileName));
-            if (ext.Equals(".bz2") || ext.Equals(".bzip") || ext.Equals(".bzip2"))
-                return new Bzip2CompressArchive(new Bzip2Archive(fileName));
-            if (ext.Equals(".lz") || ext.Equals(".lzip"))
-                return new LzipCompressArchive(new LzipArchive(fileName));
-
-            // ".zip", ".7z", ".7zip", ".rar", ".tar" 
-            return null;
-        }
-    }
-    public class CursorWait : IDisposable
-    {
-        public CursorWait(bool appStarting = false, bool applicationCursor = false)
-        {
-            Cursor.Current = appStarting ? Cursors.AppStarting : Cursors.WaitCursor;
-            if (applicationCursor) 
-                Application.UseWaitCursor = true;
-        }
-
-        public void Dispose()
-        {
-            Cursor.Current = Cursors.Default;
-            Application.UseWaitCursor = false;
-        }
-    }
-    [Serializable()]
-    public class FlatImage
-    {
-        public FlatImage(System.Drawing.Image image, string key)
-        {
-            _image = image;
-            _key = key == null ? "" : key;
-        }
-        public FlatImage()
-        {
-            _image = null;
-            _key = "";
-        }
-        public System.Drawing.Image _image { get; set; }
-        public string _key { get; set; }
-    }
-    public class SerializableImageList
-    {
-        public SerializableImageList()
-        {
-        }
-        public static bool Save(ImageList imageList, FileStream stream, bool closeBeforeExit = false)
-        {
-            List<FlatImage> fis = new List<FlatImage>();
-            for (int index = 0; index < imageList.Images.Count; index++)
-                fis.Add(new FlatImage(imageList.Images[index], imageList.Images.Keys[index]));
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, fis);
-            if (closeBeforeExit)
-                stream.Close();
-            return true;
-        }
-        public static bool Save(ImageList imageList, string filePath)
-        {
-            FileStream stream = File.OpenWrite(filePath);
-            return Save(imageList, stream, true);
-        }
-        public static ImageList Load(FileStream stream, int imgSize, bool doMultiThread, bool closeBeforeExit = false, string filePath = "") // filePath is only use for error reporting...
-        {
-            ImageList imageList = new ImageList();
-            imageList.ImageSize = new Size(imgSize, imgSize);
+            string sql = "SELECT " +
+                "System, Title, NameSimplified, Compressed, QtyPlayers, Year, Status, ImageFileName, Region, Developer, ReleaseDate, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Rating " +
+                $"FROM GameDetails {Where}";
             try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                List<FlatImage> ilc = formatter.Deserialize(stream) as List<FlatImage>;
-                for (int index = 0; index < ilc.Count; index++)
+                using (SqliteCommand command = new SqliteCommand(sql, connection_GameDetails))
                 {
-                    System.Drawing.Image i = ilc[index]._image;
-                    string key = ilc[index]._key;
-                    imageList.Images.Add(key as string, i);
+                    using (SqliteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int i = 0;
+                            string System = reader.GetString(i++);// "System"    TEXT NOT NULL,
+                            string Title = reader.GetString(i++);// "Title" TEXT NOT NULL,
+                            string NameSimplified = reader.GetString(i++);// "NameSimplified"    TEXT NOT NULL,
+                            string Compressed = reader.GetString(i++);// "Compressed"    TEXT NOT NULL,
+                            int QtyPlayers = reader.GetInt32(i++);// "QtyPlayers"    INTEGER NOT NULL DEFAULT 0,
+                            int Year = reader.GetInt32(i++);// "Year"  INTEGER NOT NULL DEFAULT 0,
+                            string Status = reader.GetString(i++);// "Status"    TEXT,
+                            string ImageFileName = reader.GetString(i++);// "ImageFileName" TEXT,
+                            string Region = reader.GetString(i++);// "Region"    TEXT,
+                            string Developer = reader.GetString(i++);// "Developer" TEXT,
+                            string ReleaseDate = reader.GetString(i++);// "ReleaseDate"   TEXT,
+                            string Genre = reader.GetString(i++);// "Genre" TEXT,
+                            string NotesCore = reader.GetString(i++);// "NotesCore" TEXT,
+                            string NotesUser = reader.GetString(i++);// "NotesUser" TEXT,
+                            string FileFormat = reader.GetString(i++);// "FileFormat"    TEXT,
+                            string Version = reader.GetString(i++);// "Version"   TEXT,
+                            string Description = reader.GetString(i++);// "Description"   TEXT,
+                            string Language = reader.GetString(i++);// "Language"  TEXT,
+                            string Rating = reader.GetString(i++);// "Rating"    TEXT,
+                            return new GameDetails( System,Title, NameSimplified, Compressed, QtyPlayers, Developer, ReleaseDate, Year, 
+                                Genre, Status, ImageFileName, Region, NotesCore, NotesUser, FileFormat, Version, Description, Language, Rating);
+                        }
+                    }
                 }
-                if (closeBeforeExit)
-                    stream.Close();
-                return imageList;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Load ImageList exception thrown \"{ex.Message}\" for file {filePath}!");
-                Form_Main.DbErrorLogging("SerializableImageList.Load", $"Load ImageList exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Input Arg(filePath={filePath}, imgSize={imgSize}, doMultiThread={doMultiThread}, closeBeforeExit={closeBeforeExit})");
+                Console.WriteLine($"GetGameDetails exception thrown \"{ex.Message}\"!\nWhere=\"{Where}\"\nsql=\"{sql}\"");
             }
-            if (closeBeforeExit)
-                stream.Close();
             return null;
         }
-        public static ImageList Load(string filePath, int imgSize, bool doMultiThread = false)
+        private bool UpdateRom(Rom rom, string Where)
         {
-            FileStream stream = File.OpenRead(filePath);
-            return Load(stream, imgSize, doMultiThread, true, filePath);
+            GameDetails gameDetails = GetGameDetails(Where);
+            if (gameDetails != null)
+            {
+                if (gameDetails.QtyPlayers > 0)
+                    rom.QtyPlayers = gameDetails.QtyPlayers;
+                if (gameDetails.Year > 0)
+                    rom.Year = gameDetails.Year;
+                if (gameDetails.Status.Length > 0)
+                    rom.Status = gameDetails.Status;
+                if (gameDetails.Region.Length > 0)
+                    rom.Region = gameDetails.Region;
+                if (gameDetails.Developer.Length > 0)
+                    rom.Developer = gameDetails.Developer;
+                if (gameDetails.ReleaseDate.Length > 0)
+                    rom.ReleaseDate = gameDetails.ReleaseDate;
+                if (gameDetails.Genre.Length > 0)
+                    rom.Genre = gameDetails.Genre;
+                if (gameDetails.NotesCore.Length > 0)
+                    rom.NotesCore = gameDetails.NotesCore;
+                if (gameDetails.NotesUser.Length > 0)
+                    rom.NotesUser = gameDetails.NotesUser;
+                if (gameDetails.FileFormat.Length > 0)
+                    rom.FileFormat = gameDetails.FileFormat;
+                if (gameDetails.Version.Length > 0)
+                    rom.Version = gameDetails.Version;
+                if (gameDetails.Description.Length > 0)
+                    rom.Description = gameDetails.Description;
+                if (gameDetails.Language.Length > 0)
+                    rom.Language = gameDetails.Language;
+                if (gameDetails.Rating.Length > 0)
+                    rom.Rating = gameDetails.Rating;
+                UpdateInDb(rom);
+                textBoxStatus.Text = $"Updated ROM {rom.Title}";
+                return true;
+            }
+            return false;
         }
-    }
-    #endregion /////////////////////////////////////////////////////////////////////////////////
+        private void toolStripMenuItem_AddGameDetailsToGameLauncherDb_Click(object sender, EventArgs e)
+        {
+            List<Rom> rom_list = new List<Rom>();
+            List<string> gameDetailsSystemNames = GetGameDetailsSystemNames();
+            Dictionary<int, string> systemNamesAndID = GetSystemNamesAndID();
+            int qtyChanges = 0;
+            int qtyProcess = 0;
+            using (new CursorWait())
+            {
+                if (GetRoms(-1, ref rom_list) < 1)
+                    return;
+                foreach (Rom rom in rom_list)
+                {
+                    ++qtyProcess;
+                    textBoxStatus.Text = $"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}";
+                    if (rom.Title.Contains("Bug's Life", StringComparison.OrdinalIgnoreCase))
+                    {
+                        textBoxStatus.Text = $"Found {rom.Title}";
+                    }
+                    string system = Contains(systemNamesAndID[rom.System], gameDetailsSystemNames);
+                    if (system.Length == 0)
+                        continue;
+                    if (UpdateRom(rom, $"WHERE Title like \"{rom.Title}\" and System = \"{system}\""))
+                        ++qtyChanges;
+                    else if (UpdateRom(rom, $"WHERE NameSimplified like \"{rom.NameSimplified}\" and System = \"{system}\""))
+                        ++qtyChanges;
+                    else if (UpdateRom(rom, $"WHERE Compressed like \"{rom.Compressed}\" and System = \"{system}\""))
+                        ++qtyChanges;
+                    else if (UpdateRom(rom, $"WHERE Title like \"{rom.Title}\""))
+                        ++qtyChanges;
+                    else if (UpdateRom(rom, $"WHERE NameSimplified like \"{rom.NameSimplified}\""))
+                        ++qtyChanges;
+                    else if (UpdateRom(rom, $"WHERE Compressed like \"{rom.Compressed}\""))
+                        ++qtyChanges;
+
+                    textBoxStatus.Update();
+                    Application.DoEvents();
+                }
+                textBoxStatus.Text = $"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}";
+            }
+        }
+        private void toolStripMenuItem_SearchMatchingImage_Click(object sender, EventArgs e)
+        {
+            List<Rom> rom_list = new List<Rom>();
+            Dictionary<int, string> systemDirAndID = GetSystemDirAndID();
+            int qtyChanges = 0;
+            int qtyProcess = 0;
+            using (new CursorWait())
+            {
+                if (GetRoms(-1, ref rom_list, "", "WHERE ImagePath = ''") < 1)
+                    return;
+                foreach (Rom rom in rom_list)
+                {
+                    ++qtyProcess;
+                    textBoxStatus.Text = $"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}";
+                    string imagePath = GetImageIndexByName(rom.NameSimplified, rom.NameOrg, rom.Title, rom.Compressed, systemDirAndID[rom.System]);
+                    if (rom.Title.Contains("Little Mermaid") || rom.Title.Contains("So Raven"))
+                    {
+                        imagePath = GetImageIndexByName(rom.NameSimplified, rom.NameOrg, rom.Title, rom.Compressed, systemDirAndID[rom.System]);
+                    }
+                    if (imagePath.Length > 0)
+                    {
+                        rom.ImagePath = imagePath;
+                        textBoxStatus.Text = $"Updating ROM {rom.Title} with {rom.ImagePath}; {qtyProcess} out of {rom_list.Count}";
+                        ++qtyChanges;
+                        UpdateInDb(rom);
+                    }
+                    textBoxStatus.Update();
+                    Application.DoEvents();
+                }
+                textBoxStatus.Text = $"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}";
+            }
+        }
+        private void toolStripMenuItem_ResetYearAndRatingFieldsInDB_Click(object sender, EventArgs e)
+        {
+            UpdateDB("UPDATE Roms SET Year = 0, Rating = \"\" WHERE Rating IS NULL OR Year IS NULL");
+            textBoxStatus.Text = "Update complete. Removed NULL values from DB for fields Year and Rating";
+        }
+        private void toolStripMenuItem_ResetRomTitleCompress_Click(object sender, EventArgs e)
+        {
+            List<Rom> rom_list = new List<Rom>();
+            int qtyChanges = 0;
+            int qtyProcess = 0;
+            using (new CursorWait())
+            {
+                if (GetRoms(-1, ref rom_list) < 1)
+                    return;
+                foreach (Rom rom in rom_list)
+                {
+                    ++qtyProcess;
+                    textBoxStatus.Text = $"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}";
+                    string Compressed = rom.Compressed;
+                    string Title = rom.Title;
+                    string NameOrg = rom.NameOrg;
+                    string NameSimplified = rom.NameSimplified;
+                    rom.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(rom.FilePath);
+                    rom.NameSimplified = ConvertToSimplifiedName(rom.NameOrg);
+                    rom.Compressed = ConvertToCompress(rom.NameOrg);
+                    rom.Title = ConvertToTitle(rom.NameOrg);
+                    if (Title.Contains("Little Mermaid"))
+                    {
+                        rom.Compressed = ConvertToCompress(rom.NameOrg);
+                    }
+                    if (!rom.NameOrg.Equals(NameOrg) || !rom.NameSimplified.Equals(NameSimplified) || !rom.Compressed.Equals(Compressed) || !rom.Title.Equals(Title))
+                    {
+                        textBoxStatus.Text = $"Updating ROM {rom.Title} compress field from \"{Compressed}\" to \"{rom.Compressed}\"; {qtyProcess} out of {rom_list.Count}";
+                        ++qtyChanges;
+                        UpdateInDb(rom);
+                    }
+                    textBoxStatus.Update();
+                    Application.DoEvents();
+                }
+                textBoxStatus.Text = $"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}";
+            }
+        }
+        private void toolStripMenuItem_ResetImageTitleCompressInDB_Click(object sender, EventArgs e)
+        {
+            List<GameImage> gameImages = new List<GameImage>();
+            int qtyChanges = 0;
+            int qtyProcess = 0;
+            using (new CursorWait())
+            {
+                if (GetGameImages(ref gameImages) < 1)
+                    return;
+                foreach (GameImage gameImage in gameImages)
+                {
+                    ++qtyProcess;
+                    textBoxStatus.Text = $"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}";
+                    string Title = gameImage.Title;
+                    string Compressed = gameImage.Compressed;
+                    string NameOrg = gameImage.NameOrg;
+                    string NameSimplified = gameImage.NameSimplified;
+                    gameImage.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(gameImage.FilePath);
+                    gameImage.NameSimplified = ConvertToSimplifiedName(gameImage.NameOrg);
+                    gameImage.Compressed = ConvertToCompress(gameImage.NameOrg);
+                    gameImage.Title = ConvertToTitle(gameImage.NameOrg);
+                    if (!gameImage.Title.Equals(Title) || !gameImage.NameOrg.Equals(NameOrg) || !gameImage.NameSimplified.Equals(NameSimplified) || !gameImage.Compressed.Equals(Compressed))
+                    {
+                        textBoxStatus.Text = $"Updating GameImage {NameOrg} to Title={gameImage.Title}; NameOrg={gameImage.NameOrg}; Compressed={gameImage.Compressed}; NameSimplified={gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}";
+                        ++qtyChanges;
+                        UpdateInDb(gameImage);
+                    }
+                    textBoxStatus.Update();
+                    Application.DoEvents();
+                }
+                textBoxStatus.Text = $"Updated {qtyChanges} GameImage's in DB out of {gameImages.Count}";
+            }
+        }
+        private void toolStripMenuItem_ResetCompressNames_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem_ResetRomTitleCompress_Click(sender, e);
+            toolStripMenuItem_ResetImageTitleCompressInDB_Click(sender, e);
+            toolStripMenuItem_SearchMatchingImage_Click(sender, e);
+            toolStripMenuItem_CreateImageListCache_Click(sender, e);
+        }
+    }// End of Form1 class
+    #endregion
 }

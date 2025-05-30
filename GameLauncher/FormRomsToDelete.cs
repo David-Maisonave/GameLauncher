@@ -110,6 +110,8 @@ namespace GameLauncher
             deleteDuplicateBy = delete_duplicate_by;
             if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum)
                 PopulateTreeView();
+            else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem)
+                PopulateTreeView(SortTypeSelected.RomSizeRev);
             else
                 PopulateTreeView(SortTypeSelected.RomVersion);
         }
