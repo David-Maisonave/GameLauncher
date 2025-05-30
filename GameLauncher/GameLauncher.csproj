@@ -263,6 +263,7 @@
     </AdditionalFiles>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
+    <Content Include="Properties\DeleteDbData.sql" />
     <Content Include="Properties\GameDetails.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -273,6 +274,7 @@
     <Content Include="Properties\N64.rdx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\GameLauncher.sqbpro" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -282,7 +284,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Version_History\README.md" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

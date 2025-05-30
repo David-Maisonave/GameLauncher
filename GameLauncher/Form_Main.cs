@@ -48,6 +48,7 @@ namespace GameLauncher
                 "CREATE TABLE \"EmulatorAttributes\" (\r\n\t\"EmulatorExecutable\"\tTEXT NOT NULL UNIQUE,\r\n\t\"DecompressFile\"\tNUMERIC DEFAULT 0,\r\n\t\"NotSupported\"\tINTEGER DEFAULT 0,\r\n\t\"PreferredExtension\"\tTEXT,\r\n\tPRIMARY KEY(\"EmulatorExecutable\")\r\n);\r\n" +
                 "CREATE TABLE \"ErrorLog\" (\r\n\t\"Process\"\tTEXT NOT NULL,\r\n\t\"Message\"\tTEXT NOT NULL,\r\n\t\"Code\"\tINTEGER NOT NULL,\r\n\t\"Circumstances\"\tTEXT,\r\n\t\"Stack\"\tTEXT\r\n);\r\n" +
                 "CREATE TABLE \"FilterAutoCompleteCustomSource\" (\r\n\t\"Source\"\tTEXT NOT NULL UNIQUE,\r\n\tPRIMARY KEY(\"Source\")\r\n);\r\n" +
+                "CREATE TABLE \"MRU\" (\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"DateLastUsed\"\tTEXT NOT NULL,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
                 "\r\n";
         private const string SQL_DB_INIT =
                 "INSERT INTO EmulatorAttributes (EmulatorExecutable, DecompressFile, NotSupported, PreferredExtension) VALUES (\"duckstation-qt-x64-ReleaseLTCG.exe\", 1, 0, \".cue\");\r\n" +
@@ -159,84 +160,13 @@ namespace GameLauncher
             binDirPath = AppDomain.CurrentDomain.BaseDirectory;
             dataDirPath = AppDomain.CurrentDomain.BaseDirectory;
         }
-        //void deleteMeCodeTempForTesting(string key, string name, int value)
-        //{
-        //    ListViewItem lvi = new ListViewItem();
-        //    System.Windows.Forms.ProgressBar pb = new System.Windows.Forms.ProgressBar();
-        //    lvi.SubItems[0].Text = name;
-        //    lvi.SubItems.Add(name);
-        //    lvi.SubItems.Add(value.ToString());
-        //    lvi.SubItems.Add("---");
-        //    lvi.SubItems.Add(key);            // LV has 3 cols; this wont show
-        //    lvi.BackColor = SystemColors.ScrollBar;
-        //    lvi.SubItems[1].Text = value.ToString();
-        //    lvi.SubItems[2].Text = key;
-        //    ListViewSubItem lvsi = new ListViewSubItem();
-        //    lvsi.Text = key;
-        //    lvi.SubItems.Add(lvsi);
-        //    listView_ProgressBarList.Items.Add(lvi);
 
-        //    Rectangle r = lvi.SubItems[2].Bounds;
-        //    pb.SetBounds(r.X, r.Y, r.Width, r.Height);
-        //    pb.Minimum = 1;
-        //    pb.Maximum = 10;
-        //    pb.Value = value;
-        //    pb.Name = key;
-        //    pb.Visible = true;
-        //    listView_ProgressBarList.Controls.Add(pb);
-        //    pb.Parent = listView_ProgressBarList;
-        //    pb.Show();
-        //    pb.Update();
-        //    listView_ProgressBarList.Update();
-        //}
-        //public System.Windows.Forms.ProgressBar LvAddProgB(System.Windows.Forms.ListView LV, int LVII, int LVColI, string lvName)
-        //{
-        //    Rectangle SizeR = default(Rectangle);
-        //    System.Windows.Forms.ProgressBar ProgBar = new System.Windows.Forms.ProgressBar();
-
-        //    SizeR = LV.Items[LVII].Bounds;
-        //    SizeR.Width = LV.Columns[LVColI].Width;
-        //    if (LVColI > 0)
-        //    {
-        //        SizeR.X = SizeR.X + LV.Columns[LVColI - 1].Width;
-        //    }
-        //    ProgBar.Parent = LV;
-        //    ProgBar.Name = lvName;
-        //    ProgBar.SetBounds(SizeR.X, SizeR.Y, SizeR.Width, SizeR.Height);
-        //    ProgBar.Visible = true;
-        //    ProgBar.Maximum = 1000;
-        //    ProgBar.Step = 1;
-
-        //    return ProgBar;
-        //}
-        //void deleteMeCodeTempForTesting()
-        //{
-        //    DisplayOrHideProgressGroup(true);
-        //    //deleteMeCodeTempForTesting("A", "Ziggy", 1);
-        //    //deleteMeCodeTempForTesting("B", "Zacky", 2);
-        //    //deleteMeCodeTempForTesting("C", "Zoey", 3);
-        //    //deleteMeCodeTempForTesting("D", "Zeke", 4);
-        //    for (int x = 0; x < 3; ++x)
-        //    {
-        //        ListViewItem item = new ListViewItem();
-        //        item.Text = "d.Name";
-        //        item.SubItems.Add("                 ");
-        //        listView_ProgressBarList.Items.Add(item);
-        //        listView_ProgressBarList.Controls.Add(LvAddProgB(listView_ProgressBarList, item.Position.X + item.Bounds.Width, item.Position.Y, "Lview" + x.ToString()));
-        //    }
-        //}
         private void Form1_Shown(object sender, EventArgs e)
         {
             string dbPath = GetDbPath();
             if (dbPath != null && Directory.Exists(System.IO.Path.GetDirectoryName(dbPath)))
                 dataDirPath = System.IO.Path.GetDirectoryName(dbPath);
             defaultImagePath = GetDefaultImagePath(dbPath); // Make sure to do this before InitializeDbConnection
-            ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
-            // Must-Do:Delete the following code before check in!!!!!!!!!!!!!!!!!!!
-            //deleteMeCodeTempForTesting();
-            ///////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////
             InitializeDbConnection(dbPath);
             GetPropertySettingsFromDB();
             Properties.Settings.Default.Save();
@@ -248,6 +178,26 @@ namespace GameLauncher
             }
             if (Properties.Settings.Default.Maximised)
                 WindowState = FormWindowState.Maximized;
+            // toolStripMenuItem_RecentGames
+            List<Mru> mrus = null;
+            GetListFromDb(ref mrus);
+            if (mrus.Count > 0)
+            {
+                int count = 0;
+                const int MaxCount = 16; // ToDo: Make this user configurable
+                foreach (Mru mru in mrus)
+                {
+                    ++count;
+                    ToolStripMenuItem item = new ToolStripMenuItem(mru.FilePath);
+                    item.Tag = mru.FilePath;
+                    item.Click += OpenRecentFile;
+                    toolStripMenuItem_RecentGames.DropDownItems.Add(item);
+                    if (count > MaxCount)
+                        break;
+                }
+            }
+            else
+                toolStripMenuItem_RecentGames.Enabled = false;
             SetAdvanceOptions();
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1129,7 +1079,7 @@ namespace GameLauncher
         {
             if (gameSystem == null)
                 return;
-            string sql = $"INSERT OR REPLACE INTO GameSystems (Name, ID, ImageDirPath, RomDirPath, EmulatorPath1, EmulatorPath2, EmulatorPath3, EmulatorPath4, EmulatorPath5, EmulatorPath6, EmulatorPath7, EmulatorPath8, EmulatorPath9, EmulatorPath10) VALUES" +
+            string sql = "INSERT OR REPLACE INTO GameSystems (Name, ID, ImageDirPath, RomDirPath, EmulatorPath1, EmulatorPath2, EmulatorPath3, EmulatorPath4, EmulatorPath5, EmulatorPath6, EmulatorPath7, EmulatorPath8, EmulatorPath9, EmulatorPath10) VALUES" +
             $" (\"{gameSystem.Name}\", {gameSystem.ID}, \"{gameSystem.ImageDirPath}\", \"{gameSystem.RomDirPath}\", \"{gameSystem.EmulatorPaths[0]}\", \"{gameSystem.EmulatorPaths[1]}\", \"{gameSystem.EmulatorPaths[2]}\", \"{gameSystem.EmulatorPaths[3]}\", \"{gameSystem.EmulatorPaths[4]}\", " +
             $"\"{gameSystem.EmulatorPaths[5]}\", \"{gameSystem.EmulatorPaths[6]}\", \"{gameSystem.EmulatorPaths[7]}\", \"{gameSystem.EmulatorPaths[8]}\", \"{gameSystem.EmulatorPaths[9]}\")";
             UpdateDB(sql);
@@ -1138,8 +1088,15 @@ namespace GameLauncher
         {
             if (gameImage == null)
                 return;
-            string sql = $"INSERT OR REPLACE INTO Images (Title, NameSimplified, NameOrg, Compressed, Checksum, FilePath) VALUES" +
+            string sql = "INSERT OR REPLACE INTO Images (Title, NameSimplified, NameOrg, Compressed, Checksum, FilePath) VALUES" +
             $" (\"{gameImage.Title}\", \"{gameImage.NameSimplified}\", \"{gameImage.NameOrg}\", \"{gameImage.Compressed}\", \"{gameImage.Checksum}\", \"{gameImage.FilePath}\")";
+            UpdateDB(sql);
+        }
+        private void UpdateInDb(Mru mru)
+        {
+            if (mru == null)
+                return;
+            string sql = $"INSERT OR REPLACE INTO MRU (FilePath, DateLastUsed) VALUES (\"{mru.FilePath}\", \"{mru.DateLastUsed}\")";
             UpdateDB(sql);
         }
         private List<string> GetSystemNames(bool updateComboBoxSystem = true)
@@ -1260,7 +1217,7 @@ namespace GameLauncher
             }
             if (Where.Length > 0)
                 where = Where;
-            var command = connection.CreateCommand();
+            SqliteCommand command = connection.CreateCommand();
             string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum, Year, Rating";
             command.CommandText = $"SELECT {fieldNames} FROM Roms {where} ORDER BY NameSimplified";
             using (SqliteDataReader reader = command.ExecuteReader())
@@ -1290,8 +1247,13 @@ namespace GameLauncher
                     string Title = reader.GetString(i++);
                     string Compressed = reader.GetString(i++);
                     string Checksum = reader.GetString(i++);
-                    int Year = GetInt32Safe(reader, i++, 0);
-                    string Rating = GetStringSafe(reader, i++);
+                    int Year = 0;
+                    string Rating = "";
+                    if (!reader.IsDBNull(reader.GetOrdinal("Year")) && !reader.IsDBNull(reader.GetOrdinal("Rating")))
+                    {
+                        Year = reader.GetInt32(i++);
+                        Rating = reader.GetString(i++);
+                    }
                     if (ImagePath.Length == 0)
                         ImagePath = defaultImagePath;
 
@@ -1304,10 +1266,10 @@ namespace GameLauncher
             }
             return myRomList.Count;
         }
-        private int GetGameImages(ref List<GameImage> gameImages, string where = "")
+        private int GetListFromDb(ref List<GameImage> gameImages, string where = "")
         {
             gameImages = new List<GameImage>();
-            var command = connection.CreateCommand();
+            SqliteCommand command = connection.CreateCommand();
             string fieldNames = "Title, NameSimplified, NameOrg, Compressed, FilePath, Checksum";
             command.CommandText = $"SELECT {fieldNames} FROM Images {where} ORDER BY NameSimplified";
             using (SqliteDataReader reader = command.ExecuteReader())
@@ -1325,6 +1287,23 @@ namespace GameLauncher
                 }
             }
             return gameImages.Count;
+        }
+        private int GetListFromDb(ref List<Mru> mrus, string where = "")
+        {
+            mrus = new List<Mru>();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT FilePath, DateLastUsed FROM MRU {where} ORDER BY DateLastUsed DESC";
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int i = 0;
+                    string FilePath = reader.GetString(i++);
+                    string DateLastUsed = reader.GetString(i++);
+                    mrus.Add(new Mru(FilePath, DateLastUsed));
+                }
+            }
+            return mrus.Count;
         }
         private Rom GetRom(string filePath)
         {
@@ -1358,8 +1337,13 @@ namespace GameLauncher
                     string Title = reader.GetString(i++);
                     string Compressed = reader.GetString(i++);
                     string Checksum = reader.GetString(i++);
-                    int Year = GetInt32Safe(reader, i++, 0);
-                    string Rating = GetStringSafe(reader, i++);
+                    int Year = 0;
+                    string Rating = "";
+                    if (!reader.IsDBNull(reader.GetOrdinal("Year")) && !reader.IsDBNull(reader.GetOrdinal("Rating")))
+                    {
+                        Year = reader.GetInt32(i++);
+                        Rating = reader.GetString(i++);
+                    }
                     if (ImagePath.Length == 0)
                         ImagePath = defaultImagePath;
 
@@ -1535,6 +1519,7 @@ namespace GameLauncher
             saveFileDialog.FileName = emulatorExecutable;
             saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(emulatorExecutable);
             saveFileDialog.CheckFileExists = true;
+            saveFileDialog.OverwritePrompt = false;
             DialogResult results = saveFileDialog.ShowDialog();
             if (results == DialogResult.Cancel)
                 return;
@@ -2889,6 +2874,10 @@ namespace GameLauncher
         private void PlaySelectedRom()
         {
             Rom rom = GetSelectedROM();
+            PlaySelectedRom(rom);
+        }
+        private void PlaySelectedRom(Rom rom)
+        {
             lock (myListView)
             {
                 waitingShellExecuteToComplete = true;
@@ -2899,6 +2888,7 @@ namespace GameLauncher
                 }
                 int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
                 string emulatorExecutable = GetEmulatorExecutable(rom.System, preferredEmulator);
+                UpdateInDb(new Mru(rom.FilePath, DateTime.Now.ToString("yyyyMMDDHHmm")));
                 FormWindowState prevWinState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
                 if (EmulatorRequiresDecompression(emulatorExecutable) && IsSupportedCompressFile(rom.FilePath))
@@ -3012,10 +3002,7 @@ namespace GameLauncher
                 NotesUser = $"; Ver={rom.NotesUser}";
             textBoxStatus.Text = $"{QtyPlayers}FileName='{rom.FilePath}'; FileSize={rom.RomSize}; ImagePath='{rom.ImagePath}'{Version}{Status}{NotesCore}{NotesUser}";
         }
-        private void myListViewContextMenu_Play_Click(object sender, EventArgs e)
-        {
-            PlaySelectedRom();
-        }
+        private void myListViewContextMenu_Play_Click(object sender, EventArgs e)=> PlaySelectedRom();
         private void myListViewContextMenu_RenameROM_Click(object sender, EventArgs e)
         {
             Rom rom = GetSelectedROM();
@@ -3074,6 +3061,7 @@ namespace GameLauncher
             saveFileDialog.FileName = emulatorExecutable;
             saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(emulatorExecutable);
             saveFileDialog.CheckFileExists = true;
+            saveFileDialog.OverwritePrompt = false;
             DialogResult results = saveFileDialog.ShowDialog();
             if (results == DialogResult.Cancel)
                 return;
@@ -3185,10 +3173,7 @@ namespace GameLauncher
                 }
             }
         }
-        private void myListView_OnDbClick(object sender, EventArgs e)
-        {
-            PlaySelectedRom();
-        }
+        private void myListView_OnDbClick(object sender, EventArgs e) => PlaySelectedRom();
         private void myListView_OnFormClosing(object sender, FormClosingEventArgs e)
         {
             threadJoyStickAborting = true;
@@ -3696,7 +3681,7 @@ namespace GameLauncher
             int qtyProcess = 0;
             using (new CursorWait())
             {
-                if (GetGameImages(ref gameImages) < 1)
+                if (GetListFromDb(ref gameImages) < 1)
                     return;
                 foreach (GameImage gameImage in gameImages)
                 {
@@ -3728,6 +3713,12 @@ namespace GameLauncher
             toolStripMenuItem_ResetImageTitleCompressInDB_Click(sender, e);
             toolStripMenuItem_SearchMatchingImage_Click(sender, e);
             toolStripMenuItem_CreateImageListCache_Click(sender, e);
+        }
+        void OpenRecentFile(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            string filePath = (string)menuItem.Tag;
+            PlaySelectedRom(GetRom(filePath));
         }
     }// End of Form1 class
     #endregion

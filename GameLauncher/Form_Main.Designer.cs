@@ -79,19 +79,20 @@
             this.toolStripMenuItem_RegexRenameFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DbUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ResetRomTitleCompress = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ResetImageTitleCompressInDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ResetCompressNames = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_PopulateGameDetailsDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_SearchMatchingImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_ResetYearAndRatingFieldsInDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_SearchMatchingImage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_FilterLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_ResetImageTitleCompressInDB = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_RecentGames = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -338,6 +339,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_RecentGames,
             this.toolStripComboBoxIconDisplay,
             this.toolStripSeparator4,
             this.changeViewToolStripMenuItem,
@@ -532,7 +534,7 @@
             // toolStripMenuItem_RegexRenameFiles
             // 
             this.toolStripMenuItem_RegexRenameFiles.Name = "toolStripMenuItem_RegexRenameFiles";
-            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItem_RegexRenameFiles.Text = "Regex Rename Files";
             this.toolStripMenuItem_RegexRenameFiles.Click += new System.EventHandler(this.toolStripMenuItem_RegexRenameFiles_Click);
             // 
@@ -549,7 +551,7 @@
             this.toolStripMenuItem_ResetYearAndRatingFieldsInDB,
             this.toolStripMenuItem_SearchMatchingImage});
             this.toolStripMenuItem_DbUtilParentMenu.Name = "toolStripMenuItem_DbUtilParentMenu";
-            this.toolStripMenuItem_DbUtilParentMenu.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem_DbUtilParentMenu.Size = new System.Drawing.Size(177, 22);
             this.toolStripMenuItem_DbUtilParentMenu.Text = "Database Util";
             // 
             // toolStripMenuItem_ResetRomTitleCompress
@@ -558,6 +560,13 @@
             this.toolStripMenuItem_ResetRomTitleCompress.Size = new System.Drawing.Size(347, 22);
             this.toolStripMenuItem_ResetRomTitleCompress.Text = "Reset ROM title and compress in DB";
             this.toolStripMenuItem_ResetRomTitleCompress.Click += new System.EventHandler(this.toolStripMenuItem_ResetRomTitleCompress_Click);
+            // 
+            // toolStripMenuItem_ResetImageTitleCompressInDB
+            // 
+            this.toolStripMenuItem_ResetImageTitleCompressInDB.Name = "toolStripMenuItem_ResetImageTitleCompressInDB";
+            this.toolStripMenuItem_ResetImageTitleCompressInDB.Size = new System.Drawing.Size(347, 22);
+            this.toolStripMenuItem_ResetImageTitleCompressInDB.Text = "Reset Image title and compress in DB";
+            this.toolStripMenuItem_ResetImageTitleCompressInDB.Click += new System.EventHandler(this.toolStripMenuItem_ResetImageTitleCompressInDB_Click);
             // 
             // toolStripMenuItem_ResetCompressNames
             // 
@@ -568,6 +577,11 @@
     "database table.\r\nAfter resetting fields, run a search for matching images for RO" +
     "M\'s missing images.";
             this.toolStripMenuItem_ResetCompressNames.Click += new System.EventHandler(this.toolStripMenuItem_ResetCompressNames_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(344, 6);
             // 
             // toolStripMenuItem_PopulateGameDetailsDB
             // 
@@ -583,12 +597,10 @@
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb.Text = "Add GameDetails data to GameLauncher database";
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb.Click += new System.EventHandler(this.toolStripMenuItem_AddGameDetailsToGameLauncherDb_Click);
             // 
-            // toolStripMenuItem_SearchMatchingImage
+            // toolStripSeparator6
             // 
-            this.toolStripMenuItem_SearchMatchingImage.Name = "toolStripMenuItem_SearchMatchingImage";
-            this.toolStripMenuItem_SearchMatchingImage.Size = new System.Drawing.Size(347, 22);
-            this.toolStripMenuItem_SearchMatchingImage.Text = "Search for image matches for games missing image";
-            this.toolStripMenuItem_SearchMatchingImage.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImage_Click);
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(344, 6);
             // 
             // toolStripMenuItem_ResetYearAndRatingFieldsInDB
             // 
@@ -598,6 +610,13 @@
             this.toolStripMenuItem_ResetYearAndRatingFieldsInDB.ToolTipText = "This option may be needed if database was initialized using Beta version of this " +
     "program.";
             this.toolStripMenuItem_ResetYearAndRatingFieldsInDB.Click += new System.EventHandler(this.toolStripMenuItem_ResetYearAndRatingFieldsInDB_Click);
+            // 
+            // toolStripMenuItem_SearchMatchingImage
+            // 
+            this.toolStripMenuItem_SearchMatchingImage.Name = "toolStripMenuItem_SearchMatchingImage";
+            this.toolStripMenuItem_SearchMatchingImage.Size = new System.Drawing.Size(347, 22);
+            this.toolStripMenuItem_SearchMatchingImage.Text = "Search for image matches for games missing image";
+            this.toolStripMenuItem_SearchMatchingImage.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImage_Click);
             // 
             // toolStripSeparator5
             // 
@@ -646,22 +665,11 @@
     "games.\r\nSupports SQL wild characters like % and _.\r\nNo REGEX support!\r\n";
             this.toolStripMenuItemSearchAll.Click += new System.EventHandler(this.toolStripMenuItemSearchAll_Click);
             // 
-            // toolStripMenuItem_ResetImageTitleCompressInDB
+            // toolStripMenuItem_RecentGames
             // 
-            this.toolStripMenuItem_ResetImageTitleCompressInDB.Name = "toolStripMenuItem_ResetImageTitleCompressInDB";
-            this.toolStripMenuItem_ResetImageTitleCompressInDB.Size = new System.Drawing.Size(347, 22);
-            this.toolStripMenuItem_ResetImageTitleCompressInDB.Text = "Reset Image title and compress in DB";
-            this.toolStripMenuItem_ResetImageTitleCompressInDB.Click += new System.EventHandler(this.toolStripMenuItem_ResetImageTitleCompressInDB_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(344, 6);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(344, 6);
+            this.toolStripMenuItem_RecentGames.Name = "toolStripMenuItem_RecentGames";
+            this.toolStripMenuItem_RecentGames.Size = new System.Drawing.Size(251, 22);
+            this.toolStripMenuItem_RecentGames.Text = "Recent &Games";
             // 
             // Form_Main
             // 
@@ -752,6 +760,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ResetImageTitleCompressInDB;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RecentGames;
     }
 }
 
