@@ -47,6 +47,7 @@ namespace GameLauncher
             PreviousLargeIconSize = Properties.Settings.Default.largeIconSize;
             PreviousSmallIconSize = Properties.Settings.Default.smallIconSize;
             InitialEmulatorsBasePath = Properties.Settings.Default.EmulatorsBasePath;
+            numericUpDown_MaxMRU.Value = Properties.Settings.Default.MaxMRU;
         }
         int[] AllowedLargeIconSize = {64, 128, 256};
         int[] AllowedSmallIconSize = {8, 16, 24, 32, 64 };
@@ -82,6 +83,7 @@ namespace GameLauncher
             Properties.Settings.Default.MaxNumberOfPairThreadsPerList = (int)numericUpDown_MaxNumberOfPairThreadsPerList.Value;
             Properties.Settings.Default.largeIconSize = (int)numericUpDown_largeIconSize.Value;
             Properties.Settings.Default.smallIconSize = (int)numericUpDown_smallIconSize.Value;
+            Properties.Settings.Default.MaxMRU = (int)numericUpDown_MaxMRU.Value;
             Properties.Settings.Default.Save();
 
             if (InitialLargeIconSize != Properties.Settings.Default.largeIconSize || InitialSmallIconSize != Properties.Settings.Default.smallIconSize)

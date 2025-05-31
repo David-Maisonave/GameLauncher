@@ -59,16 +59,19 @@
             this.checkBox_SHA256OverMD5 = new System.Windows.Forms.CheckBox();
             this.checkBox_AutoCompleteCustomSourceLiveUpdate = new System.Windows.Forms.CheckBox();
             this.button_EmulatorsBasePath_Add = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numericUpDown_MaxMRU = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_largeIconSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).BeginInit();
             this.groupBox_Checksum.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxMRU)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBox_usePreviousCollectionCache
             // 
             this.checkBox_usePreviousCollectionCache.AutoSize = true;
-            this.checkBox_usePreviousCollectionCache.Location = new System.Drawing.Point(319, 145);
+            this.checkBox_usePreviousCollectionCache.Location = new System.Drawing.Point(319, 144);
             this.checkBox_usePreviousCollectionCache.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_usePreviousCollectionCache.Name = "checkBox_usePreviousCollectionCache";
             this.checkBox_usePreviousCollectionCache.Size = new System.Drawing.Size(172, 17);
@@ -81,7 +84,7 @@
             // checkBox_useJoystickController
             // 
             this.checkBox_useJoystickController.AutoSize = true;
-            this.checkBox_useJoystickController.Location = new System.Drawing.Point(319, 116);
+            this.checkBox_useJoystickController.Location = new System.Drawing.Point(319, 115);
             this.checkBox_useJoystickController.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_useJoystickController.Name = "checkBox_useJoystickController";
             this.checkBox_useJoystickController.Size = new System.Drawing.Size(181, 17);
@@ -325,7 +328,7 @@
             this.linkLabel_Github_GameLauncher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel_Github_GameLauncher.AutoSize = true;
-            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 341);
+            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 344);
             this.linkLabel_Github_GameLauncher.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel_Github_GameLauncher.Name = "linkLabel_Github_GameLauncher";
             this.linkLabel_Github_GameLauncher.Size = new System.Drawing.Size(261, 13);
@@ -338,7 +341,7 @@
             // checkBox_disableAdvanceOptions
             // 
             this.checkBox_disableAdvanceOptions.AutoSize = true;
-            this.checkBox_disableAdvanceOptions.Location = new System.Drawing.Point(243, 310);
+            this.checkBox_disableAdvanceOptions.Location = new System.Drawing.Point(319, 202);
             this.checkBox_disableAdvanceOptions.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_disableAdvanceOptions.Name = "checkBox_disableAdvanceOptions";
             this.checkBox_disableAdvanceOptions.Size = new System.Drawing.Size(146, 17);
@@ -380,7 +383,7 @@
             this.groupBox_Checksum.Controls.Add(this.checkBox_SHA256OverMD5);
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableRomChecksum);
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableImageChecksum);
-            this.groupBox_Checksum.Location = new System.Drawing.Point(19, 202);
+            this.groupBox_Checksum.Location = new System.Drawing.Point(19, 234);
             this.groupBox_Checksum.Name = "groupBox_Checksum";
             this.groupBox_Checksum.Size = new System.Drawing.Size(578, 96);
             this.groupBox_Checksum.TabIndex = 25;
@@ -416,7 +419,7 @@
             // checkBox_AutoCompleteCustomSourceLiveUpdate
             // 
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.AutoSize = true;
-            this.checkBox_AutoCompleteCustomSourceLiveUpdate.Location = new System.Drawing.Point(319, 174);
+            this.checkBox_AutoCompleteCustomSourceLiveUpdate.Location = new System.Drawing.Point(319, 173);
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Name = "checkBox_AutoCompleteCustomSourceLiveUpdate";
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Size = new System.Drawing.Size(189, 17);
@@ -439,6 +442,41 @@
             this.button_EmulatorsBasePath_Add.UseVisualStyleBackColor = true;
             this.button_EmulatorsBasePath_Add.Click += new System.EventHandler(this.button_EmulatorsBasePath_Add_Click);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(16, 201);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(101, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Max Recent &Games";
+            // 
+            // numericUpDown_MaxMRU
+            // 
+            this.numericUpDown_MaxMRU.Location = new System.Drawing.Point(172, 201);
+            this.numericUpDown_MaxMRU.Margin = new System.Windows.Forms.Padding(2);
+            this.numericUpDown_MaxMRU.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numericUpDown_MaxMRU.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown_MaxMRU.Name = "numericUpDown_MaxMRU";
+            this.numericUpDown_MaxMRU.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDown_MaxMRU.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.numericUpDown_MaxMRU, "Maximum quantity of recent games to display on main menu MRU list.");
+            this.numericUpDown_MaxMRU.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.numericUpDown_MaxMRU.ValueChanged += new System.EventHandler(this.numericUpDown_smallIconSize_ValueChanged);
+            // 
             // Form_Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -448,14 +486,17 @@
             this.Controls.Add(this.checkBox_AutoCompleteCustomSourceLiveUpdate);
             this.Controls.Add(this.groupBox_Checksum);
             this.Controls.Add(this.linkLabel_Github_GameLauncher);
+            this.Controls.Add(this.checkBox_disableAdvanceOptions);
             this.Controls.Add(this.button_Cancel);
             this.Controls.Add(this.button_Ok);
+            this.Controls.Add(this.numericUpDown_MaxMRU);
             this.Controls.Add(this.numericUpDown_smallIconSize);
             this.Controls.Add(this.numericUpDown_largeIconSize);
             this.Controls.Add(this.numericUpDown_MaxNumberOfPairThreadsPerList);
             this.Controls.Add(this.button_DefaultImagePath);
             this.Controls.Add(this.button_EmulatorsBasePath);
             this.Controls.Add(this.button_DbPath);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -465,7 +506,6 @@
             this.Controls.Add(this.textBox_EmulatorsBasePath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox_DbPath);
-            this.Controls.Add(this.checkBox_disableAdvanceOptions);
             this.Controls.Add(this.checkBox_useJoystickController);
             this.Controls.Add(this.checkBox_usePreviousCollectionCache);
             this.KeyPreview = true;
@@ -478,6 +518,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).EndInit();
             this.groupBox_Checksum.ResumeLayout(false);
             this.groupBox_Checksum.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxMRU)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -514,5 +555,7 @@
         private System.Windows.Forms.CheckBox checkBox_SHA256OverMD5;
         private System.Windows.Forms.CheckBox checkBox_AutoCompleteCustomSourceLiveUpdate;
         private System.Windows.Forms.Button button_EmulatorsBasePath_Add;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numericUpDown_MaxMRU;
     }
 }

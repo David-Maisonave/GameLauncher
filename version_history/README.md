@@ -27,4 +27,4 @@
 	- Populate GameDetails DB
 	- Add GameDetails data to GameLauncher DB
 	- Search for image matches for games missing image
-- 
+- Added MRU. Added recent games menu option to main menu.

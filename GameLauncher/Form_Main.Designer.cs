@@ -53,6 +53,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripComboBoxSystem = new System.Windows.Forms.ToolStripComboBox();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_RecentGames = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBoxIconDisplay = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.changeViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,10 +93,11 @@
             this.toolStripMenuItem_FilterLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_RecentGames = new System.Windows.Forms.ToolStripMenuItem();
+            this.numericUpDown_Paginator = new System.Windows.Forms.NumericUpDown();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Paginator)).BeginInit();
             this.SuspendLayout();
             // 
             // myListView
@@ -353,6 +355,12 @@
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 28);
             this.optionsToolStripMenuItem.Text = "&Options";
+            // 
+            // toolStripMenuItem_RecentGames
+            // 
+            this.toolStripMenuItem_RecentGames.Name = "toolStripMenuItem_RecentGames";
+            this.toolStripMenuItem_RecentGames.Size = new System.Drawing.Size(251, 22);
+            this.toolStripMenuItem_RecentGames.Text = "Recent &Games";
             // 
             // toolStripComboBoxIconDisplay
             // 
@@ -665,17 +673,22 @@
     "games.\r\nSupports SQL wild characters like % and _.\r\nNo REGEX support!\r\n";
             this.toolStripMenuItemSearchAll.Click += new System.EventHandler(this.toolStripMenuItemSearchAll_Click);
             // 
-            // toolStripMenuItem_RecentGames
+            // numericUpDown_Paginator
             // 
-            this.toolStripMenuItem_RecentGames.Name = "toolStripMenuItem_RecentGames";
-            this.toolStripMenuItem_RecentGames.Size = new System.Drawing.Size(251, 22);
-            this.toolStripMenuItem_RecentGames.Text = "Recent &Games";
+            this.numericUpDown_Paginator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericUpDown_Paginator.Enabled = false;
+            this.numericUpDown_Paginator.Location = new System.Drawing.Point(511, 4);
+            this.numericUpDown_Paginator.Name = "numericUpDown_Paginator";
+            this.numericUpDown_Paginator.Size = new System.Drawing.Size(61, 20);
+            this.numericUpDown_Paginator.TabIndex = 92;
+            this.numericUpDown_Paginator.ValueChanged += new System.EventHandler(this.numericUpDown_Paginator_Changed);
             // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 361);
+            this.Controls.Add(this.numericUpDown_Paginator);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox_ProgressBar);
             this.Controls.Add(this.textBoxStatus);
@@ -691,6 +704,7 @@
             this.groupBox_ProgressBar.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Paginator)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -761,6 +775,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RecentGames;
+        private System.Windows.Forms.NumericUpDown numericUpDown_Paginator;
     }
 }
 

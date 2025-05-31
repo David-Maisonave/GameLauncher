@@ -178,26 +178,7 @@ namespace GameLauncher
             }
             if (Properties.Settings.Default.Maximised)
                 WindowState = FormWindowState.Maximized;
-            // toolStripMenuItem_RecentGames
-            List<Mru> mrus = null;
-            GetListFromDb(ref mrus);
-            if (mrus.Count > 0)
-            {
-                int count = 0;
-                const int MaxCount = 16; // ToDo: Make this user configurable
-                foreach (Mru mru in mrus)
-                {
-                    ++count;
-                    ToolStripMenuItem item = new ToolStripMenuItem(mru.FilePath);
-                    item.Tag = mru.FilePath;
-                    item.Click += OpenRecentFile;
-                    toolStripMenuItem_RecentGames.DropDownItems.Add(item);
-                    if (count > MaxCount)
-                        break;
-                }
-            }
-            else
-                toolStripMenuItem_RecentGames.Enabled = false;
+            SetMRU();
             SetAdvanceOptions();
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -501,7 +482,7 @@ namespace GameLauncher
         public void DelegateScanForNewRomsOnAllSystems(Form_Main form_Main, bool arg) => form_Main.ScanForNewRomsOnAllSystems(arg);
         public void DelegateRescanSelectedSystem(Form_Main form_Main, bool arg) => form_Main.RescanSelectedSystem(null, arg);
         public void DelegateDeleteImageList(Form_Main form_Main, bool arg) => form_Main.DeleteImageList();
-        public void DelegateCreateCacheForDisplaySystemIcons(Form_Main form_Main, bool arg) => form_Main.CreateCacheForDisplaySystemIcons();
+        public void DelegateCreateCacheForDisplaySystemIcons(Form_Main form_Main, bool arg) => form_Main.CreateCacheForDisplaySystemIcons(arg);
         public void DelegateDeleteImageFilesNotInDatabase(Form_Main form_Main, bool arg) => form_Main.DeleteImageFilesNotInDatabase(arg);
         public void DelegateDeleteDuplicateRomFilesInDatabase(Form_Main form_Main, DeleteDuplicateBy arg) => form_Main.DeleteDuplicateRomFilesInDatabase(arg);
         public void DelegateRedoDbInit(Form_Main form_Main, bool arg) => form_Main.RedoDbInit("Are you sure you want to rescan all ROM's?\nThis will take about 15-60 minutes.", "Rescan?", MessageBoxIcon.Question);
@@ -564,7 +545,19 @@ namespace GameLauncher
             return false;
         }
         private static bool UpdateDB(string sql) => UpdateDB(sql, connection);
-        public static void DbErrorLogging(string processName, string message, string stack = "", string circumstances = "", int errorCode = 0) => UpdateDB($"INSERT OR REPLACE INTO ErrorLog (Process, Message, Code, Circumstances, Stack) VALUES (\"{processName}\", \"{message}\", {errorCode}, \"{circumstances}\", \"{stack}\")");
+        public static void DbErrorLogging(string processName, string message, string stack = "", string circumstances = "", int errorCode = 0)
+        {
+            try 
+            {   // Make sure not to fail while trying to log an error to the database.
+                Console.WriteLine($"{message}\nStack={stack}");
+                UpdateDB("INSERT OR REPLACE INTO ErrorLog (Process, Message, Code, Circumstances, Stack) VALUES " +
+                    $"(\"{processName}\", \"{message.Replace("\"", "'")}\", {errorCode}, \"{circumstances.Replace("\"", "'")}\", \"{stack.Replace("\"", "'")}\")");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DbErrorLogging exception thrown \"{ex.Message}\"!");
+            }
+        }
         private static void EraseOldErrorLogging(string processName = "%") => UpdateDB($"DELETE FROM ErrorLog WHERE Process like \"{processName}\"");
         private static string GetFirstColStr(string sql, string defaultValue = "") => GetFirstColStr(sql, defaultValue, connection);
         private static string GetFirstColStr(string sql, SqliteConnection conn) => GetFirstColStr(sql, "", conn);
@@ -823,6 +816,8 @@ namespace GameLauncher
         {
             if (Directory.Exists(imgPath))
             {
+                int qty = 0;
+                cancelScan = false;
                 string[] imgFiles = GetFilesByExtensions(imgPath, SUPPORTED_IMAGE_FILES); // Directory.GetFiles(imgPath, "*.png");
                 ResetProgressBar(imgFiles.Length, isMainThread);
                 if (isMainThread)
@@ -830,9 +825,15 @@ namespace GameLauncher
                     foreach (var imgFile in imgFiles)
                     {
                         if (DidCancelButtonGetPressed())
+                        {
+                            SendStatus($"GetImages cancelled with only processing {qty} of {imgFiles.Length} image files.", isMainThread);
                             return;
+                        }
+                        ++qty;
                         AddImagePathToDb(imgFile, true, isMainThread);
+                        SendStatus($"Processing image file {imgFile}; {qty} of {imgFiles.Length}", isMainThread);
                     }
+                    SendStatus($"Completed processing {imgFiles.Length} image files.", isMainThread);
                 }
                 else
                     Parallel.ForEach(imgFiles, imgFile => AddImagePathToDb(imgFile, true, false));
@@ -842,6 +843,7 @@ namespace GameLauncher
 
         private void InitializeRomsInDatabaseForSystem(string emulatorDir, EmulatorExecutables emulatorPaths, bool isMainThread = false, bool scanImageDir = true, bool hideGroup = false)
         {
+            cancelScan = false;
             string romPath = emulatorDir + romSubFolderName;
             string imgPath = emulatorDir + imageSubFolderName;
             if (Directory.Exists(romPath) && IsEmulatorSupported(emulatorPaths))
@@ -917,6 +919,7 @@ namespace GameLauncher
         }
         private List<string> InitializeRomsInDatabase(string startingPath = @"C:\Emulators", string romSubFolder = @"\roms", string imageSubFolder = @"\images", bool createTables = false, int doMultithread = 0)
         {
+            cancelScan = false;
             romSubFolderName = romSubFolder;
             imageSubFolderName = imageSubFolder;
             Stopwatch totalProcessWatch = System.Diagnostics.Stopwatch.StartNew();
@@ -1116,7 +1119,6 @@ namespace GameLauncher
                     SystemNames.Add(name);
                     if (updateComboBoxSystem)
                         toolStripComboBoxSystem.Items.Add(name);
-                    Console.WriteLine($"System name , {name}!");
                 }
             }
             return SystemNames;
@@ -1135,7 +1137,6 @@ namespace GameLauncher
                     string name = reader.GetString(0);
                     int ID = reader.GetInt32(1);
                     systemNamesAndID[ID] = name;
-                    Console.WriteLine($"System name={name}, ID={ID}!");
                 }
             }
             return systemNamesAndID;
@@ -1155,7 +1156,6 @@ namespace GameLauncher
                     string emulatorDir = Path.GetDirectoryName(RomDirPath);
                     int ID = reader.GetInt32(1);
                     systemDirAndID[ID] = emulatorDir;
-                    Console.WriteLine($"System name={emulatorDir}, ID={ID}!");
                 }
             }
             return systemDirAndID;
@@ -1173,7 +1173,6 @@ namespace GameLauncher
                 {
                     string name = reader.GetString(0);
                     SystemNames.Add(name);
-                    Console.WriteLine($"System name , {name}!");
                 }
             }
             return SystemNames;
@@ -1207,7 +1206,7 @@ namespace GameLauncher
             }
             return defaultValue;
         }
-        private int GetRoms(int SystemID, ref List<Rom> myRomList, string titleSearch = "", string Where = "")
+        private int GetRoms(int SystemID, ref List<Rom> myRomList, string titleSearch = "", string Where = "", string Limit = "")
         {
             myRomList = new List<Rom>();
             string where = $"WHERE System = \"{SystemID}\" ";
@@ -1219,7 +1218,7 @@ namespace GameLauncher
                 where = Where;
             SqliteCommand command = connection.CreateCommand();
             string fieldNames = "NameSimplified, NameOrg, System, FilePath, PreferredEmulator, ImagePath, QtyPlayers, Status, Region, Developer, ReleaseDate, RomSize, Genre, NotesCore, NotesUser, FileFormat, Version, Description, Language, Title, Compressed, Checksum, Year, Rating";
-            command.CommandText = $"SELECT {fieldNames} FROM Roms {where} ORDER BY NameSimplified";
+            command.CommandText = $"SELECT {fieldNames} FROM Roms {where} ORDER BY NameSimplified {Limit}";
             using (SqliteDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -1388,6 +1387,29 @@ namespace GameLauncher
         }
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Misc Methods
+        private void SetMRU()
+        {
+            toolStripMenuItem_RecentGames.DropDownItems.Clear();
+            List<Mru> mrus = null;
+            GetListFromDb(ref mrus);
+            if (mrus.Count > 0)
+            {
+                int count = 0;
+                foreach (Mru mru in mrus)
+                {
+                    ++count;
+                    ToolStripMenuItem item = new ToolStripMenuItem(mru.FilePath);
+                    item.Tag = mru.FilePath;
+                    item.Click += OpenRecentFile;
+                    toolStripMenuItem_RecentGames.DropDownItems.Add(item);
+                    if (count > Properties.Settings.Default.MaxMRU)
+                        break;
+                }
+            }
+            else
+                toolStripMenuItem_RecentGames.Enabled = false;
+
+        }
         private void AddN64RdxToGameDetails(string fileName)
         {
             if (!File.Exists(fileName))
@@ -1765,7 +1787,6 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"GetRomCompressChecksum exception thrown \"{ex.Message}\"!");
                 DbErrorLogging("GetRomCompressChecksum", $"GetRomCompressChecksum exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Error with filePath = {filePath}");
             }
             // Only support zip files with a single compressed file. If more than 1 file, return checksum for entire zip file.
@@ -2427,15 +2448,18 @@ namespace GameLauncher
         }
         private PreviousCollectedImages GetSavedCollectionData(string systemName)
         {
-            string imageList1Path = GetImageListFile(systemName, 1);
-            string imageList2Path = GetImageListFile(systemName, 2);
-            if (File.Exists(imageList1Path) && File.Exists(imageList2Path))
+            if (systemName.Length > 0)
             {
-                PreviousCollectedImages previousCollectedImages = new PreviousCollectedImages();
-                previousCollectedImages.list1 = SerializableImageList.Load(imageList1Path, Properties.Settings.Default.largeIconSize);
-                previousCollectedImages.list2 = SerializableImageList.Load(imageList2Path, Properties.Settings.Default.smallIconSize);
-                if (previousCollectedImages.list1 != null && previousCollectedImages.list2 != null)
-                    return previousCollectedImages;
+                string imageList1Path = GetImageListFile(systemName, 1);
+                string imageList2Path = GetImageListFile(systemName, 2);
+                if (File.Exists(imageList1Path) && File.Exists(imageList2Path))
+                {
+                    PreviousCollectedImages previousCollectedImages = new PreviousCollectedImages();
+                    previousCollectedImages.list1 = SerializableImageList.Load(imageList1Path, Properties.Settings.Default.largeIconSize);
+                    previousCollectedImages.list2 = SerializableImageList.Load(imageList2Path, Properties.Settings.Default.smallIconSize);
+                    if (previousCollectedImages.list1 != null && previousCollectedImages.list2 != null)
+                        return previousCollectedImages;
+                }
             }
             return null;
         }
@@ -2447,6 +2471,13 @@ namespace GameLauncher
             SerializableImageList.Save(previousCollectedImages.list1, imageList1Path);
             SerializableImageList.Save(previousCollectedImages.list2, imageList2Path);
         }
+        private void TaskToProcessImageList(string imgFile, int setId, int listID, int i)
+        {
+            if (setId == 0)
+                tmpImageList1[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(imgFile));
+            else
+                tmpImageList2[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(imgFile));
+        }
         private void TaskToProcessImageList(int setId, int listID, int startPos, int lastPos)
         {
             string imgFile = "";
@@ -2455,30 +2486,31 @@ namespace GameLauncher
             {
                 if (tmpImageList1 == null || tmpImageList2 == null)
                     return;
-                Console.WriteLine($"Starting set{setId} with list{listID}. Start pos={startPos} and last pos={lastPos}.");
                 for (i = startPos; i < lastPos; i++)
                 {
                     imgFile = romList[index: i].ImagePath;
-                    if (setId == 0)
-                        tmpImageList1[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(imgFile));
-                    else
-                        tmpImageList2[listID].Images.Add(romList[index: i].Title, System.Drawing.Image.FromFile(imgFile));
-
+                    try
+                    {
+                        TaskToProcessImageList(imgFile, setId, listID, i);
+                    }
+                    catch (Exception ex)
+                    {
+                        DbErrorLogging("TaskToProcessImageList", $"TaskToProcessImageList exception thrown '{ex.Message}' while processing bad image file {imgFile}! Removing this file from the database.", ex.StackTrace, $"Var(setId={setId}, listID={listID}, startPos={startPos}, lastPos={lastPos}, imgFile={imgFile}, i={i})");
+                        UpdateDB($"DELETE FROM Images WHERE FilePath = \"{imgFile}\"");
+                        UpdateDB($"UPDATE Roms SET ImagePath = \"\" WHERE ImagePath = \"{imgFile}\"");
+                        imgFile = GetDefaultImageBuildPath();
+                        TaskToProcessImageList(imgFile, setId, listID, i);
+                    }
                 }
-                if (setId == 0)
-                    Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList1[listID].Images.Count}.");
-                else
-                    Console.WriteLine($"Completed set{setId}, list{listID} with count = {tmpImageList2[listID].Images.Count}.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"TaskToProcessImageList exception thrown \"{ex.Message}\" while processing image file {imgFile} {i} of {lastPos}!");
-                Form_Main.DbErrorLogging("TaskToProcessImageList", $"TaskToProcessImageList exception thrown \"{ex.Message}\" while processing image file {imgFile}!", ex.StackTrace, $"Var(setId={setId}, listID={listID}, startPos={startPos}, lastPos={lastPos}, imgFile={imgFile}, i={i})");
+                DbErrorLogging("TaskToProcessImageList", $"TaskToProcessImageList exception thrown '{ex.Message}' while processing image file {imgFile}!", ex.StackTrace, $"Var(setId={setId}, listID={listID}, startPos={startPos}, lastPos={lastPos}, imgFile={imgFile}, i={i})");
             }
         }
-        public bool DisplaySystemIcons(string systemName, int multithreadMethod = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
+        public bool DisplaySystemIcons(string systemName, bool resetPagination = true, int multithreadMethod = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
         {
-            if (systemName.Length == 0)
+            if (systemName.Length == 0 && resetPagination)
             {
                 toolStripMenuItemChangeDefaultEmulator.Enabled = false;
                 toolStripMenuItem_ROMParentMenu.Enabled = false;
@@ -2489,6 +2521,11 @@ namespace GameLauncher
             else
             {
                 SetAdvanceOptions();
+            }
+            if (resetPagination)
+            {
+                numericUpDown_Paginator.Value = 0;
+                numericUpDown_Paginator.Enabled = false;
             }
             using (new CursorWait())
             {
@@ -2508,11 +2545,36 @@ namespace GameLauncher
                     //assigning the second imageList as SmallImageList to the ListView...   
                     myListView.SmallImageList = previousCollections[systemName].list2;
                     romList = previousCollections[systemName].roms;
+                    if (romList.Count > Properties.Settings.Default.MaxRomCountBeforeSettingPagination && resetPagination)
+                    {
+                        int MaxRange = (((int)numericUpDown_Paginator.Value) + 1) * Properties.Settings.Default.MaxPaginationPerPage;
+                        numericUpDown_Paginator.Enabled = true;
+                        if (numericUpDown_Paginator.Value == 0)
+                            numericUpDown_Paginator.Maximum = romList.Count / Properties.Settings.Default.MaxPaginationPerPage;
+                        romList.RemoveRange(MaxRange, romList.Count - MaxRange);
+                    }
                 }
                 else
                 {
                     if (systemName.Length > 0 && GetRoms(systemName) < 1)
                         return false;
+                    // ToDo: add cache for pagination using value of numericUpDown_Paginator.Value
+                    if (resetPagination)
+                    {
+                        if (romList.Count > Properties.Settings.Default.MaxRomCountBeforeSettingPagination)
+                        {
+                            int MaxRange = (((int)numericUpDown_Paginator.Value) + 1) * Properties.Settings.Default.MaxPaginationPerPage;
+                            numericUpDown_Paginator.Enabled = true;
+                            if (numericUpDown_Paginator.Value == 0)
+                                numericUpDown_Paginator.Maximum = romList.Count / Properties.Settings.Default.MaxPaginationPerPage;
+                            romList.RemoveRange(MaxRange, romList.Count - MaxRange);
+                        }
+                        else
+                        {
+                            numericUpDown_Paginator.Value = 0;
+                            numericUpDown_Paginator.Enabled = false;
+                        }
+                    }
                     PreviousCollectedImages previousCollectedImages = GetSavedCollectionData(systemName);
                     if (previousCollectedImages != null && previousCollectedImages.list1.Images.Count == romList.Count)
                     {
@@ -2590,13 +2652,13 @@ namespace GameLauncher
                         //assigning the second imageList as SmallImageList to the ListView...
                         myListView.SmallImageList = myImageList2;
                     }
-                    textBoxStatus.Text = $"Setting titles for the {romList.Count} games (ROM's) found for {systemName}";
+                    textBoxStatus.Text = $"Setting titles for the {romList.Count} games (ROM's)";
                     myListView.Items.Clear();
                     // Here's a bottleneck which slows down display of over 1500 ROM's
                     for (int i = 0; i < romList.Count; i++)
                         myListView.Items.Add(romList[i].FilePath, romList[i].Title, i);
-
-                    if (previousCollectedImages == null || previousCollectedImages.list1.Images.Count != romList.Count)
+                    if (romList.Count <= Properties.Settings.Default.MaxRomCountBeforeSettingPagination && systemName.Length > 0 
+                        && (previousCollectedImages == null || previousCollectedImages.list1.Images.Count != romList.Count))
                     {
                         PreviousCollectedData previousCollectedData = new PreviousCollectedData();
                         previousCollectedData.list1 = myListView.LargeImageList;
@@ -2608,7 +2670,7 @@ namespace GameLauncher
                     }
                 }
 
-                textBoxStatus.Text = $"{romList.Count} GamSqliteCommand(ROM's) found for {systemName}";
+                textBoxStatus.Text = $"Returned {romList.Count} games.";
             }
             return true;
         }
@@ -2897,6 +2959,7 @@ namespace GameLauncher
                     ExecuteEmulator(rom.FilePath, emulatorExecutable);
                 waitingShellExecuteToComplete = false;
                 this.WindowState = prevWinState;
+                SetMRU();
             }
         }
         public void ExecuteEmulator(string romZipFile, string emulatorExecutable)
@@ -2913,7 +2976,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 MessageBox.Show($"ExecuteEmulator exception thrown \"{ex.Message}\" for emulatorExecutable ({emulatorExecutable}) and ROM file {romZipFile}!", "ExecuteEmulator Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Form_Main.DbErrorLogging("ExecuteEmulator", $"ExecuteEmulator exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Input Arg(romZipFile={romZipFile}, emulatorExecutable={emulatorExecutable})");
+                DbErrorLogging("ExecuteEmulator", $"ExecuteEmulator exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Input Arg(romZipFile={romZipFile}, emulatorExecutable={emulatorExecutable})");
             }
         }
         public void DecompressFileToTemporaryFolder(string romZipFile, string emulatorExecutable)
@@ -3286,7 +3349,6 @@ namespace GameLauncher
         }
         private void FilterOutRomsFromList(bool redisplayImageListFirst, bool useRegex, bool searchAllRomsInAllSystems = false)
         {
-            Console.WriteLine($"FilterOutRomsFromList (redisplayImageListFirst = \"{redisplayImageListFirst}\", useRegex = \"{useRegex}\")..");
             try
             {
                 if (redisplayImageListFirst || useRegex)
@@ -3314,15 +3376,12 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"FilterOutRomsFromList exception thrown \"{ex.Message}\"!");
-                Form_Main.DbErrorLogging("FilterOutRomsFromList", $"FilterOutRomsFromList exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace, $"Input Arg(redisplayImageListFirst={redisplayImageListFirst}, useRegex={useRegex})");
+                DbErrorLogging("FilterOutRomsFromList", $"FilterOutRomsFromList exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace, $"Input Arg(redisplayImageListFirst={redisplayImageListFirst}, useRegex={useRegex})");
             }
             lastSearchStr = toolStripTextBox_Filter.Text;
-            Console.WriteLine($"FilterOutRomsFromList Done..");
         }
         private void FilterOutRomsFromList(bool alwaysRedisplayImageListFirst = false, bool searchAllRomsInAllSystems = false)
         {
-            Console.WriteLine($"FilterOutRomsFromList (alwaysRedisplayImageListFirst = \"{alwaysRedisplayImageListFirst}\")..");
             try
             {
                 bool redisplayImageListFirst = alwaysRedisplayImageListFirst || !(toolStripTextBox_Filter.Text.Length > lastSearchStr.Length && toolStripTextBox_Filter.Text.StartsWith(lastSearchStr));
@@ -3344,14 +3403,11 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"FilterOutRomsFromList exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!");
-                Form_Main.DbErrorLogging("FilterOutRomsFromList", $"FilterOutRomsFromList exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace, $"Input Arg(alwaysRedisplayImageListFirst={alwaysRedisplayImageListFirst})");
+                DbErrorLogging("FilterOutRomsFromList", $"FilterOutRomsFromList exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace, $"Input Arg(alwaysRedisplayImageListFirst={alwaysRedisplayImageListFirst})");
             }
-            Console.WriteLine($"FilterOutRomsFromList Done.");
         }
         private void toolStripTextBox_Filter_Change(object sender, EventArgs e)
         {
-            Console.WriteLine($"toolStripTextBox_Filter_Change (toolStripTextBox_Filter.Text = \"{toolStripTextBox_Filter.Text}\")..");
             try
             {
                 FilterOutRomsFromList();
@@ -3360,8 +3416,7 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"toolStripTextBox_Filter_Change exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!");
-                Form_Main.DbErrorLogging("toolStripTextBox_Filter_Change", $"toolStripTextBox_Filter_Change exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace);
+                DbErrorLogging("toolStripTextBox_Filter_Change", $"toolStripTextBox_Filter_Change exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace);
             }
         }
         private void toolStripTextBox_Filter_Click(object sender, EventArgs e) => FilterOutRomsFromList();
@@ -3442,7 +3497,7 @@ namespace GameLauncher
             if (fbd.ShowDialog() == DialogResult.OK)
                 GetImagesAndWait(fbd.SelectedPath);
         }
-        private void toolStripMenuItem_CreateImageListCache_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateCreateCacheForDisplaySystemIcons), GetDelegateAction(this, null));
+        private void toolStripMenuItem_CreateImageListCache_Click(object sender, EventArgs e)=>BeginInvoke(new MyDelegateForm_Main(DelegateCreateCacheForDisplaySystemIcons), GetDelegateAction(this, true));
         private void toolStripMenuItem_ScanSelectedSystemRomsAndImages_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main(DelegateRescanSelectedSystem), GetDelegateAction(this, true));
         private void toolStripMenuItem_ScanAllSystemsNewRomsAndImages_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main(DelegateScanForNewRomsOnAllSystems), GetDelegateAction(this, true));
         private void toolStripMenuItem_DeleteDupImagesNotInDB_Click(object sender, EventArgs e)
@@ -3566,12 +3621,18 @@ namespace GameLauncher
             Dictionary<int, string> systemNamesAndID = GetSystemNamesAndID();
             int qtyChanges = 0;
             int qtyProcess = 0;
+            cancelScan = false;
             using (new CursorWait())
             {
                 if (GetRoms(-1, ref rom_list) < 1)
                     return;
                 foreach (Rom rom in rom_list)
                 {
+                    if (DidCancelButtonGetPressed())
+                    {
+                        SendStatus($"SearchMatchingImage cancelled with only processing {qtyProcess} of {rom_list.Count} ROM's.", true);
+                        return;
+                    }
                     ++qtyProcess;
                     textBoxStatus.Text = $"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}";
                     if (rom.Title.Contains("Bug's Life", StringComparison.OrdinalIgnoreCase))
@@ -3606,12 +3667,18 @@ namespace GameLauncher
             Dictionary<int, string> systemDirAndID = GetSystemDirAndID();
             int qtyChanges = 0;
             int qtyProcess = 0;
+            cancelScan = false;
             using (new CursorWait())
             {
                 if (GetRoms(-1, ref rom_list, "", "WHERE ImagePath = ''") < 1)
                     return;
                 foreach (Rom rom in rom_list)
                 {
+                    if (DidCancelButtonGetPressed())
+                    {
+                        SendStatus($"SearchMatchingImage cancelled with only processing {qtyProcess} of {rom_list.Count} ROM's.", true);
+                        return;
+                    }
                     ++qtyProcess;
                     textBoxStatus.Text = $"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}";
                     string imagePath = GetImageIndexByName(rom.NameSimplified, rom.NameOrg, rom.Title, rom.Compressed, systemDirAndID[rom.System]);
@@ -3630,6 +3697,8 @@ namespace GameLauncher
                     Application.DoEvents();
                 }
                 textBoxStatus.Text = $"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}";
+                if (qtyChanges > 0)
+                    toolStripMenuItem_CreateImageListCache_Click(sender, e);
             }
         }
         private void toolStripMenuItem_ResetYearAndRatingFieldsInDB_Click(object sender, EventArgs e)
@@ -3642,12 +3711,18 @@ namespace GameLauncher
             List<Rom> rom_list = new List<Rom>();
             int qtyChanges = 0;
             int qtyProcess = 0;
+            cancelScan = false;
             using (new CursorWait())
             {
                 if (GetRoms(-1, ref rom_list) < 1)
                     return;
                 foreach (Rom rom in rom_list)
                 {
+                    if (DidCancelButtonGetPressed())
+                    {
+                        SendStatus($"ResetRomTitleCompress cancelled with only processing {qtyProcess} of {rom_list.Count} ROM's.", true);
+                        return;
+                    }
                     ++qtyProcess;
                     textBoxStatus.Text = $"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}";
                     string Compressed = rom.Compressed;
@@ -3679,12 +3754,18 @@ namespace GameLauncher
             List<GameImage> gameImages = new List<GameImage>();
             int qtyChanges = 0;
             int qtyProcess = 0;
+            cancelScan = false;
             using (new CursorWait())
             {
                 if (GetListFromDb(ref gameImages) < 1)
                     return;
                 foreach (GameImage gameImage in gameImages)
                 {
+                    if (DidCancelButtonGetPressed())
+                    {
+                        SendStatus($"ResetImageTitleCompressInDB cancelled with only processing {qtyProcess} of {gameImages.Count} images.", true);
+                        return;
+                    }
                     ++qtyProcess;
                     textBoxStatus.Text = $"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}";
                     string Title = gameImage.Title;
@@ -3712,13 +3793,19 @@ namespace GameLauncher
             toolStripMenuItem_ResetRomTitleCompress_Click(sender, e);
             toolStripMenuItem_ResetImageTitleCompressInDB_Click(sender, e);
             toolStripMenuItem_SearchMatchingImage_Click(sender, e);
-            toolStripMenuItem_CreateImageListCache_Click(sender, e);
         }
         void OpenRecentFile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             string filePath = (string)menuItem.Tag;
             PlaySelectedRom(GetRom(filePath));
+        }
+        private void numericUpDown_Paginator_Changed(object sender, EventArgs e)
+        {
+            int MinRange = (int)numericUpDown_Paginator.Value * Properties.Settings.Default.MaxPaginationPerPage;
+            int SystemID = GetSystemIndex(toolStripComboBoxSystem.Text);
+            GetRoms(SystemID, ref romList, "", "", $"limit {MinRange} , {Properties.Settings.Default.MaxPaginationPerPage} ");
+            DisplaySystemIcons("", false);
         }
     }// End of Form1 class
     #endregion

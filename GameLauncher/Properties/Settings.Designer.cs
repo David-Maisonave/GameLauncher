@@ -262,5 +262,41 @@ namespace GameLauncher.Properties {
                 this["AutoCompleteCustomSourceLiveUpdate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public int MaxMRU {
+            get {
+                return ((int)(this["MaxMRU"]));
+            }
+            set {
+                this["MaxMRU"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int MaxPaginationPerPage {
+            get {
+                return ((int)(this["MaxPaginationPerPage"]));
+            }
+            set {
+                this["MaxPaginationPerPage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
+        public int MaxRomCountBeforeSettingPagination {
+            get {
+                return ((int)(this["MaxRomCountBeforeSettingPagination"]));
+            }
+            set {
+                this["MaxRomCountBeforeSettingPagination"] = value;
+            }
+        }
     }
 }
