@@ -8,25 +8,42 @@ using Aspose.Zip.Tar;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GameLauncher
 {
-    public interface CompressArchiveInterface : System.IDisposable
+    public interface IDecompressArchive : System.IDisposable
     {
         void ExtractToDirectory(string dirName);
         string[] GetNames();
     }
-    public class ZipCompressArchive : CompressArchiveInterface
+    public interface ICompressArchive : System.IDisposable
+    {
+        bool CompressFile(string filePath);
+    }
+    public interface IArchive : IDecompressArchive, ICompressArchive
+    {
+    }
+    public class ZipCompressArchive : IArchive
     {
         private ZipArchive archive;
-        public ZipCompressArchive(ZipArchive _archive)
+        public string archivePath { get; private set; }
+        public ZipCompressArchive(ZipArchive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public ZipCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = ZipFile.Open(archivePath, ZipArchiveMode.Create);
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames()
@@ -38,14 +55,27 @@ namespace GameLauncher
             }
             return names;
         }
+        public bool CompressFile(string filePath)
+        {
+            archive.CreateEntryFromFile(filePath, Path.GetFileName(filePath));
+            return File.Exists(archivePath);
+        }
         public void Dispose() => archive.Dispose();
     }
-    public class RarCompressArchive : CompressArchiveInterface
-    {
+    public class RarCompressArchive : IArchive
+    {// There's no free RAR library to create RAR files. The CompressFile function requires WinRar be installed in the below path.
+        public const string RarExec = @"C:\Program Files\WinRAR\Rar.exe";
+        public static bool IsWinRarInstalled()=> File.Exists(RarExec);
         private RarArchive archive;
-        public RarCompressArchive(RarArchive _archive)
+        public string archivePath { get; private set; }
+        public RarCompressArchive(RarArchive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public RarCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = null;
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames()
@@ -58,14 +88,45 @@ namespace GameLauncher
             }
             return names;
         }
-        public void Dispose() => archive.Dispose();
+        public bool CompressFile(string filePath)
+        {
+            if (!IsWinRarInstalled())
+                return false;
+            try
+            {
+                Process process = Process.Start(new ProcessStartInfo($"\"{RarExec}\"", $"a -m5 \"{archivePath}\" \"{filePath}\"")
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                });
+                process.WaitForExit();
+            }
+            catch
+            {
+                return false;
+            }
+            return File.Exists(archivePath);
+        }
+        public void Dispose()
+        {
+            if (archive != null) 
+                archive.Dispose();
+        }
     }
-    public class SevenZipCompressArchive : CompressArchiveInterface
+    public class SevenZipCompressArchive : IArchive
     {
         private SevenZipArchive archive;
-        public SevenZipCompressArchive(SevenZipArchive _archive)
+        public string archivePath { get; private set; }
+        public SevenZipCompressArchive(SevenZipArchive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public SevenZipCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = new SevenZipArchive();
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames()
@@ -77,15 +138,27 @@ namespace GameLauncher
                 // ToDo: Make sure suffix / if is directory
             }
             return names;
+        }
+        public bool CompressFile(string filePath)
+        {
+            archive.CreateEntry(Path.GetFileName(filePath),filePath);
+            archive.Save(archivePath);
+            return File.Exists(archivePath);
         }
         public void Dispose() => archive.Dispose();
     }
-    public class TarCompressArchive : CompressArchiveInterface
+    public class TarCompressArchive : IArchive
     {
         private TarArchive archive;
-        public TarCompressArchive(TarArchive _archive)
+        public string archivePath { get; private set; }
+        public TarCompressArchive(TarArchive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public TarCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = new TarArchive();
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames()
@@ -97,12 +170,19 @@ namespace GameLauncher
                 // ToDo: Make sure suffix / if is directory
             }
             return names;
+        }
+        public bool CompressFile(string filePath)
+        {
+            archive.CreateEntry(Path.GetFileName(filePath), filePath);
+            archive.Save(archivePath);
+            return File.Exists(archivePath);
         }
         public void Dispose() => archive.Dispose();
     }
     public class CompressArchiveClass
     {
         protected string dirExtractedPath;
+        public string archivePath { get; protected set; } = "";
         public string[] GetNamesFromDir()
         {
             string[] files = Directory.GetFiles(dirExtractedPath, "*", SearchOption.AllDirectories);
@@ -114,12 +194,17 @@ namespace GameLauncher
             return names;
         }
     }
-    public class GzipCompressArchive : CompressArchiveClass, CompressArchiveInterface
+    public class GzipCompressArchive : CompressArchiveClass, IArchive
     {
         private GzipArchive archive;
-        public GzipCompressArchive(GzipArchive _archive)
+        public GzipCompressArchive(GzipArchive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public GzipCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = new GzipArchive();
         }
         public void ExtractToDirectory(string dirName)
         {
@@ -127,36 +212,70 @@ namespace GameLauncher
             archive.ExtractToDirectory(dirName);
         }
         public string[] GetNames() => GetNamesFromDir();
+        public bool CompressFile(string filePath)
+        {
+            archive.SetSource(filePath);
+            archive.Save(archivePath);
+            return File.Exists(archivePath);
+        }
         public void Dispose() => archive.Dispose();
     }
-    public class Bzip2CompressArchive : CompressArchiveClass, CompressArchiveInterface
+    public class Bzip2CompressArchive : CompressArchiveClass, IArchive
     {
         private Bzip2Archive archive;
-        public Bzip2CompressArchive(Bzip2Archive _archive)
+        public Bzip2CompressArchive(Bzip2Archive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public Bzip2CompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = new Bzip2Archive();
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames() => GetNamesFromDir();
+        public bool CompressFile(string filePath)
+        {
+            archive.SetSource(filePath);
+            archive.Save(archivePath);
+            return File.Exists(archivePath);
+        }
         public void Dispose() => archive.Dispose();
     }
-    public class LzipCompressArchive : CompressArchiveClass, CompressArchiveInterface
+    public class LzipCompressArchive : CompressArchiveClass, IArchive
     {
         private LzipArchive archive;
-        public LzipCompressArchive(LzipArchive _archive)
+        public LzipCompressArchive(LzipArchive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public LzipCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = new LzipArchive();
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames() => GetNamesFromDir();
+        public bool CompressFile(string filePath)
+        {
+            archive.SetSource(filePath);
+            archive.Save(archivePath);
+            return File.Exists(archivePath);
+        }
         public void Dispose() => archive.Dispose();
     }
-    public class ZipAltCompressArchive : CompressArchiveInterface
+    public class ZipAltCompressArchive : IArchive
     {
         private Archive archive;
-        public ZipAltCompressArchive(Archive _archive)
+        public string archivePath { get; protected set; } = "";
+        public ZipAltCompressArchive(Archive archive)
         {
-            archive = _archive;
+            this.archive = archive;
+        }
+        public ZipAltCompressArchive(string archivePath)
+        {
+            this.archivePath = archivePath;
+            archive = new Archive();
         }
         public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
         public string[] GetNames()
@@ -169,11 +288,17 @@ namespace GameLauncher
             }
             return names;
         }
+        public bool CompressFile(string filePath)
+        {
+            archive.CreateEntry(Path.GetFileName(filePath), filePath);
+            archive.Save(archivePath);
+            return File.Exists(archivePath);
+        }
         public void Dispose() => archive.Dispose();
     }
-    public class CreateCompressArchiveInterface
+    public class CompressArchive
     {
-        public static CompressArchiveInterface Create(string fileName, bool doAltZip = false)
+        public static IDecompressArchive Open(string fileName, bool doAltZip = false)
         {
             string ext = Path.GetExtension(fileName).ToLower();
             if (ext.Equals(".zip") && doAltZip)
@@ -193,8 +318,90 @@ namespace GameLauncher
                 return new Bzip2CompressArchive(new Bzip2Archive(fileName));
             if (ext.Equals(".lz") || ext.Equals(".lzip"))
                 return new LzipCompressArchive(new LzipArchive(fileName));
-
             // ".zip", ".7z", ".7zip", ".rar", ".tar" 
+            return null;
+        }
+        public static bool CompressFile(string archivePath, string filePath, bool doAltZip = true)
+        {
+            string ext = Path.GetExtension(archivePath).ToLower();
+            if (ext.Equals(".zip") && doAltZip)
+            {
+                using (ICompressArchive archive = new ZipAltCompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".zip"))
+            {
+                using (ICompressArchive archive = new ZipCompressArchive(archivePath))// This doesn't work. It creates bad zip files.
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".7z") || ext.Equals(".7zip"))
+            {
+                using (ICompressArchive archive = new SevenZipCompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".rar"))
+            {
+                using (ICompressArchive archive = new RarCompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".tar"))
+            {
+                using (ICompressArchive archive = new TarCompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".gz") || ext.Equals(".gzip"))
+            {
+                using (ICompressArchive archive = new GzipCompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".bz2") || ext.Equals(".bzip") || ext.Equals(".bzip2"))
+            {
+                using (ICompressArchive archive = new Bzip2CompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+            else if (ext.Equals(".lz") || ext.Equals(".lzip"))
+            {
+                using (ICompressArchive archive = new LzipCompressArchive(archivePath))
+                {
+                    return archive.CompressFile(filePath);
+                }
+            }
+
+            return false;
+        }
+        public static IArchive CreateArchive(string archivePath, bool throwExceptionForUnsupportedType = true, bool doAltZip = false)
+        {
+            string ext = Path.GetExtension(archivePath).ToLower();
+            if (ext.Equals(".zip") && doAltZip)
+                return new ZipAltCompressArchive(archivePath);
+            else if (ext.Equals(".zip"))
+                return new ZipCompressArchive(archivePath);
+            else if (ext.Equals(".7z") || ext.Equals(".7zip"))
+                return new SevenZipCompressArchive(archivePath);
+            else if (ext.Equals(".rar"))
+                return new RarCompressArchive(archivePath);
+            else if (ext.Equals(".tar"))
+                return new TarCompressArchive(archivePath);
+            else if (ext.Equals(".gz") || ext.Equals(".gzip"))
+                return new GzipCompressArchive(archivePath);
+            else if (ext.Equals(".bz2") || ext.Equals(".bzip") || ext.Equals(".bzip2"))
+                return new Bzip2CompressArchive(archivePath);
+            else if (ext.Equals(".lz") || ext.Equals(".lzip"))
+                return new LzipCompressArchive(archivePath);
             return null;
         }
     }

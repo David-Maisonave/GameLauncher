@@ -7,7 +7,7 @@
 - Decompression option for emulators like DuckStation which don't support ZIP files.
 - Filter option.
 - Option to context menu to open link to launchbox-app.com with the ROM title name, or open google link with title. Example: https://www.google.com/search?q=Disney+Aladdin+site%253Alaunchbox-app.com
-- Decompression support for ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz"
+- Decompression support for ".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz"
 - ROM details editor.
 - GameSystem editor.
 - Option to clean and rescan ROM's for selected game console system.
@@ -27,4 +27,12 @@
 	- Populate GameDetails DB
 	- Add GameDetails data to GameLauncher DB
 	- Search for image matches for games missing image
-- Added MRU. Added recent games menu option to main menu.
+- Added MRU. Added recent games menu option to main menu
+- Added option to main menu to compress all ROM files in selected folder. Include support for following compression types (".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", and ".lz").
+- Added support to convert PNG files to JPG files.
+- Added logic to filter out string "2-in-1 - " and "3-in-1 - " from front of name in compressed name for ROM's in DB.
+- Added logic to filter out string "Disney's" and "LEGO" from front of name in compressed name for ROM's in DB.
+- Added Year and Rating field to ROM database.
+- Added pagination to game console systems having over 1500 ROM's.
+- Added option to change default images and roms sub folder.
+- 

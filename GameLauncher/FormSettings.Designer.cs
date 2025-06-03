@@ -59,8 +59,15 @@
             this.checkBox_SHA256OverMD5 = new System.Windows.Forms.CheckBox();
             this.checkBox_AutoCompleteCustomSourceLiveUpdate = new System.Windows.Forms.CheckBox();
             this.button_EmulatorsBasePath_Add = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
             this.numericUpDown_MaxMRU = new System.Windows.Forms.NumericUpDown();
+            this.textBox_ValidRomFileExtensions = new System.Windows.Forms.TextBox();
+            this.textBox_DefaultRomSubDir = new System.Windows.Forms.TextBox();
+            this.textBox_DefaultImageSubDir = new System.Windows.Forms.TextBox();
+            this.checkBox_PreviewOverBoxArt = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_largeIconSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).BeginInit();
@@ -71,7 +78,7 @@
             // checkBox_usePreviousCollectionCache
             // 
             this.checkBox_usePreviousCollectionCache.AutoSize = true;
-            this.checkBox_usePreviousCollectionCache.Location = new System.Drawing.Point(319, 144);
+            this.checkBox_usePreviousCollectionCache.Location = new System.Drawing.Point(234, 213);
             this.checkBox_usePreviousCollectionCache.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_usePreviousCollectionCache.Name = "checkBox_usePreviousCollectionCache";
             this.checkBox_usePreviousCollectionCache.Size = new System.Drawing.Size(172, 17);
@@ -84,7 +91,7 @@
             // checkBox_useJoystickController
             // 
             this.checkBox_useJoystickController.AutoSize = true;
-            this.checkBox_useJoystickController.Location = new System.Drawing.Point(319, 115);
+            this.checkBox_useJoystickController.Location = new System.Drawing.Point(234, 184);
             this.checkBox_useJoystickController.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_useJoystickController.Name = "checkBox_useJoystickController";
             this.checkBox_useJoystickController.Size = new System.Drawing.Size(181, 17);
@@ -98,10 +105,10 @@
             // 
             this.textBox_DbPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_DbPath.Location = new System.Drawing.Point(170, 14);
+            this.textBox_DbPath.Location = new System.Drawing.Point(151, 14);
             this.textBox_DbPath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_DbPath.Name = "textBox_DbPath";
-            this.textBox_DbPath.Size = new System.Drawing.Size(391, 20);
+            this.textBox_DbPath.Size = new System.Drawing.Size(410, 20);
             this.textBox_DbPath.TabIndex = 1;
             this.toolTip1.SetToolTip(this.textBox_DbPath, "This change only takes affect after program restart.  Chaning this can trigger a " +
         "new scan after program restart.");
@@ -130,10 +137,10 @@
             // 
             this.textBox_EmulatorsBasePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorsBasePath.Location = new System.Drawing.Point(170, 44);
+            this.textBox_EmulatorsBasePath.Location = new System.Drawing.Point(151, 44);
             this.textBox_EmulatorsBasePath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorsBasePath.Name = "textBox_EmulatorsBasePath";
-            this.textBox_EmulatorsBasePath.Size = new System.Drawing.Size(355, 20);
+            this.textBox_EmulatorsBasePath.Size = new System.Drawing.Size(374, 20);
             this.textBox_EmulatorsBasePath.TabIndex = 3;
             this.toolTip1.SetToolTip(this.textBox_EmulatorsBasePath, resources.GetString("textBox_EmulatorsBasePath.ToolTip"));
             // 
@@ -151,10 +158,10 @@
             // 
             this.textBox_DefaultImagePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_DefaultImagePath.Location = new System.Drawing.Point(170, 74);
+            this.textBox_DefaultImagePath.Location = new System.Drawing.Point(151, 74);
             this.textBox_DefaultImagePath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_DefaultImagePath.Name = "textBox_DefaultImagePath";
-            this.textBox_DefaultImagePath.Size = new System.Drawing.Size(391, 20);
+            this.textBox_DefaultImagePath.Size = new System.Drawing.Size(410, 20);
             this.textBox_DefaultImagePath.TabIndex = 5;
             this.toolTip1.SetToolTip(this.textBox_DefaultImagePath, "Select default image shown for ROM/games having no associated images.  Note: This" +
         " only takes affect on newly scanned ROM\'s.");
@@ -162,7 +169,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 117);
+            this.label4.Location = new System.Drawing.Point(15, 186);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 13);
@@ -172,7 +179,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 145);
+            this.label5.Location = new System.Drawing.Point(15, 214);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(81, 13);
@@ -182,7 +189,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 173);
+            this.label6.Location = new System.Drawing.Point(15, 242);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(79, 13);
@@ -227,7 +234,7 @@
             // 
             // numericUpDown_MaxNumberOfPairThreadsPerList
             // 
-            this.numericUpDown_MaxNumberOfPairThreadsPerList.Location = new System.Drawing.Point(171, 115);
+            this.numericUpDown_MaxNumberOfPairThreadsPerList.Location = new System.Drawing.Point(151, 184);
             this.numericUpDown_MaxNumberOfPairThreadsPerList.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown_MaxNumberOfPairThreadsPerList.Maximum = new decimal(new int[] {
             10,
@@ -235,7 +242,7 @@
             0,
             0});
             this.numericUpDown_MaxNumberOfPairThreadsPerList.Name = "numericUpDown_MaxNumberOfPairThreadsPerList";
-            this.numericUpDown_MaxNumberOfPairThreadsPerList.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDown_MaxNumberOfPairThreadsPerList.Size = new System.Drawing.Size(56, 20);
             this.numericUpDown_MaxNumberOfPairThreadsPerList.TabIndex = 8;
             this.toolTip1.SetToolTip(this.numericUpDown_MaxNumberOfPairThreadsPerList, "Maximum pair of threads used when creating ImageList. If set to 8, the program wi" +
         "ll use 16 threads on initial ImageList processing. Using more than 6 pair of thr" +
@@ -248,7 +255,7 @@
             0,
             0,
             0});
-            this.numericUpDown_largeIconSize.Location = new System.Drawing.Point(171, 144);
+            this.numericUpDown_largeIconSize.Location = new System.Drawing.Point(151, 213);
             this.numericUpDown_largeIconSize.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown_largeIconSize.Maximum = new decimal(new int[] {
             256,
@@ -261,7 +268,7 @@
             0,
             0});
             this.numericUpDown_largeIconSize.Name = "numericUpDown_largeIconSize";
-            this.numericUpDown_largeIconSize.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDown_largeIconSize.Size = new System.Drawing.Size(56, 20);
             this.numericUpDown_largeIconSize.TabIndex = 10;
             this.numericUpDown_largeIconSize.Value = new decimal(new int[] {
             64,
@@ -277,7 +284,7 @@
             0,
             0,
             0});
-            this.numericUpDown_smallIconSize.Location = new System.Drawing.Point(171, 173);
+            this.numericUpDown_smallIconSize.Location = new System.Drawing.Point(151, 242);
             this.numericUpDown_smallIconSize.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown_smallIconSize.Maximum = new decimal(new int[] {
             64,
@@ -290,7 +297,7 @@
             0,
             0});
             this.numericUpDown_smallIconSize.Name = "numericUpDown_smallIconSize";
-            this.numericUpDown_smallIconSize.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDown_smallIconSize.Size = new System.Drawing.Size(56, 20);
             this.numericUpDown_smallIconSize.TabIndex = 12;
             this.numericUpDown_smallIconSize.Value = new decimal(new int[] {
             8,
@@ -302,7 +309,7 @@
             // button_Ok
             // 
             this.button_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Ok.Location = new System.Drawing.Point(220, 376);
+            this.button_Ok.Location = new System.Drawing.Point(220, 338);
             this.button_Ok.Margin = new System.Windows.Forms.Padding(2);
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(67, 26);
@@ -314,7 +321,7 @@
             // button_Cancel
             // 
             this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Cancel.Location = new System.Drawing.Point(314, 376);
+            this.button_Cancel.Location = new System.Drawing.Point(314, 338);
             this.button_Cancel.Margin = new System.Windows.Forms.Padding(2);
             this.button_Cancel.Name = "button_Cancel";
             this.button_Cancel.Size = new System.Drawing.Size(75, 28);
@@ -328,7 +335,7 @@
             this.linkLabel_Github_GameLauncher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel_Github_GameLauncher.AutoSize = true;
-            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 344);
+            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 306);
             this.linkLabel_Github_GameLauncher.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel_Github_GameLauncher.Name = "linkLabel_Github_GameLauncher";
             this.linkLabel_Github_GameLauncher.Size = new System.Drawing.Size(261, 13);
@@ -341,7 +348,7 @@
             // checkBox_disableAdvanceOptions
             // 
             this.checkBox_disableAdvanceOptions.AutoSize = true;
-            this.checkBox_disableAdvanceOptions.Location = new System.Drawing.Point(319, 202);
+            this.checkBox_disableAdvanceOptions.Location = new System.Drawing.Point(234, 271);
             this.checkBox_disableAdvanceOptions.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_disableAdvanceOptions.Name = "checkBox_disableAdvanceOptions";
             this.checkBox_disableAdvanceOptions.Size = new System.Drawing.Size(146, 17);
@@ -353,7 +360,7 @@
             // checkBox_EnableImageChecksum
             // 
             this.checkBox_EnableImageChecksum.AutoSize = true;
-            this.checkBox_EnableImageChecksum.Location = new System.Drawing.Point(5, 60);
+            this.checkBox_EnableImageChecksum.Location = new System.Drawing.Point(9, 56);
             this.checkBox_EnableImageChecksum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_EnableImageChecksum.Name = "checkBox_EnableImageChecksum";
             this.checkBox_EnableImageChecksum.Size = new System.Drawing.Size(144, 17);
@@ -367,7 +374,7 @@
             // checkBox_EnableRomChecksum
             // 
             this.checkBox_EnableRomChecksum.AutoSize = true;
-            this.checkBox_EnableRomChecksum.Location = new System.Drawing.Point(5, 29);
+            this.checkBox_EnableRomChecksum.Location = new System.Drawing.Point(9, 25);
             this.checkBox_EnableRomChecksum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_EnableRomChecksum.Name = "checkBox_EnableRomChecksum";
             this.checkBox_EnableRomChecksum.Size = new System.Drawing.Size(140, 17);
@@ -379,13 +386,14 @@
             // 
             // groupBox_Checksum
             // 
+            this.groupBox_Checksum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableZipChecksum);
             this.groupBox_Checksum.Controls.Add(this.checkBox_SHA256OverMD5);
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableRomChecksum);
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableImageChecksum);
-            this.groupBox_Checksum.Location = new System.Drawing.Point(19, 234);
+            this.groupBox_Checksum.Location = new System.Drawing.Point(438, 131);
             this.groupBox_Checksum.Name = "groupBox_Checksum";
-            this.groupBox_Checksum.Size = new System.Drawing.Size(578, 96);
+            this.groupBox_Checksum.Size = new System.Drawing.Size(159, 147);
             this.groupBox_Checksum.TabIndex = 25;
             this.groupBox_Checksum.TabStop = false;
             this.groupBox_Checksum.Text = "Checksum Options";
@@ -394,7 +402,7 @@
             // checkBox_EnableZipChecksum
             // 
             this.checkBox_EnableZipChecksum.AutoSize = true;
-            this.checkBox_EnableZipChecksum.Location = new System.Drawing.Point(295, 29);
+            this.checkBox_EnableZipChecksum.Location = new System.Drawing.Point(9, 87);
             this.checkBox_EnableZipChecksum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_EnableZipChecksum.Name = "checkBox_EnableZipChecksum";
             this.checkBox_EnableZipChecksum.Size = new System.Drawing.Size(130, 17);
@@ -407,7 +415,7 @@
             // checkBox_SHA256OverMD5
             // 
             this.checkBox_SHA256OverMD5.AutoSize = true;
-            this.checkBox_SHA256OverMD5.Location = new System.Drawing.Point(295, 60);
+            this.checkBox_SHA256OverMD5.Location = new System.Drawing.Point(9, 118);
             this.checkBox_SHA256OverMD5.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_SHA256OverMD5.Name = "checkBox_SHA256OverMD5";
             this.checkBox_SHA256OverMD5.Size = new System.Drawing.Size(135, 17);
@@ -419,7 +427,7 @@
             // checkBox_AutoCompleteCustomSourceLiveUpdate
             // 
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.AutoSize = true;
-            this.checkBox_AutoCompleteCustomSourceLiveUpdate.Location = new System.Drawing.Point(319, 173);
+            this.checkBox_AutoCompleteCustomSourceLiveUpdate.Location = new System.Drawing.Point(234, 242);
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Name = "checkBox_AutoCompleteCustomSourceLiveUpdate";
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Size = new System.Drawing.Size(189, 17);
@@ -442,19 +450,9 @@
             this.button_EmulatorsBasePath_Add.UseVisualStyleBackColor = true;
             this.button_EmulatorsBasePath_Add.Click += new System.EventHandler(this.button_EmulatorsBasePath_Add_Click);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(16, 201);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(101, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Max Recent &Games";
-            // 
             // numericUpDown_MaxMRU
             // 
-            this.numericUpDown_MaxMRU.Location = new System.Drawing.Point(172, 201);
+            this.numericUpDown_MaxMRU.Location = new System.Drawing.Point(152, 270);
             this.numericUpDown_MaxMRU.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown_MaxMRU.Maximum = new decimal(new int[] {
             50,
@@ -467,7 +465,7 @@
             0,
             0});
             this.numericUpDown_MaxMRU.Name = "numericUpDown_MaxMRU";
-            this.numericUpDown_MaxMRU.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDown_MaxMRU.Size = new System.Drawing.Size(56, 20);
             this.numericUpDown_MaxMRU.TabIndex = 12;
             this.toolTip1.SetToolTip(this.numericUpDown_MaxMRU, "Maximum quantity of recent games to display on main menu MRU list.");
             this.numericUpDown_MaxMRU.Value = new decimal(new int[] {
@@ -477,11 +475,103 @@
             0});
             this.numericUpDown_MaxMRU.ValueChanged += new System.EventHandler(this.numericUpDown_smallIconSize_ValueChanged);
             // 
+            // textBox_ValidRomFileExtensions
+            // 
+            this.textBox_ValidRomFileExtensions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_ValidRomFileExtensions.Location = new System.Drawing.Point(151, 101);
+            this.textBox_ValidRomFileExtensions.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_ValidRomFileExtensions.Name = "textBox_ValidRomFileExtensions";
+            this.textBox_ValidRomFileExtensions.Size = new System.Drawing.Size(446, 20);
+            this.textBox_ValidRomFileExtensions.TabIndex = 29;
+            this.toolTip1.SetToolTip(this.textBox_ValidRomFileExtensions, resources.GetString("textBox_ValidRomFileExtensions.ToolTip"));
+            // 
+            // textBox_DefaultRomSubDir
+            // 
+            this.textBox_DefaultRomSubDir.Location = new System.Drawing.Point(152, 128);
+            this.textBox_DefaultRomSubDir.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_DefaultRomSubDir.Name = "textBox_DefaultRomSubDir";
+            this.textBox_DefaultRomSubDir.Size = new System.Drawing.Size(56, 20);
+            this.textBox_DefaultRomSubDir.TabIndex = 31;
+            this.toolTip1.SetToolTip(this.textBox_DefaultRomSubDir, "Subfolder name to search for ROM files under the emulator directory.\r\nApplies on " +
+        "a new search.");
+            // 
+            // textBox_DefaultImageSubDir
+            // 
+            this.textBox_DefaultImageSubDir.Location = new System.Drawing.Point(151, 155);
+            this.textBox_DefaultImageSubDir.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_DefaultImageSubDir.Name = "textBox_DefaultImageSubDir";
+            this.textBox_DefaultImageSubDir.Size = new System.Drawing.Size(57, 20);
+            this.textBox_DefaultImageSubDir.TabIndex = 33;
+            this.toolTip1.SetToolTip(this.textBox_DefaultImageSubDir, "Subfolder name to search for images files under the emulator directory.\r\nApplies " +
+        "on a new search.\r\n");
+            // 
+            // checkBox_PreviewOverBoxArt
+            // 
+            this.checkBox_PreviewOverBoxArt.AutoSize = true;
+            this.checkBox_PreviewOverBoxArt.Location = new System.Drawing.Point(234, 156);
+            this.checkBox_PreviewOverBoxArt.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_PreviewOverBoxArt.Name = "checkBox_PreviewOverBoxArt";
+            this.checkBox_PreviewOverBoxArt.Size = new System.Drawing.Size(123, 17);
+            this.checkBox_PreviewOverBoxArt.TabIndex = 34;
+            this.checkBox_PreviewOverBoxArt.Text = "Preview over box-art";
+            this.toolTip1.SetToolTip(this.checkBox_PreviewOverBoxArt, "When enabled, game preview image is selected over box-art image.\r\nImages with (pr" +
+        "eview) are used over images without the keyword.");
+            this.checkBox_PreviewOverBoxArt.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(16, 270);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(101, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Max Recent &Games";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(15, 101);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(127, 13);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Valid ROM file extensions";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(16, 128);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(118, 13);
+            this.label9.TabIndex = 30;
+            this.label9.Text = "Default ROM sub folder";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(15, 155);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(121, 13);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "Default image sub folder";
+            // 
             // Form_Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 409);
+            this.ClientSize = new System.Drawing.Size(604, 371);
+            this.Controls.Add(this.checkBox_PreviewOverBoxArt);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.textBox_DefaultImageSubDir);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.textBox_DefaultRomSubDir);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.textBox_ValidRomFileExtensions);
             this.Controls.Add(this.button_EmulatorsBasePath_Add);
             this.Controls.Add(this.checkBox_AutoCompleteCustomSourceLiveUpdate);
             this.Controls.Add(this.groupBox_Checksum);
@@ -510,7 +600,9 @@
             this.Controls.Add(this.checkBox_usePreviousCollectionCache);
             this.KeyPreview = true;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1200, 420);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(620, 410);
             this.Name = "Form_Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).EndInit();
@@ -557,5 +649,12 @@
         private System.Windows.Forms.Button button_EmulatorsBasePath_Add;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numericUpDown_MaxMRU;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox textBox_ValidRomFileExtensions;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox textBox_DefaultRomSubDir;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBox_DefaultImageSubDir;
+        private System.Windows.Forms.CheckBox checkBox_PreviewOverBoxArt;
     }
 }

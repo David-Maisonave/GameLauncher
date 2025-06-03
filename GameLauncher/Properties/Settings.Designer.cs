@@ -298,5 +298,65 @@ namespace GameLauncher.Properties {
                 this["MaxRomCountBeforeSettingPagination"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ValidROMTypes {
+            get {
+                return ((string)(this["ValidROMTypes"]));
+            }
+            set {
+                this["ValidROMTypes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastDirectoryUserSelected {
+            get {
+                return ((string)(this["lastDirectoryUserSelected"]));
+            }
+            set {
+                this["lastDirectoryUserSelected"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("roms")]
+        public string romSubFolderName {
+            get {
+                return ((string)(this["romSubFolderName"]));
+            }
+            set {
+                this["romSubFolderName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("images")]
+        public string imageSubFolderName {
+            get {
+                return ((string)(this["imageSubFolderName"]));
+            }
+            set {
+                this["imageSubFolderName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PreviewOverBoxArt {
+            get {
+                return ((bool)(this["PreviewOverBoxArt"]));
+            }
+            set {
+                this["PreviewOverBoxArt"] = value;
+            }
+        }
     }
 }

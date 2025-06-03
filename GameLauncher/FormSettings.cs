@@ -32,6 +32,7 @@ namespace GameLauncher
             textBox_DbPath.Text = Properties.Settings.Default.DbPath;
             textBox_EmulatorsBasePath.Text = Properties.Settings.Default.EmulatorsBasePath;
             textBox_DefaultImagePath.Text = Properties.Settings.Default.DefaultImagePath;
+            textBox_ValidRomFileExtensions.Text = Properties.Settings.Default.ValidROMTypes;
             checkBox_usePreviousCollectionCache.Checked = Properties.Settings.Default.usePreviousCollectionCache;
             checkBox_useJoystickController.Checked = Properties.Settings.Default.useJoystickController;
             checkBox_disableAdvanceOptions.Checked = Properties.Settings.Default.disableAdvanceOptions;
@@ -48,6 +49,9 @@ namespace GameLauncher
             PreviousSmallIconSize = Properties.Settings.Default.smallIconSize;
             InitialEmulatorsBasePath = Properties.Settings.Default.EmulatorsBasePath;
             numericUpDown_MaxMRU.Value = Properties.Settings.Default.MaxMRU;
+            textBox_DefaultRomSubDir.Text = Properties.Settings.Default.romSubFolderName;
+            textBox_DefaultImageSubDir.Text = Properties.Settings.Default.imageSubFolderName;
+            checkBox_PreviewOverBoxArt.Checked = Properties.Settings.Default.PreviewOverBoxArt;
         }
         int[] AllowedLargeIconSize = {64, 128, 256};
         int[] AllowedSmallIconSize = {8, 16, 24, 32, 64 };
@@ -69,6 +73,7 @@ namespace GameLauncher
             }
             if (!AllowedSmallIconSize.Contains((int)numericUpDown_smallIconSize.Value))
                 numericUpDown_largeIconSize.Value = numericUpDown_smallIconSize.Value > 32 ? 64 : 32;
+            Properties.Settings.Default.PreviewOverBoxArt = checkBox_PreviewOverBoxArt.Checked;
             Properties.Settings.Default.DoImageChecksum = checkBox_EnableImageChecksum.Checked;
             Properties.Settings.Default.DoRomChecksum = checkBox_EnableRomChecksum.Checked;
             Properties.Settings.Default.DoZipChecksum = checkBox_EnableZipChecksum.Checked;
@@ -80,10 +85,13 @@ namespace GameLauncher
             Properties.Settings.Default.DbPath = textBox_DbPath.Text;
             Properties.Settings.Default.EmulatorsBasePath = textBox_EmulatorsBasePath.Text;
             Properties.Settings.Default.DefaultImagePath = textBox_DefaultImagePath.Text;
+            Properties.Settings.Default.ValidROMTypes = textBox_ValidRomFileExtensions.Text;
             Properties.Settings.Default.MaxNumberOfPairThreadsPerList = (int)numericUpDown_MaxNumberOfPairThreadsPerList.Value;
             Properties.Settings.Default.largeIconSize = (int)numericUpDown_largeIconSize.Value;
             Properties.Settings.Default.smallIconSize = (int)numericUpDown_smallIconSize.Value;
             Properties.Settings.Default.MaxMRU = (int)numericUpDown_MaxMRU.Value;
+            Properties.Settings.Default.romSubFolderName = textBox_DefaultRomSubDir.Text;
+            Properties.Settings.Default.imageSubFolderName = textBox_DefaultImageSubDir.Text;
             Properties.Settings.Default.Save();
 
             if (InitialLargeIconSize != Properties.Settings.Default.largeIconSize || InitialSmallIconSize != Properties.Settings.Default.smallIconSize)
@@ -191,5 +199,10 @@ namespace GameLauncher
         }
 
         private void button_EmulatorsBasePath_Add_Click(object sender, EventArgs e) => SetEmulatorsBasePath(true);
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -71,5 +71,20 @@
     <Setting Name="MaxRomCountBeforeSettingPagination" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1500</Value>
     </Setting>
+    <Setting Name="ValidROMTypes" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lastDirectoryUserSelected" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="romSubFolderName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">roms</Value>
+    </Setting>
+    <Setting Name="imageSubFolderName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">images</Value>
+    </Setting>
+    <Setting Name="PreviewOverBoxArt" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

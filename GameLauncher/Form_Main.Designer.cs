@@ -35,6 +35,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPlayRom = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemRenameROM = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CopyTitleToClipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemDeleteROM = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripMenuItemChangeViewROMDetails = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +69,13 @@
             this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DeleteDupRomsByChecksum = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CompressRomFilesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomToZip = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomTo7z = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomToTar = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomToGzip = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomToBZ2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomToLZ = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ImagesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateImageListCache = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ImageSearchSelectedDir = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,6 +102,10 @@
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
             this.numericUpDown_Paginator = new System.Windows.Forms.NumericUpDown();
+            this.toolStripMenuItem_ConvertRomToRAR = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertPngToJpg = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertAllPngToJpg = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CompressAllRoms = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -137,6 +149,7 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemPlayRom,
             this.toolStripMenuItemRenameROM,
+            this.toolStripMenuItem_CopyTitleToClipboard,
             this.toolStripMenuItemDeleteROM,
             this.toolStripSeparator1,
             this.ToolStripMenuItemChangeViewROMDetails,
@@ -146,7 +159,7 @@
             this.toolStripSeparator2,
             this.searchImageAtLaunchBoxToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(220, 192);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(220, 214);
             // 
             // toolStripMenuItemPlayRom
             // 
@@ -163,6 +176,13 @@
             this.toolStripMenuItemRenameROM.Text = "&Rename ROM";
             this.toolStripMenuItemRenameROM.ToolTipText = "Rename the ROM file on the file system.";
             this.toolStripMenuItemRenameROM.Click += new System.EventHandler(this.myListViewContextMenu_RenameROM_Click);
+            // 
+            // toolStripMenuItem_CopyTitleToClipboard
+            // 
+            this.toolStripMenuItem_CopyTitleToClipboard.Name = "toolStripMenuItem_CopyTitleToClipboard";
+            this.toolStripMenuItem_CopyTitleToClipboard.Size = new System.Drawing.Size(219, 22);
+            this.toolStripMenuItem_CopyTitleToClipboard.Text = "&Copy Title to Clipboard";
+            this.toolStripMenuItem_CopyTitleToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_CopyTitleToClipboard_Click);
             // 
             // toolStripMenuItemDeleteROM
             // 
@@ -404,7 +424,9 @@
             this.toolStripMenuItemScanNewRomsAllSystems,
             this.toolStripMenuItemScanSelectedSystemNewRoms,
             this.toolStripMenuItem_CleanScanSelectedSystemNewRoms,
-            this.toolStripMenuItemDeleteRomsParentMenu});
+            this.toolStripMenuItemDeleteRomsParentMenu,
+            this.toolStripMenuItem_CompressRomFilesParentMenu,
+            this.toolStripMenuItem_CompressAllRoms});
             this.toolStripMenuItem_ROMParentMenu.Name = "toolStripMenuItem_ROMParentMenu";
             this.toolStripMenuItem_ROMParentMenu.Size = new System.Drawing.Size(251, 22);
             this.toolStripMenuItem_ROMParentMenu.Text = "&ROM\'s";
@@ -412,28 +434,28 @@
             // toolStripMenuItemRescanAllRoms
             // 
             this.toolStripMenuItemRescanAllRoms.Name = "toolStripMenuItemRescanAllRoms";
-            this.toolStripMenuItemRescanAllRoms.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemRescanAllRoms.Size = new System.Drawing.Size(368, 22);
             this.toolStripMenuItemRescanAllRoms.Text = "Rescan All ROM\'s";
             this.toolStripMenuItemRescanAllRoms.Click += new System.EventHandler(this.toolStripMenuItemRescanAllRoms_Click);
             // 
             // toolStripMenuItemScanNewRomsAllSystems
             // 
             this.toolStripMenuItemScanNewRomsAllSystems.Name = "toolStripMenuItemScanNewRomsAllSystems";
-            this.toolStripMenuItemScanNewRomsAllSystems.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemScanNewRomsAllSystems.Size = new System.Drawing.Size(368, 22);
             this.toolStripMenuItemScanNewRomsAllSystems.Text = "Scan for new ROM\'s on all systems";
             this.toolStripMenuItemScanNewRomsAllSystems.Click += new System.EventHandler(this.toolStripMenuItemScanNewRomsAllSystems_Click);
             // 
             // toolStripMenuItemScanSelectedSystemNewRoms
             // 
             this.toolStripMenuItemScanSelectedSystemNewRoms.Name = "toolStripMenuItemScanSelectedSystemNewRoms";
-            this.toolStripMenuItemScanSelectedSystemNewRoms.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemScanSelectedSystemNewRoms.Size = new System.Drawing.Size(368, 22);
             this.toolStripMenuItemScanSelectedSystemNewRoms.Text = "Scan selected system for new ROM\'s";
             this.toolStripMenuItemScanSelectedSystemNewRoms.Click += new System.EventHandler(this.toolStripMenuItemScanSelectedSystemNewRoms_Click);
             // 
             // toolStripMenuItem_CleanScanSelectedSystemNewRoms
             // 
             this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Name = "toolStripMenuItem_CleanScanSelectedSystemNewRoms";
-            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Size = new System.Drawing.Size(368, 22);
             this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Text = "Clean and scan selected system for new ROM\'s";
             this.toolStripMenuItem_CleanScanSelectedSystemNewRoms.Click += new System.EventHandler(this.toolStripMenuItem_CleanScanSelectedSystemNewRoms_Click);
             // 
@@ -444,7 +466,7 @@
             this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem,
             this.toolStripMenuItem_DeleteDupRomsByChecksum});
             this.toolStripMenuItemDeleteRomsParentMenu.Name = "toolStripMenuItemDeleteRomsParentMenu";
-            this.toolStripMenuItemDeleteRomsParentMenu.Size = new System.Drawing.Size(321, 22);
+            this.toolStripMenuItemDeleteRomsParentMenu.Size = new System.Drawing.Size(368, 22);
             this.toolStripMenuItemDeleteRomsParentMenu.Text = "Delete Duplicate ROM\'s";
             // 
             // toolStripMenuItem_DeleteDupRomsByTitleSameSystem
@@ -468,6 +490,62 @@
             this.toolStripMenuItem_DeleteDupRomsByChecksum.Text = "Delete duplicate ROM\'s by checksum";
             this.toolStripMenuItem_DeleteDupRomsByChecksum.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByChecksum_Click);
             // 
+            // toolStripMenuItem_CompressRomFilesParentMenu
+            // 
+            this.toolStripMenuItem_CompressRomFilesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_ConvertRomToZip,
+            this.toolStripMenuItem_ConvertRomTo7z,
+            this.toolStripMenuItem_ConvertRomToTar,
+            this.toolStripMenuItem_ConvertRomToGzip,
+            this.toolStripMenuItem_ConvertRomToBZ2,
+            this.toolStripMenuItem_ConvertRomToLZ,
+            this.toolStripMenuItem_ConvertRomToRAR});
+            this.toolStripMenuItem_CompressRomFilesParentMenu.Name = "toolStripMenuItem_CompressRomFilesParentMenu";
+            this.toolStripMenuItem_CompressRomFilesParentMenu.Size = new System.Drawing.Size(368, 22);
+            this.toolStripMenuItem_CompressRomFilesParentMenu.Text = "Compress ROM Files";
+            // 
+            // toolStripMenuItem_ConvertRomToZip
+            // 
+            this.toolStripMenuItem_ConvertRomToZip.Name = "toolStripMenuItem_ConvertRomToZip";
+            this.toolStripMenuItem_ConvertRomToZip.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToZip.Text = "Convert ROM files to compress Zip files";
+            this.toolStripMenuItem_ConvertRomToZip.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToZip_Click);
+            // 
+            // toolStripMenuItem_ConvertRomTo7z
+            // 
+            this.toolStripMenuItem_ConvertRomTo7z.Name = "toolStripMenuItem_ConvertRomTo7z";
+            this.toolStripMenuItem_ConvertRomTo7z.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomTo7z.Text = "Convert ROM files to compress 7z files";
+            this.toolStripMenuItem_ConvertRomTo7z.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomTo7z_Click);
+            // 
+            // toolStripMenuItem_ConvertRomToTar
+            // 
+            this.toolStripMenuItem_ConvertRomToTar.Name = "toolStripMenuItem_ConvertRomToTar";
+            this.toolStripMenuItem_ConvertRomToTar.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToTar.Text = "Convert ROM files to compress Tar files";
+            this.toolStripMenuItem_ConvertRomToTar.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToTar_Click);
+            // 
+            // toolStripMenuItem_ConvertRomToGzip
+            // 
+            this.toolStripMenuItem_ConvertRomToGzip.Name = "toolStripMenuItem_ConvertRomToGzip";
+            this.toolStripMenuItem_ConvertRomToGzip.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToGzip.Text = "Convert ROM files to compress Gzip files";
+            this.toolStripMenuItem_ConvertRomToGzip.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToGzip_Click);
+            // 
+            // toolStripMenuItem_ConvertRomToBZ2
+            // 
+            this.toolStripMenuItem_ConvertRomToBZ2.Name = "toolStripMenuItem_ConvertRomToBZ2";
+            this.toolStripMenuItem_ConvertRomToBZ2.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToBZ2.Text = "Convert ROM files to compress Bz2 files";
+            this.toolStripMenuItem_ConvertRomToBZ2.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToBZ2_Click);
+            // 
+            // toolStripMenuItem_ConvertRomToLZ
+            // 
+            this.toolStripMenuItem_ConvertRomToLZ.Name = "toolStripMenuItem_ConvertRomToLZ";
+            this.toolStripMenuItem_ConvertRomToLZ.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToLZ.Text = "Convert ROM files to compress Lz files";
+            this.toolStripMenuItem_ConvertRomToLZ.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToLZ_Click);
+            // 
             // toolStripMenuItem_ImagesParentMenu
             // 
             this.toolStripMenuItem_ImagesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -477,7 +555,9 @@
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages,
             this.toolStripMenuItem_ScanAllSystemNewRomsAndImages,
             this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages,
-            this.toolStripMenuItem_DeleteDupImagesNotInDB});
+            this.toolStripMenuItem_DeleteDupImagesNotInDB,
+            this.toolStripMenuItem_ConvertPngToJpg,
+            this.toolStripMenuItem_ConvertAllPngToJpg});
             this.toolStripMenuItem_ImagesParentMenu.Name = "toolStripMenuItem_ImagesParentMenu";
             this.toolStripMenuItem_ImagesParentMenu.Size = new System.Drawing.Size(251, 22);
             this.toolStripMenuItem_ImagesParentMenu.Text = "&Images";
@@ -683,6 +763,38 @@
             this.numericUpDown_Paginator.TabIndex = 92;
             this.numericUpDown_Paginator.ValueChanged += new System.EventHandler(this.numericUpDown_Paginator_Changed);
             // 
+            // toolStripMenuItem_ConvertRomToRAR
+            // 
+            this.toolStripMenuItem_ConvertRomToRAR.Name = "toolStripMenuItem_ConvertRomToRAR";
+            this.toolStripMenuItem_ConvertRomToRAR.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToRAR.Text = "Convert ROM files to compress RAR files";
+            this.toolStripMenuItem_ConvertRomToRAR.ToolTipText = "This option is only available if WinRar is installed in the following path:\r\nC:\\P" +
+    "rogram Files\\WinRAR\\Rar.exe";
+            this.toolStripMenuItem_ConvertRomToRAR.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToRAR_Click);
+            // 
+            // toolStripMenuItem_ConvertPngToJpg
+            // 
+            this.toolStripMenuItem_ConvertPngToJpg.Name = "toolStripMenuItem_ConvertPngToJpg";
+            this.toolStripMenuItem_ConvertPngToJpg.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ConvertPngToJpg.Text = "Convert PNG files to JPG";
+            this.toolStripMenuItem_ConvertPngToJpg.Click += new System.EventHandler(this.toolStripMenuItem_ConvertPngToJpg_Click);
+            // 
+            // toolStripMenuItem_ConvertAllPngToJpg
+            // 
+            this.toolStripMenuItem_ConvertAllPngToJpg.Name = "toolStripMenuItem_ConvertAllPngToJpg";
+            this.toolStripMenuItem_ConvertAllPngToJpg.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ConvertAllPngToJpg.Text = "Convert all PNG files to JPG in all game systems";
+            this.toolStripMenuItem_ConvertAllPngToJpg.ToolTipText = "Convert all PNG files to JPG in all game console systems.\r\nUpdate GameLauncher da" +
+    "tabase.\r\nDelete orginal PNG files after conversion.";
+            this.toolStripMenuItem_ConvertAllPngToJpg.Click += new System.EventHandler(this.toolStripMenuItem_ConvertAllPngToJpg_Click);
+            // 
+            // toolStripMenuItem_CompressAllRoms
+            // 
+            this.toolStripMenuItem_CompressAllRoms.Name = "toolStripMenuItem_CompressAllRoms";
+            this.toolStripMenuItem_CompressAllRoms.Size = new System.Drawing.Size(368, 22);
+            this.toolStripMenuItem_CompressAllRoms.Text = "Compress all ROM Files in all game systems ROM folder";
+            this.toolStripMenuItem_CompressAllRoms.Click += new System.EventHandler(this.toolStripMenuItem_CompressAllRoms_Click);
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -776,6 +888,18 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RecentGames;
         private System.Windows.Forms.NumericUpDown numericUpDown_Paginator;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CopyTitleToClipboard;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CompressRomFilesParentMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomToZip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomTo7z;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomToTar;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomToGzip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomToBZ2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomToLZ;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertRomToRAR;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertPngToJpg;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertAllPngToJpg;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CompressAllRoms;
     }
 }
 
