@@ -35,4 +35,5 @@
 - Added Year and Rating field to ROM database.
 - Added pagination to game console systems having over 1500 ROM's.
 - Added option to change default images and roms sub folder.
-- 
+- Added option to associate preview images vs box-art images.
+- Added option to delete duplicate ROM files based on NameSimplified, NameOrg, or Compressed name.
