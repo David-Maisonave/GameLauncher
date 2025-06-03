@@ -113,7 +113,7 @@ Most of the options are self explanatory.
 The checksum options are used to help detect duplicate image and ROM files. Changes to these options don't take affect until a full rescan is performed.
 
 ## ToDo
-Below are possible future plan updates, however if there's already a version next to the item, that means the code changes have already been made, and checked in to Github, but a release for associated version has not been made yet.
+Below are possible future plan updates, however if there's already a version next to the item, that means the code changes have already been made, but a release for associated version has not been made yet.
 * [1.0.1] Add Year and Rating fields to the ROM Details editor.
 * [1.0.1] Add "Only Remove from DB" option to the ROM's-Delete form.
 * Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
