@@ -16,6 +16,7 @@ namespace GameLauncher
     public partial class FormRomsToDelete : Form
     {
         public List<string> RomSelectedToDelete { get; private set; } = new List<string>();
+        public bool OnlyRemoveFromDb { get; private set; } = false;
         private DeleteDuplicateBy deleteDuplicateBy;
         private List<Rom> RomCandidatesToDelete = new List<Rom>();
         private Dictionary<string, SortedSet<Rom>> Candidates = new Dictionary<string, SortedSet<Rom>>();
@@ -213,5 +214,11 @@ namespace GameLauncher
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) => ChangeSelection(true);
         private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e) => ChangeSelection(false);
         private void selectAllButFirstToolStripMenuItem_Click(object sender, EventArgs e) => PopulateTreeView();
+
+        private void button_OnlyRemoveFromDb_Click(object sender, EventArgs e)
+        {
+            OnlyRemoveFromDb = true;
+            button_DeleteSelectedRoms_Click(sender,e);
+        }
     }
 }

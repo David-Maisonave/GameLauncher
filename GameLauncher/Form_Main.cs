@@ -2258,16 +2258,17 @@ namespace GameLauncher
                 formRomsToDelete.ShowDialog();
                 if (formRomsToDelete.RomSelectedToDelete.Count > 0)
                 {
-                    if (MessageBox.Show($"Are you sure you want to delete {formRomsToDelete.RomSelectedToDelete.Count} ROM files?", $"Delete {formRomsToDelete.RomSelectedToDelete.Count} Files",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                        DialogResult.Yes)
+                    string message = formRomsToDelete.OnlyRemoveFromDb ? $"Are you sure you want to remove {formRomsToDelete.RomSelectedToDelete.Count} ROM's from GameLauncher database?" : $"Are you sure you want to delete {formRomsToDelete.RomSelectedToDelete.Count} ROM files?";
+                    string title = formRomsToDelete.OnlyRemoveFromDb ? $"Database removal {formRomsToDelete.RomSelectedToDelete.Count} ROM's" : $"Delete {formRomsToDelete.RomSelectedToDelete.Count} Files";
+                    if (MessageBox.Show(message, title,MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==  DialogResult.Yes)
                     {
                         using (new CursorWait())
                         {
                             foreach (string f in formRomsToDelete.RomSelectedToDelete)
                             {
                                 string fileToDelete = f.StartsWith(TreeNodeText) ? f.Substring(TreeNodeText.Length) : f;
-                                File.Delete(fileToDelete);
+                                if (formRomsToDelete.OnlyRemoveFromDb == false)
+                                    File.Delete(fileToDelete);
                                 DeleteRomFromDb(fileToDelete);
                             }
                         }

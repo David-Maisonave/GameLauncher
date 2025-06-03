@@ -42,6 +42,8 @@ namespace GameLauncher
             textBox_System.Text = rom.System.ToString();
             textBox_Title.Text = rom.Title;
             textBox_Version.Text = rom.Version;
+            textBox_Year.Text = rom.Year.ToString();
+            textBox_Rating.Text = rom.Rating;
         }
         private void button_Ok_Click(object sender, EventArgs e)
         {
@@ -60,6 +62,8 @@ namespace GameLauncher
             rom.Status = textBox_Status.Text;
             rom.Title = textBox_Title.Text;
             rom.Version = textBox_Version.Text;
+            rom.Year = Int32.Parse(textBox_Year.Text);
+            rom.Rating = textBox_Rating.Text;
             Ok = true;
             this.Close();
         }
