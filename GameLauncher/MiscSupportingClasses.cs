@@ -54,7 +54,13 @@ namespace GameLauncher
         None = 0,
         DuplicateChecksum,
         DuplicateTitleInAnySystem,
-        DuplicateTitleInSameSystem
+        DuplicateTitleInSameSystem,
+        DuplicateNameSimplifiedInAnySystem,
+        DuplicateNameSimplifiedInSameSystem,
+        DuplicateNameOrgInAnySystem,
+        DuplicateNameOrgInSameSystem,
+        DuplicateCompressedInAnySystem,
+        DuplicateCompressedInSameSystem,
     }
     public class InitializeRomsInDatabaseForSystem_Arg
     {

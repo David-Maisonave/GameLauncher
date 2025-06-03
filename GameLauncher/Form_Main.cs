@@ -131,6 +131,7 @@ namespace GameLauncher
         private bool gavePreviousWarningOnImageChangeNotTakeAffect = false;
         public List<string> validRomTypes { get; private set; }
         public System.Timers.Timer filterTimer = new System.Timers.Timer();
+        private string newFilterValue = "";
         // -------------------------------------------------------------------------------------------------------------------------------------
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Modifiable static variables used by static methods
@@ -166,7 +167,7 @@ namespace GameLauncher
             binDirPath = AppDomain.CurrentDomain.BaseDirectory;
             dataDirPath = AppDomain.CurrentDomain.BaseDirectory;
             filterTimer.Elapsed += new System.Timers.ElapsedEventHandler(Filter_Timer_Elapsed);
-            filterTimer.Interval = 2000;
+            filterTimer.Interval = 1500;
             filterTimer.Start();
         }
 
@@ -811,7 +812,7 @@ namespace GameLauncher
                     return imagePath;
             }
             string NameOrg = Path.GetFileNameWithoutExtension(imgFile);
-            string NameSimplified = ConvertToSimplifiedName(NameOrg);
+            string NameSimplified = ConvertToNameSimplified(NameOrg);
             string Compressed = ConvertToCompress(NameOrg);
             string Title = ConvertToTitle(NameOrg);
             string sql = $"INSERT OR REPLACE INTO Images (Title, NameSimplified, NameOrg, Compressed, FilePath, Checksum) VALUES (\"{Title}\", \"{NameSimplified}\", \"{NameOrg}\", \"{Compressed}\", \"{imgFile}\", \"{Checksum}\")";
@@ -1799,7 +1800,7 @@ namespace GameLauncher
                 {
                     forceFeedback = line.Substring(ForceFeedbackPrefix.Length);
                     title = ConvertToTitle(title);
-                    string NameSimplified = ConvertToSimplifiedName(title);
+                    string NameSimplified = ConvertToNameSimplified(title);
                     string Compressed = ConvertToCompress(title);
                     SendStatus($"Adding details for game {systemName}-{title}", true);
                     UpdateDB("INSERT OR REPLACE INTO GameDetails " +
@@ -1838,7 +1839,7 @@ namespace GameLauncher
                     continue;
                 }
                 string title = ConvertToTitle(line);
-                string NameSimplified = ConvertToSimplifiedName(title);
+                string NameSimplified = ConvertToNameSimplified(title);
                 string Compressed = ConvertToCompress(title);
                 UpdateDB("INSERT OR REPLACE INTO GameDetails " +
                     "(System, Title, QtyPlayers, NameSimplified, Compressed)" +
@@ -1897,11 +1898,15 @@ namespace GameLauncher
         private string ConvertToTitle(string name)=> ConvertToSimplifiedName(name,false, false, true, false, true,
                         false, false, false, false, false,true, false, true, true);
         private string ConvertToCompress(string name)=> ConvertToSimplifiedName(name, true, true);
+        private string ConvertToNameSimplified(string name)=> ConvertToSimplifiedName(name,false,false,true,true,true,true,
+            true,true,true,true,true,true,false,true, true, 
+            true, true, true);
         private string ConvertToSimplifiedName(string name,
                 bool removeNumbers = false, bool doHighCompress = false, bool removeBracesAndSuffixData = true, 
                 bool trimSpaces = true, bool removeRomPrefixIndexes = true, bool removeApostropheEs = true, 
                 bool convertSuffixRomanNumToDec = true, bool removeNonAlphaNum = true, bool removeApostrophe = true, 
                 bool makeLowerCase = true, bool replaceUnderScoreWithSpace = false, bool removeRedundant = false, bool removeTrailingNonAlphaNumChar = false, bool swapTheA_ToFront = false,
+                bool removeTheA = false, bool removeDisneyLego = false, bool swapAmpersandForAnd = false, bool removePlural_and_removeApostropheEs = false,
                 string removeSpecificStrValue = "", string replacementStr = "") // removeSpecificStrValue and replacementStr is for possible future requirements, or for end user customization.
         {
             if (removeSpecificStrValue.Length > 0) // Keep this at the top because the other filters could hinder finding the specified string.
@@ -1931,10 +1936,15 @@ namespace GameLauncher
 
             if (doHighCompress || replaceUnderScoreWithSpace)
                 name = name.Replace("_", " ");
+            if (swapAmpersandForAnd)
+                name = name.Replace(" & ", " and ");
+            if (removePlural_and_removeApostropheEs)
+                name = Regex.Replace(name, @"'?[sS]\b", "");
 
             if (doHighCompress  || removeRedundant)
             {
                 name = Regex.Replace(name, @"(?i)[\s_]DSi?\+?([\s_\(\[])", "$1");
+                name = Regex.Replace(name, @"(?i)\sNDS$", "");
                 name = Regex.Replace(name, @"(?i)\sDS$", "");
                 name = Regex.Replace(name, @"(?i)N?64", "");
                 name = Regex.Replace(name, @"(?i)3D", "");
@@ -1965,8 +1975,14 @@ namespace GameLauncher
             {
                 removeNumbers = true;
                 name = Regex.Replace(name, @"(?i)([a-zA-Z][a-zA-Z])'?s\b", "$1");
+            }
+            if (doHighCompress || removeTheA)
+            {
                 name = Regex.Replace(name, @"(?i)^A\s", "");
                 name = Regex.Replace(name, @"(?i)^The\s", "");
+            }
+            if (doHighCompress)
+            {
                 name = Regex.Replace(name, @"(?i)\s[\,-\.]\sA\s", "");
                 name = Regex.Replace(name, @"(?i)\s[\,-\.]\sThe\s", "");
                 name = Regex.Replace(name, @"(?i)[\,-\.]\s?A", "");
@@ -1977,10 +1993,16 @@ namespace GameLauncher
                 name = Regex.Replace(name, @"(?i)\sEdition\s", "");
                 name = Regex.Replace(name, @"(?i)\sPart\s", "");
                 name = Regex.Replace(name, @"(?i)^[2-9]-in-1\s?-?\s?", ""); // Remove "2-in-1 - ", and , "3-in-1 - " from start of name
+            }
+            if (doHighCompress || removeDisneyLego)
+            {
                 name = Regex.Replace(name, @"(?i)^Disney's\s", ""); // Remove Disney's from start of name
                 name = Regex.Replace(name, @"(?i)^Disney-Pixar\s", ""); // Remove Disney's from start of name
                 name = Regex.Replace(name, @"(?i)^Disney\s", ""); // Remove Disney's from start of name
                 name = Regex.Replace(name, @"(?i)^LEGO\s", ""); // Remove LEGO from start of name
+            }
+            if (doHighCompress || removeTheA)
+            {
                 string nameWithOutTheA = Regex.Replace(name, @"(,\s?(A|The)$)|(,\s?(A|The)\s)", "");
                 if (!name.Equals(nameWithOutTheA))
                 {
@@ -2184,12 +2206,37 @@ namespace GameLauncher
                         }
                     }
                 }
-                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem)
+                else if (   deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem ||
+                            deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInSameSystem ||
+                            deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInSameSystem ||
+                            deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInSameSystem
+                    )
                 {
                     SqliteCommand command = connection.CreateCommand();
-                    command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem ? 
+                    if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem)
+                    {
+                        command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem ?
                         "SELECT FilePath, Title, RomSize FROM roms WHERE Title IN (SELECT * FROM (SELECT Title FROM roms GROUP BY Title HAVING COUNT(Title) > 1) AS a) order by Title, RomSize desc;" :
                         "SELECT FilePath, Title, System, RomSize FROM roms WHERE Title || System  IN (SELECT Title || System FROM roms GROUP BY Title,System HAVING COUNT(*) > 1) order by Title, RomSize desc;";
+                    }
+                    else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInSameSystem)
+                    {
+                        command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem ?
+                        "SELECT FilePath, Title, NameSimplified, RomSize FROM roms WHERE NameSimplified IN (SELECT * FROM (SELECT NameSimplified FROM roms GROUP BY NameSimplified HAVING COUNT(NameSimplified) > 1) AS a) order by NameSimplified, RomSize desc;" :
+                        "SELECT FilePath, Title, NameSimplified, System, RomSize FROM roms WHERE NameSimplified || System  IN (SELECT NameSimplified || System FROM roms GROUP BY NameSimplified,System HAVING COUNT(*) > 1) order by NameSimplified, RomSize desc;";
+                    }
+                    else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInSameSystem)
+                    {
+                        command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem ?
+                        "SELECT FilePath, Title, NameOrg, RomSize FROM roms WHERE NameOrg IN (SELECT * FROM (SELECT NameOrg FROM roms GROUP BY NameOrg HAVING COUNT(NameOrg) > 1) AS a) order by NameOrg, RomSize desc;" :
+                        "SELECT FilePath, Title, NameOrg, System, RomSize FROM roms WHERE NameOrg || System  IN (SELECT NameOrg || System FROM roms GROUP BY NameOrg,System HAVING COUNT(*) > 1) order by NameOrg, RomSize desc;";
+                    }
+                    else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInSameSystem)
+                    {
+                        command.CommandText = deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem ?
+                        "SELECT FilePath, Title, Compressed, RomSize FROM roms WHERE Compressed IN (SELECT * FROM (SELECT Compressed FROM roms GROUP BY Compressed HAVING COUNT(Compressed) > 1) AS a) and Compressed <> \"\" order by Compressed, RomSize desc;" :
+                        "SELECT FilePath, Title, Compressed, System, RomSize FROM roms WHERE Compressed || System  IN (SELECT Compressed || System FROM roms GROUP BY Compressed,System HAVING COUNT(*) > 1) and Compressed <> \"\" order by Compressed, RomSize desc;";
+                    }
                     using (SqliteDataReader reader = command.ExecuteReader())
                     {
                         while (!cancelScan && reader.Read())
@@ -2579,7 +2626,7 @@ namespace GameLauncher
         private Rom GetRomDetails(string romFilePath, int systemIndex, string emulatorDir, long RomSize)
         {
             string NameOrg = GetFileNameWithoutExtensionAndWithoutBin(romFilePath); // f.Substring(imgPath.Length + 1);
-            string NameSimplified = ConvertToSimplifiedName(NameOrg);
+            string NameSimplified = ConvertToNameSimplified(NameOrg);
             string Compressed = ConvertToCompress(NameOrg);
             string Title = ConvertToTitle(NameOrg);
             string Status = "";
@@ -2617,7 +2664,7 @@ namespace GameLauncher
                         addInfoToNotesInsteadOfPlayerQty = true;
                     continue;
                 }
-                string NameSimplified = ConvertToSimplifiedName(line);
+                string NameSimplified = ConvertToNameSimplified(line);
                 string sql = $"UPDATE Roms SET QtyPlayers = 4 WHERE NameSimplified = \"{NameSimplified}\"";
                 if (addInfoToNotesInsteadOfPlayerQty)
                     sql = $"UPDATE Roms SET NotesUser = \"Possible Multiplayer Game\" WHERE NameSimplified = \"{NameSimplified}\"";
@@ -3746,14 +3793,20 @@ namespace GameLauncher
         {
             try
             {
-                FilterOutRomsFromList();
-                if (toolStripTextBox_Filter.Text.Length < lastSearchStr.Length)
+                if (toolStripTextBox_Filter.Text.Length >= lastSearchStr.Length)
+                    FilterOutRomsFromList();
+                else
+                {
+                    if (newFilterValue.Length == 0)
+                        FilterOutRomsFromList();
                     lastSearchStr = "";
+                }
             }
             catch (Exception ex)
             {
                 DbErrorLogging("toolStripTextBox_Filter_Change", $"toolStripTextBox_Filter_Change exception thrown \"{ex.Message}\" for text {toolStripTextBox_Filter.Text}!", ex.StackTrace);
             }
+            newFilterValue = toolStripTextBox_Filter.Text;
         }
         private void toolStripTextBox_Filter_Click(object sender, EventArgs e) => FilterOutRomsFromList();
         private void toolStripTextBox_Filter_DbClick(object sender, EventArgs e)=> FilterOutRomsFromList(true);
@@ -3849,6 +3902,12 @@ namespace GameLauncher
         private void toolStripMenuItem_DeleteDupRomsByTitleSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInSameSystem));
         private void toolStripMenuItem_DeleteDupRomsByTitleAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateTitleInAnySystem));
         private void toolStripMenuItem_DeleteDupRomsByChecksum_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateChecksum));
+        private void toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateNameSimplifiedInSameSystem));
+        private void toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem));
+        private void toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateNameOrgInSameSystem));
+        private void toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateNameOrgInAnySystem));
+        private void toolStripMenuItem_DeleteDupRomsByCompressedSameSystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateCompressedInSameSystem));
+        private void toolStripMenuItem_DeleteDupRomsByCompressedAnySystem_Click(object sender, EventArgs e) => BeginInvoke(new MyDelegateForm_Main_DeleteDuplicateBy(DelegateDeleteDuplicateRomFilesInDatabase), GetDelegateAction(this, DeleteDuplicateBy.DuplicateCompressedInAnySystem));
         private void toolStripMenuItem_PopulateGameDetailsDB_Click(object sender, EventArgs e)
         {
             using (new CursorWait())
@@ -3977,7 +4036,7 @@ namespace GameLauncher
                     string NameOrg = rom.NameOrg;
                     string NameSimplified = rom.NameSimplified;
                     rom.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(rom.FilePath);
-                    rom.NameSimplified = ConvertToSimplifiedName(rom.NameOrg);
+                    rom.NameSimplified = ConvertToNameSimplified(rom.NameOrg);
                     rom.Compressed = ConvertToCompress(rom.NameOrg);
                     rom.Title = ConvertToTitle(rom.NameOrg);
                     if (Title.Contains("Little Mermaid"))
@@ -4018,7 +4077,7 @@ namespace GameLauncher
                     string NameOrg = gameImage.NameOrg;
                     string NameSimplified = gameImage.NameSimplified;
                     gameImage.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(gameImage.FilePath);
-                    gameImage.NameSimplified = ConvertToSimplifiedName(gameImage.NameOrg);
+                    gameImage.NameSimplified = ConvertToNameSimplified(gameImage.NameOrg);
                     gameImage.Compressed = ConvertToCompress(gameImage.NameOrg);
                     gameImage.Title = ConvertToTitle(gameImage.NameOrg);
                     if (!gameImage.Title.Equals(Title) || !gameImage.NameOrg.Equals(NameOrg) || !gameImage.NameSimplified.Equals(NameSimplified) || !gameImage.Compressed.Equals(Compressed))
@@ -4068,7 +4127,10 @@ namespace GameLauncher
         private void toolStripMenuItem_ConvertAllPngToJpg_Click(object sender, EventArgs e) => ConvertPngToJpg(true, true);
         void Filter_Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            //TODO: call your method like "Plus"
+            if (toolStripTextBox_Filter.Text.Length > 0 && toolStripTextBox_Filter.Text.Equals(newFilterValue))
+            {
+                newFilterValue = "";
+            }
         }
     }// End of Form1 class
     #endregion

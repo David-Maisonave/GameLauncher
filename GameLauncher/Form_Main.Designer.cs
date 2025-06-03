@@ -76,6 +76,8 @@
             this.toolStripMenuItem_ConvertRomToGzip = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConvertRomToBZ2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConvertRomToLZ = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertRomToRAR = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CompressAllRoms = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ImagesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateImageListCache = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ImageSearchSelectedDir = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,6 +86,8 @@
             this.toolStripMenuItem_ScanAllSystemNewRomsAndImages = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DeleteDupImagesNotInDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertPngToJpg = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertAllPngToJpg = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_MiscUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_RegexRenameFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DbUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,10 +106,16 @@
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
             this.numericUpDown_Paginator = new System.Windows.Forms.NumericUpDown();
-            this.toolStripMenuItem_ConvertRomToRAR = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_ConvertPngToJpg = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_ConvertAllPngToJpg = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_CompressAllRoms = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -464,6 +474,16 @@
             this.toolStripMenuItemDeleteRomsParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem,
             this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem,
+            this.toolStripSeparator8,
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem,
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem,
+            this.toolStripSeparator9,
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem,
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem,
+            this.toolStripSeparator10,
+            this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem,
+            this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem,
+            this.toolStripSeparator11,
             this.toolStripMenuItem_DeleteDupRomsByChecksum});
             this.toolStripMenuItemDeleteRomsParentMenu.Name = "toolStripMenuItemDeleteRomsParentMenu";
             this.toolStripMenuItemDeleteRomsParentMenu.Size = new System.Drawing.Size(368, 22);
@@ -472,21 +492,21 @@
             // toolStripMenuItem_DeleteDupRomsByTitleSameSystem
             // 
             this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Name = "toolStripMenuItem_DeleteDupRomsByTitleSameSystem";
-            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Size = new System.Drawing.Size(320, 22);
+            this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Size = new System.Drawing.Size(388, 22);
             this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Text = "Delete duplicate ROM\'s by title in same system";
             this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByTitleSameSystem_Click);
             // 
             // toolStripMenuItem_DeleteDupRomsByTitleAnySystem
             // 
             this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Name = "toolStripMenuItem_DeleteDupRomsByTitleAnySystem";
-            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Size = new System.Drawing.Size(320, 22);
+            this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Size = new System.Drawing.Size(388, 22);
             this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Text = "Delete duplicate ROM\'s by title in any system";
             this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByTitleAnySystem_Click);
             // 
             // toolStripMenuItem_DeleteDupRomsByChecksum
             // 
             this.toolStripMenuItem_DeleteDupRomsByChecksum.Name = "toolStripMenuItem_DeleteDupRomsByChecksum";
-            this.toolStripMenuItem_DeleteDupRomsByChecksum.Size = new System.Drawing.Size(320, 22);
+            this.toolStripMenuItem_DeleteDupRomsByChecksum.Size = new System.Drawing.Size(388, 22);
             this.toolStripMenuItem_DeleteDupRomsByChecksum.Text = "Delete duplicate ROM\'s by checksum";
             this.toolStripMenuItem_DeleteDupRomsByChecksum.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByChecksum_Click);
             // 
@@ -545,6 +565,22 @@
             this.toolStripMenuItem_ConvertRomToLZ.Size = new System.Drawing.Size(288, 22);
             this.toolStripMenuItem_ConvertRomToLZ.Text = "Convert ROM files to compress Lz files";
             this.toolStripMenuItem_ConvertRomToLZ.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToLZ_Click);
+            // 
+            // toolStripMenuItem_ConvertRomToRAR
+            // 
+            this.toolStripMenuItem_ConvertRomToRAR.Name = "toolStripMenuItem_ConvertRomToRAR";
+            this.toolStripMenuItem_ConvertRomToRAR.Size = new System.Drawing.Size(288, 22);
+            this.toolStripMenuItem_ConvertRomToRAR.Text = "Convert ROM files to compress RAR files";
+            this.toolStripMenuItem_ConvertRomToRAR.ToolTipText = "This option is only available if WinRar is installed in the following path:\r\nC:\\P" +
+    "rogram Files\\WinRAR\\Rar.exe";
+            this.toolStripMenuItem_ConvertRomToRAR.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToRAR_Click);
+            // 
+            // toolStripMenuItem_CompressAllRoms
+            // 
+            this.toolStripMenuItem_CompressAllRoms.Name = "toolStripMenuItem_CompressAllRoms";
+            this.toolStripMenuItem_CompressAllRoms.Size = new System.Drawing.Size(368, 22);
+            this.toolStripMenuItem_CompressAllRoms.Text = "Compress all ROM Files in all game systems ROM folder";
+            this.toolStripMenuItem_CompressAllRoms.Click += new System.EventHandler(this.toolStripMenuItem_CompressAllRoms_Click);
             // 
             // toolStripMenuItem_ImagesParentMenu
             // 
@@ -609,6 +645,22 @@
             this.toolStripMenuItem_DeleteDupImagesNotInDB.Size = new System.Drawing.Size(330, 22);
             this.toolStripMenuItem_DeleteDupImagesNotInDB.Text = "Delete duplicate image files not in database";
             this.toolStripMenuItem_DeleteDupImagesNotInDB.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupImagesNotInDB_Click);
+            // 
+            // toolStripMenuItem_ConvertPngToJpg
+            // 
+            this.toolStripMenuItem_ConvertPngToJpg.Name = "toolStripMenuItem_ConvertPngToJpg";
+            this.toolStripMenuItem_ConvertPngToJpg.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ConvertPngToJpg.Text = "Convert PNG files to JPG";
+            this.toolStripMenuItem_ConvertPngToJpg.Click += new System.EventHandler(this.toolStripMenuItem_ConvertPngToJpg_Click);
+            // 
+            // toolStripMenuItem_ConvertAllPngToJpg
+            // 
+            this.toolStripMenuItem_ConvertAllPngToJpg.Name = "toolStripMenuItem_ConvertAllPngToJpg";
+            this.toolStripMenuItem_ConvertAllPngToJpg.Size = new System.Drawing.Size(330, 22);
+            this.toolStripMenuItem_ConvertAllPngToJpg.Text = "Convert all PNG files to JPG in all game systems";
+            this.toolStripMenuItem_ConvertAllPngToJpg.ToolTipText = "Convert all PNG files to JPG in all game console systems.\r\nUpdate GameLauncher da" +
+    "tabase.\r\nDelete orginal PNG files after conversion.";
+            this.toolStripMenuItem_ConvertAllPngToJpg.Click += new System.EventHandler(this.toolStripMenuItem_ConvertAllPngToJpg_Click);
             // 
             // toolStripMenuItem_MiscUtilParentMenu
             // 
@@ -763,37 +815,67 @@
             this.numericUpDown_Paginator.TabIndex = 92;
             this.numericUpDown_Paginator.ValueChanged += new System.EventHandler(this.numericUpDown_Paginator_Changed);
             // 
-            // toolStripMenuItem_ConvertRomToRAR
+            // toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem
             // 
-            this.toolStripMenuItem_ConvertRomToRAR.Name = "toolStripMenuItem_ConvertRomToRAR";
-            this.toolStripMenuItem_ConvertRomToRAR.Size = new System.Drawing.Size(288, 22);
-            this.toolStripMenuItem_ConvertRomToRAR.Text = "Convert ROM files to compress RAR files";
-            this.toolStripMenuItem_ConvertRomToRAR.ToolTipText = "This option is only available if WinRar is installed in the following path:\r\nC:\\P" +
-    "rogram Files\\WinRAR\\Rar.exe";
-            this.toolStripMenuItem_ConvertRomToRAR.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToRAR_Click);
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem.Name = "toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem";
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem.Text = "Delete duplicate ROM\'s by NameSimplified  in same system";
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem_Click);
             // 
-            // toolStripMenuItem_ConvertPngToJpg
+            // toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem
             // 
-            this.toolStripMenuItem_ConvertPngToJpg.Name = "toolStripMenuItem_ConvertPngToJpg";
-            this.toolStripMenuItem_ConvertPngToJpg.Size = new System.Drawing.Size(330, 22);
-            this.toolStripMenuItem_ConvertPngToJpg.Text = "Convert PNG files to JPG";
-            this.toolStripMenuItem_ConvertPngToJpg.Click += new System.EventHandler(this.toolStripMenuItem_ConvertPngToJpg_Click);
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem.Name = "toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem";
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem.Text = "Delete duplicate ROM\'s by NameSimplified in any system";
+            this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem_Click);
             // 
-            // toolStripMenuItem_ConvertAllPngToJpg
+            // toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem
             // 
-            this.toolStripMenuItem_ConvertAllPngToJpg.Name = "toolStripMenuItem_ConvertAllPngToJpg";
-            this.toolStripMenuItem_ConvertAllPngToJpg.Size = new System.Drawing.Size(330, 22);
-            this.toolStripMenuItem_ConvertAllPngToJpg.Text = "Convert all PNG files to JPG in all game systems";
-            this.toolStripMenuItem_ConvertAllPngToJpg.ToolTipText = "Convert all PNG files to JPG in all game console systems.\r\nUpdate GameLauncher da" +
-    "tabase.\r\nDelete orginal PNG files after conversion.";
-            this.toolStripMenuItem_ConvertAllPngToJpg.Click += new System.EventHandler(this.toolStripMenuItem_ConvertAllPngToJpg_Click);
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem.Name = "toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem";
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem.Text = "Delete duplicate ROM\'s by NameOrg in same system";
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem_Click);
             // 
-            // toolStripMenuItem_CompressAllRoms
+            // toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem
             // 
-            this.toolStripMenuItem_CompressAllRoms.Name = "toolStripMenuItem_CompressAllRoms";
-            this.toolStripMenuItem_CompressAllRoms.Size = new System.Drawing.Size(368, 22);
-            this.toolStripMenuItem_CompressAllRoms.Text = "Compress all ROM Files in all game systems ROM folder";
-            this.toolStripMenuItem_CompressAllRoms.Click += new System.EventHandler(this.toolStripMenuItem_CompressAllRoms_Click);
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem.Name = "toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem";
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem.Text = "Delete duplicate ROM\'s by NameOrg in any system";
+            this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem_Click);
+            // 
+            // toolStripMenuItem_DeleteDupRomsByCompressedSameSystem
+            // 
+            this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem.Name = "toolStripMenuItem_DeleteDupRomsByCompressedSameSystem";
+            this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem.Text = "Delete duplicate ROM\'s by Compressed in same system";
+            this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByCompressedSameSystem_Click);
+            // 
+            // toolStripMenuItem_DeleteDupRomsByCompressedAnySystem
+            // 
+            this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem.Name = "toolStripMenuItem_DeleteDupRomsByCompressedAnySystem";
+            this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem.Text = "Delete duplicate ROM\'s by Compressed in any system";
+            this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupRomsByCompressedAnySystem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(385, 6);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(385, 6);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(385, 6);
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(385, 6);
             // 
             // Form_Main
             // 
@@ -900,6 +982,16 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertPngToJpg;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertAllPngToJpg;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CompressAllRoms;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByNameSimplifiedSameSystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByNameSimplifiedAnySystem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByNameOrgSameSystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByNameOrgAnySystem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByCompressedSameSystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByCompressedAnySystem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
     }
 }
 

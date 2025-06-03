@@ -50,7 +50,7 @@ namespace GameLauncher
         }
         private void PopulateTreeView(SortTypeSelected select = SortTypeSelected.None)
         {
-            string KeyName = deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum ? "Checksum" : "Title";
+            string KeyName = "Checksum";
             if (select != SortTypeSelected.None)
                 sortTypeSelected = select;
             treeView1.Nodes.Clear();
@@ -63,18 +63,65 @@ namespace GameLauncher
                         Candidates[RomCandidatesToDelete[i].Checksum] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[RomCandidatesToDelete[i].Checksum].Add(RomCandidatesToDelete[i]);
                 }
-                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem)
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem)
                 {
+                    KeyName = "Title";
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Title))
+                        Candidates[RomCandidatesToDelete[i].Title] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].Title].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem)
+                {
+                    KeyName = "NameSimplified";
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].NameSimplified))
+                        Candidates[RomCandidatesToDelete[i].NameSimplified] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].NameSimplified].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem)
+                {
+                    KeyName = "NameOrg";
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].NameOrg))
+                        Candidates[RomCandidatesToDelete[i].NameOrg] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].NameOrg].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem)
+                {
+                    KeyName = "Compressed";
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Compressed))
+                        Candidates[RomCandidatesToDelete[i].Compressed] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].Compressed].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem)
+                {
+                    KeyName = "Title";
                     string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
                     if (!Candidates.ContainsKey($"{system}-{RomCandidatesToDelete[i].Title}"))
                         Candidates[$"{system}-{RomCandidatesToDelete[i].Title}"] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[$"{system}-{RomCandidatesToDelete[i].Title}"].Add(RomCandidatesToDelete[i]);
                 }
-                else
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem)
                 {
-                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Title))
-                        Candidates[RomCandidatesToDelete[i].Title] = new SortedSet<Rom>(GetComparisonType());
-                    Candidates[RomCandidatesToDelete[i].Title].Add(RomCandidatesToDelete[i]);
+                    KeyName = "NameSimplified";
+                    string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
+                    if (!Candidates.ContainsKey($"{system}-{RomCandidatesToDelete[i].NameSimplified}"))
+                        Candidates[$"{system}-{RomCandidatesToDelete[i].NameSimplified}"] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[$"{system}-{RomCandidatesToDelete[i].NameSimplified}"].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem)
+                {
+                    KeyName = "NameOrg";
+                    string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
+                    if (!Candidates.ContainsKey($"{system}-{RomCandidatesToDelete[i].NameOrg}"))
+                        Candidates[$"{system}-{RomCandidatesToDelete[i].NameOrg}"] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[$"{system}-{RomCandidatesToDelete[i].NameOrg}"].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem)
+                {
+                    KeyName = "Compressed";
+                    string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
+                    if (!Candidates.ContainsKey($"{system}-{RomCandidatesToDelete[i].Compressed}"))
+                        Candidates[$"{system}-{RomCandidatesToDelete[i].Compressed}"] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[$"{system}-{RomCandidatesToDelete[i].Compressed}"].Add(RomCandidatesToDelete[i]);
                 }
             }
             treeView1.CheckBoxes = true;
@@ -110,7 +157,7 @@ namespace GameLauncher
             deleteDuplicateBy = delete_duplicate_by;
             if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum)
                 PopulateTreeView();
-            else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem)
+            else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem || deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem)
                 PopulateTreeView(SortTypeSelected.RomSizeRev);
             else
                 PopulateTreeView(SortTypeSelected.RomVersion);
