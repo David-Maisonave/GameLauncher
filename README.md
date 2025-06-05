@@ -118,5 +118,6 @@ Below are possible future plan updates, however if there's already a version nex
 * [1.0.1] Add "Only Remove from DB" option to the ROM's-Delete form.
 * Add filter based on Rating field.
 * Find database source to use to automatically populate Ratings field.
-* Add Favorites option to the system combobox, where the favorites list the last 100 ROM's played, and listed in order of last played.
+* Add Favorites option to the system combobox, and have it use pagination.
+* Add All-System option to system combobox, and have it use pagination.
 * Add option to password protected advance option.
