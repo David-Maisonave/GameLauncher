@@ -116,6 +116,12 @@
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
             this.numericUpDown_Paginator = new System.Windows.Forms.NumericUpDown();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_CreateChecksumForRomsSelectSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CreateChecksumForRomsAllSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -363,7 +369,6 @@
             this.toolStripMenuItemSearchAll});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
             this.menuStrip1.ShowItemToolTips = true;
             this.menuStrip1.Size = new System.Drawing.Size(876, 37);
             this.menuStrip1.TabIndex = 91;
@@ -444,9 +449,14 @@
             this.toolStripMenuItemScanNewRomsAllSystems,
             this.toolStripMenuItemScanSelectedSystemNewRoms,
             this.toolStripMenuItem_CleanScanSelectedSystemNewRoms,
-            this.toolStripMenuItemDeleteRomsParentMenu,
+            this.toolStripSeparator12,
             this.toolStripMenuItem_CompressRomFilesParentMenu,
-            this.toolStripMenuItem_CompressAllRoms});
+            this.toolStripMenuItem_CompressAllRoms,
+            this.toolStripSeparator14,
+            this.toolStripMenuItem_CreateChecksumForRomsSelectSystem,
+            this.toolStripMenuItem_CreateChecksumForRomsAllSystem,
+            this.toolStripSeparator13,
+            this.toolStripMenuItemDeleteRomsParentMenu});
             this.toolStripMenuItem_ROMParentMenu.Name = "toolStripMenuItem_ROMParentMenu";
             this.toolStripMenuItem_ROMParentMenu.Size = new System.Drawing.Size(380, 34);
             this.toolStripMenuItem_ROMParentMenu.Text = "&ROM\'s";
@@ -663,6 +673,7 @@
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages,
             this.toolStripMenuItem_ScanAllSystemNewRomsAndImages,
             this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages,
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem,
             this.toolStripMenuItem_DeleteDupImagesNotInDB,
             this.toolStripMenuItem_ConvertPngToJpg,
             this.toolStripMenuItem_ConvertAllPngToJpg});
@@ -746,7 +757,7 @@
             // toolStripMenuItem_RegexRenameFiles
             // 
             this.toolStripMenuItem_RegexRenameFiles.Name = "toolStripMenuItem_RegexRenameFiles";
-            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(268, 34);
+            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(270, 34);
             this.toolStripMenuItem_RegexRenameFiles.Text = "Regex Rename Files";
             this.toolStripMenuItem_RegexRenameFiles.Click += new System.EventHandler(this.toolStripMenuItem_RegexRenameFiles_Click);
             // 
@@ -763,7 +774,7 @@
             this.toolStripMenuItem_ResetYearAndRatingFieldsInDB,
             this.toolStripMenuItem_SearchMatchingImage});
             this.toolStripMenuItem_DbUtilParentMenu.Name = "toolStripMenuItem_DbUtilParentMenu";
-            this.toolStripMenuItem_DbUtilParentMenu.Size = new System.Drawing.Size(268, 34);
+            this.toolStripMenuItem_DbUtilParentMenu.Size = new System.Drawing.Size(270, 34);
             this.toolStripMenuItem_DbUtilParentMenu.Text = "Database Util";
             // 
             // toolStripMenuItem_ResetRomTitleCompress
@@ -888,6 +899,42 @@
             this.numericUpDown_Paginator.TabIndex = 92;
             this.numericUpDown_Paginator.ValueChanged += new System.EventHandler(this.numericUpDown_Paginator_Changed);
             // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(556, 6);
+            // 
+            // toolStripSeparator13
+            // 
+            this.toolStripSeparator13.Name = "toolStripSeparator13";
+            this.toolStripSeparator13.Size = new System.Drawing.Size(556, 6);
+            // 
+            // toolStripMenuItem_CreateChecksumForRomsSelectSystem
+            // 
+            this.toolStripMenuItem_CreateChecksumForRomsSelectSystem.Name = "toolStripMenuItem_CreateChecksumForRomsSelectSystem";
+            this.toolStripMenuItem_CreateChecksumForRomsSelectSystem.Size = new System.Drawing.Size(559, 34);
+            this.toolStripMenuItem_CreateChecksumForRomsSelectSystem.Text = "Create checksum for ROM\'s of selected system";
+            this.toolStripMenuItem_CreateChecksumForRomsSelectSystem.Click += new System.EventHandler(this.toolStripMenuItem_CreateChecksumForRomsSelectSystem_Click);
+            // 
+            // toolStripMenuItem_CreateChecksumForRomsAllSystem
+            // 
+            this.toolStripMenuItem_CreateChecksumForRomsAllSystem.Name = "toolStripMenuItem_CreateChecksumForRomsAllSystem";
+            this.toolStripMenuItem_CreateChecksumForRomsAllSystem.Size = new System.Drawing.Size(559, 34);
+            this.toolStripMenuItem_CreateChecksumForRomsAllSystem.Text = "Create checksum for ROM\'s of all systems";
+            this.toolStripMenuItem_CreateChecksumForRomsAllSystem.Click += new System.EventHandler(this.toolStripMenuItem_CreateChecksumForRomsAllSystem_Click);
+            // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(556, 6);
+            // 
+            // toolStripMenuItem_CreateChecksumForImagesAllSystem
+            // 
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Name = "toolStripMenuItem_CreateChecksumForImagesAllSystem";
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Size = new System.Drawing.Size(501, 34);
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Text = "Create checksum for images of all systems";
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Click += new System.EventHandler(this.toolStripMenuItem_CreateChecksumForImagesAllSystem_Click);
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1004,6 +1051,12 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByCompressedSameSystem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupRomsByCompressedAnySystem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CreateChecksumForRomsSelectSystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CreateChecksumForRomsAllSystem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CreateChecksumForImagesAllSystem;
     }
 }
 

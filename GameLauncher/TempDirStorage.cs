@@ -12,11 +12,37 @@ namespace GameLauncher
         /// Initializes a new instance of the <see cref="TempDirStorage"/> class.
         /// </summary>
         /// <param name="path">The path to use as temp storage.</param>
-        public TempDirStorage(string path = null, bool deleteIfExistingContent = true)
+        public TempDirStorage(bool deleteIfExistingContent = true, string path = null)
         {
             if (path == null)
-                path = Path.Combine(System.IO.Path.GetTempPath(), $"{System.Windows.Forms.Application.ProductName}_temporary_directory");
+                path = Path.Combine(System.IO.Path.GetTempPath(), $"{System.Windows.Forms.Application.ProductName}\\_temporary_directory\\");
             this.tempDir = path;
+            Init(deleteIfExistingContent);
+        }
+        public TempDirStorage(string suffixDir, bool deleteIfExistingContent = true, string path = null)
+        {
+            if (path == null)
+                path = $"{GetMultiThreadParentDir()}\\{suffixDir}\\";
+            this.tempDir = path;
+            Init(deleteIfExistingContent);
+        }
+        private static string GetMultiThreadParentDir()
+        {
+            return Path.Combine(System.IO.Path.GetTempPath(), $"{System.Windows.Forms.Application.ProductName}\\_tmp_dir_");
+        }
+        public static void DeleteTempMultithreadDir()
+        {
+            try
+            {
+                if (Directory.Exists(GetMultiThreadParentDir()))
+                    Directory.Delete(GetMultiThreadParentDir(), true);
+            }
+            catch
+            {
+            }
+        }
+        public void Init(bool deleteIfExistingContent)
+        {
             if (deleteIfExistingContent)
                 this.Clear();
             this.Create();

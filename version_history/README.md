@@ -40,3 +40,7 @@
 ### 1.0.1
 - Added Year and Rating fields to the ROM Details editor.
 - Added "Only Remove from DB" option to the ROM's-Delete form.
+- Added fields (StarRating, StarRatingVoteCount, WikipediaURL, and Publisher) to GameDetails database.
+- Added implementation to fetch game details from XML files and add it to the GameDetails database.
+- Added multithreading logic to TempDirStorage which allows decompressing multiple files in multithread environment.
+- Added CreateChecksumForRoms option to main menu. This allows checksums to be created after database initialization.

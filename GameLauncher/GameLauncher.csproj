@@ -220,6 +220,34 @@
     </Compile>
     <Compile Include="SerializableImageList.cs" />
     <Compile Include="TempDirStorage.cs" />
+    <Content Include="Properties\CreateDb.sql" />
+    <Content Include="Properties\Neo Geo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Nintendo 64.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Nintendo DS.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Nintendo Entertainment System.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Nintendo Game Boy Advance.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Sega Genesis.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Sega Master System.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Sony Playstation.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\Super Nintendo Entertainment System.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="FormRomsToDelete.resx">
       <DependentUpon>FormRomsToDelete.cs</DependentUpon>
     </EmbeddedResource>
@@ -263,7 +291,9 @@
     </AdditionalFiles>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <Content Include="Properties\DeleteDbData.sql" />
+    <Content Include="Properties\Atari 2600.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Properties\GameDetails.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
