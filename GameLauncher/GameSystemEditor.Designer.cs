@@ -58,21 +58,31 @@
             this.textBox_EmulatorPath10 = new System.Windows.Forms.TextBox();
             this.button_Cancel = new System.Windows.Forms.Button();
             this.button_Ok = new System.Windows.Forms.Button();
+            this.checkBox_ExtractArchive1 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive2 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive3 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive6 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive5 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive4 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive9 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive8 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive7 = new System.Windows.Forms.CheckBox();
+            this.checkBox_ExtractArchive10 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox_EmulatorPath4
             // 
             this.textBox_EmulatorPath4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath4.Location = new System.Drawing.Point(104, 154);
-            this.textBox_EmulatorPath4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath4.Location = new System.Drawing.Point(104, 166);
+            this.textBox_EmulatorPath4.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath4.Name = "textBox_EmulatorPath4";
-            this.textBox_EmulatorPath4.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath4.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath4.TabIndex = 71;
             // 
             // label18
             // 
-            this.label18.Location = new System.Drawing.Point(8, 159);
+            this.label18.Location = new System.Drawing.Point(8, 171);
             this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(88, 13);
@@ -83,15 +93,15 @@
             // 
             this.textBox_EmulatorPath3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath3.Location = new System.Drawing.Point(104, 135);
-            this.textBox_EmulatorPath3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath3.Location = new System.Drawing.Point(104, 143);
+            this.textBox_EmulatorPath3.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath3.Name = "textBox_EmulatorPath3";
-            this.textBox_EmulatorPath3.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath3.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath3.TabIndex = 69;
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(8, 140);
+            this.label7.Location = new System.Drawing.Point(8, 148);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(88, 13);
@@ -102,15 +112,15 @@
             // 
             this.textBox_EmulatorPath2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath2.Location = new System.Drawing.Point(104, 118);
-            this.textBox_EmulatorPath2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath2.Location = new System.Drawing.Point(104, 122);
+            this.textBox_EmulatorPath2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath2.Name = "textBox_EmulatorPath2";
-            this.textBox_EmulatorPath2.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath2.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath2.TabIndex = 67;
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(8, 122);
+            this.label8.Location = new System.Drawing.Point(8, 126);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(88, 13);
@@ -122,9 +132,9 @@
             this.textBox_EmulatorPath1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_EmulatorPath1.Location = new System.Drawing.Point(104, 100);
-            this.textBox_EmulatorPath1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath1.Name = "textBox_EmulatorPath1";
-            this.textBox_EmulatorPath1.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath1.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath1.TabIndex = 65;
             // 
             // label9
@@ -141,9 +151,9 @@
             this.textBox_ImageDirPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_ImageDirPath.Location = new System.Drawing.Point(104, 77);
-            this.textBox_ImageDirPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_ImageDirPath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ImageDirPath.Name = "textBox_ImageDirPath";
-            this.textBox_ImageDirPath.Size = new System.Drawing.Size(234, 20);
+            this.textBox_ImageDirPath.Size = new System.Drawing.Size(299, 20);
             this.textBox_ImageDirPath.TabIndex = 61;
             // 
             // label11
@@ -160,10 +170,10 @@
             this.textBox_System.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_System.Location = new System.Drawing.Point(104, 30);
-            this.textBox_System.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_System.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_System.Name = "textBox_System";
             this.textBox_System.ReadOnly = true;
-            this.textBox_System.Size = new System.Drawing.Size(56, 20);
+            this.textBox_System.Size = new System.Drawing.Size(121, 20);
             this.textBox_System.TabIndex = 55;
             // 
             // label5
@@ -180,9 +190,9 @@
             this.textBox_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Name.Location = new System.Drawing.Point(104, 8);
-            this.textBox_Name.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Name.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Name.Name = "textBox_Name";
-            this.textBox_Name.Size = new System.Drawing.Size(234, 20);
+            this.textBox_Name.Size = new System.Drawing.Size(299, 20);
             this.textBox_Name.TabIndex = 47;
             // 
             // label1
@@ -199,9 +209,9 @@
             this.textBox_RomDirPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_RomDirPath.Location = new System.Drawing.Point(104, 55);
-            this.textBox_RomDirPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_RomDirPath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_RomDirPath.Name = "textBox_RomDirPath";
-            this.textBox_RomDirPath.Size = new System.Drawing.Size(234, 20);
+            this.textBox_RomDirPath.Size = new System.Drawing.Size(299, 20);
             this.textBox_RomDirPath.TabIndex = 91;
             // 
             // label2
@@ -215,7 +225,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(8, 176);
+            this.label3.Location = new System.Drawing.Point(8, 192);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(88, 13);
@@ -226,15 +236,15 @@
             // 
             this.textBox_EmulatorPath5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath5.Location = new System.Drawing.Point(104, 171);
-            this.textBox_EmulatorPath5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath5.Location = new System.Drawing.Point(104, 187);
+            this.textBox_EmulatorPath5.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath5.Name = "textBox_EmulatorPath5";
-            this.textBox_EmulatorPath5.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath5.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath5.TabIndex = 71;
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(8, 197);
+            this.label4.Location = new System.Drawing.Point(8, 213);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(86, 13);
@@ -245,15 +255,15 @@
             // 
             this.textBox_EmulatorPath6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath6.Location = new System.Drawing.Point(104, 192);
-            this.textBox_EmulatorPath6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath6.Location = new System.Drawing.Point(104, 208);
+            this.textBox_EmulatorPath6.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath6.Name = "textBox_EmulatorPath6";
-            this.textBox_EmulatorPath6.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath6.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath6.TabIndex = 65;
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(8, 214);
+            this.label6.Location = new System.Drawing.Point(8, 234);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(88, 13);
@@ -264,15 +274,15 @@
             // 
             this.textBox_EmulatorPath7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath7.Location = new System.Drawing.Point(104, 210);
-            this.textBox_EmulatorPath7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath7.Location = new System.Drawing.Point(104, 230);
+            this.textBox_EmulatorPath7.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath7.Name = "textBox_EmulatorPath7";
-            this.textBox_EmulatorPath7.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath7.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath7.TabIndex = 67;
             // 
             // label10
             // 
-            this.label10.Location = new System.Drawing.Point(8, 232);
+            this.label10.Location = new System.Drawing.Point(8, 256);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(88, 13);
@@ -283,15 +293,15 @@
             // 
             this.textBox_EmulatorPath8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath8.Location = new System.Drawing.Point(104, 227);
-            this.textBox_EmulatorPath8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath8.Location = new System.Drawing.Point(104, 251);
+            this.textBox_EmulatorPath8.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath8.Name = "textBox_EmulatorPath8";
-            this.textBox_EmulatorPath8.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath8.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath8.TabIndex = 69;
             // 
             // label12
             // 
-            this.label12.Location = new System.Drawing.Point(8, 251);
+            this.label12.Location = new System.Drawing.Point(8, 279);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(88, 13);
@@ -302,15 +312,15 @@
             // 
             this.textBox_EmulatorPath9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath9.Location = new System.Drawing.Point(104, 246);
-            this.textBox_EmulatorPath9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath9.Location = new System.Drawing.Point(104, 274);
+            this.textBox_EmulatorPath9.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath9.Name = "textBox_EmulatorPath9";
-            this.textBox_EmulatorPath9.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath9.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath9.TabIndex = 71;
             // 
             // label13
             // 
-            this.label13.Location = new System.Drawing.Point(8, 268);
+            this.label13.Location = new System.Drawing.Point(8, 300);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(88, 13);
@@ -321,17 +331,17 @@
             // 
             this.textBox_EmulatorPath10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_EmulatorPath10.Location = new System.Drawing.Point(104, 263);
-            this.textBox_EmulatorPath10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_EmulatorPath10.Location = new System.Drawing.Point(104, 295);
+            this.textBox_EmulatorPath10.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_EmulatorPath10.Name = "textBox_EmulatorPath10";
-            this.textBox_EmulatorPath10.Size = new System.Drawing.Size(234, 20);
+            this.textBox_EmulatorPath10.Size = new System.Drawing.Size(229, 20);
             this.textBox_EmulatorPath10.TabIndex = 71;
             // 
             // button_Cancel
             // 
             this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Cancel.Location = new System.Drawing.Point(211, 295);
-            this.button_Cancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_Cancel.Location = new System.Drawing.Point(246, 328);
+            this.button_Cancel.Margin = new System.Windows.Forms.Padding(2);
             this.button_Cancel.Name = "button_Cancel";
             this.button_Cancel.Size = new System.Drawing.Size(75, 28);
             this.button_Cancel.TabIndex = 93;
@@ -342,8 +352,8 @@
             // button_Ok
             // 
             this.button_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Ok.Location = new System.Drawing.Point(65, 295);
-            this.button_Ok.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_Ok.Location = new System.Drawing.Point(104, 328);
+            this.button_Ok.Margin = new System.Windows.Forms.Padding(2);
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(67, 26);
             this.button_Ok.TabIndex = 92;
@@ -351,11 +361,131 @@
             this.button_Ok.UseVisualStyleBackColor = true;
             this.button_Ok.Click += new System.EventHandler(this.button_Ok_Click);
             // 
+            // checkBox_ExtractArchive1
+            // 
+            this.checkBox_ExtractArchive1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive1.AutoSize = true;
+            this.checkBox_ExtractArchive1.Location = new System.Drawing.Point(344, 100);
+            this.checkBox_ExtractArchive1.Name = "checkBox_ExtractArchive1";
+            this.checkBox_ExtractArchive1.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive1.TabIndex = 94;
+            this.checkBox_ExtractArchive1.Text = "Extract";
+            this.checkBox_ExtractArchive1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive2
+            // 
+            this.checkBox_ExtractArchive2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive2.AutoSize = true;
+            this.checkBox_ExtractArchive2.Location = new System.Drawing.Point(344, 122);
+            this.checkBox_ExtractArchive2.Name = "checkBox_ExtractArchive2";
+            this.checkBox_ExtractArchive2.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive2.TabIndex = 95;
+            this.checkBox_ExtractArchive2.Text = "Extract";
+            this.checkBox_ExtractArchive2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive3
+            // 
+            this.checkBox_ExtractArchive3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive3.AutoSize = true;
+            this.checkBox_ExtractArchive3.Location = new System.Drawing.Point(344, 143);
+            this.checkBox_ExtractArchive3.Name = "checkBox_ExtractArchive3";
+            this.checkBox_ExtractArchive3.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive3.TabIndex = 96;
+            this.checkBox_ExtractArchive3.Text = "Extract";
+            this.checkBox_ExtractArchive3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive6
+            // 
+            this.checkBox_ExtractArchive6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive6.AutoSize = true;
+            this.checkBox_ExtractArchive6.Location = new System.Drawing.Point(344, 208);
+            this.checkBox_ExtractArchive6.Name = "checkBox_ExtractArchive6";
+            this.checkBox_ExtractArchive6.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive6.TabIndex = 99;
+            this.checkBox_ExtractArchive6.Text = "Extract";
+            this.checkBox_ExtractArchive6.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive5
+            // 
+            this.checkBox_ExtractArchive5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive5.AutoSize = true;
+            this.checkBox_ExtractArchive5.Location = new System.Drawing.Point(344, 187);
+            this.checkBox_ExtractArchive5.Name = "checkBox_ExtractArchive5";
+            this.checkBox_ExtractArchive5.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive5.TabIndex = 98;
+            this.checkBox_ExtractArchive5.Text = "Extract";
+            this.checkBox_ExtractArchive5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive4
+            // 
+            this.checkBox_ExtractArchive4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive4.AutoSize = true;
+            this.checkBox_ExtractArchive4.Location = new System.Drawing.Point(344, 166);
+            this.checkBox_ExtractArchive4.Name = "checkBox_ExtractArchive4";
+            this.checkBox_ExtractArchive4.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive4.TabIndex = 97;
+            this.checkBox_ExtractArchive4.Text = "Extract";
+            this.checkBox_ExtractArchive4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive9
+            // 
+            this.checkBox_ExtractArchive9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive9.AutoSize = true;
+            this.checkBox_ExtractArchive9.Location = new System.Drawing.Point(344, 274);
+            this.checkBox_ExtractArchive9.Name = "checkBox_ExtractArchive9";
+            this.checkBox_ExtractArchive9.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive9.TabIndex = 102;
+            this.checkBox_ExtractArchive9.Text = "Extract";
+            this.checkBox_ExtractArchive9.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive8
+            // 
+            this.checkBox_ExtractArchive8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive8.AutoSize = true;
+            this.checkBox_ExtractArchive8.Location = new System.Drawing.Point(344, 251);
+            this.checkBox_ExtractArchive8.Name = "checkBox_ExtractArchive8";
+            this.checkBox_ExtractArchive8.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive8.TabIndex = 101;
+            this.checkBox_ExtractArchive8.Text = "Extract";
+            this.checkBox_ExtractArchive8.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive7
+            // 
+            this.checkBox_ExtractArchive7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive7.AutoSize = true;
+            this.checkBox_ExtractArchive7.Location = new System.Drawing.Point(344, 230);
+            this.checkBox_ExtractArchive7.Name = "checkBox_ExtractArchive7";
+            this.checkBox_ExtractArchive7.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive7.TabIndex = 100;
+            this.checkBox_ExtractArchive7.Text = "Extract";
+            this.checkBox_ExtractArchive7.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ExtractArchive10
+            // 
+            this.checkBox_ExtractArchive10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_ExtractArchive10.AutoSize = true;
+            this.checkBox_ExtractArchive10.Location = new System.Drawing.Point(344, 295);
+            this.checkBox_ExtractArchive10.Name = "checkBox_ExtractArchive10";
+            this.checkBox_ExtractArchive10.Size = new System.Drawing.Size(59, 17);
+            this.checkBox_ExtractArchive10.TabIndex = 103;
+            this.checkBox_ExtractArchive10.Text = "Extract";
+            this.checkBox_ExtractArchive10.UseVisualStyleBackColor = true;
+            // 
             // GameSystemEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 328);
+            this.ClientSize = new System.Drawing.Size(414, 361);
+            this.Controls.Add(this.checkBox_ExtractArchive10);
+            this.Controls.Add(this.checkBox_ExtractArchive9);
+            this.Controls.Add(this.checkBox_ExtractArchive8);
+            this.Controls.Add(this.checkBox_ExtractArchive7);
+            this.Controls.Add(this.checkBox_ExtractArchive6);
+            this.Controls.Add(this.checkBox_ExtractArchive5);
+            this.Controls.Add(this.checkBox_ExtractArchive4);
+            this.Controls.Add(this.checkBox_ExtractArchive3);
+            this.Controls.Add(this.checkBox_ExtractArchive2);
+            this.Controls.Add(this.checkBox_ExtractArchive1);
             this.Controls.Add(this.button_Cancel);
             this.Controls.Add(this.button_Ok);
             this.Controls.Add(this.textBox_RomDirPath);
@@ -386,11 +516,11 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox_Name);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(605, 400);
+            this.MaximumSize = new System.Drawing.Size(1600, 420);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(365, 365);
+            this.MinimumSize = new System.Drawing.Size(430, 400);
             this.Name = "GameSystemEditor";
             this.Text = "GameSystem Editor";
             this.ResumeLayout(false);
@@ -429,5 +559,15 @@
         private System.Windows.Forms.TextBox textBox_EmulatorPath10;
         private System.Windows.Forms.Button button_Cancel;
         private System.Windows.Forms.Button button_Ok;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive1;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive2;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive3;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive6;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive5;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive4;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive9;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive8;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive7;
+        private System.Windows.Forms.CheckBox checkBox_ExtractArchive10;
     }
 }

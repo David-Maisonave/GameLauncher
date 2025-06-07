@@ -38,33 +38,50 @@ namespace GameLauncher
         public string Rating;
         public string Checksum;
         public string CompressChecksum;
-        public Rom(string nameTruncated, int systemID, string path, string nameOrg, string title, string compressed, int preferredEmulatorID = 0, string imagePath = null, int qtyPlayers = 0, string region = null, string developer = null, long romSize = 0, string genre = null, string notesCore = null, string notesUser = null, string fileFormat = null, string releaseDate = null, string status = null, string version = null, string description = null, string language = null, int year = 0, string rating = null, string checksum = null, string compressChecksum = null)
+        public string Publisher;
+        public string WikipediaURL;
+        public float StarRating;
+        public int StarRatingVoteCount;
+        public bool Favorite;
+        public bool Disable;
+        public Rom(string NameSimplified, int System, string FilePath, string NameOrg, string Title, string Compressed, int PreferredEmulatorID = 0, 
+            string ImagePath = null, int QtyPlayers = 0, string Region = null, string Developer = null, long RomSize = 0, string Genre = null, 
+            string NotesCore = null, string NotesUser = null, string FileFormat = null, string ReleaseDate = null, string Status = null, 
+            string Version = null, string Description = null, string Language = null, int Year = 0, string Rating = null, string Checksum = null,
+            string CompressChecksum = null, string Publisher = null, string WikipediaURL = null, float StarRating = 0, int StarRatingVoteCount = 0, 
+            bool Favorite = false, bool Disable = false)
         {
-            NameSimplified = nameTruncated;
-            System = systemID;
-            FilePath = path;
-            NameOrg = nameOrg;
-            Title = title;
-            Compressed = compressed;
-            PreferredEmulatorID = preferredEmulatorID;
-            ImagePath = imagePath;
-            QtyPlayers = qtyPlayers;
-            Region = region;
-            Developer = developer;
-            RomSize = romSize;
-            Genre = genre;
-            NotesCore = notesCore;
-            NotesUser = notesUser;
-            FileFormat = fileFormat;
-            ReleaseDate = releaseDate;
-            Status = status;
-            Version = version;
-            Description = description;
-            Language = language;
-            Checksum = checksum;
-            CompressChecksum = compressChecksum;
-            Year = year;
-            Rating = rating;
+            this.NameSimplified = NameSimplified;
+            this.System = System;
+            this.FilePath = FilePath;
+            this.NameOrg = NameOrg;
+            this.Title = Title;
+            this.Compressed = Compressed;
+            this.PreferredEmulatorID = PreferredEmulatorID;
+            this.ImagePath = ImagePath;
+            this.QtyPlayers = QtyPlayers;
+            this.Region = Region;
+            this.Developer = Developer;
+            this.RomSize = RomSize;
+            this.Genre = Genre;
+            this.NotesCore = NotesCore;
+            this.NotesUser = NotesUser;
+            this.FileFormat = FileFormat;
+            this.ReleaseDate = ReleaseDate;
+            this.Status = Status;
+            this.Version = Version;
+            this.Description = Description;
+            this.Language = Language;
+            this.Checksum = Checksum;
+            this.CompressChecksum = CompressChecksum;
+            this.Year = Year;
+            this.Rating = Rating;
+            this.Publisher = Publisher;
+            this.WikipediaURL = WikipediaURL;
+            this.StarRating = StarRating;
+            this.StarRatingVoteCount = StarRatingVoteCount;
+            this.Favorite = Favorite;
+            this.Disable = Disable;
         }
         public override bool Equals(object obj)
         {

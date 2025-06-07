@@ -38,9 +38,14 @@
 - Added option to associate preview images vs box-art images.
 - Added option to delete duplicate ROM files based on NameSimplified, NameOrg, or Compressed name.
 ### 1.0.1
+- Fixed bug when decompressing files.
 - Added Year and Rating fields to the ROM Details editor.
 - Added "Only Remove from DB" option to the ROM's-Delete form.
 - Added fields (StarRating, StarRatingVoteCount, WikipediaURL, and Publisher) to GameDetails database.
 - Added implementation to fetch game details from XML files and add it to the GameDetails database.
 - Added multithreading logic to TempDirStorage which allows decompressing multiple files in multithread environment.
 - Added CreateChecksumForRoms option to main menu. This allows checksums to be created after database initialization.
+- Added filter by Rating, Qty-Players, Star-Rating, Genre, Language, Region, Release-Decade, and Developers.
+- Added All-System option to system combobox, and have it use pagination.
+- Added Favorite option to ROM's table.
+- 

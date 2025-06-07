@@ -120,6 +120,20 @@ namespace GameLauncher
             this.DateLastUsed = DateLastUsed;
         }
     }
+    public class EmulatorAttributes
+    {
+        public string EmulatorExecutable;
+        public bool DecompressFile;
+        public bool NotSupported;
+        public string PreferredExtension;
+        public EmulatorAttributes(string EmulatorExecutable, bool DecompressFile = false, bool NotSupported = false, string PreferredExtension = "")
+        {
+            this.EmulatorExecutable = EmulatorExecutable;
+            this.DecompressFile = DecompressFile;
+            this.NotSupported = NotSupported;
+            this.PreferredExtension = PreferredExtension;
+        }
+    }
     #endregion /////////////////////////////////////////////////////////////////////////////////
 }
 //void deleteMeCodeTempForTesting(string key, string name, int value)

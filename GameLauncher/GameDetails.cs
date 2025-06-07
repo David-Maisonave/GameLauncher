@@ -30,11 +30,13 @@ namespace GameLauncher
         public string Publisher;
         public float StarRating;
         public int StarRatingVoteCount;
+        public string FileName;
+        public string WikipediaURL;
         public GameDetails(string System, string Title, string NameSimplified, string Compressed, int QtyPlayers,
             string Developer = "", string ReleaseDate = "", int Year = 0, string Genre = "",
             string Status = "", string ImageFileName = "", string Region = "",
             string NotesCore = "", string NotesUser = "", string FileFormat = "",
-            string Version = "", string Description = "", string Language = "", string Rating = "", string Publisher = "", float StarRating = 0, int StarRatingVoteCount = 0)
+            string Version = "", string Description = "", string Language = "", string Rating = "", string Publisher = "", string FileName = "", float StarRating = 0, int StarRatingVoteCount = 0, string WikipediaURL = null)
         {
             this.System = System;
             this.Title = Title;
@@ -56,8 +58,10 @@ namespace GameLauncher
             this.Language = Language;
             this.Rating = Rating;
             this.Publisher = Publisher;
+            this.FileName = FileName;
             this.StarRating = StarRating;
             this.StarRatingVoteCount = StarRatingVoteCount;
+            this.WikipediaURL = WikipediaURL;
         }
         public override string ToString()
         {

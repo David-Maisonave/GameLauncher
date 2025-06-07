@@ -22,5 +22,41 @@ CREATE TABLE "GameDetails" (
 	"WikipediaURL"	TEXT NOT NULL DEFAULT "",
 	"StarRating"	REAL NOT NULL DEFAULT 0,
 	"StarRatingVoteCount"	INTEGER NOT NULL DEFAULT 0,
+	"FileName"	TEXT NOT NULL DEFAULT "",
 	PRIMARY KEY("System","Title")
 );
+CREATE TABLE "Roms" (
+	"Title"	TEXT NOT NULL,
+	"NameSimplified"	TEXT NOT NULL,
+	"NameOrg"	TEXT NOT NULL,
+	"Compressed"	TEXT NOT NULL,
+	"System"	INTEGER NOT NULL,
+	"FilePath"	TEXT NOT NULL UNIQUE,
+	"PreferredEmulator"	INTEGER NOT NULL DEFAULT 0,
+	"ImagePath"	TEXT,
+	"QtyPlayers"	INTEGER NOT NULL DEFAULT 1,
+	"Status"	TEXT,
+	"Region"	TEXT,
+	"Developer"	TEXT,
+	"ReleaseDate"	TEXT,
+	"RomSize"	INTEGER,
+	"Genre"	TEXT,
+	"NotesCore"	TEXT,
+	"NotesUser"	TEXT,
+	"FileFormat"	TEXT,
+	"Version"	TEXT,
+	"Description"	TEXT,
+	"Language"	TEXT,
+	"Year"	INTEGER,
+	"Rating"	TEXT,
+	"Checksum"	TEXT,
+	"CompressChecksum"	TEXT,
+	"Publisher"	TEXT,
+	"WikipediaURL"	TEXT,
+	"StarRating"	REAL,
+	"StarRatingVoteCount"	INTEGER,
+	PRIMARY KEY("FilePath")
+);
+
+ALTER TABLE Roms ADD Favorite Boolean; 
+ALTER TABLE Roms ADD Disable Boolean; 

@@ -22,7 +22,11 @@ namespace GameLauncher
         public TempDirStorage(string suffixDir, bool deleteIfExistingContent = true, string path = null)
         {
             if (path == null)
+            {
+                if (suffixDir.Contains(":"))
+                    suffixDir = Path.GetFileName(suffixDir);
                 path = $"{GetMultiThreadParentDir()}\\{suffixDir}\\";
+            }
             this.tempDir = path;
             Init(deleteIfExistingContent);
         }

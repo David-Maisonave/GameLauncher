@@ -44,6 +44,8 @@ namespace GameLauncher
             textBox_Version.Text = rom.Version;
             textBox_Year.Text = rom.Year.ToString();
             textBox_Rating.Text = rom.Rating;
+            checkBox_Favorite.Checked = rom.Favorite;
+            checkBox_Disable.Checked = rom.Disable;
         }
         private void button_Ok_Click(object sender, EventArgs e)
         {
@@ -64,6 +66,8 @@ namespace GameLauncher
             rom.Version = textBox_Version.Text;
             rom.Year = Int32.Parse(textBox_Year.Text);
             rom.Rating = textBox_Rating.Text;
+            rom.Favorite = checkBox_Favorite.Checked;
+            rom.Disable = checkBox_Disable.Checked;
             Ok = true;
             this.Close();
         }
