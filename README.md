@@ -116,8 +116,8 @@ The checksum options are used to help detect duplicate image and ROM files. Chan
 Below are possible future plan updates, however if there's already a version next to the item, that means the code changes have already been made, but a release for associated version has not been made yet.
 * [1.0.1] Add Year and Rating fields to the ROM Details editor.
 * [1.0.1] Add "Only Remove from DB" option to the ROM's-Delete form.
-* Add filter based on Rating field.
-* Find database source to use to automatically populate Ratings field.
+* [1.0.1] Add filter based on Rating, Qty-Players, Star-Rating, Genre, Language, Region, Release-Decade, and Developers.
+* [1.0.1] Find database source to use to automatically populate Ratings field.
+* [1.0.1] Add All-System option to system combobox, and have it use pagination.
 * Add Favorites option to the system combobox, and have it use pagination.
-* Add All-System option to system combobox, and have it use pagination.
 * Add option to password protected advance option.
