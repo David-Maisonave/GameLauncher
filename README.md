@@ -119,5 +119,5 @@ Below are possible future plan updates, however if there's already a version nex
 * [1.0.1] Add filter based on Rating, Qty-Players, Star-Rating, Genre, Language, Region, Release-Decade, and Developers.
 * [1.0.1] Find database source to use to automatically populate Ratings field.
 * [1.0.1] Add All-System option to system combobox, and have it use pagination.
-* Add Favorites option to the system combobox, and have it use pagination.
+* [1.0.1] Add Favorites option to the system combobox, and have it use pagination.
 * Add option to password protected advance option.
