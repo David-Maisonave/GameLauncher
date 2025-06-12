@@ -60,9 +60,20 @@ namespace GameLauncher
             {
                 if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateChecksum)
                 {
+                    if (RomCandidatesToDelete[i].Checksum.Contains("2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg="))
+                    {
+                        string k = RomCandidatesToDelete[i].Checksum;
+                        string k2 = RomCandidatesToDelete[i].CompressChecksum;
+                    }
                     if (!Candidates.ContainsKey(RomCandidatesToDelete[i].Checksum))
                         Candidates[RomCandidatesToDelete[i].Checksum] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[RomCandidatesToDelete[i].Checksum].Add(RomCandidatesToDelete[i]);
+                }
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressChecksum)
+                {
+                    if (!Candidates.ContainsKey(RomCandidatesToDelete[i].CompressChecksum))
+                        Candidates[RomCandidatesToDelete[i].CompressChecksum] = new SortedSet<Rom>(GetComparisonType());
+                    Candidates[RomCandidatesToDelete[i].CompressChecksum].Add(RomCandidatesToDelete[i]);
                 }
                 else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem)
                 {
@@ -92,7 +103,7 @@ namespace GameLauncher
                         Candidates[RomCandidatesToDelete[i].Compressed] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[RomCandidatesToDelete[i].Compressed].Add(RomCandidatesToDelete[i]);
                 }
-                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInAnySystem)
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateTitleInSameSystem)
                 {
                     KeyName = "Title";
                     string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
@@ -100,7 +111,7 @@ namespace GameLauncher
                         Candidates[$"{system}-{RomCandidatesToDelete[i].Title}"] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[$"{system}-{RomCandidatesToDelete[i].Title}"].Add(RomCandidatesToDelete[i]);
                 }
-                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInAnySystem)
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameSimplifiedInSameSystem)
                 {
                     KeyName = "NameSimplified";
                     string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
@@ -108,7 +119,7 @@ namespace GameLauncher
                         Candidates[$"{system}-{RomCandidatesToDelete[i].NameSimplified}"] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[$"{system}-{RomCandidatesToDelete[i].NameSimplified}"].Add(RomCandidatesToDelete[i]);
                 }
-                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInAnySystem)
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateNameOrgInSameSystem)
                 {
                     KeyName = "NameOrg";
                     string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
@@ -116,7 +127,7 @@ namespace GameLauncher
                         Candidates[$"{system}-{RomCandidatesToDelete[i].NameOrg}"] = new SortedSet<Rom>(GetComparisonType());
                     Candidates[$"{system}-{RomCandidatesToDelete[i].NameOrg}"].Add(RomCandidatesToDelete[i]);
                 }
-                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInAnySystem)
+                else if (deleteDuplicateBy == DeleteDuplicateBy.DuplicateCompressedInSameSystem)
                 {
                     KeyName = "Compressed";
                     string system = $"[{Form_Main.GetSystemNameByID(RomCandidatesToDelete[i].System)}]";
@@ -126,7 +137,8 @@ namespace GameLauncher
                 }
             }
             treeView1.CheckBoxes = true;
-            /*TreeNode parentNode = */ treeView1.Nodes.Add("Duplicates");
+            treeView1.Nodes.Add("Duplicates");
+            /*TreeNode parentNode = treeView1.Nodes.Add("Duplicates"); */
             //TreeNode firstChildNode = null;
             //TreeNode lastChildNode = null;
             foreach (string key in Candidates.Keys)
@@ -141,6 +153,17 @@ namespace GameLauncher
                 foreach (Rom rom in Candidates[key])
                 {
                     TreeNode cc = childNode.Nodes.Add(rom.FilePath);
+                    if (key.Contains("2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg="))
+                    {
+                        string k2 = Candidates[key].ToString();
+                        string k = key;
+                        foreach (Rom _rom in Candidates[key])
+                        {
+                            k2 = _rom.Title;
+                            k = _rom.Checksum;
+                            k2 = _rom.Title;
+                        }
+                    }
                     if (isFirstNode)
                         isFirstNode = false;
                     else

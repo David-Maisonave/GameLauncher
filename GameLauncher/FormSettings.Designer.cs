@@ -64,21 +64,25 @@
             this.textBox_DefaultRomSubDir = new System.Windows.Forms.TextBox();
             this.textBox_DefaultImageSubDir = new System.Windows.Forms.TextBox();
             this.checkBox_PreviewOverBoxArt = new System.Windows.Forms.CheckBox();
+            this.checkBox_ConvertImageFilesToJpg = new System.Windows.Forms.CheckBox();
+            this.checkBox_DeleteOldImageFile = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.groupBox_ConvertImageDurringImageScanOptions = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_largeIconSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_smallIconSize)).BeginInit();
             this.groupBox_Checksum.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxMRU)).BeginInit();
+            this.groupBox_ConvertImageDurringImageScanOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBox_usePreviousCollectionCache
             // 
             this.checkBox_usePreviousCollectionCache.AutoSize = true;
-            this.checkBox_usePreviousCollectionCache.Location = new System.Drawing.Point(234, 213);
+            this.checkBox_usePreviousCollectionCache.Location = new System.Drawing.Point(234, 186);
             this.checkBox_usePreviousCollectionCache.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_usePreviousCollectionCache.Name = "checkBox_usePreviousCollectionCache";
             this.checkBox_usePreviousCollectionCache.Size = new System.Drawing.Size(172, 17);
@@ -91,7 +95,7 @@
             // checkBox_useJoystickController
             // 
             this.checkBox_useJoystickController.AutoSize = true;
-            this.checkBox_useJoystickController.Location = new System.Drawing.Point(234, 184);
+            this.checkBox_useJoystickController.Location = new System.Drawing.Point(234, 157);
             this.checkBox_useJoystickController.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_useJoystickController.Name = "checkBox_useJoystickController";
             this.checkBox_useJoystickController.Size = new System.Drawing.Size(181, 17);
@@ -309,7 +313,7 @@
             // button_Ok
             // 
             this.button_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Ok.Location = new System.Drawing.Point(220, 338);
+            this.button_Ok.Location = new System.Drawing.Point(220, 358);
             this.button_Ok.Margin = new System.Windows.Forms.Padding(2);
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(67, 26);
@@ -321,7 +325,7 @@
             // button_Cancel
             // 
             this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Cancel.Location = new System.Drawing.Point(314, 338);
+            this.button_Cancel.Location = new System.Drawing.Point(314, 358);
             this.button_Cancel.Margin = new System.Windows.Forms.Padding(2);
             this.button_Cancel.Name = "button_Cancel";
             this.button_Cancel.Size = new System.Drawing.Size(75, 28);
@@ -335,7 +339,7 @@
             this.linkLabel_Github_GameLauncher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel_Github_GameLauncher.AutoSize = true;
-            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 306);
+            this.linkLabel_Github_GameLauncher.Location = new System.Drawing.Point(177, 326);
             this.linkLabel_Github_GameLauncher.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel_Github_GameLauncher.Name = "linkLabel_Github_GameLauncher";
             this.linkLabel_Github_GameLauncher.Size = new System.Drawing.Size(261, 13);
@@ -348,7 +352,7 @@
             // checkBox_disableAdvanceOptions
             // 
             this.checkBox_disableAdvanceOptions.AutoSize = true;
-            this.checkBox_disableAdvanceOptions.Location = new System.Drawing.Point(234, 271);
+            this.checkBox_disableAdvanceOptions.Location = new System.Drawing.Point(234, 244);
             this.checkBox_disableAdvanceOptions.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_disableAdvanceOptions.Name = "checkBox_disableAdvanceOptions";
             this.checkBox_disableAdvanceOptions.Size = new System.Drawing.Size(146, 17);
@@ -391,9 +395,9 @@
             this.groupBox_Checksum.Controls.Add(this.checkBox_SHA256OverMD5);
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableRomChecksum);
             this.groupBox_Checksum.Controls.Add(this.checkBox_EnableImageChecksum);
-            this.groupBox_Checksum.Location = new System.Drawing.Point(438, 131);
+            this.groupBox_Checksum.Location = new System.Drawing.Point(432, 131);
             this.groupBox_Checksum.Name = "groupBox_Checksum";
-            this.groupBox_Checksum.Size = new System.Drawing.Size(159, 147);
+            this.groupBox_Checksum.Size = new System.Drawing.Size(159, 137);
             this.groupBox_Checksum.TabIndex = 25;
             this.groupBox_Checksum.TabStop = false;
             this.groupBox_Checksum.Text = "Checksum Options";
@@ -427,7 +431,7 @@
             // checkBox_AutoCompleteCustomSourceLiveUpdate
             // 
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.AutoSize = true;
-            this.checkBox_AutoCompleteCustomSourceLiveUpdate.Location = new System.Drawing.Point(234, 242);
+            this.checkBox_AutoCompleteCustomSourceLiveUpdate.Location = new System.Drawing.Point(234, 215);
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Name = "checkBox_AutoCompleteCustomSourceLiveUpdate";
             this.checkBox_AutoCompleteCustomSourceLiveUpdate.Size = new System.Drawing.Size(189, 17);
@@ -509,7 +513,7 @@
             // checkBox_PreviewOverBoxArt
             // 
             this.checkBox_PreviewOverBoxArt.AutoSize = true;
-            this.checkBox_PreviewOverBoxArt.Location = new System.Drawing.Point(234, 156);
+            this.checkBox_PreviewOverBoxArt.Location = new System.Drawing.Point(234, 129);
             this.checkBox_PreviewOverBoxArt.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_PreviewOverBoxArt.Name = "checkBox_PreviewOverBoxArt";
             this.checkBox_PreviewOverBoxArt.Size = new System.Drawing.Size(123, 17);
@@ -518,6 +522,32 @@
             this.toolTip1.SetToolTip(this.checkBox_PreviewOverBoxArt, "When enabled, game preview image is selected over box-art image.\r\nImages with (pr" +
         "eview) are used over images without the keyword.");
             this.checkBox_PreviewOverBoxArt.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_ConvertImageFilesToJpg
+            // 
+            this.checkBox_ConvertImageFilesToJpg.AutoSize = true;
+            this.checkBox_ConvertImageFilesToJpg.Location = new System.Drawing.Point(14, 22);
+            this.checkBox_ConvertImageFilesToJpg.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_ConvertImageFilesToJpg.Name = "checkBox_ConvertImageFilesToJpg";
+            this.checkBox_ConvertImageFilesToJpg.Size = new System.Drawing.Size(158, 17);
+            this.checkBox_ConvertImageFilesToJpg.TabIndex = 23;
+            this.checkBox_ConvertImageFilesToJpg.Text = "Convert Image Files To JPG";
+            this.toolTip1.SetToolTip(this.checkBox_ConvertImageFilesToJpg, resources.GetString("checkBox_ConvertImageFilesToJpg.ToolTip"));
+            this.checkBox_ConvertImageFilesToJpg.UseVisualStyleBackColor = true;
+            this.checkBox_ConvertImageFilesToJpg.CheckedChanged += new System.EventHandler(this.checkBox_ConvertImageFilesToJpg_CheckedChanged);
+            // 
+            // checkBox_DeleteOldImageFile
+            // 
+            this.checkBox_DeleteOldImageFile.AutoSize = true;
+            this.checkBox_DeleteOldImageFile.Location = new System.Drawing.Point(221, 22);
+            this.checkBox_DeleteOldImageFile.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox_DeleteOldImageFile.Name = "checkBox_DeleteOldImageFile";
+            this.checkBox_DeleteOldImageFile.Size = new System.Drawing.Size(127, 17);
+            this.checkBox_DeleteOldImageFile.TabIndex = 24;
+            this.checkBox_DeleteOldImageFile.Text = "Delete Old Image File";
+            this.toolTip1.SetToolTip(this.checkBox_DeleteOldImageFile, "After conversion, delete original image file.\r\nIE: If image files get converted s" +
+        "uccessfully, delete the original source image file.");
+            this.checkBox_DeleteOldImageFile.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
@@ -548,7 +578,6 @@
             this.label9.Size = new System.Drawing.Size(118, 13);
             this.label9.TabIndex = 30;
             this.label9.Text = "Default ROM sub folder";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label10
             // 
@@ -560,11 +589,23 @@
             this.label10.TabIndex = 32;
             this.label10.Text = "Default image sub folder";
             // 
+            // groupBox_ConvertImageDurringImageScanOptions
+            // 
+            this.groupBox_ConvertImageDurringImageScanOptions.Controls.Add(this.checkBox_ConvertImageFilesToJpg);
+            this.groupBox_ConvertImageDurringImageScanOptions.Controls.Add(this.checkBox_DeleteOldImageFile);
+            this.groupBox_ConvertImageDurringImageScanOptions.Location = new System.Drawing.Point(220, 272);
+            this.groupBox_ConvertImageDurringImageScanOptions.Name = "groupBox_ConvertImageDurringImageScanOptions";
+            this.groupBox_ConvertImageDurringImageScanOptions.Size = new System.Drawing.Size(377, 45);
+            this.groupBox_ConvertImageDurringImageScanOptions.TabIndex = 27;
+            this.groupBox_ConvertImageDurringImageScanOptions.TabStop = false;
+            this.groupBox_ConvertImageDurringImageScanOptions.Text = "Image Scan Options";
+            // 
             // Form_Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 371);
+            this.ClientSize = new System.Drawing.Size(604, 391);
+            this.Controls.Add(this.groupBox_ConvertImageDurringImageScanOptions);
             this.Controls.Add(this.checkBox_PreviewOverBoxArt);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.textBox_DefaultImageSubDir);
@@ -600,9 +641,9 @@
             this.Controls.Add(this.checkBox_usePreviousCollectionCache);
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1200, 420);
+            this.MaximumSize = new System.Drawing.Size(1600, 450);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(620, 410);
+            this.MinimumSize = new System.Drawing.Size(620, 430);
             this.Name = "Form_Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxNumberOfPairThreadsPerList)).EndInit();
@@ -611,6 +652,8 @@
             this.groupBox_Checksum.ResumeLayout(false);
             this.groupBox_Checksum.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_MaxMRU)).EndInit();
+            this.groupBox_ConvertImageDurringImageScanOptions.ResumeLayout(false);
+            this.groupBox_ConvertImageDurringImageScanOptions.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -656,5 +699,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox_DefaultImageSubDir;
         private System.Windows.Forms.CheckBox checkBox_PreviewOverBoxArt;
+        private System.Windows.Forms.GroupBox groupBox_ConvertImageDurringImageScanOptions;
+        private System.Windows.Forms.CheckBox checkBox_ConvertImageFilesToJpg;
+        private System.Windows.Forms.CheckBox checkBox_DeleteOldImageFile;
     }
 }

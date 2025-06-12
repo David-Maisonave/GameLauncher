@@ -358,5 +358,29 @@ namespace GameLauncher.Properties {
                 this["PreviewOverBoxArt"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoConvertImageFilesToJpg {
+            get {
+                return ((bool)(this["AutoConvertImageFilesToJpg"]));
+            }
+            set {
+                this["AutoConvertImageFilesToJpg"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoDeleteOldImageFileAfterConversion {
+            get {
+                return ((bool)(this["AutoDeleteOldImageFileAfterConversion"]));
+            }
+            set {
+                this["AutoDeleteOldImageFileAfterConversion"] = value;
+            }
+        }
     }
 }

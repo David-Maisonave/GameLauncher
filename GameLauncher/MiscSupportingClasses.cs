@@ -53,6 +53,7 @@ namespace GameLauncher
     {
         None = 0,
         DuplicateChecksum,
+        DuplicateCompressChecksum,
         DuplicateTitleInAnySystem,
         DuplicateTitleInSameSystem,
         DuplicateNameSimplifiedInAnySystem,

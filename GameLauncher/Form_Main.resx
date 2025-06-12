@@ -138,6 +138,16 @@ Note: The change is not reflected on the list until after restarting GameLaunche
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>351, 17</value>
   </metadata>
+  <data name="toolStripMenuItem_AddNewGameSystemEmulator.ToolTipText" xml:space="preserve">
+    <value>Select one or more emulator paths to run full scan for new ROM's and images.
+The selected directories will be used as the name of the new game system(s).
+The selected directories must each have the following:
+1. An executable or a windows link to an executable, which will be used as the default emulator.
+2. A "Roms" sub directory.
+Optionally, it can have an "Images" directory which will be scanned for images associated with the ROM files.
+
+Note: If the path has multiple executables, they will be used as alternative emulators which can be selected from context menu to launch the games.</value>
+  </data>
   <data name="toolStripMenuItem_FilterLabel.ToolTipText" xml:space="preserve">
     <value>Filter List.
 Only display ROM files having the specified text within the title.
@@ -187,5 +197,9 @@ $,^,|,*,.,?,+,[,],(,),\
         WaFl7oqnAUJfYoCZh+vQ82UESMo3L2ABZqXVo2eYGlPFijyuplORq2rnrpKbMD21Dq9tLoa/WFHE1XQq
         6tobvVYmqMM/DlOYpohPZCyMLnjhf8EX5W8uHdJTEYnjIQAAAABJRU5ErkJggg==
 </value>
+  </data>
+  <data name="toolStripMenuItem_ResetCompressNames.ToolTipText" xml:space="preserve">
+    <value>Reset fields Title, compress-title-name, SimplifiedTitle, and OrgTitle for the ROM's and image database.
+After fields get reset, this option will run a search for matching images for ROM's that are missing images.</value>
   </data>
 </root>

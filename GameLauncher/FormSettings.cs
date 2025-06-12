@@ -42,6 +42,8 @@ namespace GameLauncher
             checkBox_EnableImageChecksum.Checked = Properties.Settings.Default.DoImageChecksum;
             checkBox_EnableZipChecksum.Checked = Properties.Settings.Default.DoZipChecksum;
             checkBox_SHA256OverMD5.Checked = Properties.Settings.Default.SHA256OverMD5;
+            checkBox_ConvertImageFilesToJpg.Checked = Properties.Settings.Default.AutoConvertImageFilesToJpg;
+            checkBox_DeleteOldImageFile.Checked = Properties.Settings.Default.AutoDeleteOldImageFileAfterConversion;
 
             InitialLargeIconSize = Properties.Settings.Default.largeIconSize;
             InitialSmallIconSize = Properties.Settings.Default.smallIconSize;
@@ -52,6 +54,10 @@ namespace GameLauncher
             textBox_DefaultRomSubDir.Text = Properties.Settings.Default.romSubFolderName;
             textBox_DefaultImageSubDir.Text = Properties.Settings.Default.imageSubFolderName;
             checkBox_PreviewOverBoxArt.Checked = Properties.Settings.Default.PreviewOverBoxArt;
+
+            checkBox_EnableZipChecksum.Enabled = checkBox_EnableRomChecksum.Checked;
+            checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
+            checkBox_DeleteOldImageFile.Enabled = checkBox_ConvertImageFilesToJpg.Checked;
         }
         int[] AllowedLargeIconSize = {64, 128, 256};
         int[] AllowedSmallIconSize = {8, 16, 24, 32, 64 };
@@ -78,6 +84,8 @@ namespace GameLauncher
             Properties.Settings.Default.DoRomChecksum = checkBox_EnableRomChecksum.Checked;
             Properties.Settings.Default.DoZipChecksum = checkBox_EnableZipChecksum.Checked;
             Properties.Settings.Default.SHA256OverMD5 = checkBox_SHA256OverMD5.Checked;
+            Properties.Settings.Default.AutoConvertImageFilesToJpg = checkBox_ConvertImageFilesToJpg.Checked;
+            Properties.Settings.Default.AutoDeleteOldImageFileAfterConversion = checkBox_DeleteOldImageFile.Checked;
             Properties.Settings.Default.disableAdvanceOptions = checkBox_disableAdvanceOptions.Checked;
             Properties.Settings.Default.AutoCompleteCustomSourceLiveUpdate = checkBox_AutoCompleteCustomSourceLiveUpdate.Checked;
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
@@ -148,9 +156,8 @@ namespace GameLauncher
         }
         private void SetEmulatorsBasePath(bool addToExistingPath)
         {
-            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
+            SelectFolderDialog folderBrowserDialog1 = new SelectFolderDialog();
             folderBrowserDialog1.Description = "Select root (base) directory containing emulators and associated ROM files.";
-            folderBrowserDialog1.ShowNewFolderButton = false;
             folderBrowserDialog1.SelectedPath = textBox_EmulatorsBasePath.Text;
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
@@ -186,23 +193,13 @@ namespace GameLauncher
             linkLabel_Github_GameLauncher.LinkVisited = true;
             System.Diagnostics.Process.Start("https://github.com/David-Maisonave/GameLauncher");
         }
-
         private void checkBox_EnableRomChecksum_CheckedChanged(object sender, EventArgs e)
         {
             checkBox_EnableZipChecksum.Enabled = checkBox_EnableRomChecksum.Checked;
             checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
         }
-
-        private void checkBox_EnableImageChecksum_CheckedChanged(object sender, EventArgs e)
-        {
-            checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
-        }
-
+        private void checkBox_EnableImageChecksum_CheckedChanged(object sender, EventArgs e) => checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
         private void button_EmulatorsBasePath_Add_Click(object sender, EventArgs e) => SetEmulatorsBasePath(true);
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void checkBox_ConvertImageFilesToJpg_CheckedChanged(object sender, EventArgs e) => checkBox_DeleteOldImageFile.Enabled = checkBox_ConvertImageFilesToJpg.Checked;
     }
 }

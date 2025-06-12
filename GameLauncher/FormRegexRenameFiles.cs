@@ -22,9 +22,8 @@ namespace GameLauncher
 
         private void button_dir_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
+            SelectFolderDialog folderBrowserDialog1 = new SelectFolderDialog();
             folderBrowserDialog1.Description = "Select directory to perform search and replace.";
-            folderBrowserDialog1.ShowNewFolderButton = false;
             folderBrowserDialog1.SelectedPath = textBox_Dir.Text;
             DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)

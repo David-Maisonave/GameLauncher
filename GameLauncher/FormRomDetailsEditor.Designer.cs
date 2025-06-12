@@ -1,6 +1,6 @@
 ﻿namespace GameLauncher
 {
-    partial class RomDetailsEditor
+    partial class FormRomDetailsEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_Title = new System.Windows.Forms.TextBox();
             this.textBox_NameSimplified = new System.Windows.Forms.TextBox();
@@ -82,6 +83,19 @@
             this.label25 = new System.Windows.Forms.Label();
             this.checkBox_Favorite = new System.Windows.Forms.CheckBox();
             this.checkBox_Disable = new System.Windows.Forms.CheckBox();
+            this.textBox_WikipediaUrl = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.textBox_Publisher = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textBox_StarRating = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBox_StarRatingVoteCount = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.button_CreateNewSHA256Checksum = new System.Windows.Forms.Button();
+            this.button_CreateNewSHA256ChecksumForCompressChecksum = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.button_CreateNewMD5ChecksumForCompressChecksum = new System.Windows.Forms.Button();
+            this.button_CreateNewMD5Checksum = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -99,30 +113,29 @@
             this.textBox_Title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Title.Location = new System.Drawing.Point(131, 8);
-            this.textBox_Title.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Title.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Title.Name = "textBox_Title";
             this.textBox_Title.Size = new System.Drawing.Size(283, 20);
             this.textBox_Title.TabIndex = 1;
-            this.textBox_Title.TextChanged += new System.EventHandler(this.Title_TextChanged);
             // 
             // textBox_NameSimplified
             // 
-            this.textBox_NameSimplified.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_NameSimplified.Location = new System.Drawing.Point(131, 29);
-            this.textBox_NameSimplified.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_NameSimplified.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_NameSimplified.Location = new System.Drawing.Point(323, 51);
+            this.textBox_NameSimplified.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_NameSimplified.Name = "textBox_NameSimplified";
             this.textBox_NameSimplified.ReadOnly = true;
-            this.textBox_NameSimplified.Size = new System.Drawing.Size(284, 20);
+            this.textBox_NameSimplified.Size = new System.Drawing.Size(91, 20);
             this.textBox_NameSimplified.TabIndex = 3;
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(9, 34);
+            this.label2.Location = new System.Drawing.Point(234, 55);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 13);
+            this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "NameSimplified";
             // 
@@ -130,17 +143,17 @@
             // 
             this.textBox_NameOrg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_NameOrg.Location = new System.Drawing.Point(131, 49);
-            this.textBox_NameOrg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_NameOrg.Location = new System.Drawing.Point(131, 30);
+            this.textBox_NameOrg.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_NameOrg.Name = "textBox_NameOrg";
             this.textBox_NameOrg.ReadOnly = true;
-            this.textBox_NameOrg.Size = new System.Drawing.Size(283, 20);
+            this.textBox_NameOrg.Size = new System.Drawing.Size(167, 20);
             this.textBox_NameOrg.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(9, 54);
+            this.label3.Location = new System.Drawing.Point(9, 35);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(109, 13);
@@ -149,19 +162,17 @@
             // 
             // textBox_Compressed
             // 
-            this.textBox_Compressed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Compressed.Location = new System.Drawing.Point(131, 70);
-            this.textBox_Compressed.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Compressed.Location = new System.Drawing.Point(131, 51);
+            this.textBox_Compressed.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Compressed.Name = "textBox_Compressed";
             this.textBox_Compressed.ReadOnly = true;
-            this.textBox_Compressed.Size = new System.Drawing.Size(167, 20);
+            this.textBox_Compressed.Size = new System.Drawing.Size(91, 20);
             this.textBox_Compressed.TabIndex = 7;
             // 
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(9, 74);
+            this.label4.Location = new System.Drawing.Point(9, 55);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(104, 13);
@@ -171,8 +182,8 @@
             // textBox_System
             // 
             this.textBox_System.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_System.Location = new System.Drawing.Point(369, 70);
-            this.textBox_System.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_System.Location = new System.Drawing.Point(369, 30);
+            this.textBox_System.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_System.Name = "textBox_System";
             this.textBox_System.ReadOnly = true;
             this.textBox_System.Size = new System.Drawing.Size(46, 20);
@@ -182,7 +193,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(300, 74);
+            this.label5.Location = new System.Drawing.Point(300, 35);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(61, 12);
@@ -193,8 +204,8 @@
             // 
             this.textBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_FilePath.Location = new System.Drawing.Point(131, 94);
-            this.textBox_FilePath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_FilePath.Location = new System.Drawing.Point(131, 73);
+            this.textBox_FilePath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.ReadOnly = true;
             this.textBox_FilePath.Size = new System.Drawing.Size(283, 20);
@@ -203,7 +214,7 @@
             // label6
             // 
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(9, 98);
+            this.label6.Location = new System.Drawing.Point(9, 77);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(104, 13);
@@ -212,18 +223,16 @@
             // 
             // textBox_Developer
             // 
-            this.textBox_Developer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Developer.Location = new System.Drawing.Point(131, 196);
-            this.textBox_Developer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Developer.Location = new System.Drawing.Point(131, 202);
+            this.textBox_Developer.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Developer.Name = "textBox_Developer";
-            this.textBox_Developer.Size = new System.Drawing.Size(283, 20);
+            this.textBox_Developer.Size = new System.Drawing.Size(111, 20);
             this.textBox_Developer.TabIndex = 23;
             // 
             // label7
             // 
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(9, 201);
+            this.label7.Location = new System.Drawing.Point(9, 207);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(104, 13);
@@ -234,8 +243,8 @@
             // 
             this.textBox_Region.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Region.Location = new System.Drawing.Point(131, 176);
-            this.textBox_Region.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Region.Location = new System.Drawing.Point(131, 180);
+            this.textBox_Region.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Region.Name = "textBox_Region";
             this.textBox_Region.Size = new System.Drawing.Size(283, 20);
             this.textBox_Region.TabIndex = 21;
@@ -243,7 +252,7 @@
             // label8
             // 
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(9, 180);
+            this.label8.Location = new System.Drawing.Point(9, 184);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(109, 13);
@@ -254,8 +263,8 @@
             // 
             this.textBox_Status.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Status.Location = new System.Drawing.Point(131, 156);
-            this.textBox_Status.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Status.Location = new System.Drawing.Point(131, 160);
+            this.textBox_Status.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Status.Name = "textBox_Status";
             this.textBox_Status.Size = new System.Drawing.Size(283, 20);
             this.textBox_Status.TabIndex = 19;
@@ -263,7 +272,7 @@
             // label9
             // 
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(9, 161);
+            this.label9.Location = new System.Drawing.Point(9, 165);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(37, 13);
@@ -272,8 +281,8 @@
             // 
             // textBox_QtyPlayers
             // 
-            this.textBox_QtyPlayers.Location = new System.Drawing.Point(249, 114);
-            this.textBox_QtyPlayers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_QtyPlayers.Location = new System.Drawing.Point(249, 139);
+            this.textBox_QtyPlayers.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_QtyPlayers.Name = "textBox_QtyPlayers";
             this.textBox_QtyPlayers.Size = new System.Drawing.Size(46, 20);
             this.textBox_QtyPlayers.TabIndex = 17;
@@ -281,7 +290,7 @@
             // label10
             // 
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(187, 119);
+            this.label10.Location = new System.Drawing.Point(187, 144);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 13);
@@ -292,8 +301,8 @@
             // 
             this.textBox_ImagePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_ImagePath.Location = new System.Drawing.Point(131, 135);
-            this.textBox_ImagePath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_ImagePath.Location = new System.Drawing.Point(131, 94);
+            this.textBox_ImagePath.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ImagePath.Name = "textBox_ImagePath";
             this.textBox_ImagePath.Size = new System.Drawing.Size(283, 20);
             this.textBox_ImagePath.TabIndex = 15;
@@ -301,7 +310,7 @@
             // label11
             // 
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(9, 140);
+            this.label11.Location = new System.Drawing.Point(9, 99);
             this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(104, 13);
@@ -310,8 +319,8 @@
             // 
             // textBox_PreferredEmulatorID
             // 
-            this.textBox_PreferredEmulatorID.Location = new System.Drawing.Point(131, 114);
-            this.textBox_PreferredEmulatorID.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_PreferredEmulatorID.Location = new System.Drawing.Point(131, 139);
+            this.textBox_PreferredEmulatorID.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_PreferredEmulatorID.Name = "textBox_PreferredEmulatorID";
             this.textBox_PreferredEmulatorID.Size = new System.Drawing.Size(46, 20);
             this.textBox_PreferredEmulatorID.TabIndex = 13;
@@ -319,7 +328,7 @@
             // label12
             // 
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(9, 119);
+            this.label12.Location = new System.Drawing.Point(9, 144);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(109, 17);
@@ -330,8 +339,8 @@
             // 
             this.textBox_FileFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_FileFormat.Location = new System.Drawing.Point(131, 322);
-            this.textBox_FileFormat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_FileFormat.Location = new System.Drawing.Point(131, 328);
+            this.textBox_FileFormat.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_FileFormat.Name = "textBox_FileFormat";
             this.textBox_FileFormat.Size = new System.Drawing.Size(283, 20);
             this.textBox_FileFormat.TabIndex = 35;
@@ -339,7 +348,7 @@
             // label13
             // 
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(9, 327);
+            this.label13.Location = new System.Drawing.Point(9, 333);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(94, 13);
@@ -350,8 +359,8 @@
             // 
             this.textBox_NotesUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_NotesUser.Location = new System.Drawing.Point(131, 301);
-            this.textBox_NotesUser.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_NotesUser.Location = new System.Drawing.Point(131, 307);
+            this.textBox_NotesUser.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_NotesUser.Name = "textBox_NotesUser";
             this.textBox_NotesUser.Size = new System.Drawing.Size(283, 20);
             this.textBox_NotesUser.TabIndex = 33;
@@ -359,7 +368,7 @@
             // label14
             // 
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(9, 305);
+            this.label14.Location = new System.Drawing.Point(9, 311);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(104, 13);
@@ -370,8 +379,8 @@
             // 
             this.textBox_NotesCore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_NotesCore.Location = new System.Drawing.Point(131, 280);
-            this.textBox_NotesCore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_NotesCore.Location = new System.Drawing.Point(131, 286);
+            this.textBox_NotesCore.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_NotesCore.Name = "textBox_NotesCore";
             this.textBox_NotesCore.Size = new System.Drawing.Size(283, 20);
             this.textBox_NotesCore.TabIndex = 31;
@@ -379,7 +388,7 @@
             // label15
             // 
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(8, 287);
+            this.label15.Location = new System.Drawing.Point(8, 293);
             this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(105, 13);
@@ -390,8 +399,8 @@
             // 
             this.textBox_Genre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Genre.Location = new System.Drawing.Point(131, 259);
-            this.textBox_Genre.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Genre.Location = new System.Drawing.Point(131, 265);
+            this.textBox_Genre.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Genre.Name = "textBox_Genre";
             this.textBox_Genre.Size = new System.Drawing.Size(204, 20);
             this.textBox_Genre.TabIndex = 29;
@@ -399,7 +408,7 @@
             // label16
             // 
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(9, 262);
+            this.label16.Location = new System.Drawing.Point(9, 268);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(104, 13);
@@ -408,8 +417,8 @@
             // 
             // textBox_RomSize
             // 
-            this.textBox_RomSize.Location = new System.Drawing.Point(131, 238);
-            this.textBox_RomSize.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_RomSize.Location = new System.Drawing.Point(131, 244);
+            this.textBox_RomSize.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_RomSize.Name = "textBox_RomSize";
             this.textBox_RomSize.ReadOnly = true;
             this.textBox_RomSize.Size = new System.Drawing.Size(91, 20);
@@ -418,7 +427,7 @@
             // label17
             // 
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(9, 243);
+            this.label17.Location = new System.Drawing.Point(9, 249);
             this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(49, 13);
@@ -427,8 +436,8 @@
             // 
             // textBox_ReleaseDate
             // 
-            this.textBox_ReleaseDate.Location = new System.Drawing.Point(131, 217);
-            this.textBox_ReleaseDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_ReleaseDate.Location = new System.Drawing.Point(131, 223);
+            this.textBox_ReleaseDate.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_ReleaseDate.Name = "textBox_ReleaseDate";
             this.textBox_ReleaseDate.Size = new System.Drawing.Size(91, 20);
             this.textBox_ReleaseDate.TabIndex = 25;
@@ -436,7 +445,7 @@
             // label18
             // 
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(9, 222);
+            this.label18.Location = new System.Drawing.Point(9, 228);
             this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(104, 13);
@@ -447,17 +456,17 @@
             // 
             this.textBox_CompressChecksum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_CompressChecksum.Location = new System.Drawing.Point(131, 408);
-            this.textBox_CompressChecksum.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_CompressChecksum.Location = new System.Drawing.Point(131, 417);
+            this.textBox_CompressChecksum.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_CompressChecksum.Name = "textBox_CompressChecksum";
             this.textBox_CompressChecksum.ReadOnly = true;
-            this.textBox_CompressChecksum.Size = new System.Drawing.Size(283, 20);
+            this.textBox_CompressChecksum.Size = new System.Drawing.Size(236, 20);
             this.textBox_CompressChecksum.TabIndex = 45;
             // 
             // label20
             // 
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(9, 411);
+            this.label20.Location = new System.Drawing.Point(9, 420);
             this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(104, 13);
@@ -468,17 +477,17 @@
             // 
             this.textBox_Checksum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Checksum.Location = new System.Drawing.Point(131, 387);
-            this.textBox_Checksum.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Checksum.Location = new System.Drawing.Point(131, 393);
+            this.textBox_Checksum.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Checksum.Name = "textBox_Checksum";
             this.textBox_Checksum.ReadOnly = true;
-            this.textBox_Checksum.Size = new System.Drawing.Size(283, 20);
+            this.textBox_Checksum.Size = new System.Drawing.Size(236, 20);
             this.textBox_Checksum.TabIndex = 43;
             // 
             // label21
             // 
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(9, 391);
+            this.label21.Location = new System.Drawing.Point(9, 397);
             this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(75, 13);
@@ -489,8 +498,8 @@
             // 
             this.textBox_Language.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Language.Location = new System.Drawing.Point(131, 365);
-            this.textBox_Language.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Language.Location = new System.Drawing.Point(131, 371);
+            this.textBox_Language.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Language.Name = "textBox_Language";
             this.textBox_Language.Size = new System.Drawing.Size(283, 20);
             this.textBox_Language.TabIndex = 41;
@@ -498,7 +507,7 @@
             // label22
             // 
             this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(9, 370);
+            this.label22.Location = new System.Drawing.Point(9, 376);
             this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(109, 13);
@@ -509,8 +518,8 @@
             // 
             this.textBox_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Description.Location = new System.Drawing.Point(131, 344);
-            this.textBox_Description.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Description.Location = new System.Drawing.Point(131, 350);
+            this.textBox_Description.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Description.Name = "textBox_Description";
             this.textBox_Description.Size = new System.Drawing.Size(283, 20);
             this.textBox_Description.TabIndex = 39;
@@ -518,7 +527,7 @@
             // label23
             // 
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(9, 348);
+            this.label23.Location = new System.Drawing.Point(9, 354);
             this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(109, 13);
@@ -527,8 +536,8 @@
             // 
             // textBox_Version
             // 
-            this.textBox_Version.Location = new System.Drawing.Point(369, 114);
-            this.textBox_Version.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Version.Location = new System.Drawing.Point(369, 139);
+            this.textBox_Version.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Version.Name = "textBox_Version";
             this.textBox_Version.Size = new System.Drawing.Size(46, 20);
             this.textBox_Version.TabIndex = 37;
@@ -536,7 +545,7 @@
             // label24
             // 
             this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(310, 119);
+            this.label24.Location = new System.Drawing.Point(310, 144);
             this.label24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(55, 13);
@@ -546,8 +555,8 @@
             // button_Cancel
             // 
             this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Cancel.Location = new System.Drawing.Point(261, 447);
-            this.button_Cancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_Cancel.Location = new System.Drawing.Point(261, 476);
+            this.button_Cancel.Margin = new System.Windows.Forms.Padding(2);
             this.button_Cancel.Name = "button_Cancel";
             this.button_Cancel.Size = new System.Drawing.Size(75, 28);
             this.button_Cancel.TabIndex = 47;
@@ -558,8 +567,8 @@
             // button_Ok
             // 
             this.button_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_Ok.Location = new System.Drawing.Point(103, 447);
-            this.button_Ok.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_Ok.Location = new System.Drawing.Point(103, 476);
+            this.button_Ok.Margin = new System.Windows.Forms.Padding(2);
             this.button_Ok.Name = "button_Ok";
             this.button_Ok.Size = new System.Drawing.Size(67, 26);
             this.button_Ok.TabIndex = 46;
@@ -569,8 +578,8 @@
             // 
             // textBox_Year
             // 
-            this.textBox_Year.Location = new System.Drawing.Point(339, 217);
-            this.textBox_Year.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Year.Location = new System.Drawing.Point(339, 223);
+            this.textBox_Year.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Year.Name = "textBox_Year";
             this.textBox_Year.Size = new System.Drawing.Size(74, 20);
             this.textBox_Year.TabIndex = 49;
@@ -578,7 +587,7 @@
             // label19
             // 
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(301, 222);
+            this.label19.Location = new System.Drawing.Point(301, 228);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(30, 13);
@@ -587,8 +596,8 @@
             // 
             // textBox_Rating
             // 
-            this.textBox_Rating.Location = new System.Drawing.Point(301, 238);
-            this.textBox_Rating.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Rating.Location = new System.Drawing.Point(301, 244);
+            this.textBox_Rating.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Rating.Name = "textBox_Rating";
             this.textBox_Rating.Size = new System.Drawing.Size(113, 20);
             this.textBox_Rating.TabIndex = 51;
@@ -596,7 +605,7 @@
             // label25
             // 
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(245, 243);
+            this.label25.Location = new System.Drawing.Point(245, 249);
             this.label25.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(46, 13);
@@ -606,7 +615,7 @@
             // checkBox_Favorite
             // 
             this.checkBox_Favorite.AutoSize = true;
-            this.checkBox_Favorite.Location = new System.Drawing.Point(345, 259);
+            this.checkBox_Favorite.Location = new System.Drawing.Point(345, 265);
             this.checkBox_Favorite.Name = "checkBox_Favorite";
             this.checkBox_Favorite.Size = new System.Drawing.Size(64, 17);
             this.checkBox_Favorite.TabIndex = 52;
@@ -617,18 +626,158 @@
             // 
             this.checkBox_Disable.AutoSize = true;
             this.checkBox_Disable.Enabled = false;
-            this.checkBox_Disable.Location = new System.Drawing.Point(230, 217);
+            this.checkBox_Disable.Location = new System.Drawing.Point(230, 223);
             this.checkBox_Disable.Name = "checkBox_Disable";
             this.checkBox_Disable.Size = new System.Drawing.Size(61, 17);
             this.checkBox_Disable.TabIndex = 53;
             this.checkBox_Disable.Text = "Disable";
             this.checkBox_Disable.UseVisualStyleBackColor = true;
             // 
-            // RomDetailsEditor
+            // textBox_WikipediaUrl
+            // 
+            this.textBox_WikipediaUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_WikipediaUrl.Location = new System.Drawing.Point(131, 117);
+            this.textBox_WikipediaUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_WikipediaUrl.Name = "textBox_WikipediaUrl";
+            this.textBox_WikipediaUrl.Size = new System.Drawing.Size(283, 20);
+            this.textBox_WikipediaUrl.TabIndex = 55;
+            // 
+            // label26
+            // 
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(9, 122);
+            this.label26.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(104, 13);
+            this.label26.TabIndex = 54;
+            this.label26.Text = "Wikipedia URL";
+            // 
+            // textBox_Publisher
+            // 
+            this.textBox_Publisher.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_Publisher.Location = new System.Drawing.Point(313, 202);
+            this.textBox_Publisher.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Publisher.Name = "textBox_Publisher";
+            this.textBox_Publisher.Size = new System.Drawing.Size(100, 20);
+            this.textBox_Publisher.TabIndex = 57;
+            // 
+            // label27
+            // 
+            this.label27.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(249, 207);
+            this.label27.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(64, 13);
+            this.label27.TabIndex = 56;
+            this.label27.Text = "Publisher";
+            // 
+            // textBox_StarRating
+            // 
+            this.textBox_StarRating.Location = new System.Drawing.Point(130, 441);
+            this.textBox_StarRating.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_StarRating.Name = "textBox_StarRating";
+            this.textBox_StarRating.ReadOnly = true;
+            this.textBox_StarRating.Size = new System.Drawing.Size(92, 20);
+            this.textBox_StarRating.TabIndex = 59;
+            // 
+            // label28
+            // 
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(8, 444);
+            this.label28.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(104, 13);
+            this.label28.TabIndex = 58;
+            this.label28.Text = "Star Rating";
+            // 
+            // textBox_StarRatingVoteCount
+            // 
+            this.textBox_StarRatingVoteCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_StarRatingVoteCount.Location = new System.Drawing.Point(369, 441);
+            this.textBox_StarRatingVoteCount.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_StarRatingVoteCount.Name = "textBox_StarRatingVoteCount";
+            this.textBox_StarRatingVoteCount.ReadOnly = true;
+            this.textBox_StarRatingVoteCount.Size = new System.Drawing.Size(44, 20);
+            this.textBox_StarRatingVoteCount.TabIndex = 61;
+            // 
+            // label29
+            // 
+            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(248, 444);
+            this.label29.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(119, 13);
+            this.label29.TabIndex = 60;
+            this.label29.Text = "Star Rating Vote Count";
+            // 
+            // button_CreateNewSHA256Checksum
+            // 
+            this.button_CreateNewSHA256Checksum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_CreateNewSHA256Checksum.Location = new System.Drawing.Point(394, 393);
+            this.button_CreateNewSHA256Checksum.Name = "button_CreateNewSHA256Checksum";
+            this.button_CreateNewSHA256Checksum.Size = new System.Drawing.Size(21, 23);
+            this.button_CreateNewSHA256Checksum.TabIndex = 62;
+            this.button_CreateNewSHA256Checksum.Text = "S";
+            this.toolTip1.SetToolTip(this.button_CreateNewSHA256Checksum, "Create new SHA256 checksum");
+            this.button_CreateNewSHA256Checksum.UseVisualStyleBackColor = true;
+            this.button_CreateNewSHA256Checksum.Click += new System.EventHandler(this.button_CreateNewSHA256Checksum_Click);
+            // 
+            // button_CreateNewSHA256ChecksumForCompressChecksum
+            // 
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.Location = new System.Drawing.Point(394, 417);
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.Name = "button_CreateNewSHA256ChecksumForCompressChecksum";
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.Size = new System.Drawing.Size(21, 23);
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.TabIndex = 63;
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.Text = "S";
+            this.toolTip1.SetToolTip(this.button_CreateNewSHA256ChecksumForCompressChecksum, "Create new SHA256 checksum for field CompressChecksum");
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.UseVisualStyleBackColor = true;
+            this.button_CreateNewSHA256ChecksumForCompressChecksum.Click += new System.EventHandler(this.button_CreateNewSHA256ChecksumForCompressChecksum_Click);
+            // 
+            // button_CreateNewMD5ChecksumForCompressChecksum
+            // 
+            this.button_CreateNewMD5ChecksumForCompressChecksum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_CreateNewMD5ChecksumForCompressChecksum.Location = new System.Drawing.Point(371, 417);
+            this.button_CreateNewMD5ChecksumForCompressChecksum.Name = "button_CreateNewMD5ChecksumForCompressChecksum";
+            this.button_CreateNewMD5ChecksumForCompressChecksum.Size = new System.Drawing.Size(21, 23);
+            this.button_CreateNewMD5ChecksumForCompressChecksum.TabIndex = 65;
+            this.button_CreateNewMD5ChecksumForCompressChecksum.Text = "M";
+            this.toolTip1.SetToolTip(this.button_CreateNewMD5ChecksumForCompressChecksum, "Create new MD5 checksum for field CompressChecksum");
+            this.button_CreateNewMD5ChecksumForCompressChecksum.UseVisualStyleBackColor = true;
+            this.button_CreateNewMD5ChecksumForCompressChecksum.Click += new System.EventHandler(this.button_CreateNewMD5ChecksumForCompressChecksum_Click);
+            // 
+            // button_CreateNewMD5Checksum
+            // 
+            this.button_CreateNewMD5Checksum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_CreateNewMD5Checksum.Location = new System.Drawing.Point(371, 393);
+            this.button_CreateNewMD5Checksum.Name = "button_CreateNewMD5Checksum";
+            this.button_CreateNewMD5Checksum.Size = new System.Drawing.Size(21, 23);
+            this.button_CreateNewMD5Checksum.TabIndex = 64;
+            this.button_CreateNewMD5Checksum.Text = "M";
+            this.toolTip1.SetToolTip(this.button_CreateNewMD5Checksum, "Create new MD5 checksum");
+            this.button_CreateNewMD5Checksum.UseVisualStyleBackColor = true;
+            this.button_CreateNewMD5Checksum.Click += new System.EventHandler(this.button_CreateNewMD5Checksum_Click);
+            // 
+            // FormRomDetailsEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 488);
+            this.ClientSize = new System.Drawing.Size(427, 517);
+            this.Controls.Add(this.button_CreateNewMD5ChecksumForCompressChecksum);
+            this.Controls.Add(this.button_CreateNewMD5Checksum);
+            this.Controls.Add(this.button_CreateNewSHA256ChecksumForCompressChecksum);
+            this.Controls.Add(this.button_CreateNewSHA256Checksum);
+            this.Controls.Add(this.textBox_StarRatingVoteCount);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.textBox_StarRating);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.textBox_Publisher);
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.textBox_WikipediaUrl);
+            this.Controls.Add(this.label26);
             this.Controls.Add(this.checkBox_Disable);
             this.Controls.Add(this.checkBox_Favorite);
             this.Controls.Add(this.textBox_Rating);
@@ -683,14 +832,13 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox_Title);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(2005, 534);
+            this.MaximumSize = new System.Drawing.Size(2005, 560);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(440, 527);
-            this.Name = "RomDetailsEditor";
+            this.MinimumSize = new System.Drawing.Size(440, 540);
+            this.Name = "FormRomDetailsEditor";
             this.Text = "ROM Details";
-            this.Load += new System.EventHandler(this.RomDetailsEditor_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -752,5 +900,18 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.CheckBox checkBox_Favorite;
         private System.Windows.Forms.CheckBox checkBox_Disable;
+        private System.Windows.Forms.TextBox textBox_WikipediaUrl;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox textBox_Publisher;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox textBox_StarRating;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textBox_StarRatingVoteCount;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Button button_CreateNewSHA256Checksum;
+        private System.Windows.Forms.Button button_CreateNewSHA256ChecksumForCompressChecksum;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button button_CreateNewMD5ChecksumForCompressChecksum;
+        private System.Windows.Forms.Button button_CreateNewMD5Checksum;
     }
 }

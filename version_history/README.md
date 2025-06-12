@@ -48,4 +48,9 @@
 - Added filter by Rating, Qty-Players, Star-Rating, Genre, Language, Region, Release-Decade, and Developers.
 - Added All-System option to system combobox, and have it use pagination.
 - Added Favorite option to ROM's table.
+- Added Favorites option to the system combobox, with pagination support.
+- Added GameLauncher database backup and restore support.
+- Added option to add new game-systems (emulators) after database has been initialized.
+- Added option to automatically convert image files to JPG file during scan for new images. This option is disabled by default, and must be enabled from the Settings dialog window.
+- Added support to convert BMP files to JPG.
 - 
