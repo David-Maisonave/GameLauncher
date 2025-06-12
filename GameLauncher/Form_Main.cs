@@ -166,6 +166,8 @@ namespace GameLauncher
         // BEGIN -- joystick related
         private static Thread threadJoyStick = null;
         private static bool threadJoyStickAborting = false;
+        private static bool noJoystickFound = false;
+        private static bool joyStickThreadEnded = false;
         private static string miscData = "";
         private static bool waitingShellExecuteToComplete = false;
         private static Dictionary<string, long> dictAvoidRepeat = new Dictionary<string, long>();
@@ -425,6 +427,7 @@ namespace GameLauncher
         {
             try
             {
+                joyStickThreadEnded = false;
                 // https://stackoverflow.com/questions/18416039/joystick-acquisition-with-sharpdx
                 //var directInput = new DirectInput();
                 // To simulate cursor and keys see following: https://gamedev.stackexchange.com/questions/19906/how-do-i-simulate-the-mouse-and-keyboard-using-c-or-c
@@ -459,6 +462,7 @@ namespace GameLauncher
                 if (joystickGuid == Guid.Empty)
                 {
                     Console.WriteLine("No joystick/Gamepad found.");
+                    noJoystickFound = true;
                     threadJoyStickAborting = true;
                     return;
                     //Console.ReadKey();
@@ -601,7 +605,9 @@ namespace GameLauncher
             }
             catch {
                 Console.WriteLine("PollJoystick exception thrown!!!");
+                noJoystickFound = true;
             }
+            joyStickThreadEnded = true;
         }
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Delegate coding
@@ -4067,8 +4073,11 @@ namespace GameLauncher
                     return;
                 }
                 waitingShellExecuteToComplete = true;
-                threadJoyStickAborting = true;
-                threadJoyStick.Abort();
+                if (Properties.Settings.Default.useJoystickController && noJoystickFound == false && threadJoyStick != null)
+                {
+                    //threadJoyStick.Abort();
+                    threadJoyStickAborting = true;
+                }
                 UpdateInDb(new Mru(rom.FilePath, DateTime.Now.ToString("yyyyMMDDHHmm")));
                 FormWindowState prevWinState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
@@ -4079,7 +4088,7 @@ namespace GameLauncher
                 waitingShellExecuteToComplete = false;
                 this.WindowState = prevWinState;
                 SetMRU();
-                if (Properties.Settings.Default.useJoystickController)
+                if (Properties.Settings.Default.useJoystickController && noJoystickFound == false)
                 {
                     threadJoyStickAborting = false;
                     threadJoyStick = new Thread(PollJoystick);

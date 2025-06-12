@@ -22,7 +22,7 @@ namespace GameLauncher
         public string SelectedPath // Same as InitialDirectory. This variable is here to simplify FolderBrowserDialog code replacement
         {
             get { return openFolderDialog.InitialDirectory; }
-            set { openFolderDialog.InitialDirectory = value; }
+            set { openFolderDialog.InitialDirectory = value; openFolderDialog.DefaultDirectory = value; }
         }
         public string InitialDirectory
         { // This property allows you to set the specific path where you want the file dialog to initially open. If you don't set this property or if the specified path doesn't exist, the dialog will typically open to the last used directory.
