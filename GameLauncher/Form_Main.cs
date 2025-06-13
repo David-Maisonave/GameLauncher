@@ -47,7 +47,7 @@ namespace GameLauncher
         #region const or readonly variables
         private const string SQL_CREATETABLES =
                 "CREATE TABLE \"GameSystems\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"ID\"\tINTEGER NOT NULL UNIQUE,\r\n\t\"RomDirPath\"\tTEXT NOT NULL,\r\n\t\"ImageDirPath\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath1\"\tTEXT NOT NULL,\r\n\t\"EmulatorPath2\"\tTEXT,\r\n\t\"EmulatorPath3\"\tTEXT,\r\n\t\"EmulatorPath4\"\tTEXT,\r\n\t\"EmulatorPath5\"\tTEXT,\r\n\t\"EmulatorPath6\"\tTEXT,\r\n\t\"EmulatorPath7\"\tTEXT,\r\n\t\"EmulatorPath8\"\tTEXT,\r\n\t\"EmulatorPath9\"\tTEXT,\r\n\t\"EmulatorPath10\"\tTEXT,\r\n\tPRIMARY KEY(\"ID\" AUTOINCREMENT)\r\n);\r\n" +
-                "CREATE TABLE \"Roms\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\t\"Year\"\tINTEGER,\r\n\t\"Rating\"\tTEXT,\r\n\t\"Checksum\"\tTEXT,\r\n\t\"CompressChecksum\"\tTEXT,\r\n\t\"Publisher\"\tTEXT,\r\n\t\"WikipediaURL\"\tTEXT,\r\n\t\"StarRating\"\tREAL,\r\n\t\"StarRatingVoteCount\"\tINTEGER,\r\n\t\"Favorite\"\tBOOLEAN,\r\n\t\"Disable\"\tBOOLEAN,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
+                "CREATE TABLE \"Roms\" (\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"System\"\tINTEGER NOT NULL,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Region\"\tTEXT,\r\n\t\"Developer\"\tTEXT,\r\n\t\"ReleaseDate\"\tTEXT,\r\n\t\"RomSize\"\tINTEGER,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"FileFormat\"\tTEXT,\r\n\t\"Version\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\t\"Language\"\tTEXT,\r\n\t\"Year\"\tINTEGER,\r\n\t\"Rating\"\tTEXT,\r\n\t\"Checksum\"\tTEXT,\r\n\t\"CompressChecksum\"\tTEXT,\r\n\t\"Publisher\"\tTEXT,\r\n\t\"WikipediaURL\"\tTEXT,\r\n\t\"StarRating\"\tREAL,\r\n\t\"StarRatingVoteCount\"\tINTEGER,\r\n\t\"Favorite\"\tBoolean,\r\n\t\"Disable\"\tBoolean,\r\n\tPRIMARY KEY(\"FilePath\",\"Title\")\r\n);\r\n" +
                 "CREATE TABLE \"Images\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"NameSimplified\"\tTEXT NOT NULL,\r\n\t\"NameOrg\"\tTEXT NOT NULL,\r\n\t\"Compressed\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Checksum\"\tTEXT\r\n);\r\n" +
                 "CREATE TABLE \"PersistenceVariables\" (\r\n\t\"Name\"\tTEXT NOT NULL UNIQUE,\r\n\t\"Value\"\tTEXT,\r\n\t\"ValueInt\"\tINTEGER,\r\n\tPRIMARY KEY(\"Name\")\r\n);\r\n" +
                 "CREATE TABLE \"Roms_UserChanges\" (\r\n\t\"Title\"\tTEXT NOT NULL,\r\n\t\"FilePath\"\tTEXT NOT NULL UNIQUE,\r\n\t\"PreferredEmulator\"\tINTEGER NOT NULL DEFAULT 0,\r\n\t\"ImagePath\"\tTEXT,\r\n\t\"QtyPlayers\"\tINTEGER NOT NULL DEFAULT 1,\r\n\t\"Status\"\tTEXT,\r\n\t\"Genre\"\tTEXT,\r\n\t\"NotesCore\"\tTEXT,\r\n\t\"NotesUser\"\tTEXT,\r\n\t\"Description\"\tTEXT,\r\n\tPRIMARY KEY(\"FilePath\")\r\n);\r\n" +
@@ -114,6 +114,9 @@ namespace GameLauncher
         private const string DEFAULT_IMAGE_SUBFOLDER_NAME = "images";
         private const string item_any = "__Any__";
         private const string item_all = "_All_";
+        private const string GAMES_WITHOUT_IMAGE = "Games Without Image";
+        private const string GAMES_WITH_IMAGE = "Games With Image";
+
         private const string item_Favorite = "_Favorite_";
         private readonly Dictionary<string, string> minimum_decade_year = new Dictionary<string, string>()
             {
@@ -238,6 +241,11 @@ namespace GameLauncher
             toolStripComboBox_FilterStarRating.Items.Add("3+");
             toolStripComboBox_FilterStarRating.Items.Add("2+");
             toolStripComboBox_FilterStarRating.Text = item_any;
+
+            toolStripComboBox_GamesWithWithoutImage.Items.Add(item_any);
+            toolStripComboBox_GamesWithWithoutImage.Items.Add(GAMES_WITHOUT_IMAGE);
+            toolStripComboBox_GamesWithWithoutImage.Items.Add(GAMES_WITH_IMAGE);
+            toolStripComboBox_GamesWithWithoutImage.Text = item_any;
         }
         private void PopulateDynamicComboBoxMenu() // This has to be called after DB init
         {
@@ -1062,17 +1070,23 @@ namespace GameLauncher
             {
                 imgFile = ConvertFileToJpg(imgFile, Properties.Settings.Default.AutoDeleteOldImageFileAfterConversion);
             }
+            string NameOrg = Path.GetFileNameWithoutExtension(imgFile);
+            string NameSimplified = ConvertToNameSimplified(NameOrg);
+            string Compressed = ConvertToCompress(NameOrg);
+            string Title = ConvertToTitle(NameOrg);
             string Checksum = GetImageChecksum(imgFile);
             if (Properties.Settings.Default.DoImageChecksum)
             {
                 string imagePath = GetFirstColStr($"SELECT FilePath FROM Images WHERE Checksum = \"{Checksum}\"");
                 if (NotEmpty(imagePath))
-                    return imagePath;
+                {
+                    string existingTitle = GetFirstColStr($"SELECT Title FROM Images WHERE Checksum = \"{Checksum}\"");
+                    if (existingTitle == Title)
+                        return imagePath;
+                    importFiles = false;
+                    imgFile = imagePath;
+                }
             }
-            string NameOrg = Path.GetFileNameWithoutExtension(imgFile);
-            string NameSimplified = ConvertToNameSimplified(NameOrg);
-            string Compressed = ConvertToCompress(NameOrg);
-            string Title = ConvertToTitle(NameOrg);
             if (importFiles)
             {
                 string sql_title = $"SELECT Title FROM Roms WHERE (ImagePath = \"\" OR ImagePath IS NULL OR ImagePath LIKE \"%GameController.png\") and Title like \"{Title}\"";
@@ -2459,8 +2473,12 @@ namespace GameLauncher
                 where += $" AND Year >= {minimum_decade_year[toolStripComboBox_FilterYearsDecade.Text]} and Year <= {maximum_decade_year[toolStripComboBox_FilterYearsDecade.Text]}";
             if (toolStripComboBox_FilterDeveloper.Text != item_any)
                 where += $" AND Developer LIKE \"%{toolStripComboBox_FilterDeveloper.Text}%\"";
+            if (toolStripComboBox_GamesWithWithoutImage.Text == GAMES_WITHOUT_IMAGE)
+                where += $" AND (ImagePath = \"\" OR ImagePath = \"{Properties.Settings.Default.DefaultImagePath}\" OR ImagePath IS NULL)";
+            else if (toolStripComboBox_GamesWithWithoutImage.Text == GAMES_WITH_IMAGE)
+                where += $" AND ImagePath <> \"\" AND ImagePath <> \"{Properties.Settings.Default.DefaultImagePath}\" AND ImagePath IS NOT NULL"; //ToDo: add check if default image
             GetRoms(SystemID, ref romList, "", where);
-            DisplaySystemIcons(toolStripComboBoxSystem.Text, true);
+            DisplaySystemIcons(toolStripComboBoxSystem.Text, true, 1, true);
         }
         public int GetNumber(string numStr)
         {
@@ -2633,17 +2651,19 @@ namespace GameLauncher
             return null;
         }
         private string ConvertToTitle(string name)=> ConvertToSimplifiedName(name,false, false, true, false, true,
-                        false, false, false, false, false,true, false, true, true);
+                        false, false, false, false, false,true, false,
+                        true, true, false, false, false,false, true);
         private string ConvertToCompress(string name)=> ConvertToSimplifiedName(name, true, true);
         private string ConvertToNameSimplified(string name)=> ConvertToSimplifiedName(name,false,false,true,true,true,true,
             true,true,true,true,true,true,false,true, true, 
-            true, true, true);
+            true, true, true, true);
         private string ConvertToSimplifiedName(string name,
                 bool removeNumbers = false, bool doHighCompress = false, bool removeBracesAndSuffixData = true, 
                 bool trimSpaces = true, bool removeRomPrefixIndexes = true, bool removeApostropheEs = true, 
                 bool convertSuffixRomanNumToDec = true, bool removeNonAlphaNum = true, bool removeApostrophe = true, 
                 bool makeLowerCase = true, bool replaceUnderScoreWithSpace = false, bool removeRedundant = false, bool removeTrailingNonAlphaNumChar = false, bool swapTheA_ToFront = false,
                 bool removeTheA = false, bool removeDisneyLego = false, bool swapAmpersandForAnd = false, bool removePlural_and_removeApostropheEs = false,
+                bool removeByAuthor = false,
                 string removeSpecificStrValue = "", string replacementStr = "") // removeSpecificStrValue and replacementStr is for possible future requirements, or for end user customization.
         {
             if (removeSpecificStrValue.Length > 0) // Keep this at the top because the other filters could hinder finding the specified string.
@@ -2738,6 +2758,8 @@ namespace GameLauncher
                 name = Regex.Replace(name, @"(?i)^Disney\s", ""); // Remove Disney's from start of name
                 name = Regex.Replace(name, @"(?i)^LEGO\s", ""); // Remove LEGO from start of name
             }
+            if (doHighCompress || removeByAuthor)
+                name = Regex.Replace(name, @"(?i)(\sby\s.+)", ""); // Remove " by ?author?"
             if (doHighCompress || removeTheA)
             {
                 string nameWithOutTheA = Regex.Replace(name, @"(,\s?(A|The)$)|(,\s?(A|The)\s)", "");
@@ -3625,7 +3647,7 @@ namespace GameLauncher
                 DbErrorLogging("TaskToProcessImageList", $"TaskToProcessImageList exception thrown '{ex.Message}' while processing image file {imgFile}!", ex.StackTrace, $"Var(setId={setId}, listID={listID}, startPos={startPos}, lastPos={lastPos}, imgFile={imgFile}, i={i})");
             }
         }
-        public bool DisplaySystemIcons(string systemName, bool resetPagination = true, int multithreadMethod = 1) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
+        public bool DisplaySystemIcons(string systemName, bool resetPagination = true, int multithreadMethod = 1, bool isFiltered = false) // ToDo: After full testing is complete, only keep the Parallel.For, and maybe the none threading logic.  Do delete the Task threading logic.
         {
             bool oneSystem = IsSpecificSystemSelected(systemName); // systemName.Length > 0 && systemName != item_all;
             if (!oneSystem && resetPagination)
@@ -3658,7 +3680,7 @@ namespace GameLauncher
                 }
                 else
                 {
-                    if (oneSystem && GetRoms(systemName) < 1)
+                    if (oneSystem && isFiltered == false && GetRoms(systemName) < 1)
                         return false;
                     else if (systemName == item_Favorite) 
                     {
@@ -5067,14 +5089,6 @@ namespace GameLauncher
             toolStripMenuItem_PopulateGameDetailsDB_Click(sender,e);
             toolStripMenuItem_AddGameDetailsToGameLauncherDb_Click(sender,e);
         }
-        private void FilterRating_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterQtyPlayers_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterStarRating_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterGenre_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterLanguage_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterRegion_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterYearsDecade_Changed(object sender, EventArgs e) => FilterRoms();
-        private void FilterDeveloper_Changed(object sender, EventArgs e) => FilterRoms();
         private void toolStripMenuItem_ResetAllFilters_Click(object sender, EventArgs e)
         {
             formInitiated = false;
@@ -5086,6 +5100,7 @@ namespace GameLauncher
             toolStripComboBox_FilterYearsDecade.Text = item_any;
             toolStripComboBox_FilterRegion.Text = item_any;
             toolStripComboBox_FilterDeveloper.Text = item_any;
+            toolStripComboBox_GamesWithWithoutImage.Text = item_any;
             toolStripTextBox_Filter.Text = "";
             formInitiated = true;
             FilterRoms();
@@ -5163,6 +5178,7 @@ namespace GameLauncher
                 MessageBox.Show($"Completed data collection for {dialog.FileNames.Count} emulator path(s).", "Process Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+        private void Filter_OnChanged(object sender, EventArgs e) => FilterRoms();
     }// End of Form1 class
     #endregion
 }

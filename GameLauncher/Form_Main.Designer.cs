@@ -84,6 +84,8 @@
             this.toolStripComboBox_FilterYearsDecade = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripMenuItem_DeveloperParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox_FilterDeveloper = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripComboBox_GamesWithWithoutImage = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_ResetAllFilters = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBoxIconDisplay = new System.Windows.Forms.ToolStripComboBox();
@@ -558,6 +560,7 @@
             this.toolStripMenuItem_RegionParentMenu,
             this.toolStripMenuItem_DecadeParentMenu,
             this.toolStripMenuItem_DeveloperParentMenu,
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu,
             this.toolStripSeparator15,
             this.toolStripMenuItem_ResetAllFilters});
             this.toolStripMenuItem_FilterParentMenu.Name = "toolStripMenuItem_FilterParentMenu";
@@ -569,7 +572,7 @@
             this.toolStripMenuItem_RatingParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterRating});
             this.toolStripMenuItem_RatingParentMenu.Name = "toolStripMenuItem_RatingParentMenu";
-            this.toolStripMenuItem_RatingParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_RatingParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_RatingParentMenu.Text = "Rating";
             // 
             // toolStripComboBox_FilterRating
@@ -577,15 +580,15 @@
             this.toolStripComboBox_FilterRating.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterRating.Name = "toolStripComboBox_FilterRating";
             this.toolStripComboBox_FilterRating.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterRating.SelectedIndexChanged += new System.EventHandler(this.FilterRating_Changed);
-            this.toolStripComboBox_FilterRating.TextChanged += new System.EventHandler(this.FilterRating_Changed);
+            this.toolStripComboBox_FilterRating.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterRating.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_MaxPlayersParentMenu
             // 
             this.toolStripMenuItem_MaxPlayersParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterMaxPlayers});
             this.toolStripMenuItem_MaxPlayersParentMenu.Name = "toolStripMenuItem_MaxPlayersParentMenu";
-            this.toolStripMenuItem_MaxPlayersParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_MaxPlayersParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_MaxPlayersParentMenu.Text = "Qty-Players";
             // 
             // toolStripComboBox_FilterMaxPlayers
@@ -593,15 +596,15 @@
             this.toolStripComboBox_FilterMaxPlayers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterMaxPlayers.Name = "toolStripComboBox_FilterMaxPlayers";
             this.toolStripComboBox_FilterMaxPlayers.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterMaxPlayers.SelectedIndexChanged += new System.EventHandler(this.FilterQtyPlayers_Changed);
-            this.toolStripComboBox_FilterMaxPlayers.TextChanged += new System.EventHandler(this.FilterQtyPlayers_Changed);
+            this.toolStripComboBox_FilterMaxPlayers.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterMaxPlayers.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_StarRatingParentMenu
             // 
             this.toolStripMenuItem_StarRatingParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterStarRating});
             this.toolStripMenuItem_StarRatingParentMenu.Name = "toolStripMenuItem_StarRatingParentMenu";
-            this.toolStripMenuItem_StarRatingParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_StarRatingParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_StarRatingParentMenu.Text = "Star Rating";
             // 
             // toolStripComboBox_FilterStarRating
@@ -609,15 +612,15 @@
             this.toolStripComboBox_FilterStarRating.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterStarRating.Name = "toolStripComboBox_FilterStarRating";
             this.toolStripComboBox_FilterStarRating.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterStarRating.SelectedIndexChanged += new System.EventHandler(this.FilterStarRating_Changed);
-            this.toolStripComboBox_FilterStarRating.TextChanged += new System.EventHandler(this.FilterStarRating_Changed);
+            this.toolStripComboBox_FilterStarRating.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterStarRating.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_GenreParentMenu
             // 
             this.toolStripMenuItem_GenreParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterGenre});
             this.toolStripMenuItem_GenreParentMenu.Name = "toolStripMenuItem_GenreParentMenu";
-            this.toolStripMenuItem_GenreParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_GenreParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_GenreParentMenu.Text = "Genre";
             // 
             // toolStripComboBox_FilterGenre
@@ -625,15 +628,15 @@
             this.toolStripComboBox_FilterGenre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterGenre.Name = "toolStripComboBox_FilterGenre";
             this.toolStripComboBox_FilterGenre.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterGenre.SelectedIndexChanged += new System.EventHandler(this.FilterGenre_Changed);
-            this.toolStripComboBox_FilterGenre.TextChanged += new System.EventHandler(this.FilterGenre_Changed);
+            this.toolStripComboBox_FilterGenre.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterGenre.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_LanguageParentMenu
             // 
             this.toolStripMenuItem_LanguageParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterLanguage});
             this.toolStripMenuItem_LanguageParentMenu.Name = "toolStripMenuItem_LanguageParentMenu";
-            this.toolStripMenuItem_LanguageParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_LanguageParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_LanguageParentMenu.Text = "Language";
             // 
             // toolStripComboBox_FilterLanguage
@@ -641,15 +644,15 @@
             this.toolStripComboBox_FilterLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterLanguage.Name = "toolStripComboBox_FilterLanguage";
             this.toolStripComboBox_FilterLanguage.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterLanguage.SelectedIndexChanged += new System.EventHandler(this.FilterLanguage_Changed);
-            this.toolStripComboBox_FilterLanguage.TextChanged += new System.EventHandler(this.FilterLanguage_Changed);
+            this.toolStripComboBox_FilterLanguage.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterLanguage.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_RegionParentMenu
             // 
             this.toolStripMenuItem_RegionParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterRegion});
             this.toolStripMenuItem_RegionParentMenu.Name = "toolStripMenuItem_RegionParentMenu";
-            this.toolStripMenuItem_RegionParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_RegionParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_RegionParentMenu.Text = "Region";
             // 
             // toolStripComboBox_FilterRegion
@@ -657,15 +660,15 @@
             this.toolStripComboBox_FilterRegion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterRegion.Name = "toolStripComboBox_FilterRegion";
             this.toolStripComboBox_FilterRegion.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterRegion.SelectedIndexChanged += new System.EventHandler(this.FilterRegion_Changed);
-            this.toolStripComboBox_FilterRegion.TextChanged += new System.EventHandler(this.FilterRegion_Changed);
+            this.toolStripComboBox_FilterRegion.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterRegion.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_DecadeParentMenu
             // 
             this.toolStripMenuItem_DecadeParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterYearsDecade});
             this.toolStripMenuItem_DecadeParentMenu.Name = "toolStripMenuItem_DecadeParentMenu";
-            this.toolStripMenuItem_DecadeParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_DecadeParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_DecadeParentMenu.Text = "Release-Decade";
             // 
             // toolStripComboBox_FilterYearsDecade
@@ -673,15 +676,15 @@
             this.toolStripComboBox_FilterYearsDecade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterYearsDecade.Name = "toolStripComboBox_FilterYearsDecade";
             this.toolStripComboBox_FilterYearsDecade.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterYearsDecade.SelectedIndexChanged += new System.EventHandler(this.FilterYearsDecade_Changed);
-            this.toolStripComboBox_FilterYearsDecade.TextChanged += new System.EventHandler(this.FilterYearsDecade_Changed);
+            this.toolStripComboBox_FilterYearsDecade.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterYearsDecade.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripMenuItem_DeveloperParentMenu
             // 
             this.toolStripMenuItem_DeveloperParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_FilterDeveloper});
             this.toolStripMenuItem_DeveloperParentMenu.Name = "toolStripMenuItem_DeveloperParentMenu";
-            this.toolStripMenuItem_DeveloperParentMenu.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_DeveloperParentMenu.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_DeveloperParentMenu.Text = "Developer";
             // 
             // toolStripComboBox_FilterDeveloper
@@ -689,19 +692,38 @@
             this.toolStripComboBox_FilterDeveloper.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBox_FilterDeveloper.Name = "toolStripComboBox_FilterDeveloper";
             this.toolStripComboBox_FilterDeveloper.Size = new System.Drawing.Size(121, 23);
-            this.toolStripComboBox_FilterDeveloper.SelectedIndexChanged += new System.EventHandler(this.FilterDeveloper_Changed);
-            this.toolStripComboBox_FilterDeveloper.TextChanged += new System.EventHandler(this.FilterDeveloper_Changed);
+            this.toolStripComboBox_FilterDeveloper.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_FilterDeveloper.TextChanged += new System.EventHandler(this.Filter_OnChanged);
+            // 
+            // toolStripMenuItem_GamesWithoutImagesParentMenu
+            // 
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripComboBox_GamesWithWithoutImage});
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu.Name = "toolStripMenuItem_GamesWithoutImagesParentMenu";
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu.Size = new System.Drawing.Size(239, 22);
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu.Text = "Games With or Without Images";
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu.ToolTipText = "Display ROM\'s (games) with or without associated image.\r\nROM\'s displaying default" +
+    " image are associated with ROM\'s not having an image.";
+            // 
+            // toolStripComboBox_GamesWithWithoutImage
+            // 
+            this.toolStripComboBox_GamesWithWithoutImage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox_GamesWithWithoutImage.Name = "toolStripComboBox_GamesWithWithoutImage";
+            this.toolStripComboBox_GamesWithWithoutImage.Size = new System.Drawing.Size(121, 23);
+            this.toolStripComboBox_GamesWithWithoutImage.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
+            this.toolStripComboBox_GamesWithWithoutImage.TextChanged += new System.EventHandler(this.Filter_OnChanged);
             // 
             // toolStripSeparator15
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(154, 6);
+            this.toolStripSeparator15.Size = new System.Drawing.Size(236, 6);
             // 
             // toolStripMenuItem_ResetAllFilters
             // 
             this.toolStripMenuItem_ResetAllFilters.Name = "toolStripMenuItem_ResetAllFilters";
-            this.toolStripMenuItem_ResetAllFilters.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItem_ResetAllFilters.Size = new System.Drawing.Size(239, 22);
             this.toolStripMenuItem_ResetAllFilters.Text = "Clear All Filters";
+            this.toolStripMenuItem_ResetAllFilters.ToolTipText = "Remove all filters, and set them to default settings.";
             this.toolStripMenuItem_ResetAllFilters.Click += new System.EventHandler(this.toolStripMenuItem_ResetAllFilters_Click);
             // 
             // toolStripComboBoxIconDisplay
@@ -1040,26 +1062,26 @@
             // toolStripMenuItem_CreateImageListCache
             // 
             this.toolStripMenuItem_CreateImageListCache.Name = "toolStripMenuItem_CreateImageListCache";
-            this.toolStripMenuItem_CreateImageListCache.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_CreateImageListCache.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_CreateImageListCache.Text = "Create Image-List Cache";
             this.toolStripMenuItem_CreateImageListCache.Click += new System.EventHandler(this.toolStripMenuItem_CreateImageListCache_Click);
             // 
             // toolStripMenuItem_CreateChecksumForImagesAllSystem
             // 
             this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Name = "toolStripMenuItem_CreateChecksumForImagesAllSystem";
-            this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Text = "Create checksum for images of all systems";
             this.toolStripMenuItem_CreateChecksumForImagesAllSystem.Click += new System.EventHandler(this.toolStripMenuItem_CreateChecksumForImagesAllSystem_Click);
             // 
             // toolStripSeparator19
             // 
             this.toolStripSeparator19.Name = "toolStripSeparator19";
-            this.toolStripSeparator19.Size = new System.Drawing.Size(330, 6);
+            this.toolStripSeparator19.Size = new System.Drawing.Size(351, 6);
             // 
             // toolStripMenuItem_ImportImages
             // 
             this.toolStripMenuItem_ImportImages.Name = "toolStripMenuItem_ImportImages";
-            this.toolStripMenuItem_ImportImages.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_ImportImages.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_ImportImages.Text = "Import Images";
             this.toolStripMenuItem_ImportImages.ToolTipText = "Import images from a selected directory.\r\nImported images are copied to the defau" +
     "lt images directory.";
@@ -1068,53 +1090,53 @@
             // toolStripMenuItem_ImageSearchSelectedDir
             // 
             this.toolStripMenuItem_ImageSearchSelectedDir.Name = "toolStripMenuItem_ImageSearchSelectedDir";
-            this.toolStripMenuItem_ImageSearchSelectedDir.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_ImageSearchSelectedDir.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_ImageSearchSelectedDir.Text = "Find images in specific directory";
             this.toolStripMenuItem_ImageSearchSelectedDir.Click += new System.EventHandler(this.toolStripMenuItem_ImageSearchSelectedDir_Click);
             // 
             // toolStripMenuItem_SearchMatchingImage
             // 
             this.toolStripMenuItem_SearchMatchingImage.Name = "toolStripMenuItem_SearchMatchingImage";
-            this.toolStripMenuItem_SearchMatchingImage.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_SearchMatchingImage.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_SearchMatchingImage.Text = "Find image matches for games missing an image";
             this.toolStripMenuItem_SearchMatchingImage.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImage_Click);
             // 
             // toolStripSeparator18
             // 
             this.toolStripSeparator18.Name = "toolStripSeparator18";
-            this.toolStripSeparator18.Size = new System.Drawing.Size(330, 6);
+            this.toolStripSeparator18.Size = new System.Drawing.Size(351, 6);
             // 
             // toolStripMenuItem_ScanSelectedSystemNewImages
             // 
             this.toolStripMenuItem_ScanSelectedSystemNewImages.Name = "toolStripMenuItem_ScanSelectedSystemNewImages";
-            this.toolStripMenuItem_ScanSelectedSystemNewImages.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_ScanSelectedSystemNewImages.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_ScanSelectedSystemNewImages.Text = "Scan selected system for new images";
             this.toolStripMenuItem_ScanSelectedSystemNewImages.Click += new System.EventHandler(this.toolStripMenuItem_ScanSelectedSystemNewImages_Click);
             // 
             // toolStripMenuItem_ScanSelectedSystemRomsAndImages
             // 
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Name = "toolStripMenuItem_ScanSelectedSystemRomsAndImages";
-            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Text = "Scan selected system for new ROM\'s and images";
             this.toolStripMenuItem_ScanSelectedSystemRomsAndImages.Click += new System.EventHandler(this.toolStripMenuItem_ScanSelectedSystemRomsAndImages_Click);
             // 
             // toolStripMenuItem_ScanAllSystemNewRomsAndImages
             // 
             this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Name = "toolStripMenuItem_ScanAllSystemNewRomsAndImages";
-            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_ScanAllSystemNewRomsAndImages.Text = "Scan for new ROM\'s and images on all systems";
             // 
             // toolStripMenuItem_ScanAllSystemsNewRomsAndImages
             // 
             this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Name = "toolStripMenuItem_ScanAllSystemsNewRomsAndImages";
-            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Text = "Scan all systems for new ROM\'s and images";
             this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages.Click += new System.EventHandler(this.toolStripMenuItem_ScanAllSystemsNewRomsAndImages_Click);
             // 
             // toolStripSeparator17
             // 
             this.toolStripSeparator17.Name = "toolStripSeparator17";
-            this.toolStripSeparator17.Size = new System.Drawing.Size(330, 6);
+            this.toolStripSeparator17.Size = new System.Drawing.Size(351, 6);
             // 
             // toolStripMenuItem_ConvertPngToJpg
             // 
@@ -1136,12 +1158,12 @@
             // toolStripSeparator16
             // 
             this.toolStripSeparator16.Name = "toolStripSeparator16";
-            this.toolStripSeparator16.Size = new System.Drawing.Size(330, 6);
+            this.toolStripSeparator16.Size = new System.Drawing.Size(351, 6);
             // 
             // toolStripMenuItem_DeleteDupImagesNotInDB
             // 
             this.toolStripMenuItem_DeleteDupImagesNotInDB.Name = "toolStripMenuItem_DeleteDupImagesNotInDB";
-            this.toolStripMenuItem_DeleteDupImagesNotInDB.Size = new System.Drawing.Size(333, 22);
+            this.toolStripMenuItem_DeleteDupImagesNotInDB.Size = new System.Drawing.Size(354, 22);
             this.toolStripMenuItem_DeleteDupImagesNotInDB.Text = "Delete duplicate image files not in database";
             this.toolStripMenuItem_DeleteDupImagesNotInDB.Click += new System.EventHandler(this.toolStripMenuItem_DeleteDupImagesNotInDB_Click);
             // 
@@ -1395,7 +1417,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(596, 388);
             this.Name = "Form_Main";
-            this.Text = "Game Launcher [Ver-1.0.1d] by David Maisonave Sr";
+            this.Text = "Game Launcher [Ver-1.0.1] by David Maisonave Sr";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.myListView_OnFormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.contextMenuStrip1.ResumeLayout(false);
@@ -1554,6 +1576,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Emulator9;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Emulator10;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_AddNewGameSystemEmulator;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_GamesWithoutImagesParentMenu;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox_GamesWithWithoutImage;
     }
 }
 
