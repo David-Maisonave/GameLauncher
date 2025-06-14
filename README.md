@@ -116,3 +116,4 @@ The checksum options are used to help detect duplicate image and ROM files. Chan
 Below are possible future plan updates, however if there's already a version next to the item, that means the code changes have already been made, but a release for associated version has not been made yet.
 * Add option to password protected advance option.
 * Add logic to grab image from clipboard and link to selected ROM file.
+* Add logic to monitor image folder for new image files.
