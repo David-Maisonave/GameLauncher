@@ -120,17 +120,17 @@
   <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="toolStripMenuItemChangeTitle.ToolTipText" xml:space="preserve">
+    <value>Change the title displayed for the selected ROM. The title change only effects GameLauncher, and the change is NOT seen by the emulator.
+Note: The change is not reflected on the list until after restarting GameLauncher or after changing the selected game console system.
+</value>
+  </data>
   <data name="toolStripMenuItemDeleteROM.ToolTipText" xml:space="preserve">
     <value>Delete the ROM (Game) file from the file system.  
 Warning: This permanently deletes the file!!!
 Note: The change is not reflected on the list until after restarting GameLauncher or after changing the selected game console system.
 
 Pressing ctrl while selecting this option will bypass warning message.</value>
-  </data>
-  <data name="toolStripMenuItemChangeTitle.ToolTipText" xml:space="preserve">
-    <value>Change the title displayed for the selected ROM. The title change only effects GameLauncher, and the change is NOT seen by the emulator.
-Note: The change is not reflected on the list until after restarting GameLauncher or after changing the selected game console system.
-</value>
   </data>
   <metadata name="toolTip_Info.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>233, 17</value>
@@ -139,7 +139,7 @@ Note: The change is not reflected on the list until after restarting GameLaunche
     <value>351, 17</value>
   </metadata>
   <data name="toolStripMenuItem_AddNewGameSystemEmulator.ToolTipText" xml:space="preserve">
-    <value>Select one or more emulator paths to run full scan for new ROM's and images.
+    <value>Select one or more game-system (emulator) paths to run full scan for new ROM's and images.
 The selected directories will be used as the name of the new game system(s).
 The selected directories must each have the following:
 1. An executable or a windows link to an executable, which will be used as the default emulator.

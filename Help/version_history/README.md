@@ -55,4 +55,7 @@
 - Added support to convert BMP files to JPG.
 - Added filter for ROM's with or without associated image files.
 - Removed ConsolidatedFiles binary from the build, because it was triggering a bogus malware warning on sourceforge.
+### 1.0.2
+- Added option to open File-Explorer with the selected ROM file selected in Explorer.
+- Added 'add to favorite' menu option.
 - 

@@ -44,6 +44,7 @@ namespace GameLauncher
             checkBox_SHA256OverMD5.Checked = Properties.Settings.Default.SHA256OverMD5;
             checkBox_ConvertImageFilesToJpg.Checked = Properties.Settings.Default.AutoConvertImageFilesToJpg;
             checkBox_DeleteOldImageFile.Checked = Properties.Settings.Default.AutoDeleteOldImageFileAfterConversion;
+            checkBox_WatchImageFolderForChanges.Checked = Properties.Settings.Default.WatchImageFolderForChanges;
 
             InitialLargeIconSize = Properties.Settings.Default.largeIconSize;
             InitialSmallIconSize = Properties.Settings.Default.smallIconSize;
@@ -90,6 +91,7 @@ namespace GameLauncher
             Properties.Settings.Default.AutoCompleteCustomSourceLiveUpdate = checkBox_AutoCompleteCustomSourceLiveUpdate.Checked;
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
             Properties.Settings.Default.usePreviousCollectionCache = checkBox_usePreviousCollectionCache.Checked;
+            Properties.Settings.Default.WatchImageFolderForChanges = checkBox_WatchImageFolderForChanges.Checked;
             Properties.Settings.Default.DbPath = textBox_DbPath.Text;
             Properties.Settings.Default.EmulatorsBasePath = textBox_EmulatorsBasePath.Text;
             Properties.Settings.Default.DefaultImagePath = textBox_DefaultImagePath.Text;

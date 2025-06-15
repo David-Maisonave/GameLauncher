@@ -382,5 +382,17 @@ namespace GameLauncher.Properties {
                 this["AutoDeleteOldImageFileAfterConversion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool WatchImageFolderForChanges {
+            get {
+                return ((bool)(this["WatchImageFolderForChanges"]));
+            }
+            set {
+                this["WatchImageFolderForChanges"] = value;
+            }
+        }
     }
 }

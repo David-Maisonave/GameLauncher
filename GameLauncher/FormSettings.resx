@@ -120,6 +120,9 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="textBox_EmulatorsBasePath.ToolTip" xml:space="preserve">
     <value>This is the base directory where all the emulators are stored. Changing this can trigger a full ROM rescan.
 To enter multiple paths, separate each path with semicolon.
@@ -131,11 +134,6 @@ Change only applies to new full scan.
 Warning: When enable, this will increase the time it takes to do a full scan when initializing the GameLauncher database.
 </value>
   </data>
-  <data name="checkBox_SHA256OverMD5.ToolTip" xml:space="preserve">
-    <value>When checked, performs an SHA256 instead of MD5 for checksum.
-SHA256 is more accurate than MD5, but it takes longer to perform durring initialization.
-SHA256 also takes more space in the GameLauncher database.</value>
-  </data>
   <data name="groupBox_Checksum.ToolTip" xml:space="preserve">
     <value>All checksum options only apply when performing a new/full scan!!!
 
@@ -143,6 +141,11 @@ Warning:
 When any of these options are enable, it will increase the time it takes to do a full scan when initializing the GameLauncher database.
 
 </value>
+  </data>
+  <data name="checkBox_SHA256OverMD5.ToolTip" xml:space="preserve">
+    <value>When checked, performs an SHA256 instead of MD5 for checksum.
+SHA256 is more accurate than MD5, but it takes longer to perform durring initialization.
+SHA256 also takes more space in the GameLauncher database.</value>
   </data>
   <data name="textBox_ValidRomFileExtensions.ToolTip" xml:space="preserve">
     <value>A list of valid ROM's file extensions used when initailizing datbase or when compressing files.
