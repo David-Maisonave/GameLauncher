@@ -40,6 +40,7 @@ CREATE TABLE "GameDetails" (
 	"StarRating"	REAL NOT NULL DEFAULT 0,
 	"StarRatingVoteCount"	INTEGER NOT NULL DEFAULT 0,
 	"FileName"	TEXT NOT NULL DEFAULT "",
+	"ID"	TEXT NOT NULL DEFAULT "",
 	PRIMARY KEY("System","Title")
 );
 CREATE TABLE "Roms" (

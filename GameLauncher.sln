@@ -6,8 +6,50 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLauncher", "GameLauncher\GameLauncher.csproj", "{0623B1F4-F652-4F29-B4AE-1ECDB0FE47F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Menu", "Menu", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		version_history\README.md = version_history\README.md
+		Help\Menu\README.md = Help\Menu\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "version_history", "version_history", "{0C9236D6-F7B2-453F-A3B0-AA59F292B4F9}"
+	ProjectSection(SolutionItems) = preProject
+		Help\version_history\README.md = Help\version_history\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Help", "Help", "{57321B5F-7990-4B73-927F-3E07BEC9DACE}"
+	ProjectSection(SolutionItems) = preProject
+		Help\README.md = Help\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Advance Options", "Advance Options", "{D70B7604-E40D-4F96-A947-FFE166C553DE}"
+	ProjectSection(SolutionItems) = preProject
+		Help\Menu\Advance Options\README.md = Help\Menu\Advance Options\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filters", "Filters", "{6341D061-8985-4F7C-8B50-FB1633192528}"
+	ProjectSection(SolutionItems) = preProject
+		Help\Menu\Filters\README.md = Help\Menu\Filters\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{04190CAA-0CCD-4A3C-B82B-0A15BE80DBEC}"
+	ProjectSection(SolutionItems) = preProject
+		Help\Menu\Images\README.md = Help\Menu\Images\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROM's", "ROM's", "{22A1978E-5F78-4C75-B263-9DC0C3F017E9}"
+	ProjectSection(SolutionItems) = preProject
+		Help\Menu\ROM's\README.md = Help\Menu\ROM's\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database backup  restore", "Database backup  restore", "{0E7D70E9-10C3-4957-8B4B-6905187D9407}"
+	ProjectSection(SolutionItems) = preProject
+		Help\Menu\Advance Options\Database backup  restore\README.md = Help\Menu\Advance Options\Database backup  restore\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database Util", "Database Util", "{77A90318-8261-448E-BEA4-4AE9CD046011}"
+	ProjectSection(SolutionItems) = preProject
+		Help\Menu\Advance Options\Database Util\README.md = Help\Menu\Advance Options\Database Util\README.md
 	EndProjectSection
 EndProject
 Global
@@ -29,6 +71,17 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {57321B5F-7990-4B73-927F-3E07BEC9DACE}
+		{0C9236D6-F7B2-453F-A3B0-AA59F292B4F9} = {8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}
+		{57321B5F-7990-4B73-927F-3E07BEC9DACE} = {8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}
+		{D70B7604-E40D-4F96-A947-FFE166C553DE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6341D061-8985-4F7C-8B50-FB1633192528} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{04190CAA-0CCD-4A3C-B82B-0A15BE80DBEC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{22A1978E-5F78-4C75-B263-9DC0C3F017E9} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{0E7D70E9-10C3-4957-8B4B-6905187D9407} = {D70B7604-E40D-4F96-A947-FFE166C553DE}
+		{77A90318-8261-448E-BEA4-4AE9CD046011} = {D70B7604-E40D-4F96-A947-FFE166C553DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E6AC3C6-F5B7-4DA1-AEF4-EA02ABD38FB3}

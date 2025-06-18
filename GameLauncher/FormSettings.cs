@@ -45,6 +45,7 @@ namespace GameLauncher
             checkBox_ConvertImageFilesToJpg.Checked = Properties.Settings.Default.AutoConvertImageFilesToJpg;
             checkBox_DeleteOldImageFile.Checked = Properties.Settings.Default.AutoDeleteOldImageFileAfterConversion;
             checkBox_WatchImageFolderForChanges.Checked = Properties.Settings.Default.WatchImageFolderForChanges;
+            checkBox_OnlyImportConvertedImageFiles.Checked = Properties.Settings.Default.OnlyImportConvertedImageFiles;
 
             InitialLargeIconSize = Properties.Settings.Default.largeIconSize;
             InitialSmallIconSize = Properties.Settings.Default.smallIconSize;
@@ -92,6 +93,7 @@ namespace GameLauncher
             Properties.Settings.Default.useJoystickController = checkBox_useJoystickController.Checked;
             Properties.Settings.Default.usePreviousCollectionCache = checkBox_usePreviousCollectionCache.Checked;
             Properties.Settings.Default.WatchImageFolderForChanges = checkBox_WatchImageFolderForChanges.Checked;
+            Properties.Settings.Default.OnlyImportConvertedImageFiles = checkBox_OnlyImportConvertedImageFiles.Checked;
             Properties.Settings.Default.DbPath = textBox_DbPath.Text;
             Properties.Settings.Default.EmulatorsBasePath = textBox_EmulatorsBasePath.Text;
             Properties.Settings.Default.DefaultImagePath = textBox_DefaultImagePath.Text;
@@ -202,6 +204,6 @@ namespace GameLauncher
         }
         private void checkBox_EnableImageChecksum_CheckedChanged(object sender, EventArgs e) => checkBox_SHA256OverMD5.Enabled = checkBox_EnableRomChecksum.Checked || checkBox_EnableImageChecksum.Checked;
         private void button_EmulatorsBasePath_Add_Click(object sender, EventArgs e) => SetEmulatorsBasePath(true);
-        private void checkBox_ConvertImageFilesToJpg_CheckedChanged(object sender, EventArgs e) => checkBox_DeleteOldImageFile.Enabled = checkBox_ConvertImageFilesToJpg.Checked;
+        private void checkBox_ConvertImageFilesToJpg_CheckedChanged(object sender, EventArgs e) => checkBox_DeleteOldImageFile.Enabled = checkBox_OnlyImportConvertedImageFiles.Enabled = checkBox_ConvertImageFilesToJpg.Checked;
     }
 }

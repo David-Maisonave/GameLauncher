@@ -394,5 +394,17 @@ namespace GameLauncher.Properties {
                 this["WatchImageFolderForChanges"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OnlyImportConvertedImageFiles {
+            get {
+                return ((bool)(this["OnlyImportConvertedImageFiles"]));
+            }
+            set {
+                this["OnlyImportConvertedImageFiles"] = value;
+            }
+        }
     }
 }

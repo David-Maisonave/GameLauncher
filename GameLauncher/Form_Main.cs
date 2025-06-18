@@ -172,11 +172,9 @@ namespace GameLauncher
         private static Thread threadJoyStick = null;
         private static bool threadJoyStickAborting = false;
         private static bool noJoystickFound = false;
-        private static bool joyStickThreadEnded = false;
         private static string miscData = "";
         private static bool waitingShellExecuteToComplete = false;
         private static Dictionary<string, long> dictAvoidRepeat = new Dictionary<string, long>();
-        private static string lastRomPlayed =  "";
         // END -- joystick related
         // -----------------------------------
         private static bool cancelScan = false;
@@ -467,7 +465,6 @@ namespace GameLauncher
         {
             try
             {
-                joyStickThreadEnded = false;
                 // https://stackoverflow.com/questions/18416039/joystick-acquisition-with-sharpdx
                 //var directInput = new DirectInput();
                 // To simulate cursor and keys see following: https://gamedev.stackexchange.com/questions/19906/how-do-i-simulate-the-mouse-and-keyboard-using-c-or-c
@@ -647,7 +644,6 @@ namespace GameLauncher
                 Console.WriteLine("PollJoystick exception thrown!!!");
                 noJoystickFound = true;
             }
-            joyStickThreadEnded = true;
         }
         #endregion /////////////////////////////////////////////////////////////////////////////////
         #region Delegate coding
@@ -1112,6 +1108,12 @@ namespace GameLauncher
             if (Properties.Settings.Default.AutoConvertImageFilesToJpg)
             {
                 imgFile = ConvertFileToJpg(imgFile, Properties.Settings.Default.AutoDeleteOldImageFileAfterConversion,false, isMainThread);
+                if (importFiles && Properties.Settings.Default.OnlyImportConvertedImageFiles)
+                {
+                    string ext = Path.GetExtension(imgFile);
+                    if (!ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase) && !ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase))
+                        return "";
+                }
             }
             string NameOrg = Path.GetFileNameWithoutExtension(imgFile);
             string NameSimplified = ConvertToNameSimplified(NameOrg);
@@ -1159,7 +1161,7 @@ namespace GameLauncher
                     MessageBox.Show($"Image scan complete for path {imagePath}");
             }
         }
-        private void GetImages(string imgPath, bool isMainThread = false, bool importFiles = false, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        private void GetImages(string imgPath, bool isMainThread = false, bool importFiles = false, SearchOption searchOption = SearchOption.TopDirectoryOnly, bool checkIfInDb = false, bool checkMatchingRom = false)
         {
             if (Directory.Exists(imgPath))
             {
@@ -1177,7 +1179,7 @@ namespace GameLauncher
                             return;
                         }
                         ++qty;
-                        AddImagePathToDb(imgFile, true, isMainThread, false, false, importFiles);
+                        AddImagePathToDb(imgFile, true, isMainThread, checkIfInDb, false, importFiles, checkMatchingRom);
                         SendStatus($"Processing image file {imgFile}; {qty} of {imgFiles.Length}", isMainThread);
                     }
                     SendStatus($"Completed processing {imgFiles.Length} image files.", isMainThread);
@@ -2036,11 +2038,10 @@ namespace GameLauncher
         }
         private void DeleteROM()
         {
-            System.Windows.Forms.Keys mods = System.Windows.Forms.Control.ModifierKeys;
             Rom rom = GetSelectedROM();
             if (rom == null)
                 return;
-            if ((mods & System.Windows.Forms.Keys.Control) > 0 ||  // If Alt key is held while selecting deletion option, than do silent delete.
+            if (IsKeyPress(System.Windows.Forms.Keys.Control) ||  // If Alt key is held while selecting deletion option, than do silent delete.
                 MessageBox.Show($"Are you sure you want to DELETE ROM with title\n'{rom.Title}'\nand having file name\n'{rom.FilePath}'", "Delete ROM", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 File.Delete(rom.FilePath);
@@ -2190,12 +2191,14 @@ namespace GameLauncher
         private void JumpToBrowser(string link, bool copyTitleToClipboard = false)
         {
             Rom rom = GetSelectedROM();
+            Dictionary<int, string> systemDirAndID = GetSystemNamesAndID();
             if (rom == null)
                 return;
             string title = System.Text.Encodings.Web.UrlEncoder.Default.Encode(rom.Title);
+            string system = GetDictItem(ref systemDirAndID, rom.System);
             if (copyTitleToClipboard)
                 Clipboard.SetText(rom.Title);
-            link = link.Replace("{title}", title);
+            link = link.Replace("{title}", title).Replace("{system}", system);
             System.Diagnostics.Process.Start(link);
         }
         private void OpenFileLocation()
@@ -2228,6 +2231,65 @@ namespace GameLauncher
                 if (findMatchesForRomsWithMissingImages)
                     SearchMatchingImage();
             }
+        }
+        private void AssignClipboardImage(bool overWriteFile = false)
+        {
+            IDataObject d = Clipboard.GetDataObject();
+            if (d.GetDataPresent(DataFormats.Bitmap))
+            {
+                Rom rom = GetSelectedROM();
+                if (rom != null)
+                {
+                    System.Drawing.Image image = Clipboard.GetImage();
+                    string filename = $"{GetEmulatorsBasePath()}\\{Properties.Settings.Default.imageSubFolderName}\\{rom.Title}.jpg";
+                    if (overWriteFile || !File.Exists(filename))
+                        image.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    AddImagePathToDb(filename, true, false, false, false, false, true);
+                }
+            }
+        }
+        private void ChangeAssignedImage()
+        {
+            Rom rom = GetSelectedROM();
+            if (rom == null)
+                return;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = $"Image File (*.png,*.jpg,*.jpeg,*.bmp,*.tif)|*.png;*.jpg;*.jpeg;*.bmp;*.tif|All Files (*.*)|*.*";
+            saveFileDialog.Title = $"Select new image file to assign for ROM '{rom.Title}'";
+            saveFileDialog.FileName = rom.ImagePath;
+            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(rom.ImagePath);
+            string romSystemImageDir = GetGameSystemImagePath(rom.System);
+            if (!saveFileDialog.InitialDirectory.Contains(romSystemImageDir, StringComparison.OrdinalIgnoreCase) && lastDirSelected.Length > 0)
+                saveFileDialog.InitialDirectory = lastDirSelected;
+            if (rom.ImagePath.Contains(DEFAULTIMAGEFILENAME))
+            {
+                saveFileDialog.FileName = $"{rom.Title}";
+                string jpgFile = $"{saveFileDialog.InitialDirectory}\\{saveFileDialog.FileName}.jpg";
+                if (File.Exists(jpgFile))
+                    saveFileDialog.FileName = jpgFile;
+            }
+            saveFileDialog.CheckFileExists = true;
+            saveFileDialog.OverwritePrompt = false;
+            DialogResult results = saveFileDialog.ShowDialog();
+            if (results == DialogResult.Cancel)
+                return;
+            if (saveFileDialog.FileName == "")
+            {
+                ErrorMessage("Entered invalid file name.", "Invalid Name!!!", "myListViewContextMenu_ChangeAssignedImage_Click");
+                return;
+            }
+            if (saveFileDialog.FileName.Equals(rom.ImagePath, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            rom.ImagePath = saveFileDialog.FileName;
+            lastDirSelected = Path.GetDirectoryName(rom.ImagePath);
+            UpdateInDb(rom);
+            if (!gavePreviousWarningOnImageChangeNotTakeAffect)
+                MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
+            gavePreviousWarningOnImageChangeNotTakeAffect = true;
+            DeleteImageList(rom.System);
         }
         private void SearchMatchingImage(bool isMainThread = true)
         {
@@ -2559,6 +2621,119 @@ namespace GameLauncher
             else
                 MessageBox.Show($"Did not find any files to convert in path {targetDir}", "No files found", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        public void DecompressFiles(string romDir, bool updateDbWithConvertedFiles, bool deleteOrgCompressFile)
+        {
+            int qtyTotalDecompressFiles = 0;
+            int qtyProcess = 0;
+            cancelScan = false;
+            string[] filesToDecompress = new string[0];
+            foreach (string ext in SUPPORTED_COMPRESSION_FILE)
+            {
+                string[] newSet = Directory.GetFiles(romDir, $"*{ext}");
+                if (newSet != null && newSet.Length > 0)
+                    filesToDecompress = filesToDecompress.Concat(newSet).ToArray();
+            }
+            if (filesToDecompress.Length == 0)
+            {
+                if (deleteOrgCompressFile == false)
+                    MessageBox.Show($"Found no compress files in folder {romDir}");
+                return;
+            }
+            Dictionary<string, string> filesToChangeInDB = new Dictionary<string, string>();
+            List<string> filesToDelete = new List<string>();
+            foreach (string file in filesToDecompress)
+            {
+                if (DidCancelButtonGetPressed())
+                {
+                    SendStatus($"DecompressFiles cancelled with only processing {qtyProcess} of {filesToDecompress.Length} processed.", true);
+                    return;
+                }
+                ++qtyProcess;
+                string destDir = Path.GetDirectoryName(file);
+                using (IDecompressArchive archive = CompressArchive.Open(file))
+                {
+                    archive.ExtractToDirectory(destDir);
+                    bool fileExtractSuccess = false;
+                    bool allFileExtracted = true;
+                    int qtyFilesInThisCompressFile = 0;
+                    string fileToChangeInDB = "";
+                    foreach (string name in archive.GetNames())
+                    {
+                        string destinationPath = Path.GetFullPath(Path.Combine(destDir, name));
+                        if (Directory.Exists(destinationPath))
+                            continue;
+                        if (File.Exists(destinationPath))
+                        {
+                            ++qtyTotalDecompressFiles;
+                            ++qtyFilesInThisCompressFile;
+                            fileExtractSuccess = true;
+                            fileToChangeInDB = destinationPath;
+                        }
+                        else
+                            allFileExtracted = false;
+                    }
+                    if (fileExtractSuccess && allFileExtracted)
+                    {
+                        filesToDelete.Add(file);
+                        if (qtyFilesInThisCompressFile == 1 && fileToChangeInDB.Length > 0)
+                            filesToChangeInDB[file] = fileToChangeInDB; // If there's more than 1 file decompress there's no practical way to tell which file to swap in the database for the compress file.
+                    }
+                }
+            }
+            int qtyDeleted = 0;
+            if (filesToDelete.Count > 0 && (deleteOrgCompressFile || MessageBox.Show($"Decompressed {qtyTotalDecompressFiles} files. Do you want to delete the original compressed files in folder {romDir}?", "Delete Compress Files?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                foreach (string fileToDelete in filesToDelete)
+                {
+                    if (DidCancelButtonGetPressed())
+                    {
+                        SendStatus($"DecompressFiles cancelled with only {qtyDeleted} deleted out of {filesToDelete.Count}.", true);
+                        return;
+                    }
+                    try
+                    {
+                        File.Delete(fileToDelete);
+                        ++qtyDeleted;
+                    }
+                    catch { }
+                }
+                SendStatus($"Decompressed {filesToDelete.Count} files out of {qtyProcess}, and deleted {qtyDeleted} compressed files in folder {romDir}.", true);
+            }
+            else
+                SendStatus($"Decompressed {filesToDelete.Count} files out of {qtyProcess} in folder {romDir}.", true);
+            if (filesToDelete.Count > 0)
+            {
+                if (updateDbWithConvertedFiles || MessageBox.Show($"Do you want to update GameLauncher database to point to the new {filesToDelete.Count} decompress files?", "Update database?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    foreach (string fileToChangeInDB in filesToDelete)
+                        UpdateDB($"UPDATE Roms SET FilePath = \"{filesToChangeInDB[fileToChangeInDB]}\" WHERE FilePath like \"{fileToChangeInDB}\"");
+                }
+            }
+            else
+                MessageBox.Show($"Did not find any compress files to decompress in path {romDir}", "No compress files found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        public void DecompressFiles(bool onlySelectedSystem, bool updateDbWithConvertedFiles = false, bool deleteOrgCompressFile = false)
+        {
+            string selectedSystem = toolStripComboBoxSystem.Text;
+            if (onlySelectedSystem)
+            {
+                if (selectedSystem == ITEM_ANY)
+                    onlySelectedSystem = false;
+                else if (selectedSystem == ITEM_FAVORITE)
+                {
+                    MessageBox.Show($"Can not select this option while '{ITEM_FAVORITE}' is selected for system combo field.");
+                    return;
+                }
+            }
+            List<string> SystemNames = GetSystemNames(false);
+            foreach (string systemName in SystemNames)
+            {
+                if (onlySelectedSystem && !systemName.Equals(selectedSystem))
+                    continue;
+                string romDir = GetGameSystemRomPath(systemName);
+                DecompressFiles(romDir, updateDbWithConvertedFiles, deleteOrgCompressFile);
+            }
+        }
         public void CompressFilesInSelectedFolder(bool deleteOrgFiles, bool updateDbWithConvertedFiles, string compressFileType = "zip")
         {// Convert all systems ROM path
             List<string> SystemNames = GetSystemNames(false);
@@ -2593,10 +2768,10 @@ namespace GameLauncher
                 if (newSet != null && newSet.Length > 0)
                     filesToCompress = filesToCompress.Concat(newSet).ToArray();
             }
-            if (filesToCompress == null || filesToCompress.Length == 0)
+            if (filesToCompress.Length == 0)
             {
                 if (deleteOrgFiles == false)
-                    MessageBox.Show($"Found no files in folder {targetDir}");
+                    MessageBox.Show($"Found no valid ROM type files to compress in folder {targetDir}");
                 return;
             }
             Dictionary<string, string> filesToChangeInDB = new Dictionary<string, string>();
@@ -2814,7 +2989,95 @@ namespace GameLauncher
                 system = toolStripComboBoxSystem.Text;
             return system != null && system.Length != 0 && system != ITEM_ANY && system != ITEM_FAVORITE;
         }
-        private void ResetAllFilters()
+        private void ChangeTitle()
+        {
+            Rom rom = GetSelectedROM();
+            if (rom == null)
+                return;
+            InputForm inputForm = new InputForm("                ROM Title:", "Change ROM Title", rom.Title, $"Enter new ROM title for game \"{rom.Title}\"", $"Enter new ROM title for game having file name \"{rom.FilePath}\"");
+            inputForm.ShowDialog();
+            if (inputForm.Ok)
+            {
+                rom.Title = inputForm.Value;
+                UpdateInDb(rom);
+                DeleteImageList(rom.System);
+            }
+        }
+        private void ChangeViewROMDetails()
+        {
+            Rom rom = GetSelectedROM();
+            if (rom == null)
+                return;
+            FormRomDetailsEditor romDetails = new FormRomDetailsEditor(rom);
+            romDetails.ShowDialog();
+            if (romDetails.Ok)
+            {
+                UpdateInDb(rom);
+                DeleteImageList(rom.System);
+            }
+        }
+        private void AssignPreferredEmulator()
+        {
+            Rom rom = GetSelectedROM();
+            if (rom == null)
+                return;
+            int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
+            string emulatorExecutable = GetEmulatorExecutable(rom.System, preferredEmulator);
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = $"Emulator Executable File (*.exe)|*.exe|All Files (*.*)|*.*";
+            saveFileDialog.Title = "Select preferred emulator executable";
+            saveFileDialog.FileName = emulatorExecutable;
+            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(emulatorExecutable);
+            saveFileDialog.CheckFileExists = true;
+            saveFileDialog.OverwritePrompt = false;
+            DialogResult results = saveFileDialog.ShowDialog();
+            if (results == DialogResult.Cancel)
+                return;
+            if (saveFileDialog.FileName == "" || !File.Exists(saveFileDialog.FileName))
+            {
+                ErrorMessage($"Entered invalid file name for emulator", "Invalid Name!!!", "myListViewContextMenu_AssignPreferredEmulator_Click", $"saveFileDialog.FileName={saveFileDialog.FileName}");
+                return;
+            }
+            if (saveFileDialog.FileName.Equals(rom.FilePath, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // Check if selected emulator already exists in DB
+            int emulatorIndex = -1;
+            int lastPopulatedEmulator = -1;
+            for (int i = 1; i < 11; i++)
+            {
+                string sql = $"SELECT EmulatorPath{i} FROM GameSystems WHERE Name like \"{toolStripComboBoxSystem.Text}\"";
+                string s = GetFirstColStr(sql);
+                if (s != null && s.Length > 0)
+                {
+                    if (s.Equals(saveFileDialog.FileName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        emulatorIndex = i;
+                        break;
+                    }
+                    lastPopulatedEmulator = i;
+                }
+            }
+            if (emulatorIndex == -1)
+            {// Add emulator to DB
+                if (lastPopulatedEmulator == 10)
+                {
+                    ErrorMessage($"Can not set emulator because there's already 10 emulators associated with game console system {toolStripComboBoxSystem.Text}", "Can not set emulator!!!", "myListViewContextMenu_AssignPreferredEmulator_Click");
+                    return;
+                }
+                emulatorIndex = lastPopulatedEmulator + 1;
+                UpdateDB($"UPDATE GameSystems SET EmulatorPath{emulatorIndex} = \"{saveFileDialog.FileName}\" WHERE Name like \"{toolStripComboBoxSystem.Text}\"");
+            }
+            if (emulatorIndex != -1)
+            {
+                rom.PreferredEmulatorID = emulatorIndex;
+                UpdateInDb(rom);
+                MessageBox.Show($"Emulator updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void ResetAllFilters(bool runFilter = false)
         {
             formInitiated = false;
             toolStripComboBox_FilterRating.Text = ITEM_ANY;
@@ -2828,6 +3091,8 @@ namespace GameLauncher
             toolStripComboBox_GamesWithWithoutImage.Text = ITEM_ANY;
             toolStripTextBox_Filter.Text = "";
             formInitiated = true;
+            if (runFilter)
+                FilterRoms();
         }
         public void FilterRoms()
         {
@@ -2899,6 +3164,7 @@ namespace GameLauncher
             string Version = ""; // Bad source. Can not trust this data
             int Year = 0;
             string WikipediaURL = "";
+            string ID = "";
             while ((line = sr.ReadLine()) != null)
             {
                 if (DidCancelButtonGetPressed())
@@ -2930,6 +3196,7 @@ namespace GameLauncher
                     Version = ""; // Bad source. Can not trust this data
                     Year = 0;
                     WikipediaURL = "";
+                    ID = "";
                 }
                 else if (tagName.Equals("ApplicationPath"))
                     ApplicationPath = content;
@@ -2960,7 +3227,9 @@ namespace GameLauncher
                 else if (tagName.Equals("Version"))
                     Version = content; // Not using
                 else if (tagName.Equals("WikipediaURL"))
-                    WikipediaURL = content; // Not using
+                    WikipediaURL = content;
+                else if (tagName.Equals("ID"))
+                    ID = content;
                 else if (line.Contains("</Game>"))
                 {
                     if (ReleaseDate.Length > 0 && Char.IsDigit(ReleaseDate[0]))
@@ -2977,10 +3246,10 @@ namespace GameLauncher
                     string Compressed = ConvertToCompress(title);
                     string sql = "INSERT OR REPLACE INTO GameDetails " +
                         "(System, Title, QtyPlayers, NameSimplified, Compressed, Developer, NotesCore, Publisher, FileName, Rating, " +
-                        "ReleaseDate, Year, Region, Genre, StarRating, StarRatingVoteCount, Status, WikipediaURL)" +
+                        "ReleaseDate, Year, Region, Genre, StarRating, StarRatingVoteCount, Status, WikipediaURL, ID)" +
                         " values" +
                         $" (\"{system}\", \"{title}\", {MaxPlayers}, \"{NameSimplified}\", \"{Compressed}\", \"{Developer}\", \"{Notes}\", \"{Publisher}\", \"{ApplicationPath}\", \"{Rating}\", " +
-                        $"\"{ReleaseDate}\", {Year}, \"{Region}\", \"{Genre}\", {CommunityStarRating}, {CommunityStarRatingTotalVotes}, \"{Status}\", \"{WikipediaURL}\");";
+                        $"\"{ReleaseDate}\", {Year}, \"{Region}\", \"{Genre}\", {CommunityStarRating}, {CommunityStarRatingTotalVotes}, \"{Status}\", \"{WikipediaURL}\", \"{ID}\");";
                     UpdateDB(sql, connection_GameDetails);
                     ++qtyChanges;
                     ++qtyTotalChanges;
@@ -4453,12 +4722,18 @@ namespace GameLauncher
             return null;
         }
         private bool IsSupportedCompressFile(string romFile) => SUPPORTED_COMPRESSION_FILE.Contains(Path.GetExtension(romFile).ToLower());
-        private void PlaySelectedRom()
+        private void PlaySelectedRom(TriBoolean decompress = TriBoolean.None)
         {
             Rom rom = GetSelectedROM();
-            PlaySelectedRom(rom);
+            PlaySelectedRom(rom, -1, decompress);
         }
-        private void PlaySelectedRom(Rom rom, int PreferredEmulatorID = -1)
+        public enum TriBoolean
+        {
+            None,
+            False,
+            True,
+        }
+        private void PlaySelectedRom(Rom rom, int PreferredEmulatorID = -1, TriBoolean decompress = TriBoolean.None)
         {
             if (rom == null)
                 return;
@@ -4490,7 +4765,10 @@ namespace GameLauncher
                 UpdateInDb(new Mru(rom.FilePath, DateTime.Now.ToString("yyyyMMDDHHmm")));
                 FormWindowState prevWinState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
-                if (EmulatorRequiresDecompression(emulatorExecutable) && IsSupportedCompressFile(rom.FilePath))
+                bool emulatorRequiresDecompression = EmulatorRequiresDecompression(emulatorExecutable);
+                if (decompress != TriBoolean.None)
+                    emulatorRequiresDecompression = decompress == TriBoolean.True;
+                if (emulatorRequiresDecompression && IsSupportedCompressFile(rom.FilePath))
                     DecompressFileToTemporaryFolder(rom.FilePath, emulatorExecutable);
                 else
                     ExecuteEmulator(rom.FilePath, emulatorExecutable);
@@ -4618,124 +4896,8 @@ namespace GameLauncher
         private void myListViewContextMenu_Play_Click(object sender, EventArgs e)=> PlaySelectedRom();
         private void myListViewContextMenu_RenameROM_Click(object sender, EventArgs e) => RenameROM();
         private void myListViewContextMenu_DeleteROM_Click(object sender, EventArgs e) => DeleteROM();
-        private void myListViewContextMenu_AssignPreferredEmulator_Click(object sender, EventArgs e)
-        {
-            Rom rom = GetSelectedROM();
-            if (rom == null)
-                return;
-            int preferredEmulator = rom.PreferredEmulatorID > 0 ? rom.PreferredEmulatorID : 1;
-            string emulatorExecutable = GetEmulatorExecutable(rom.System, preferredEmulator);
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = $"Emulator Executable File (*.exe)|*.exe|All Files (*.*)|*.*";
-            saveFileDialog.Title = "Select preferred emulator executable";
-            saveFileDialog.FileName = emulatorExecutable;
-            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(emulatorExecutable);
-            saveFileDialog.CheckFileExists = true;
-            saveFileDialog.OverwritePrompt = false;
-            DialogResult results = saveFileDialog.ShowDialog();
-            if (results == DialogResult.Cancel)
-                return;
-            if (saveFileDialog.FileName == "" || !File.Exists(saveFileDialog.FileName))
-            {
-                ErrorMessage($"Entered invalid file name for emulator", "Invalid Name!!!", "myListViewContextMenu_AssignPreferredEmulator_Click", $"saveFileDialog.FileName={saveFileDialog.FileName}");
-                return;
-            }
-            if (saveFileDialog.FileName.Equals(rom.FilePath, StringComparison.OrdinalIgnoreCase))
-            {
-                MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            // Check if selected emulator already exists in DB
-            int emulatorIndex = -1;
-            int lastPopulatedEmulator = -1;
-            for (int i = 1; i < 11; i++)
-            {
-                string sql = $"SELECT EmulatorPath{i} FROM GameSystems WHERE Name like \"{toolStripComboBoxSystem.Text}\"";
-                string s = GetFirstColStr(sql);
-                if (s != null && s.Length > 0)
-                {
-                    if (s.Equals(saveFileDialog.FileName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        emulatorIndex = i;
-                        break;
-                    }
-                    lastPopulatedEmulator = i;
-                }
-            }
-            if (emulatorIndex == -1)
-            {// Add emulator to DB
-                if (lastPopulatedEmulator == 10)
-                {
-                    ErrorMessage($"Can not set emulator because there's already 10 emulators associated with game console system {toolStripComboBoxSystem.Text}", "Can not set emulator!!!", "myListViewContextMenu_AssignPreferredEmulator_Click");
-                    return;
-                }
-                emulatorIndex = lastPopulatedEmulator + 1;
-                UpdateDB($"UPDATE GameSystems SET EmulatorPath{emulatorIndex} = \"{saveFileDialog.FileName}\" WHERE Name like \"{toolStripComboBoxSystem.Text}\"");
-            }
-            if (emulatorIndex != -1)
-            {
-                rom.PreferredEmulatorID = emulatorIndex;
-                UpdateInDb(rom);
-                MessageBox.Show($"Emulator updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-        private void myListViewContextMenu_ChangeAssignedImage_Click(object sender, EventArgs e)
-        {
-            Rom rom = GetSelectedROM();
-            if (rom == null)
-                return;
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = $"Image File (*.png,*.jpg,*.jpeg,*.bmp,*.tif)|*.png;*.jpg;*.jpeg;*.bmp;*.tif|All Files (*.*)|*.*";
-            saveFileDialog.Title = $"Select new image file to assign for ROM '{rom.Title}'";
-            saveFileDialog.FileName = rom.ImagePath;
-            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(rom.ImagePath);
-            string romSystemImageDir = GetGameSystemImagePath(rom.System);
-            if (!saveFileDialog.InitialDirectory.Contains(romSystemImageDir, StringComparison.OrdinalIgnoreCase) && lastDirSelected.Length > 0)
-                saveFileDialog.InitialDirectory = lastDirSelected;
-            if (rom.ImagePath.Contains(DEFAULTIMAGEFILENAME))
-            {
-                saveFileDialog.FileName = $"{rom.Title}";
-                string jpgFile = $"{saveFileDialog.InitialDirectory}\\{saveFileDialog.FileName}.jpg";
-                if (File.Exists(jpgFile))
-                    saveFileDialog.FileName = jpgFile;
-            }
-            saveFileDialog.CheckFileExists = true;
-            saveFileDialog.OverwritePrompt = false;
-            DialogResult results = saveFileDialog.ShowDialog();
-            if (results == DialogResult.Cancel)
-                return;
-            if (saveFileDialog.FileName == "")
-            {
-                ErrorMessage("Entered invalid file name.", "Invalid Name!!!", "myListViewContextMenu_ChangeAssignedImage_Click");
-                return;
-            }
-            if (saveFileDialog.FileName.Equals(rom.ImagePath, StringComparison.OrdinalIgnoreCase))
-            {
-                MessageBox.Show($"Nothing to do, because the new file name is the same as the old file name:\n{saveFileDialog.FileName}", "Same Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            rom.ImagePath = saveFileDialog.FileName;
-            lastDirSelected = Path.GetDirectoryName(rom.ImagePath);
-            UpdateInDb(rom);
-            if (!gavePreviousWarningOnImageChangeNotTakeAffect)
-                MessageBox.Show($"ROM '{rom.Title}' associated image changed. The change will not be seen on the list until restarting GameLauncher or until changing game console selection.");
-            gavePreviousWarningOnImageChangeNotTakeAffect = true;
-            DeleteImageList(rom.System);
-        }
-        private void myListViewContextMenu_ChangeTitle_Click(object sender, EventArgs e)
-        {
-            Rom rom = GetSelectedROM();
-            if (rom == null)
-                return;
-            InputForm inputForm = new InputForm("                ROM Title:", "Change ROM Title", rom.Title, $"Enter new ROM title for game \"{rom.Title}\"", $"Enter new ROM title for game having file name \"{rom.FilePath}\"");
-            inputForm.ShowDialog();
-            if (inputForm.Ok)
-            {
-                rom.Title = inputForm.Value; 
-                UpdateInDb(rom);
-                DeleteImageList(rom.System);
-            }
-        }
+        private void myListViewContextMenu_AssignPreferredEmulator_Click(object sender, EventArgs e) => AssignPreferredEmulator();
+        private void myListViewContextMenu_ChangeTitle_Click(object sender, EventArgs e) => ChangeTitle();
         private void myListView_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -4756,9 +4918,15 @@ namespace GameLauncher
             Properties.Settings.Default.Save();
             TempDirStorage.DeleteTempMultithreadDir();
         }
+        //public bool IsKeyPress(System.Windows.Forms.Keys keys = Keys.None) => (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Alt & System.Windows.Forms.Keys.Control & System.Windows.Forms.Keys.Shift) == keys;
+        public bool IsKeyPress(System.Windows.Forms.Keys keys = Keys.None)
+        {
+            int mods = (int)System.Windows.Forms.Control.ModifierKeys;
+            int sp_keys = (int)System.Windows.Forms.Keys.Alt + (int)System.Windows.Forms.Keys.Control + (int)System.Windows.Forms.Keys.Shift;
+            return  (mods & sp_keys) == (int)keys;
+        }
         private void myListView_KeyDown(object sender, KeyEventArgs e)
         {
-            System.Windows.Forms.Keys mods = System.Windows.Forms.Control.ModifierKeys;
             if (e.KeyCode == Keys.Divide)
             {
                 if (toolStripComboBoxSystem.SelectedIndex == 0)
@@ -4773,13 +4941,17 @@ namespace GameLauncher
                 else
                     toolStripComboBoxSystem.SelectedIndex += 1;
             }
-            else if (e.KeyCode == Keys.F5)
+            else if (e.KeyCode == Keys.F5 && IsKeyPress(System.Windows.Forms.Keys.Control))
+                FilterRoms(); // Code never reaches this point, because of GUI shortcut.  This is just here as a reminder that this key combo is taken.
+            else if (e.KeyCode == Keys.F5 && IsKeyPress(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Alt))
+                FilterRoms();// ToDo: Repurpose this key combination, since this feature already has a key combo. (ctrl-F5)
+            else if (e.KeyCode == Keys.F5 && IsKeyPress())
             {
                 if (IsRepeat("F5", MAX_SECONDS_TO_WAIT_F5))
                     return;
                 PlaySelectedRom();
             }
-            else if (e.KeyCode == Keys.F6)
+            else if (e.KeyCode == Keys.F6 && IsKeyPress())
             {
                 if (IsRepeat("F6"))
                     return;
@@ -4788,13 +4960,13 @@ namespace GameLauncher
                 else if (this.WindowState == FormWindowState.Maximized)
                     this.WindowState = FormWindowState.Normal;
             }
-            else if (e.KeyCode == Keys.F7)
+            else if (e.KeyCode == Keys.F7 && IsKeyPress())
             {
                 if (IsRepeat("F7"))
                     return;
                 this.WindowState = FormWindowState.Minimized;
             }
-            else if (e.KeyCode == Keys.F8)
+            else if (e.KeyCode == Keys.F8 && IsKeyPress())
             {
                 if (IsRepeat("F8"))
                     return;
@@ -4803,7 +4975,7 @@ namespace GameLauncher
                 else
                     toolStripComboBoxIconDisplay.SelectedIndex += 1;
             }
-            else if (e.KeyCode == Keys.F9)
+            else if (e.KeyCode == Keys.F9 && IsKeyPress())
             {
                 if (IsRepeat("F9"))
                     return;
@@ -4812,32 +4984,75 @@ namespace GameLauncher
                 else
                     toolStripComboBoxIconDisplay.SelectedIndex -= 1;
             }
-            else if (e.KeyCode == Keys.F10)
+            else if (e.KeyCode == Keys.F10 && IsKeyPress())
                 toolStripComboBoxIconDisplay.SelectedIndex = 0;
-            else if (e.KeyCode == Keys.F11)
+            else if (e.KeyCode == Keys.F11 && IsKeyPress())
                 toolStripComboBoxIconDisplay.SelectedIndex = 1;
-            else if (e.KeyCode == Keys.F12)
+            else if (e.KeyCode == Keys.F12 && IsKeyPress())
                 toolStripComboBoxIconDisplay.SelectedIndex = 2;
-            else if (e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.Escape && IsKeyPress())
                 cancelScan = true;
+            else if (e.KeyCode == Keys.E && IsKeyPress(System.Windows.Forms.Keys.Shift))
+                ResetAllFilters(true);
+            else if (e.KeyCode == Keys.E && IsKeyPress(System.Windows.Forms.Keys.Control))
+                OpenFileLocation();
             else if (Properties.Settings.Default.disableAdvanceOptions == false)
             { // Make sure to put all context menu items below (except F5)
-                if (e.KeyCode == Keys.Delete)
+                if (e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Control || e.KeyCode == Keys.ShiftKey)
+                {
+
+                }
+                else if (e.KeyCode == Keys.Delete)
                     DeleteROM();
-                else if (e.KeyCode == Keys.C && (mods & System.Windows.Forms.Keys.Control) > 0)
+                else if (e.KeyCode == Keys.F5 && IsKeyPress(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift))
+                    PlaySelectedRom(TriBoolean.False);
+                else if (e.KeyCode == Keys.F5 && IsKeyPress(System.Windows.Forms.Keys.Shift))
+                    PlaySelectedRom(TriBoolean.True);
+                else if (e.KeyCode == Keys.C && IsKeyPress(System.Windows.Forms.Keys.Control))
                     CopyTitleToClipboard();
-                else if (e.KeyCode == Keys.F1 && (mods & System.Windows.Forms.Keys.Control) > 0)
+                else if (e.KeyCode == Keys.V && IsKeyPress(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift))
+                    AssignClipboardImage(true);
+                else if (e.KeyCode == Keys.V && IsKeyPress(System.Windows.Forms.Keys.Control))
+                    AssignClipboardImage();
+                else if (e.KeyCode == Keys.I && IsKeyPress(System.Windows.Forms.Keys.Control))
+                    ChangeAssignedImage();
+                else if (e.KeyCode == Keys.F1 && IsKeyPress(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift))
+                    JumpToBrowser("https://www.google.com/search?q={title}", true);
+                else if (e.KeyCode == Keys.F1 && IsKeyPress(System.Windows.Forms.Keys.Shift))
+                    JumpToBrowser("https://www.google.com/search?q={title}+{system}", true);
+                else if (e.KeyCode == Keys.F1 && IsKeyPress(System.Windows.Forms.Keys.Control))
                     JumpToBrowser("https://www.gamesdatabase.org/list.aspx?in=1&searchtext={title}&searchtype=1", true);
-                else if (e.KeyCode == Keys.F1)
-                    BrowseGameWikipediaPage();
-                else if (e.KeyCode == Keys.F2)
-                    RenameROM();
-                else if (e.KeyCode == Keys.F3)
+                else if (e.KeyCode == Keys.F3 && IsKeyPress())
                     JumpToBrowser("https://www.google.com/search?q={title}+site:launchbox-app.com", true);
-                else if (e.KeyCode == Keys.E && (mods & System.Windows.Forms.Keys.Control) > 0)
-                    OpenFileLocation();
-                else if (e.KeyCode == Keys.A && (mods & System.Windows.Forms.Keys.Control) > 0)
+                else if (e.KeyCode == Keys.F1 && IsKeyPress())
+                    BrowseGameWikipediaPage();
+                else if (e.KeyCode == Keys.F2 && IsKeyPress())
+                    RenameROM();
+                else if (e.KeyCode == Keys.F3 && IsKeyPress(System.Windows.Forms.Keys.Control))
+                    JumpToBrowser("https://www.google.com/search?q={title}+Images+site:launchbox-app.com&udm=2", true);
+                else if (e.KeyCode == Keys.A && IsKeyPress(System.Windows.Forms.Keys.Control))
                     AddRomToFavorite();
+                else if (e.KeyCode == Keys.V && IsKeyPress(System.Windows.Forms.Keys.Alt))
+                    ChangeViewROMDetails();
+                else if (e.KeyCode == Keys.G && IsKeyPress(System.Windows.Forms.Keys.Control))
+                {
+                    toolStripComboBox_GamesWithWithoutImage.Text = GAMES_WITHOUT_IMAGE;
+                    FilterRoms();
+                }
+                else if (e.KeyCode == Keys.G && IsKeyPress(System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift))
+                {
+                    toolStripComboBox_GamesWithWithoutImage.Text = GAMES_WITH_IMAGE;
+                    FilterRoms();
+                }
+                else if (e.KeyCode == Keys.G && IsKeyPress(System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift))
+                {
+                    toolStripComboBox_GamesWithWithoutImage.Text = ITEM_ANY;
+                    FilterRoms();
+                }
+                else if (e.KeyCode == Keys.P && IsKeyPress(System.Windows.Forms.Keys.Control))
+                    AssignPreferredEmulator();
+                else if (e.KeyCode == Keys.T && IsKeyPress(System.Windows.Forms.Keys.Control))
+                    ChangeTitle();
             }
         }
         private void button_CancelScan_Click(object sender, EventArgs e)
@@ -4923,10 +5138,9 @@ namespace GameLauncher
             try
             {
                 bool redisplayImageListFirst = alwaysRedisplayImageListFirst || !(toolStripTextBox_Filter.Text.Length > lastSearchStr.Length && toolStripTextBox_Filter.Text.StartsWith(lastSearchStr));
-                System.Windows.Forms.Keys mods = System.Windows.Forms.Control.ModifierKeys;
                 if (alwaysRedisplayImageListFirst == false && ((toolStripTextBox_Filter.Text.Length == 0 && lastSearchStr.Length == 0) || toolStripTextBox_Filter.Text.Equals(lastSearchStr)))
                     return;
-                bool useRegex = (mods & System.Windows.Forms.Keys.Control) > 0;
+                bool useRegex = IsKeyPress(System.Windows.Forms.Keys.Control);
                 // ToDo: Add logic to skip the following logic if less than 2 seconds have passed
                 string[] RegexKeys = { "$", "^", "|", "*", ".", "?", "+", "[", "]", "(", ")", "\\" };
                 foreach (string key in RegexKeys)
@@ -4966,13 +5180,12 @@ namespace GameLauncher
         private void toolStripTextBox_Filter_Click(object sender, EventArgs e) => FilterOutRomsFromList();
         private void toolStripTextBox_Filter_DbClick(object sender, EventArgs e)=> FilterOutRomsFromList(true);
 
-        private void searchImageAtLaunchBoxToolStripMenuItem_Click(object sender, EventArgs e) => JumpToBrowser("https://www.google.com/search?q={title}+site:launchbox-app.com", true);
+        private void toolStripMenuItem_GoogleImageAtLaunchBox_Click(object sender, EventArgs e) => JumpToBrowser("https://www.google.com/search?q={title}+Images+site:launchbox-app.com&udm=2", true);
         private void toolStripMenuItemSearchAll_Click(object sender, EventArgs e) 
         {
             if (toolStripTextBox_Filter.Text.Length == 0)
                 return;
-            System.Windows.Forms.Keys mods = System.Windows.Forms.Control.ModifierKeys;
-            bool useRegex = (mods & System.Windows.Forms.Keys.Control) > 0;
+            bool useRegex = IsKeyPress(System.Windows.Forms.Keys.Control);
             List<Rom> romListAllSystem = new List<Rom>();
             GetRoms(-1, ref romListAllSystem, $"%{toolStripTextBox_Filter.Text}%");
             const int MaxAllowedResults = 1000;
@@ -4989,19 +5202,7 @@ namespace GameLauncher
             romList = romListAllSystem;
             DisplaySystemIcons("");
         }
-        private void ToolStripMenuItemChangeViewROMDetails_Click(object sender, EventArgs e)
-        {
-            Rom rom = GetSelectedROM();
-            if (rom == null)
-                return;
-            FormRomDetailsEditor romDetails = new FormRomDetailsEditor(rom);
-            romDetails.ShowDialog();
-            if (romDetails.Ok)
-            {
-                UpdateInDb(rom);
-                DeleteImageList(rom.System);
-            }
-        }
+        private void ToolStripMenuItemChangeViewROMDetails_Click(object sender, EventArgs e) => ChangeViewROMDetails();
         private void changeViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GameSystem gameSystem = GetGameSystem();
@@ -5352,11 +5553,7 @@ namespace GameLauncher
             toolStripMenuItem_PopulateGameDetailsDB_Click(sender,e);
             toolStripMenuItem_AddGameDetailsToGameLauncherDb_Click(sender,e);
         }
-        private void toolStripMenuItem_ResetAllFilters_Click(object sender, EventArgs e)
-        {
-            ResetAllFilters();
-            FilterRoms();
-        }
+        private void toolStripMenuItem_ResetAllFilters_Click(object sender, EventArgs e) => ResetAllFilters(true);
         private void toolStripMenuItem_ImportImages_Click(object sender, EventArgs e)
         {
             SelectFolderDialog fbd = new SelectFolderDialog();
@@ -5367,7 +5564,7 @@ namespace GameLauncher
                 Properties.Settings.Default.lastDirectoryUserSelected = fbd.SelectedPath;
                 using (new CursorWait())
                 {
-                    GetImages(fbd.SelectedPath, true, true, SearchOption.AllDirectories);
+                    GetImages(fbd.SelectedPath, true, true, SearchOption.AllDirectories, true, true);
                     MessageBox.Show($"Image scan complete for path {fbd.SelectedPath}");
                 }
             }
@@ -5432,6 +5629,16 @@ namespace GameLauncher
             RemoveRomsMissingInFilesystem();
             RemoveImagesMissingInFilesystem();
         }
+        private void toolStripMenuItem_GoogleTitleAndSystem_Click(object sender, EventArgs e) => JumpToBrowser("https://www.google.com/search?q={title}+{system}", true);
+        private void toolStripMenuItem_GoogleTitle_Click(object sender, EventArgs e) => JumpToBrowser("https://www.google.com/search?q={title}", true);
+        private void toolStripMenuItemRefreshFilter_Click(object sender, EventArgs e) => FilterRoms();
+        private void toolStripMenuItem_AssignClipboardImage_Click(object sender, EventArgs e) => AssignClipboardImage();
+        private void toolStripMenuItem_ChangeAssignedImage_Click(object sender, EventArgs e) => ChangeAssignedImage();
+        private void toolStripMenuItem_GoogleLaunchBox_Click(object sender, EventArgs e) => JumpToBrowser("https://www.google.com/search?q={title}+site:launchbox-app.com", true);
+        private void toolStripMenuItem_DecompressAllSystems_Click(object sender, EventArgs e) => DecompressFiles(false);
+        private void toolStripMenuItem_DecompressSelectedSystem_Click(object sender, EventArgs e) => DecompressFiles(true);
+        private void toolStripMenuItem_DecompressAllSystemsAndUpdateDB_Click(object sender, EventArgs e) => DecompressFiles(false, true);
+        private void toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress_Click(object sender, EventArgs e) => DecompressFiles(false, true, true);
     }// End of Form1 class
     #endregion
 }
