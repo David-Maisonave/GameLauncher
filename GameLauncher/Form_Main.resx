@@ -149,6 +149,11 @@ Note: If the path has multiple executables, they will be used as alternative emu
     <value>Reset fields Title, compress-title-name, SimplifiedTitle, and OrgTitle for the ROM's and image database.
 After fields get reset, this option will run a search for matching images for ROM's that are missing images.</value>
   </data>
+  <data name="toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.ToolTipText" xml:space="preserve">
+    <value>ROM's that have images pointing to the general image folder will get image replaced with any matching image description in selected folder.
+The general image directory is a folder that is not a sub folder of an emulator directory.
+The replacement image will get imported to the sub directory associated with the ROM emulator directory.</value>
+  </data>
   <data name="toolStripMenuItem_FilterLabel.ToolTipText" xml:space="preserve">
     <value>Filter List.
 Only display ROM files having the specified text within the title.

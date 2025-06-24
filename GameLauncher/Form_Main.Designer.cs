@@ -113,6 +113,8 @@
             this.toolStripMenuItem_CleanScanSelectedSystemNewRoms = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_CompressRomFilesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_CompressAllRoms = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_ConvertRomToZip = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConvertRomTo7z = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConvertRomToTar = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,6 +122,20 @@
             this.toolStripMenuItem_ConvertRomToBZ2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConvertRomToLZ = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConvertRomToRAR = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressSelectedSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressSelectToFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_DecompressAllSystems = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_DecompressAllToFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator25 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_SelectDirToDecompressToFiles = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_SelectDirToDecompressToDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_CreateChecksumForRomsSelectSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateChecksumForRomsAllSystem = new System.Windows.Forms.ToolStripMenuItem();
@@ -159,7 +175,6 @@
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_DeleteDupImagesNotInDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_MiscUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_RegexRenameFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_DbBackupRestoreParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_BackupMainDBTables = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_BackupRomTable = new System.Windows.Forms.ToolStripMenuItem();
@@ -186,18 +201,19 @@
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_PopulateGameDetailsDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_FileUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ConvertDblExtToSingleExt = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_RegexRenameFiles = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_FilterLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox_Filter = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.toolStripMenuItem_DecompressParentMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_DecompressSelectedSystem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_DecompressAllSystems = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_CompressAllRoms = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress = new System.Windows.Forms.ToolStripMenuItem();
+            this.progressBar_BottomRight = new System.Windows.Forms.ProgressBar();
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Paginator)).BeginInit();
@@ -924,6 +940,7 @@
             this.toolStripSeparator12,
             this.toolStripMenuItem_CompressRomFilesParentMenu,
             this.toolStripMenuItem_DecompressParentMenu,
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt,
             this.toolStripSeparator14,
             this.toolStripMenuItem_CreateChecksumForRomsSelectSystem,
             this.toolStripMenuItem_CreateChecksumForRomsAllSystem,
@@ -971,6 +988,7 @@
             // 
             this.toolStripMenuItem_CompressRomFilesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_CompressAllRoms,
+            this.toolStripSeparator24,
             this.toolStripMenuItem_ConvertRomToZip,
             this.toolStripMenuItem_ConvertRomTo7z,
             this.toolStripMenuItem_ConvertRomToTar,
@@ -981,6 +999,18 @@
             this.toolStripMenuItem_CompressRomFilesParentMenu.Name = "toolStripMenuItem_CompressRomFilesParentMenu";
             this.toolStripMenuItem_CompressRomFilesParentMenu.Size = new System.Drawing.Size(341, 22);
             this.toolStripMenuItem_CompressRomFilesParentMenu.Text = "Compress ROM Files";
+            // 
+            // toolStripMenuItem_CompressAllRoms
+            // 
+            this.toolStripMenuItem_CompressAllRoms.Name = "toolStripMenuItem_CompressAllRoms";
+            this.toolStripMenuItem_CompressAllRoms.Size = new System.Drawing.Size(368, 22);
+            this.toolStripMenuItem_CompressAllRoms.Text = "Compress all ROM Files in all game systems ROM folder";
+            this.toolStripMenuItem_CompressAllRoms.Click += new System.EventHandler(this.toolStripMenuItem_CompressAllRoms_Click);
+            // 
+            // toolStripSeparator24
+            // 
+            this.toolStripSeparator24.Name = "toolStripSeparator24";
+            this.toolStripSeparator24.Size = new System.Drawing.Size(365, 6);
             // 
             // toolStripMenuItem_ConvertRomToZip
             // 
@@ -1032,6 +1062,132 @@
             this.toolStripMenuItem_ConvertRomToRAR.ToolTipText = "This option is only available if WinRar is installed in the following path:\r\nC:\\P" +
     "rogram Files\\WinRAR\\Rar.exe";
             this.toolStripMenuItem_ConvertRomToRAR.Click += new System.EventHandler(this.toolStripMenuItem_ConvertRomToRAR_Click);
+            // 
+            // toolStripMenuItem_DecompressParentMenu
+            // 
+            this.toolStripMenuItem_DecompressParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_DecompressSelectedSystem,
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB,
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress,
+            this.toolStripMenuItem_DecompressSelectToFolder,
+            this.toolStripSeparator23,
+            this.toolStripMenuItem_DecompressAllSystems,
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB,
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress,
+            this.toolStripMenuItem_DecompressAllToFolder,
+            this.toolStripSeparator25,
+            this.toolStripMenuItem_SelectDirToDecompressToFiles,
+            this.toolStripMenuItem_SelectDirToDecompressToDir});
+            this.toolStripMenuItem_DecompressParentMenu.Name = "toolStripMenuItem_DecompressParentMenu";
+            this.toolStripMenuItem_DecompressParentMenu.Size = new System.Drawing.Size(341, 22);
+            this.toolStripMenuItem_DecompressParentMenu.Text = "Decompress";
+            // 
+            // toolStripMenuItem_DecompressSelectedSystem
+            // 
+            this.toolStripMenuItem_DecompressSelectedSystem.Name = "toolStripMenuItem_DecompressSelectedSystem";
+            this.toolStripMenuItem_DecompressSelectedSystem.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressSelectedSystem.Text = "Decompress Selected System";
+            this.toolStripMenuItem_DecompressSelectedSystem.ToolTipText = "Decompress all compress ROM files for selected system (game console). ";
+            this.toolStripMenuItem_DecompressSelectedSystem.Click += new System.EventHandler(this.toolStripMenuItem_DecompressSelectedSystem_Click);
+            // 
+            // toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB
+            // 
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB.Name = "toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB";
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB.Text = "Decompress Selected and Update DB";
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB.ToolTipText = "Decompress compress ROM files for selected system (game console), and update DB. " +
+    "";
+            this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB.Click += new System.EventHandler(this.toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB_Click);
+            // 
+            // toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress
+            // 
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress.Name = "toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress";
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress.Text = "Decompress select, update db, && delete compress";
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress.ToolTipText = "Decompress compress ROM files for selected systems, update DB to point to the dec" +
+    "ompress files, and delete original compress files.\r\n";
+            this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress.Click += new System.EventHandler(this.toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress_Click);
+            // 
+            // toolStripMenuItem_DecompressSelectToFolder
+            // 
+            this.toolStripMenuItem_DecompressSelectToFolder.Name = "toolStripMenuItem_DecompressSelectToFolder";
+            this.toolStripMenuItem_DecompressSelectToFolder.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressSelectToFolder.Text = "Decompress select to folder";
+            this.toolStripMenuItem_DecompressSelectToFolder.ToolTipText = "Decompress select system compress ROM files to a folder having same name as compr" +
+    "ess file.";
+            this.toolStripMenuItem_DecompressSelectToFolder.Click += new System.EventHandler(this.toolStripMenuItem_DecompressSelectToFolder_Click);
+            // 
+            // toolStripSeparator23
+            // 
+            this.toolStripSeparator23.Name = "toolStripSeparator23";
+            this.toolStripSeparator23.Size = new System.Drawing.Size(334, 6);
+            // 
+            // toolStripMenuItem_DecompressAllSystems
+            // 
+            this.toolStripMenuItem_DecompressAllSystems.Name = "toolStripMenuItem_DecompressAllSystems";
+            this.toolStripMenuItem_DecompressAllSystems.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressAllSystems.Text = "Decompress All System";
+            this.toolStripMenuItem_DecompressAllSystems.ToolTipText = "Decompress all compress ROM files for all systems.";
+            this.toolStripMenuItem_DecompressAllSystems.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllSystems_Click);
+            // 
+            // toolStripMenuItem_DecompressAllSystemsAndUpdateDB
+            // 
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Name = "toolStripMenuItem_DecompressAllSystemsAndUpdateDB";
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Text = "Decompress All System and Update DB";
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.ToolTipText = "Decompress all compress ROM files for all systems, and update DB to point to the " +
+    "decompress files.";
+            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB_Click);
+            // 
+            // toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress
+            // 
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Name = "toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress";
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Text = "Decompress all, update DB, && delete compress";
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.ToolTipText = "Decompress all compress ROM files for all systems, update DB to point to the deco" +
+    "mpress files, and delete original compress files.";
+            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress_Click);
+            // 
+            // toolStripMenuItem_DecompressAllToFolder
+            // 
+            this.toolStripMenuItem_DecompressAllToFolder.Name = "toolStripMenuItem_DecompressAllToFolder";
+            this.toolStripMenuItem_DecompressAllToFolder.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_DecompressAllToFolder.Text = "Decompress all to folder";
+            this.toolStripMenuItem_DecompressAllToFolder.ToolTipText = "Decompress all system compress ROM files to a folder having same name as compress" +
+    " file.";
+            this.toolStripMenuItem_DecompressAllToFolder.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllToFolder_Click);
+            // 
+            // toolStripSeparator25
+            // 
+            this.toolStripSeparator25.Name = "toolStripSeparator25";
+            this.toolStripSeparator25.Size = new System.Drawing.Size(334, 6);
+            // 
+            // toolStripMenuItem_SelectDirToDecompressToFiles
+            // 
+            this.toolStripMenuItem_SelectDirToDecompressToFiles.Name = "toolStripMenuItem_SelectDirToDecompressToFiles";
+            this.toolStripMenuItem_SelectDirToDecompressToFiles.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_SelectDirToDecompressToFiles.Text = "Select Specific Folder to decompress to files";
+            this.toolStripMenuItem_SelectDirToDecompressToFiles.ToolTipText = "Select a directory to decompress to files";
+            this.toolStripMenuItem_SelectDirToDecompressToFiles.Click += new System.EventHandler(this.toolStripMenuItem_SelectDirToDecompressToFiles_Click);
+            // 
+            // toolStripMenuItem_SelectDirToDecompressToDir
+            // 
+            this.toolStripMenuItem_SelectDirToDecompressToDir.Name = "toolStripMenuItem_SelectDirToDecompressToDir";
+            this.toolStripMenuItem_SelectDirToDecompressToDir.Size = new System.Drawing.Size(337, 22);
+            this.toolStripMenuItem_SelectDirToDecompressToDir.Text = "Select Specific Folder to decompress to folders";
+            this.toolStripMenuItem_SelectDirToDecompressToDir.ToolTipText = "Select a directory to decompress to directories having same name as the compress " +
+    "file name.";
+            this.toolStripMenuItem_SelectDirToDecompressToDir.Click += new System.EventHandler(this.toolStripMenuItem_SelectDirToDecompressToDir_Click);
+            // 
+            // toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt
+            // 
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt.Name = "toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt";
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt.Size = new System.Drawing.Size(341, 22);
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt.Text = "Select system convert double ext";
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt.ToolTipText = "For selected system, convert compress files with double extensions to single exte" +
+    "nsion.\r\nExample:\r\nMarioKart.nds.zip -> MarioKart.zip\r\nCoolLuke.n64.zip -> CoolLu" +
+    "ke.zip\r\nBlocks.bin.zip -> Blocks.zip\r\n";
+            this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt.Click += new System.EventHandler(this.toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt_Click);
             // 
             // toolStripSeparator14
             // 
@@ -1321,19 +1477,12 @@
             // toolStripMenuItem_MiscUtilParentMenu
             // 
             this.toolStripMenuItem_MiscUtilParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_RegexRenameFiles,
             this.toolStripMenuItem_DbBackupRestoreParentMenu,
-            this.toolStripMenuItem_DbUtilParentMenu});
+            this.toolStripMenuItem_DbUtilParentMenu,
+            this.toolStripMenuItem_FileUtilParentMenu});
             this.toolStripMenuItem_MiscUtilParentMenu.Name = "toolStripMenuItem_MiscUtilParentMenu";
             this.toolStripMenuItem_MiscUtilParentMenu.Size = new System.Drawing.Size(251, 22);
             this.toolStripMenuItem_MiscUtilParentMenu.Text = "&Advance Options";
-            // 
-            // toolStripMenuItem_RegexRenameFiles
-            // 
-            this.toolStripMenuItem_RegexRenameFiles.Name = "toolStripMenuItem_RegexRenameFiles";
-            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(211, 22);
-            this.toolStripMenuItem_RegexRenameFiles.Text = "Regex Rename Files";
-            this.toolStripMenuItem_RegexRenameFiles.Click += new System.EventHandler(this.toolStripMenuItem_RegexRenameFiles_Click);
             // 
             // toolStripMenuItem_DbBackupRestoreParentMenu
             // 
@@ -1423,6 +1572,8 @@
             this.toolStripMenuItem_RemoveRomsMissingInFilesystem,
             this.toolStripMenuItem_RemoveImagesMissingInFilesystem,
             this.toolStripMenuItem_RemoveMissingRomsAndImagesFromDB,
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem,
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages,
             this.toolStripSeparator22,
             this.toolStripMenuItem_ResetChecksumForAllSystems,
             this.toolStripMenuItem_ResetChecksumForSelectSystem,
@@ -1538,6 +1689,50 @@
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb.Text = "Add GameDetails data to GameLauncher database";
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb.Click += new System.EventHandler(this.toolStripMenuItem_AddGameDetailsToGameLauncherDb_Click);
             // 
+            // toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages
+            // 
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.Name = "toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages";
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.Size = new System.Drawing.Size(462, 22);
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.Text = "Replace ROM associated images from general image ";
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.ToolTipText = resources.GetString("toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.ToolTipText");
+            this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages.Click += new System.EventHandler(this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages_Click);
+            // 
+            // toolStripMenuItem_FileUtilParentMenu
+            // 
+            this.toolStripMenuItem_FileUtilParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_ConvertDblExtToSingleExt,
+            this.toolStripMenuItem_RegexRenameFiles,
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles});
+            this.toolStripMenuItem_FileUtilParentMenu.Name = "toolStripMenuItem_FileUtilParentMenu";
+            this.toolStripMenuItem_FileUtilParentMenu.Size = new System.Drawing.Size(211, 22);
+            this.toolStripMenuItem_FileUtilParentMenu.Text = "File Utility";
+            // 
+            // toolStripMenuItem_ConvertDblExtToSingleExt
+            // 
+            this.toolStripMenuItem_ConvertDblExtToSingleExt.Name = "toolStripMenuItem_ConvertDblExtToSingleExt";
+            this.toolStripMenuItem_ConvertDblExtToSingleExt.Size = new System.Drawing.Size(242, 22);
+            this.toolStripMenuItem_ConvertDblExtToSingleExt.Text = "Convert Double Ext to Single Ext";
+            this.toolStripMenuItem_ConvertDblExtToSingleExt.ToolTipText = "Convert compress files with double extensions to single extension.\r\nExample:\r\nMar" +
+    "ioKart.nds.zip -> MarioKart.zip\r\nCoolLuke.n64.zip -> CoolLuke.zip\r\nBlocks.bin.zi" +
+    "p -> Blocks.zip";
+            this.toolStripMenuItem_ConvertDblExtToSingleExt.Click += new System.EventHandler(this.toolStripMenuItem_ConvertDblExtToSingleExt_Click);
+            // 
+            // toolStripMenuItem_RegexRenameFiles
+            // 
+            this.toolStripMenuItem_RegexRenameFiles.Name = "toolStripMenuItem_RegexRenameFiles";
+            this.toolStripMenuItem_RegexRenameFiles.Size = new System.Drawing.Size(242, 22);
+            this.toolStripMenuItem_RegexRenameFiles.Text = "Regex Rename Files";
+            this.toolStripMenuItem_RegexRenameFiles.Click += new System.EventHandler(this.toolStripMenuItem_RegexRenameFiles_Click);
+            // 
+            // toolStripMenuItem_RenameLaunchBoxROMFiles
+            // 
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles.Name = "toolStripMenuItem_RenameLaunchBoxROMFiles";
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles.Size = new System.Drawing.Size(242, 22);
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles.Text = "Rename LaunchBox ROM Files";
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles.ToolTipText = "Rename imported ROM files in LaunchBox folder to file names in the LaunchBox.Meta" +
+    "data.db database.";
+            this.toolStripMenuItem_RenameLaunchBoxROMFiles.Click += new System.EventHandler(this.toolStripMenuItem_RenameLaunchBoxROMFiles_Click);
+            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
@@ -1605,63 +1800,31 @@
             this.menuStrip1.TabIndex = 91;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // toolStripMenuItem_DecompressParentMenu
+            // progressBar_BottomRight
             // 
-            this.toolStripMenuItem_DecompressParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_DecompressSelectedSystem,
-            this.toolStripMenuItem_DecompressAllSystems,
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB,
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress});
-            this.toolStripMenuItem_DecompressParentMenu.Name = "toolStripMenuItem_DecompressParentMenu";
-            this.toolStripMenuItem_DecompressParentMenu.Size = new System.Drawing.Size(341, 22);
-            this.toolStripMenuItem_DecompressParentMenu.Text = "Decompress";
+            this.progressBar_BottomRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar_BottomRight.Location = new System.Drawing.Point(385, 348);
+            this.progressBar_BottomRight.Margin = new System.Windows.Forms.Padding(2);
+            this.progressBar_BottomRight.Name = "progressBar_BottomRight";
+            this.progressBar_BottomRight.Size = new System.Drawing.Size(67, 15);
+            this.progressBar_BottomRight.TabIndex = 93;
+            this.progressBar_BottomRight.Visible = false;
             // 
-            // toolStripMenuItem_DecompressSelectedSystem
+            // toolStripMenuItem_RemoveImagesNotPartOfSystem
             // 
-            this.toolStripMenuItem_DecompressSelectedSystem.Name = "toolStripMenuItem_DecompressSelectedSystem";
-            this.toolStripMenuItem_DecompressSelectedSystem.Size = new System.Drawing.Size(305, 22);
-            this.toolStripMenuItem_DecompressSelectedSystem.Text = "Decompress Selected System";
-            this.toolStripMenuItem_DecompressSelectedSystem.ToolTipText = "Decompress all compress ROM files for selected system (game console). ";
-            this.toolStripMenuItem_DecompressSelectedSystem.Click += new System.EventHandler(this.toolStripMenuItem_DecompressSelectedSystem_Click);
-            // 
-            // toolStripMenuItem_DecompressAllSystems
-            // 
-            this.toolStripMenuItem_DecompressAllSystems.Name = "toolStripMenuItem_DecompressAllSystems";
-            this.toolStripMenuItem_DecompressAllSystems.Size = new System.Drawing.Size(305, 22);
-            this.toolStripMenuItem_DecompressAllSystems.Text = "Decompress All System";
-            this.toolStripMenuItem_DecompressAllSystems.ToolTipText = "Decompress all compress ROM files for all systems.";
-            this.toolStripMenuItem_DecompressAllSystems.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllSystems_Click);
-            // 
-            // toolStripMenuItem_CompressAllRoms
-            // 
-            this.toolStripMenuItem_CompressAllRoms.Name = "toolStripMenuItem_CompressAllRoms";
-            this.toolStripMenuItem_CompressAllRoms.Size = new System.Drawing.Size(368, 22);
-            this.toolStripMenuItem_CompressAllRoms.Text = "Compress all ROM Files in all game systems ROM folder";
-            this.toolStripMenuItem_CompressAllRoms.Click += new System.EventHandler(this.toolStripMenuItem_CompressAllRoms_Click);
-            // 
-            // toolStripMenuItem_DecompressAllSystemsAndUpdateDB
-            // 
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Name = "toolStripMenuItem_DecompressAllSystemsAndUpdateDB";
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Size = new System.Drawing.Size(305, 22);
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Text = "Decompress All System and Update DB";
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.ToolTipText = "Decompress all compress ROM files for all systems, and update DB to point to the " +
-    "decompress files.";
-            this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllSystemsAndUpdateDB_Click);
-            // 
-            // toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress
-            // 
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Name = "toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress";
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Size = new System.Drawing.Size(305, 22);
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Text = "Decompress, update DB, && delete compress";
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.ToolTipText = "Decompress all compress ROM files for all systems, update DB to point to the deco" +
-    "mpress files, and delete original compress files.";
-            this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress.Click += new System.EventHandler(this.toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress_Click);
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem.Name = "toolStripMenuItem_RemoveImagesNotPartOfSystem";
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem.Size = new System.Drawing.Size(462, 22);
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem.Text = "Remove images not part system console";
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem.ToolTipText = "Remove images from ROM\'s where the image is not in same subfolder as ROM parent f" +
+    "older.";
+            this.toolStripMenuItem_RemoveImagesNotPartOfSystem.Click += new System.EventHandler(this.toolStripMenuItem_RemoveImagesNotPartOfSystem_Click);
             // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(456, 365);
+            this.Controls.Add(this.progressBar_BottomRight);
             this.Controls.Add(this.numericUpDown_Paginator);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox_ProgressBar);
@@ -1814,7 +1977,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DeleteDupImagesNotInDB;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MiscUtilParentMenu;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RegexRenameFiles;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DbBackupRestoreParentMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_BackupMainDBTables;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_BackupRomTable;
@@ -1854,6 +2016,23 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CompressAllRoms;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DecompressAllSystemsAndUpdateDB;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DecompressAllAndUpdateDBAndDeleteCompress;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator23;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DecompressSelectedSystemsAndUpdateDB;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DecompressSelectedAndUpdateDBAndDeleteCompress;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator24;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DecompressAllToFolder;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_DecompressSelectToFolder;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator25;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SelectDirToDecompressToFiles;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SelectDirToDecompressToDir;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_FileUtilParentMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConvertDblExtToSingleExt;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RegexRenameFiles;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ForSelectSystemConvertDblExtToSingleExt;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RenameLaunchBoxROMFiles;
+        private System.Windows.Forms.ProgressBar progressBar_BottomRight;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RemoveImagesNotPartOfSystem;
     }
 }
 

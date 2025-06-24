@@ -53,6 +53,14 @@ namespace GameLauncher
         {
             get { return openFolderDialog.FileName; }
         }
+        public string FolderName
+        {
+            get { return openFolderDialog.FileName; }
+        }
+        public List<string> FolderNames
+        {
+            get { return FileNames; }
+        }
         public List<string> FileNames
         {
             get

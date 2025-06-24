@@ -21,6 +21,7 @@ CREATE TABLE "GameDetails" (
 	"NameSimplified"	TEXT NOT NULL,
 	"Compressed"	TEXT NOT NULL,
 	"QtyPlayers"	NUMERIC NOT NULL DEFAULT 0,
+	"PlayMode"	TEXT NOT NULL DEFAULT "",
 	"Year"	INTEGER NOT NULL DEFAULT 0,
 	"Status"	TEXT NOT NULL DEFAULT "",
 	"ImageFileName"	TEXT NOT NULL DEFAULT "",

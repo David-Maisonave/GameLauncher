@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.WindowsAPICodePack.Taskbar;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +23,30 @@ namespace GameLauncher
     }
     public class CursorWait : IDisposable
     {
-        public CursorWait(bool appStarting = false, bool applicationCursor = false)
+        private TaskbarManager taskbarProcess = null;
+        private System.Windows.Forms.ProgressBar miniProgressBar = null;
+        public CursorWait(bool appStarting = false, bool applicationCursor = false, TaskbarManager taskbarProcess = null) => Init(appStarting, applicationCursor, taskbarProcess, null);
+        public CursorWait(TaskbarManager taskbarProcess, bool appStarting = false, bool applicationCursor = false) => Init(appStarting, applicationCursor, taskbarProcess, null);
+        public CursorWait(System.Windows.Forms.ProgressBar miniProgressBar, bool appStarting = false, bool applicationCursor = false) => Init(appStarting, applicationCursor, null, miniProgressBar);
+        public CursorWait(TaskbarManager taskbarProcess, System.Windows.Forms.ProgressBar miniProgressBar, bool appStarting = false, bool applicationCursor = false) => Init(appStarting, applicationCursor, taskbarProcess, miniProgressBar);
+        private void Init(bool appStarting, bool applicationCursor, TaskbarManager taskbarProcess, System.Windows.Forms.ProgressBar miniProgressBar)
         {
+            this.taskbarProcess = taskbarProcess;
+            this.miniProgressBar = miniProgressBar;
+            if (miniProgressBar != null)
+                miniProgressBar.Show();
             Cursor.Current = appStarting ? Cursors.AppStarting : Cursors.WaitCursor;
             if (applicationCursor)
                 Application.UseWaitCursor = true;
         }
-
         public void Dispose()
         {
             Cursor.Current = Cursors.Default;
             Application.UseWaitCursor = false;
+            if (taskbarProcess != null)
+                taskbarProcess.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
+            if (miniProgressBar != null)
+                miniProgressBar.Hide();
         }
     }
     #endregion /////////////////////////////////////////////////////////////////////////////////

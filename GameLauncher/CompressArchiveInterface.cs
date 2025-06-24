@@ -22,7 +22,7 @@ namespace GameLauncher
 {
     public interface IDecompressArchive : System.IDisposable
     {
-        void ExtractToDirectory(string dirName);
+        bool ExtractToDirectory(string dirName);
         string[] GetNames();
     }
     public interface ICompressArchive : System.IDisposable
@@ -45,7 +45,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = ZipFile.Open(archivePath, ZipArchiveMode.Create);
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames()
         {
             string[] names = new string[archive.Entries.Count];
@@ -77,7 +88,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = null;
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames()
         {
             string[] names = new string[archive.Entries.Count];
@@ -128,7 +150,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = new SevenZipArchive();
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames()
         {
             string[] names = new string[archive.Entries.Count];
@@ -160,7 +193,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = new TarArchive();
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames()
         {
             string[] names = new string[archive.Entries.Count];
@@ -206,10 +250,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = new GzipArchive();
         }
-        public void ExtractToDirectory(string dirName)
+        public bool ExtractToDirectory(string dirName)
         {
             dirExtractedPath = dirName;
-            archive.ExtractToDirectory(dirName);
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch 
+            {
+                return false;
+            }
+            return true;
         }
         public string[] GetNames() => GetNamesFromDir();
         public bool CompressFile(string filePath)
@@ -232,7 +284,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = new Bzip2Archive();
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames() => GetNamesFromDir();
         public bool CompressFile(string filePath)
         {
@@ -254,7 +317,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = new LzipArchive();
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames() => GetNamesFromDir();
         public bool CompressFile(string filePath)
         {
@@ -277,7 +351,18 @@ namespace GameLauncher
             this.archivePath = archivePath;
             archive = new Archive();
         }
-        public void ExtractToDirectory(string dirName) => archive.ExtractToDirectory(dirName);
+        public bool ExtractToDirectory(string dirName)
+        {
+            try
+            {
+                archive.ExtractToDirectory(dirName);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public string[] GetNames()
         {
             string[] names = new string[archive.Entries.Count];
