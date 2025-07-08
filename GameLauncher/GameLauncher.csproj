@@ -106,8 +106,14 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.6, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.6\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Data.Sqlite, Version=10.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Sqlite.Core.10.0.0-preview.3.25171.6\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=9.0.0.6, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.6\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -149,6 +155,9 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=9.0.0.6, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.9.0.6\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
@@ -209,6 +218,9 @@
     <Reference Include="System.Text.Encodings.Web, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.9.0.5\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -220,11 +232,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompressArchiveInterface.cs" />
-    <Compile Include="FormRomsToDelete.cs">
+    <Compile Include="Db.cs" />
+    <Compile Include="Form_ConfirmImage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormRomsToDelete.Designer.cs">
-      <DependentUpon>FormRomsToDelete.cs</DependentUpon>
+    <Compile Include="Form_ConfirmImage.Designer.cs">
+      <DependentUpon>Form_ConfirmImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_RomsToDelete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_RomsToDelete.Designer.cs">
+      <DependentUpon>Form_RomsToDelete.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_ImageDeletionPrompt.cs">
       <SubType>Form</SubType>
@@ -238,31 +257,38 @@
     <Compile Include="Form_Main.Designer.cs">
       <DependentUpon>Form_Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSettings.cs">
+    <Compile Include="Form_Settings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSettings.Designer.cs">
-      <DependentUpon>FormSettings.cs</DependentUpon>
+    <Compile Include="Form_Settings.Designer.cs">
+      <DependentUpon>Form_Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormInput.cs">
+    <Compile Include="Form_Input.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormInput.Designer.cs">
-      <DependentUpon>FormInput.cs</DependentUpon>
+    <Compile Include="Form_Input.Designer.cs">
+      <DependentUpon>Form_Input.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormRegexRenameFiles.cs">
+    <Compile Include="Form_RegexRenameFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormRegexRenameFiles.Designer.cs">
-      <DependentUpon>FormRegexRenameFiles.cs</DependentUpon>
+    <Compile Include="Form_RegexRenameFiles.Designer.cs">
+      <DependentUpon>Form_RegexRenameFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_SelectImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_SelectImage.Designer.cs">
+      <DependentUpon>Form_SelectImage.cs</DependentUpon>
     </Compile>
     <Compile Include="GameDetails.cs" />
-    <Compile Include="FormGameSystemEditor.cs">
+    <Compile Include="Form_GameSystemEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGameSystemEditor.Designer.cs">
-      <DependentUpon>FormGameSystemEditor.cs</DependentUpon>
+    <Compile Include="Form_GameSystemEditor.Designer.cs">
+      <DependentUpon>Form_GameSystemEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameSystems.cs" />
     <Compile Include="MiscSupportingClasses.cs" />
     <Compile Include="MiscSupportingClasses.Designer.cs">
       <DependentUpon>MiscSupportingClasses.cs</DependentUpon>
@@ -270,15 +296,17 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rom.cs" />
-    <Compile Include="FormRomDetailsEditor.cs">
+    <Compile Include="Form_RomDetailsEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormRomDetailsEditor.Designer.cs">
-      <DependentUpon>FormRomDetailsEditor.cs</DependentUpon>
+    <Compile Include="Form_RomDetailsEditor.Designer.cs">
+      <DependentUpon>Form_RomDetailsEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Roms_UserChanges.cs" />
     <Compile Include="SelectFolderDialog.cs" />
     <Compile Include="SerializableImageList.cs" />
     <Compile Include="SqlReader.cs" />
+    <Compile Include="StrMatch.cs" />
     <Compile Include="TempDirStorage.cs" />
     <Resource Include="Properties\CreateDb.sql" />
     <Content Include="Properties\Neo Geo.xml">
@@ -308,8 +336,11 @@
     <Content Include="Properties\Super Nintendo Entertainment System.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="FormRomsToDelete.resx">
-      <DependentUpon>FormRomsToDelete.cs</DependentUpon>
+    <EmbeddedResource Include="Form_ConfirmImage.resx">
+      <DependentUpon>Form_ConfirmImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_RomsToDelete.resx">
+      <DependentUpon>Form_RomsToDelete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageDeletionPrompt.resx">
       <DependentUpon>Form_ImageDeletionPrompt.cs</DependentUpon>
@@ -317,17 +348,20 @@
     <EmbeddedResource Include="Form_Main.resx">
       <DependentUpon>Form_Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSettings.resx">
-      <DependentUpon>FormSettings.cs</DependentUpon>
+    <EmbeddedResource Include="Form_SelectImage.resx">
+      <DependentUpon>Form_SelectImage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormInput.resx">
-      <DependentUpon>FormInput.cs</DependentUpon>
+    <EmbeddedResource Include="Form_Settings.resx">
+      <DependentUpon>Form_Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormRegexRenameFiles.resx">
-      <DependentUpon>FormRegexRenameFiles.cs</DependentUpon>
+    <EmbeddedResource Include="Form_Input.resx">
+      <DependentUpon>Form_Input.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGameSystemEditor.resx">
-      <DependentUpon>FormGameSystemEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Form_RegexRenameFiles.resx">
+      <DependentUpon>Form_RegexRenameFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_GameSystemEditor.resx">
+      <DependentUpon>Form_GameSystemEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -339,8 +373,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="FormRomDetailsEditor.resx">
-      <DependentUpon>FormRomDetailsEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Form_RomDetailsEditor.resx">
+      <DependentUpon>Form_RomDetailsEditor.cs</DependentUpon>
     </EmbeddedResource>
     <None Include=".editorconfig" />
     <None Include="app.config" />
@@ -365,6 +399,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\GameLauncher.sqbpro" />
+    <Content Include="Properties\GamesAlternateName.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

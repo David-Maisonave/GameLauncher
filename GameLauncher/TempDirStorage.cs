@@ -80,7 +80,7 @@ namespace GameLauncher
         }
         #region IDisposable
         /// <summary>
-        /// An indicator whether this object is beeing actively disposed or not.
+        /// An indicator whether this object is being actively disposed or not.
         /// </summary>
         private bool disposed;
         public void Dispose()
@@ -107,7 +107,7 @@ namespace GameLauncher
         /// <remarks>
         /// All managed resources must be released in this
         /// method, so after disposing this object no other
-        /// object is beeing referenced by it anymore.
+        /// object is being referenced by it anymore.
         /// </remarks>
         private void ReleaseManagedResources()
         {
@@ -119,7 +119,7 @@ namespace GameLauncher
         /// <remarks>
         /// All unmanaged resources must be released in this
         /// method, so after disposing this object no other
-        /// object is beeing referenced by it anymore.
+        /// object is being referenced by it anymore.
         /// </remarks>
         private void ReleaseUnmanagedResources()
         {
@@ -128,11 +128,11 @@ namespace GameLauncher
         {
             if (!this.disposed)
             {
-                /* Release unmanaged ressources */
+                /* Release unmanaged resources */
                 this.ReleaseUnmanagedResources();
                 if (disposing)
                 {
-                    /* Release managed ressources */
+                    /* Release managed resources */
                     this.ReleaseManagedResources();
                 }
                 /* Set indicator that this object is disposed */

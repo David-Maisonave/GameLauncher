@@ -67,7 +67,7 @@ namespace GameLauncher
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Load ImageList exception thrown \"{ex.Message}\" for file {filePath}!");
+                Console.Error.WriteLine($"Load ImageList exception thrown \"{ex.Message}\" for file {filePath}!");
                 Form_Main.DbErrorLogging("SerializableImageList.Load", $"Load ImageList exception thrown \"{ex.Message}\"!", ex.StackTrace, $"Input Arg(filePath={filePath}, imgSize={imgSize}, doMultiThread={doMultiThread}, closeBeforeExit={closeBeforeExit})");
             }
             if (closeBeforeExit)

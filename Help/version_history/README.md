@@ -58,5 +58,6 @@
 ### 1.0.2
 - Added option to open File-Explorer with the selected ROM file selected in Explorer.
 - Added 'add to favorite' menu option.
-- Decompress ROM file option added.
+- Added Decompress ROM file option.
 - Added Taskbar progressbar feature.
+- Added logging file logic.

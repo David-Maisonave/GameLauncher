@@ -15,6 +15,7 @@ namespace GameLauncher
         private string sql = ""; // Only used for error messages
         public SqlReader(string sql, Microsoft.Data.Sqlite.SqliteConnection conn = null, bool writeToConsoleOnError = true)
         {
+            Form_Main.InfoLogging($"SqlReader called with sql = {sql}", false);
             sqliteCommand = new Microsoft.Data.Sqlite.SqliteCommand(sql, conn == null ? Form_Main.connection : conn);
             reader = sqliteCommand.ExecuteReader();
             this.sql = sql;
@@ -41,7 +42,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetString exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetString exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -55,7 +56,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetFloat exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetFloat exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -69,7 +70,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetDouble exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetDouble exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -83,7 +84,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetBoolean exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetBoolean exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -97,7 +98,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetInt16 exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetInt16 exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -111,7 +112,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetInt32 exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetInt32 exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -125,7 +126,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetInt64 exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetInt64 exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -139,7 +140,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetGuid exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetGuid exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -153,7 +154,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetDecimal exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetDecimal exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -167,7 +168,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetChar exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetChar exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -181,7 +182,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetByte exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetByte exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -195,7 +196,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetTimeSpan exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetTimeSpan exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -209,7 +210,7 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetDateTimeOffset exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetDateTimeOffset exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
@@ -223,10 +224,13 @@ namespace GameLauncher
             catch (Exception ex)
             {
                 if (writeToConsoleOnError)
-                    Console.WriteLine($"GetDateTime exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
+                    Console.Error.WriteLine($"GetDateTime exception thrown \"{ex.Message}\" for field {fieldName}; SQL = \"{sql}\"");
             }
             return defaultValue;
         }
+        public int GetInt32(int index = 0) => reader.GetInt32(index);
+        public string GetString(int index = 0) => reader.GetString(index);
+        public bool GetBoolean(int index = 0) => reader.GetBoolean(index);
         // Extra functions not in SqliteDataReader
         public string GetStr(string fieldName, string defaultValue = "") => GetString(fieldName, defaultValue);
         public int GetInt(string fieldName, int defaultValue = 0) => GetInt32(fieldName, defaultValue);

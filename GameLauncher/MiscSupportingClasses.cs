@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -87,70 +88,6 @@ namespace GameLauncher
         public bool isMainThread;
         public bool scanImageDir;
         public bool hideGroup;
-    }
-    #endregion /////////////////////////////////////////////////////////////////////////////////
-    #region DB associated classes
-    public class EmulatorExecutables
-    {
-        public const int MAX_EMULATOR_EXECUTABLES = 10;
-        public string[] EmulatorPaths = new string[MAX_EMULATOR_EXECUTABLES] { "", "", "", "", "", "", "", "", "", "" };
-    }
-    public class GameSystem : EmulatorExecutables
-    {
-        public string Name;
-        public string RomDirPath;
-        public string ImageDirPath;
-        public int ID;
-        public GameSystem(string name, string romPath, string imgPath, EmulatorExecutables paths, int id)
-        {
-            Name = name;
-            RomDirPath = romPath;
-            ImageDirPath = imgPath;
-            EmulatorPaths = paths.EmulatorPaths;
-            ID = id;
-        }
-    }
-    public class GameImage
-    {
-        public string Title;
-        public string NameSimplified;
-        public string NameOrg;
-        public string Compressed;
-        public string FilePath;
-        public string Checksum;
-        public GameImage(string Title, string NameSimplified, string FilePath, string NameOrg, string Compressed, string Checksum)
-        {
-            this.Title = Title;
-            this.NameSimplified = NameSimplified;
-            this.FilePath = FilePath;
-            this.NameOrg = NameOrg;
-            this.Compressed = Compressed;
-            this.Checksum = Checksum;
-        }
-    }
-    public class Mru
-    {
-        public string FilePath;
-        public string DateLastUsed;
-        public Mru(string FilePath, string DateLastUsed)
-        {
-            this.FilePath = FilePath;
-            this.DateLastUsed = DateLastUsed;
-        }
-    }
-    public class EmulatorAttributes
-    {
-        public string EmulatorExecutable;
-        public bool DecompressFile;
-        public bool NotSupported;
-        public string PreferredExtension;
-        public EmulatorAttributes(string EmulatorExecutable, bool DecompressFile = false, bool NotSupported = false, string PreferredExtension = "")
-        {
-            this.EmulatorExecutable = EmulatorExecutable;
-            this.DecompressFile = DecompressFile;
-            this.NotSupported = NotSupported;
-            this.PreferredExtension = PreferredExtension;
-        }
     }
     #endregion /////////////////////////////////////////////////////////////////////////////////
 }

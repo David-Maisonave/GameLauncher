@@ -44,12 +44,14 @@ namespace GameLauncher
         public int StarRatingVoteCount;
         public bool Favorite;
         public bool Disable;
-        public Rom(string NameSimplified, int System, string FilePath, string NameOrg, string Title, string Compressed, int PreferredEmulatorID = 0, 
-            string ImagePath = null, int QtyPlayers = 0, string Region = null, string Developer = null, long RomSize = 0, string Genre = null, 
-            string NotesCore = null, string NotesUser = null, string FileFormat = null, string ReleaseDate = null, string Status = null, 
-            string Version = null, string Description = null, string Language = null, int Year = 0, string Rating = null, string Checksum = null,
-            string CompressChecksum = null, string Publisher = null, string WikipediaURL = null, float StarRating = 0, int StarRatingVoteCount = 0, 
-            bool Favorite = false, bool Disable = false)
+        public int PlayCount;
+        public bool Hide;
+        public Rom(string NameSimplified, int System, string FilePath, string NameOrg, string Title, string Compressed, int PreferredEmulatorID, 
+            string ImagePath, int QtyPlayers, string Region, string Developer, long RomSize, string Genre, 
+            string NotesCore, string NotesUser, string FileFormat, string ReleaseDate, string Status, 
+            string Version, string Description, string Language, int Year, string Rating, string Checksum,
+            string CompressChecksum, string Publisher, string WikipediaURL, float StarRating, int StarRatingVoteCount, 
+            int PlayCount, bool Favorite, bool Disable, bool Hide)
         {
             this.NameSimplified = NameSimplified;
             this.System = System;
@@ -82,6 +84,42 @@ namespace GameLauncher
             this.StarRatingVoteCount = StarRatingVoteCount;
             this.Favorite = Favorite;
             this.Disable = Disable;
+            this.PlayCount = PlayCount;
+            this.Hide = Hide;
+        }
+        public bool Update(Roms_UserChanges r)
+        {
+            if (!FilePath.Equals(r.FilePath,StringComparison.OrdinalIgnoreCase))
+                return false;
+            bool hasChanged = Title != r.Title || PreferredEmulatorID != r.PreferredEmulatorID || ImagePath != r.ImagePath 
+                || QtyPlayers != r.QtyPlayers || Status != r.Status || Region != r.Region || Developer != r.Developer || Genre != r.Genre
+                || NotesCore != r.NotesCore || NotesUser != r.NotesUser || ReleaseDate != r.ReleaseDate || Version != r.Version 
+                || Description != r.Description || Language != r.Language || Year != r.Year || Rating != r.Rating
+                || Publisher != r.Publisher || WikipediaURL != r.WikipediaURL || PlayCount != r.PlayCount || Favorite != r.Favorite
+                || Disable != r.Disable || Hide != r.Hide;
+            Title = r.Title;
+            PreferredEmulatorID = r.PreferredEmulatorID;
+            ImagePath = r.ImagePath;
+            QtyPlayers = r.QtyPlayers;
+            Status = r.Status;
+            Region = r.Region;
+            Developer = r.Developer;
+            Genre = r.Genre;
+            NotesCore = r.NotesCore;
+            NotesUser = r.NotesUser;
+            ReleaseDate = r.ReleaseDate;
+            Version = r.Version;
+            Description = r.Description;
+            Language = r.Language;
+            Year = r.Year;
+            Rating = r.Rating;
+            Publisher = r.Publisher;
+            WikipediaURL = r.WikipediaURL;
+            PlayCount = r.PlayCount;
+            Favorite = r.Favorite;
+            Disable = r.Disable;
+            Hide = r.Hide;
+            return hasChanged;
         }
         public override bool Equals(object obj)
         {
