@@ -145,6 +145,19 @@ Optionally, it can have an "Images" directory which will be scanned for images a
 
 Note: If the path has multiple executables, they will be used as alternative emulators which can be selected from context menu to launch the games.</value>
   </data>
+  <data name="toolStripMenuItem_SearchMatchingImage1.ToolTipText" xml:space="preserve">
+    <value>Find image matches for games missing images, and change associated image without a prompt.
+Search results are more accurate than S2 or S3, but may miss close matches that are similar but not exactly the same.</value>
+  </data>
+  <data name="toolStripMenuItem_SearchMatchingImageConfirm.ToolTipText" xml:space="preserve">
+    <value>Find image matches for games missing an image and give confirmation prompt before accepting ROM associated image change.
+Search results are more accurate than S2 or S3, but may miss close matches that are similar but not exactly the same.</value>
+  </data>
+  <data name="toolStripMenuItem_SearchMatchingImageConfirm2.ToolTipText" xml:space="preserve">
+    <value>Finds matches that are similar, but may not have all the exact letters or words.
+80% to 98% accuracy, with results having more false possitives than S1 or S0.
+Should use only after using S1 or S0 search.</value>
+  </data>
   <data name="toolStripMenuItem_ResetCompressNames.ToolTipText" xml:space="preserve">
     <value>Reset fields Title, compress-title-name, SimplifiedTitle, and OrgTitle for the ROM's and image database.
 After fields get reset, this option will run a search for matching images for ROM's that are missing images.</value>

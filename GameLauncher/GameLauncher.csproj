@@ -306,7 +306,7 @@
     <Compile Include="SelectFolderDialog.cs" />
     <Compile Include="SerializableImageList.cs" />
     <Compile Include="SqlReader.cs" />
-    <Compile Include="StrMatch.cs" />
+    <Compile Include="StrCompare.cs" />
     <Compile Include="TempDirStorage.cs" />
     <Resource Include="Properties\CreateDb.sql" />
     <Content Include="Properties\Neo Geo.xml">
@@ -400,6 +400,9 @@
     </Content>
     <None Include="Properties\GameLauncher.sqbpro" />
     <Content Include="Properties\GamesAlternateName.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Properties\ImageExternal.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">

@@ -27,7 +27,14 @@ namespace GameLauncher
             textBox_ImageFileName.Text = imageFileName;
             textBox_RomTitle.Text = rom.Title;
             textBox_RomFile.Text = rom.FilePath;
-            pictureBox_Preview.Image = Image.FromFile(imageFileName);
+            try
+            {
+                pictureBox_Preview.Image = Image.FromFile(imageFileName);
+            }
+            catch
+            {
+                Form_Main.ErrorMessage($"Can NOT display image for file {imageFileName}!");
+            }
             system = Form_Main.GetSystemNameByID(rom.System);
         }
         private void button_Ok_Click(object sender, EventArgs e)

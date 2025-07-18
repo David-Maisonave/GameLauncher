@@ -97,6 +97,9 @@
             this.toolStripComboBox_FilterDeveloper = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripMenuItem_GamesWithoutImagesParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox_GamesWithWithoutImage = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripMenuItem_GamesWithoutImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_GamesWithImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_GamesWithOrWithoutImage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRefreshFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ResetAllFilters = new System.Windows.Forms.ToolStripMenuItem();
@@ -166,8 +169,15 @@
             this.toolStripMenuItem_ImportImagesToAllSystemsManual = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_FindImageParentMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ImageSearchSelectedDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator29 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_SearchMatchingImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_SearchMatchingImage1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator30 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_SearchMatchingImageConfirm0 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_SearchMatchingImageConfirm = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_SearchMatchingImageConfirm2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_SearchMatchingImageConfirm3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator28 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemFindImagesAndFindMatches = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFindImagesAndFindMatchesConfirm = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
@@ -197,6 +207,7 @@
             this.toolStripMenuItem_ResetRomTitleCompress = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ResetImageTitleCompressInDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ResetCompressNames = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_ResetAlternateNameTitleCompress = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator21 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_ResetYearAndRatingFieldsInDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_RemoveRomsMissingInFilesystem = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,14 +216,15 @@
             this.toolStripMenuItem_RemoveImagesNotPartOfSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator22 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_ClearDbErrorLogging = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator26 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem_ResetChecksumForAllSystems = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ResetChecksumForSelectSystem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateRomChecksumForMissingChecksum = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateImageChecksumForMissingChecksum = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_CreateImageAndRomChecksumForMissingChecksum = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator26 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem_ClearDbErrorLogging = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_PopulateExternalImageDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_PopulateGameDetailsDB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_FileUtilParentMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -226,7 +238,7 @@
             this.toolStripMenuItemSearchAll = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.progressBar_BottomRight = new System.Windows.Forms.ProgressBar();
-            this.toolStripMenuItem_ResetAlternateNameTitleCompress = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_SearchMatchingImageConfirm4 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox_ProgressBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Paginator)).BeginInit();
@@ -465,9 +477,9 @@
             // ToolStripMenuItemChangeViewROMDetails
             // 
             this.ToolStripMenuItemChangeViewROMDetails.Name = "ToolStripMenuItemChangeViewROMDetails";
-            this.ToolStripMenuItemChangeViewROMDetails.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
+            this.ToolStripMenuItemChangeViewROMDetails.ShortcutKeyDisplayString = "Alt+Enter";
             this.ToolStripMenuItemChangeViewROMDetails.Size = new System.Drawing.Size(252, 22);
-            this.ToolStripMenuItemChangeViewROMDetails.Text = "Edit \\ &View ROM Details";
+            this.ToolStripMenuItemChangeViewROMDetails.Text = "Properties";
             this.ToolStripMenuItemChangeViewROMDetails.Click += new System.EventHandler(this.ToolStripMenuItemChangeViewROMDetails_Click);
             // 
             // toolStripMenuItemAssignPreferredEmulator
@@ -860,9 +872,13 @@
             // toolStripMenuItem_GamesWithoutImagesParentMenu
             // 
             this.toolStripMenuItem_GamesWithoutImagesParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripComboBox_GamesWithWithoutImage});
+            this.toolStripComboBox_GamesWithWithoutImage,
+            this.toolStripMenuItem_GamesWithoutImage,
+            this.toolStripMenuItem_GamesWithImage,
+            this.toolStripMenuItem_GamesWithOrWithoutImage});
             this.toolStripMenuItem_GamesWithoutImagesParentMenu.Name = "toolStripMenuItem_GamesWithoutImagesParentMenu";
             this.toolStripMenuItem_GamesWithoutImagesParentMenu.ShortcutKeyDisplayString = "";
+            this.toolStripMenuItem_GamesWithoutImagesParentMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
             this.toolStripMenuItem_GamesWithoutImagesParentMenu.Size = new System.Drawing.Size(188, 22);
             this.toolStripMenuItem_GamesWithoutImagesParentMenu.Text = "Game Image";
             this.toolStripMenuItem_GamesWithoutImagesParentMenu.ToolTipText = "Display ROM\'s (games) with or without associated image.\r\nROM\'s displaying default" +
@@ -877,6 +893,30 @@
     " image are associated with ROM\'s not having an image.";
             this.toolStripComboBox_GamesWithWithoutImage.SelectedIndexChanged += new System.EventHandler(this.Filter_OnChanged);
             this.toolStripComboBox_GamesWithWithoutImage.TextChanged += new System.EventHandler(this.Filter_OnChanged);
+            // 
+            // toolStripMenuItem_GamesWithoutImage
+            // 
+            this.toolStripMenuItem_GamesWithoutImage.Name = "toolStripMenuItem_GamesWithoutImage";
+            this.toolStripMenuItem_GamesWithoutImage.ShortcutKeys = System.Windows.Forms.Keys.F4;
+            this.toolStripMenuItem_GamesWithoutImage.Size = new System.Drawing.Size(290, 22);
+            this.toolStripMenuItem_GamesWithoutImage.Text = "Games Without Image";
+            this.toolStripMenuItem_GamesWithoutImage.Click += new System.EventHandler(this.toolStripMenuItem_GamesWithoutImage_Click);
+            // 
+            // toolStripMenuItem_GamesWithImage
+            // 
+            this.toolStripMenuItem_GamesWithImage.Name = "toolStripMenuItem_GamesWithImage";
+            this.toolStripMenuItem_GamesWithImage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            this.toolStripMenuItem_GamesWithImage.Size = new System.Drawing.Size(290, 22);
+            this.toolStripMenuItem_GamesWithImage.Text = "Games with Image";
+            this.toolStripMenuItem_GamesWithImage.Click += new System.EventHandler(this.toolStripMenuItem_GamesWithImage_Click);
+            // 
+            // toolStripMenuItem_GamesWithOrWithoutImage
+            // 
+            this.toolStripMenuItem_GamesWithOrWithoutImage.Name = "toolStripMenuItem_GamesWithOrWithoutImage";
+            this.toolStripMenuItem_GamesWithOrWithoutImage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F4)));
+            this.toolStripMenuItem_GamesWithOrWithoutImage.Size = new System.Drawing.Size(290, 22);
+            this.toolStripMenuItem_GamesWithOrWithoutImage.Text = "Games with and without image";
+            this.toolStripMenuItem_GamesWithOrWithoutImage.Click += new System.EventHandler(this.toolStripMenuItem_GamesWithOrWithoutImage_Click);
             // 
             // toolStripSeparator15
             // 
@@ -1425,8 +1465,16 @@
             // 
             this.toolStripMenuItem_FindImageParentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_ImageSearchSelectedDir,
+            this.toolStripSeparator29,
             this.toolStripMenuItem_SearchMatchingImage,
+            this.toolStripMenuItem_SearchMatchingImage1,
+            this.toolStripSeparator30,
+            this.toolStripMenuItem_SearchMatchingImageConfirm0,
             this.toolStripMenuItem_SearchMatchingImageConfirm,
+            this.toolStripMenuItem_SearchMatchingImageConfirm2,
+            this.toolStripMenuItem_SearchMatchingImageConfirm3,
+            this.toolStripMenuItem_SearchMatchingImageConfirm4,
+            this.toolStripSeparator28,
             this.toolStripMenuItemFindImagesAndFindMatches,
             this.toolStripMenuItemFindImagesAndFindMatchesConfirm});
             this.toolStripMenuItem_FindImageParentMenu.Name = "toolStripMenuItem_FindImageParentMenu";
@@ -1440,21 +1488,71 @@
             this.toolStripMenuItem_ImageSearchSelectedDir.Text = "Find images in specific directory";
             this.toolStripMenuItem_ImageSearchSelectedDir.Click += new System.EventHandler(this.toolStripMenuItem_ImageSearchSelectedDir_Click);
             // 
+            // toolStripSeparator29
+            // 
+            this.toolStripSeparator29.Name = "toolStripSeparator29";
+            this.toolStripSeparator29.Size = new System.Drawing.Size(385, 6);
+            // 
             // toolStripMenuItem_SearchMatchingImage
             // 
             this.toolStripMenuItem_SearchMatchingImage.Name = "toolStripMenuItem_SearchMatchingImage";
             this.toolStripMenuItem_SearchMatchingImage.Size = new System.Drawing.Size(388, 22);
-            this.toolStripMenuItem_SearchMatchingImage.Text = "Find image matches for games missing an image";
+            this.toolStripMenuItem_SearchMatchingImage.Text = "Find image matches (S0) for games missing image";
+            this.toolStripMenuItem_SearchMatchingImage.ToolTipText = "Find image matches for games missing an image and do NOT give confirmation prompt" +
+    ".\r\nAssociated ROM image change is made automatically without confirmation.\r\n";
             this.toolStripMenuItem_SearchMatchingImage.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImage_Click);
+            // 
+            // toolStripMenuItem_SearchMatchingImage1
+            // 
+            this.toolStripMenuItem_SearchMatchingImage1.Name = "toolStripMenuItem_SearchMatchingImage1";
+            this.toolStripMenuItem_SearchMatchingImage1.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_SearchMatchingImage1.Text = "Find matches (S1) for games missing image";
+            this.toolStripMenuItem_SearchMatchingImage1.ToolTipText = resources.GetString("toolStripMenuItem_SearchMatchingImage1.ToolTipText");
+            this.toolStripMenuItem_SearchMatchingImage1.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImage1_Click);
+            // 
+            // toolStripSeparator30
+            // 
+            this.toolStripSeparator30.Name = "toolStripSeparator30";
+            this.toolStripSeparator30.Size = new System.Drawing.Size(385, 6);
+            // 
+            // toolStripMenuItem_SearchMatchingImageConfirm0
+            // 
+            this.toolStripMenuItem_SearchMatchingImageConfirm0.Name = "toolStripMenuItem_SearchMatchingImageConfirm0";
+            this.toolStripMenuItem_SearchMatchingImageConfirm0.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_SearchMatchingImageConfirm0.Text = "Find matches (S0) for games missing image and confirm";
+            this.toolStripMenuItem_SearchMatchingImageConfirm0.ToolTipText = "Find image matches for games missing an image and give confirmation prompt before" +
+    " accepting ROM associated image change.\r\nFind exact match only.";
+            this.toolStripMenuItem_SearchMatchingImageConfirm0.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImageConfirm0_Click);
             // 
             // toolStripMenuItem_SearchMatchingImageConfirm
             // 
             this.toolStripMenuItem_SearchMatchingImageConfirm.Name = "toolStripMenuItem_SearchMatchingImageConfirm";
             this.toolStripMenuItem_SearchMatchingImageConfirm.Size = new System.Drawing.Size(388, 22);
-            this.toolStripMenuItem_SearchMatchingImageConfirm.Text = "Find matches for games missing image and confirm";
-            this.toolStripMenuItem_SearchMatchingImageConfirm.ToolTipText = "Find image matches for games missing an image and give confirmation prompt in ord" +
-    "er to accept image change to ROM.";
+            this.toolStripMenuItem_SearchMatchingImageConfirm.Text = "Find matches (S1) for games missing image and confirm";
+            this.toolStripMenuItem_SearchMatchingImageConfirm.ToolTipText = resources.GetString("toolStripMenuItem_SearchMatchingImageConfirm.ToolTipText");
             this.toolStripMenuItem_SearchMatchingImageConfirm.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImageConfirm_Click);
+            // 
+            // toolStripMenuItem_SearchMatchingImageConfirm2
+            // 
+            this.toolStripMenuItem_SearchMatchingImageConfirm2.Name = "toolStripMenuItem_SearchMatchingImageConfirm2";
+            this.toolStripMenuItem_SearchMatchingImageConfirm2.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_SearchMatchingImageConfirm2.Text = "Find matches (S2) for games missing image and confirm";
+            this.toolStripMenuItem_SearchMatchingImageConfirm2.ToolTipText = resources.GetString("toolStripMenuItem_SearchMatchingImageConfirm2.ToolTipText");
+            this.toolStripMenuItem_SearchMatchingImageConfirm2.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImageConfirm2_Click);
+            // 
+            // toolStripMenuItem_SearchMatchingImageConfirm3
+            // 
+            this.toolStripMenuItem_SearchMatchingImageConfirm3.Name = "toolStripMenuItem_SearchMatchingImageConfirm3";
+            this.toolStripMenuItem_SearchMatchingImageConfirm3.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_SearchMatchingImageConfirm3.Text = "Find matches (S3) for games missing image and confirm";
+            this.toolStripMenuItem_SearchMatchingImageConfirm3.ToolTipText = "Use search algorithm that could find a needle in a hey stack, but gives some fals" +
+    "e positives";
+            this.toolStripMenuItem_SearchMatchingImageConfirm3.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImageConfirm3_Click);
+            // 
+            // toolStripSeparator28
+            // 
+            this.toolStripSeparator28.Name = "toolStripSeparator28";
+            this.toolStripSeparator28.Size = new System.Drawing.Size(385, 6);
             // 
             // toolStripMenuItemFindImagesAndFindMatches
             // 
@@ -1663,14 +1761,15 @@
             this.toolStripMenuItem_RemoveImagesNotPartOfSystem,
             this.toolStripMenuItem_ReplaceRomGeneralImageWithImportedImages,
             this.toolStripSeparator22,
+            this.toolStripMenuItem_ClearDbErrorLogging,
+            this.toolStripSeparator26,
             this.toolStripMenuItem_ResetChecksumForAllSystems,
             this.toolStripMenuItem_ResetChecksumForSelectSystem,
             this.toolStripMenuItem_CreateRomChecksumForMissingChecksum,
             this.toolStripMenuItem_CreateImageChecksumForMissingChecksum,
             this.toolStripMenuItem_CreateImageAndRomChecksumForMissingChecksum,
-            this.toolStripSeparator26,
-            this.toolStripMenuItem_ClearDbErrorLogging,
             this.toolStripSeparator7,
+            this.toolStripMenuItem_PopulateExternalImageDB,
             this.toolStripMenuItem_PopulateGameDetailsDB,
             this.toolStripMenuItem_AddGameDetailsToGameLauncherDb});
             this.toolStripMenuItem_DbUtilParentMenu.Name = "toolStripMenuItem_DbUtilParentMenu";
@@ -1698,6 +1797,15 @@
             this.toolStripMenuItem_ResetCompressNames.Text = "Reset both ROM + Image title and compress-title-name in DB";
             this.toolStripMenuItem_ResetCompressNames.ToolTipText = resources.GetString("toolStripMenuItem_ResetCompressNames.ToolTipText");
             this.toolStripMenuItem_ResetCompressNames.Click += new System.EventHandler(this.toolStripMenuItem_ResetCompressNames_Click);
+            // 
+            // toolStripMenuItem_ResetAlternateNameTitleCompress
+            // 
+            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Name = "toolStripMenuItem_ResetAlternateNameTitleCompress";
+            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Size = new System.Drawing.Size(462, 22);
+            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Text = "Reset AlternateName title and compress-title-name in DB";
+            this.toolStripMenuItem_ResetAlternateNameTitleCompress.ToolTipText = "Reset fields Title, compress-title-name, SimplifiedTitle, and OrgTitle for Altern" +
+    "ateName database.\r\n";
+            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Click += new System.EventHandler(this.toolStripMenuItem_ResetAlternateNameTitleCompress_Click);
             // 
             // toolStripSeparator21
             // 
@@ -1758,6 +1866,18 @@
             this.toolStripSeparator22.Name = "toolStripSeparator22";
             this.toolStripSeparator22.Size = new System.Drawing.Size(459, 6);
             // 
+            // toolStripMenuItem_ClearDbErrorLogging
+            // 
+            this.toolStripMenuItem_ClearDbErrorLogging.Name = "toolStripMenuItem_ClearDbErrorLogging";
+            this.toolStripMenuItem_ClearDbErrorLogging.Size = new System.Drawing.Size(462, 22);
+            this.toolStripMenuItem_ClearDbErrorLogging.Text = "Clear DB Error Logging";
+            this.toolStripMenuItem_ClearDbErrorLogging.Click += new System.EventHandler(this.toolStripMenuItem_ClearDbErrorLogging_Click);
+            // 
+            // toolStripSeparator26
+            // 
+            this.toolStripSeparator26.Name = "toolStripSeparator26";
+            this.toolStripSeparator26.Size = new System.Drawing.Size(459, 6);
+            // 
             // toolStripMenuItem_ResetChecksumForAllSystems
             // 
             this.toolStripMenuItem_ResetChecksumForAllSystems.Name = "toolStripMenuItem_ResetChecksumForAllSystems";
@@ -1793,22 +1913,17 @@
             this.toolStripMenuItem_CreateImageAndRomChecksumForMissingChecksum.Text = "Create checksum for ROM\'s and images missing checksum";
             this.toolStripMenuItem_CreateImageAndRomChecksumForMissingChecksum.Click += new System.EventHandler(this.toolStripMenuItem_CreateImageAndRomChecksumForMissingChecksum_Click);
             // 
-            // toolStripSeparator26
-            // 
-            this.toolStripSeparator26.Name = "toolStripSeparator26";
-            this.toolStripSeparator26.Size = new System.Drawing.Size(459, 6);
-            // 
-            // toolStripMenuItem_ClearDbErrorLogging
-            // 
-            this.toolStripMenuItem_ClearDbErrorLogging.Name = "toolStripMenuItem_ClearDbErrorLogging";
-            this.toolStripMenuItem_ClearDbErrorLogging.Size = new System.Drawing.Size(462, 22);
-            this.toolStripMenuItem_ClearDbErrorLogging.Text = "Clear DB Error Logging";
-            this.toolStripMenuItem_ClearDbErrorLogging.Click += new System.EventHandler(this.toolStripMenuItem_ClearDbErrorLogging_Click);
-            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(459, 6);
+            // 
+            // toolStripMenuItem_PopulateExternalImageDB
+            // 
+            this.toolStripMenuItem_PopulateExternalImageDB.Name = "toolStripMenuItem_PopulateExternalImageDB";
+            this.toolStripMenuItem_PopulateExternalImageDB.Size = new System.Drawing.Size(462, 22);
+            this.toolStripMenuItem_PopulateExternalImageDB.Text = "Populate ExternalImage Database";
+            this.toolStripMenuItem_PopulateExternalImageDB.Click += new System.EventHandler(this.toolStripMenuItem_PopulateExternalImageDB_Click);
             // 
             // toolStripMenuItem_PopulateGameDetailsDB
             // 
@@ -1936,14 +2051,14 @@
             this.progressBar_BottomRight.TabIndex = 93;
             this.progressBar_BottomRight.Visible = false;
             // 
-            // toolStripMenuItem_ResetAlternateNameTitleCompress
+            // toolStripMenuItem_SearchMatchingImageConfirm4
             // 
-            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Name = "toolStripMenuItem_ResetAlternateNameTitleCompress";
-            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Size = new System.Drawing.Size(462, 22);
-            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Text = "Reset AlternateName title and compress-title-name in DB";
-            this.toolStripMenuItem_ResetAlternateNameTitleCompress.ToolTipText = "Reset fields Title, compress-title-name, SimplifiedTitle, and OrgTitle for Altern" +
-    "ateName database.\r\n";
-            this.toolStripMenuItem_ResetAlternateNameTitleCompress.Click += new System.EventHandler(this.toolStripMenuItem_ResetAlternateNameTitleCompress_Click);
+            this.toolStripMenuItem_SearchMatchingImageConfirm4.Name = "toolStripMenuItem_SearchMatchingImageConfirm4";
+            this.toolStripMenuItem_SearchMatchingImageConfirm4.Size = new System.Drawing.Size(388, 22);
+            this.toolStripMenuItem_SearchMatchingImageConfirm4.Text = "Find matches (S4) for games missing image and confirm";
+            this.toolStripMenuItem_SearchMatchingImageConfirm4.ToolTipText = "Use search algorithm that could find a needle in a hey stack, but gives many fals" +
+    "e positives";
+            this.toolStripMenuItem_SearchMatchingImageConfirm4.Click += new System.EventHandler(this.toolStripMenuItem_SearchMatchingImageConfirm4_Click);
             // 
             // Form_Main
             // 
@@ -2172,6 +2287,18 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SearchMatchingImageConfirm;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFindImagesAndFindMatchesConfirm;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ResetAlternateNameTitleCompress;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PopulateExternalImageDB;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SearchMatchingImageConfirm2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_GamesWithoutImage;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_GamesWithImage;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_GamesWithOrWithoutImage;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator29;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator28;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SearchMatchingImageConfirm3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SearchMatchingImage1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator30;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SearchMatchingImageConfirm0;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SearchMatchingImageConfirm4;
     }
 }
 
