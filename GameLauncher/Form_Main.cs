@@ -218,35 +218,35 @@ namespace GameLauncher
             form_Main = this;
             db = new Db(this);
             InitializeComponent();
-            int x = StrCompare.GetDifference("frogger2threedeep", "frogger2threeedeep");
-            x = StrCompare.GetDifference("frogger2threeedeep", "frogger2threedeep");
-            x = StrCompare.GetDifference("1234567890", "12345678"); // source2 is shorter
-            x = StrCompare.GetDifference("12345678", "1234567890"); // source1 is shorter
-            x = StrCompare.GetDifference("0123456789", "12345678"); // source2 is shorter
-            x = StrCompare.GetDifference("12345678", "0123456789"); // source1 is shorter
-            x = StrCompare.GetDifference("0123456789", "abcdefgh"); // source2 is shorter
-            x = StrCompare.GetDifference("abcdefgh", "0123456789"); // source1 is shorter
-            x = StrCompare.GetDifference("abcdefgh", "ABCDEFGH"); // case test
-            x = StrCompare.GetDifference("abcdefghi", "ABCDEFGH"); // case test
-            x = StrCompare.Difference("abcdefgh", "ABCDEFGH"); // case test
-            x = StrCompare.Difference("abcdefghi", "ABCDEFGH"); // case test
-            x = StrCompare.Difference("abcdefgh", "ABCDEFGHI"); // case test
-            x = StrCompare.GetDifference("", "");
-            x = StrCompare.GetDifference("fox", "foxx");
-            x = StrCompare.GetDifference("foxx", "fox");
-            x = StrCompare.GetDifference("xxxxx", "yyyyy");
-            x = StrCompare.GetDifference("The world is on fire", "The world is on fire");
-            x = StrCompare.GetDifference("Th world is on fire", "The world is on fire");
-            x = StrCompare.GetDifference("The world is on fire", "Th world is on fire");
-            x = StrCompare.GetDifference("The the world is on fire", "The world is on fire");
-            x = StrCompare.GetDifference("world is on fire", "The world is on fire");
-            x = StrCompare.GetDifference("is fire world on", "The world is on fire");
-            x = StrCompare.GetPhraseDifference("is fire world on", "The world is on fire");
-            x = StrCompare.GetPhraseDifference("world is on fire", "The world is on fire");
-            x = StrCompare.GetPhraseDifference("WorldIsOnFire", "world is on fire");
-            x = StrCompare.GetPhraseDifference("WorldIsOnFire", "world is on fire");
-            x = StrCompare.GetPhraseDifference("world is on fire", "The world is on fire");
-            x = StrCompare.GetPhraseDifference("world is on fire", "The world is on fire", true);
+            int x = Fuzzy.LevenshteinDistance("frogger2threedeep", "frogger2threeedeep");
+            x = Fuzzy.LevenshteinDistance("frogger2threeedeep", "frogger2threedeep");
+            x = Fuzzy.LevenshteinDistance("1234567890", "12345678"); // source2 is shorter
+            x = Fuzzy.LevenshteinDistance("12345678", "1234567890"); // source1 is shorter
+            x = Fuzzy.LevenshteinDistance("0123456789", "12345678"); // source2 is shorter
+            x = Fuzzy.LevenshteinDistance("12345678", "0123456789"); // source1 is shorter
+            x = Fuzzy.LevenshteinDistance("0123456789", "abcdefgh"); // source2 is shorter
+            x = Fuzzy.LevenshteinDistance("abcdefgh", "0123456789"); // source1 is shorter
+            x = Fuzzy.LevenshteinDistance("abcdefgh", "ABCDEFGH"); // case test
+            x = Fuzzy.LevenshteinDistance("abcdefghi", "ABCDEFGH"); // case test
+            x = Fuzzy.iLevDistance("abcdefgh", "ABCDEFGH"); // case test
+            x = Fuzzy.iLevDistance("abcdefghi", "ABCDEFGH"); // case test
+            x = Fuzzy.iLevDistance("abcdefgh", "ABCDEFGHI"); // case test
+            x = Fuzzy.LevenshteinDistance("", "");
+            x = Fuzzy.LevenshteinDistance("fox", "foxx");
+            x = Fuzzy.LevenshteinDistance("foxx", "fox");
+            x = Fuzzy.LevenshteinDistance("xxxxx", "yyyyy");
+            x = Fuzzy.LevenshteinDistance("The world is on fire", "The world is on fire");
+            x = Fuzzy.LevenshteinDistance("Th world is on fire", "The world is on fire");
+            x = Fuzzy.LevenshteinDistance("The world is on fire", "Th world is on fire");
+            x = Fuzzy.LevenshteinDistance("The the world is on fire", "The world is on fire");
+            x = Fuzzy.LevenshteinDistance("world is on fire", "The world is on fire");
+            x = Fuzzy.LevenshteinDistance("is fire world on", "The world is on fire");
+            x = Fuzzy.GetPhraseDifference("is fire world on", "The world is on fire");
+            x = Fuzzy.GetPhraseDifference("world is on fire", "The world is on fire");
+            x = Fuzzy.GetPhraseDifference("WorldIsOnFire", "world is on fire");
+            x = Fuzzy.GetPhraseDifference("WorldIsOnFire", "world is on fire");
+            x = Fuzzy.GetPhraseDifference("world is on fire", "The world is on fire");
+            x = Fuzzy.GetPhraseDifference("world is on fire", "The world is on fire", true);
             TempDirStorage.DeleteTempMultithreadDir();
             toolStripTextBox_Filter.AutoCompleteCustomSource = new AutoCompleteStringCollection();
             PopulateValidRomTypes();
@@ -905,8 +905,7 @@ namespace GameLauncher
             }
             return defaultValue;
         }
-        private int GetImageIndexByPath(string FilePath) => GetFirstColInt($"SELECT ID FROM Images WHERE FilePath like \"{FilePath}\"");
-        public int GetSystemIndex(string Name) => GetFirstColInt($"SELECT ID FROM GameSystems WHERE Name = \"{Name}\"");
+        public int GetSystemIndex(string Name) => GetFirstColInt($"SELECT ID FROM GameSystems WHERE Name like \"{Name}\"");
         public static string GetSystemNameByID(int id) => GetFirstColStr($"SELECT Name FROM GameSystems WHERE ID = \"{id}\"");
         private void EraseDbContent() => UpdateDB("DELETE FROM Roms;\r\nDELETE FROM Images;\r\nDELETE FROM GameSystems;\r\nDELETE FROM sqlite_sequence;\r\n");
         public string GetPersistenceVariable(string name, string defaultValue = "") => GetFirstColStr($"SELECT Value FROM PersistenceVariables WHERE Name = \"{name}\"", defaultValue);
@@ -1242,7 +1241,7 @@ namespace GameLauncher
                     int MatchDiff = Title.Length * 2;
                     foreach (Rom rom in romsWithoutImages) 
                     {
-                        int diff = StrCompare.GetDifference(rom.Title, Title);
+                        int diff = Fuzzy.LevenshteinDistance(rom.Title, Title);
                         if (diff < 2 && diff < MatchDiff)
                         {
                             MatchDiff = diff;
@@ -1255,7 +1254,7 @@ namespace GameLauncher
                     {
                         foreach (Rom rom in romsWithoutImages)
                         {
-                            int diff = StrCompare.GetDifference(rom.NameSimplified, NameSimplified);
+                            int diff = Fuzzy.LevenshteinDistance(rom.NameSimplified, NameSimplified);
                             if (diff < 2 && diff < MatchDiff)
                             {
                                 MatchDiff = diff;
@@ -1265,11 +1264,11 @@ namespace GameLauncher
                             }
                         }
                     }
-                    if (IsNullOrEmpty(romFile) && StrCompare.GetWordCount(Title) >= PHRASE_MATCH_MIN_WORDS)
+                    if (IsNullOrEmpty(romFile) && Fuzzy.GetWordCount(Title) >= PHRASE_MATCH_MIN_WORDS)
                     {
                         foreach (Rom rom in romsWithoutImages)
                         {
-                            int diff = StrCompare.GetPhraseDifference(rom.Title, Title);
+                            int diff = Fuzzy.GetPhraseDifference(rom.Title, Title);
                             if (diff < 2 && diff < MatchDiff)
                             {
                                 MatchDiff = diff;
@@ -1283,7 +1282,7 @@ namespace GameLauncher
                     {
                         foreach (Rom rom in romsWithoutImages)
                         {
-                            int diff = StrCompare.GetDifference(rom.Compressed, Compressed);
+                            int diff = Fuzzy.LevenshteinDistance(rom.Compressed, Compressed);
                             if (diff < 2 && diff < MatchDiff)
                             {
                                 MatchDiff = diff;
@@ -1900,13 +1899,6 @@ namespace GameLauncher
             }
             MessageBox.Show(backupType == BackupType.Roms_UserChanges_CopyToRoms? "Copied Roms_UserChanges to Roms table." : "Database restore complete");
         }
-        public string WordLettersSeparated(string word, string sep = "%")
-        {
-            string returnWord = "";
-            foreach (char c in word)
-                returnWord += $"{c}{sep}";
-            return returnWord;
-        }
         public string CreateSqlQueryFindSimilarNames(
             string phrase,                                  // Phrase to search
             string fieldToReturn = "CompareName",           // Column or Columns to return in SQL query
@@ -1922,10 +1914,10 @@ namespace GameLauncher
             int percentageMatch = 80                        // Percentage of required word matching when there's at least (minWordsPercMatch) quantity of words
             )
         {
-            string[] keywords = StrCompare.GetKeywordList(ref phrase, true);
+            string[] keywords = Fuzzy.GetKeywordList(ref phrase, true);
             int phraseLen = phrase.Length;
             if (keywords.Length < minimumWordsRequired)
-                return null;
+                return null;+
             if (minCount == -1)
             {
                 if (keywords.Length >= minWordsPercMatch)
@@ -1943,7 +1935,7 @@ namespace GameLauncher
                 {
                     string nearWordSearch = "";
                     if (doNearWordSearch)
-                        nearWordSearch += $" OR {fieldToCompare} LIKE '%{WordLettersSeparated(keywords[i])}%' ";
+                        nearWordSearch += $" OR {fieldToCompare} LIKE '%{Fuzzy.HasCharInSameOrder(keywords[i])}%' ";
                     sql += $"({fieldToCompare} LIKE '%{keywords[i]}%'  {nearWordSearch}) ";
                 }
                 else
@@ -1977,6 +1969,7 @@ namespace GameLauncher
             string yesterdayDateStr = DateTime.Today.AddDays(-1).ToString("yyyyMMDD");
             string dayBeforeYesterdayDateStr = DateTime.Today.AddDays(-2).ToString("yyyyMMDD");
             string yesterdayFileName = $"{dirPath}{yesterdayDateStr}{DB_BACKUP_EXT}";
+
             string dayBeforeYesterdayFileName = $"{dirPath}{dayBeforeYesterdayDateStr}{DB_BACKUP_EXT}";
             if (!Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
@@ -2171,71 +2164,73 @@ namespace GameLauncher
         }
         private void CreateChecksumForImagesAllSystem(bool withMissingChecksumOnly = false)
         {
-            List<GameImage> gameImages = null;
-            string where = "";
-            if (withMissingChecksumOnly)
-                where = " WHERE Checksum = '' OR Checksum IS NULL ";
-            using (new CursorWait(taskbarProcess, progressBar_BottomRight))
-            {
-                if (!db.Get(ref gameImages, where))
-                    return;
-                ResetWorkStatus(gameImages.Count);
-                foreach (GameImage gameImage in gameImages)
-                {
-                    if (DidCancelButtonGetPressed(true))
-                    {
-                        SendStatus($"CreateChecksumForImagesAllSystem({withMissingChecksumOnly}) cancelled with only processing {qtyProcess} of {gameImages.Count} images.", true);
-                        return;
-                    }
-                    IncProgress();
-                    ++qtyTotalProcess;
-                    SendStatus($"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
-                    string Checksum = gameImage.Checksum;
-                    gameImage.Checksum = GetChecksumStr(gameImage.FilePath);
-                    if (!gameImage.Checksum.Equals(Checksum))
-                    {
-                        SendStatus($"Updating GameImage Title={gameImage.Title}; Checksum={gameImage.Checksum}; {qtyProcess} out of {gameImages.Count}", true);
-                        ++qtyChanges;
-                        ++qtyTotalChanges;
-                        db.Update(gameImage);
-                    }
-                }
-                SendStatus($"Updated {qtyChanges} GameImage's in DB out of {gameImages.Count}", true);
-            }
+            db.SP_UpdateAllImageChecksum(!withMissingChecksumOnly);
+            //List<GameImage> gameImages = null;
+            //string where = "";
+            //if (withMissingChecksumOnly)
+            //    where = " WHERE Checksum = '' OR Checksum IS NULL ";
+            //using (new CursorWait(taskbarProcess, progressBar_BottomRight))
+            //{
+            //    if (!db.Get(ref gameImages, where))
+            //        return;
+            //    ResetWorkStatus(gameImages.Count);
+            //    foreach (GameImage gameImage in gameImages)
+            //    {
+            //        if (DidCancelButtonGetPressed(true))
+            //        {
+            //            SendStatus($"CreateChecksumForImagesAllSystem({withMissingChecksumOnly}) cancelled with only processing {qtyProcess} of {gameImages.Count} images.", true);
+            //            return;
+            //        }
+            //        IncProgress();
+            //        ++qtyTotalProcess;
+            //        SendStatus($"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
+            //        string Checksum = gameImage.Checksum;
+            //        gameImage.Checksum = GetChecksumStr(gameImage.FilePath);
+            //        if (!gameImage.Checksum.Equals(Checksum))
+            //        {
+            //            SendStatus($"Updating GameImage Title={gameImage.Title}; Checksum={gameImage.Checksum}; {qtyProcess} out of {gameImages.Count}", true);
+            //            ++qtyChanges;
+            //            ++qtyTotalChanges;
+            //            db.Update(gameImage);
+            //        }
+            //    }
+            //    SendStatus($"Updated {qtyChanges} GameImage's in DB out of {gameImages.Count}", true);
+            //}
         }
         private void CreateChecksumForRomsAllSystem(bool withMissingChecksumOnly = false)
         {
-            List<Rom> roms = null;
-            string where = "";
-            if (withMissingChecksumOnly)
-                where = " WHERE Checksum = '' OR Checksum IS NULL ";
-            using (new CursorWait(taskbarProcess, progressBar_BottomRight))
-            {
-                if (!db.Get(ref roms, where))
-                    return;
-                ResetWorkStatus(roms.Count);
-                foreach (Rom rom in roms)
-                {
-                    if (DidCancelButtonGetPressed(true))
-                    {
-                        SendStatus($"CreateChecksumForRomsAllSystem({withMissingChecksumOnly}) cancelled with only processing {qtyProcess} of {roms.Count} images.", true);
-                        return;
-                    }
-                    IncProgress();
-                    ++qtyTotalProcess;
-                    SendStatus($"Processing Rom {rom.NameSimplified}; {qtyProcess} out of {roms.Count}", true);
-                    string Checksum = rom.Checksum;
-                    rom.Checksum = GetChecksumStr(rom.FilePath);
-                    if (!rom.Checksum.Equals(Checksum))
-                    {
-                        SendStatus($"Updating Rom Title={rom.Title}; Checksum={rom.Checksum}; {qtyProcess} out of {roms.Count}", true);
-                        ++qtyChanges;
-                        ++qtyTotalChanges;
-                        db.Update(rom);
-                    }
-                }
-                SendStatus($"Updated {qtyChanges} Rom's in DB out of {roms.Count}", true);
-            }
+            db.SP_UpdateAllRomChecksum(!withMissingChecksumOnly);
+            //List<Rom> roms = null;
+            //string where = "";
+            //if (withMissingChecksumOnly)
+            //    where = " WHERE Checksum = '' OR Checksum IS NULL ";
+            //using (new CursorWait(taskbarProcess, progressBar_BottomRight))
+            //{
+            //    if (!db.Get(ref roms, where))
+            //        return;
+            //    ResetWorkStatus(roms.Count);
+            //    foreach (Rom rom in roms)
+            //    {
+            //        if (DidCancelButtonGetPressed(true))
+            //        {
+            //            SendStatus($"CreateChecksumForRomsAllSystem({withMissingChecksumOnly}) cancelled with only processing {qtyProcess} of {roms.Count} images.", true);
+            //            return;
+            //        }
+            //        IncProgress();
+            //        ++qtyTotalProcess;
+            //        SendStatus($"Processing Rom {rom.NameSimplified}; {qtyProcess} out of {roms.Count}", true);
+            //        string Checksum = rom.Checksum;
+            //        rom.Checksum = GetChecksumStr(rom.FilePath);
+            //        if (!rom.Checksum.Equals(Checksum))
+            //        {
+            //            SendStatus($"Updating Rom Title={rom.Title}; Checksum={rom.Checksum}; {qtyProcess} out of {roms.Count}", true);
+            //            ++qtyChanges;
+            //            ++qtyTotalChanges;
+            //            db.Update(rom);
+            //        }
+            //    }
+            //    SendStatus($"Updated {qtyChanges} Rom's in DB out of {roms.Count}", true);
+            //}
         }
         private void RemoveImagesMissingInFilesystem(string where = "", bool isMainThread = true)
         {
@@ -2477,7 +2472,7 @@ namespace GameLauncher
                             MatchDiff = rom.Title.Length * 2;
                             foreach (GameImage image in gameImages)
                             {
-                                int diff = StrCompare.GetDifference(rom.Title, image.Title);
+                                int diff = Fuzzy.LevenshteinDistance(rom.Title, image.Title);
                                 if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff != 0)
                                     continue;
                                 if (diff <= MaxDiff && diff < MatchDiff)
@@ -2494,7 +2489,7 @@ namespace GameLauncher
                             {
                                 foreach (AlternateNames alternateName in alternateNames)
                                 {
-                                    int diff = StrCompare.GetDifference(rom.Title, alternateName.Title);
+                                    int diff = Fuzzy.LevenshteinDistance(rom.Title, alternateName.Title);
                                     if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff != 0)
                                         continue;
                                     if (diff <= MaxDiff && diff < MatchDiff)
@@ -2504,7 +2499,7 @@ namespace GameLauncher
                                         int alt_MaxDiff = default_Title.Length > diffFactor ? (default_Title.Length / diffFactor) : 1;
                                         foreach (GameImage image in gameImages)
                                         {
-                                            int diff_alt = StrCompare.GetDifference(default_Title, image.Title);
+                                            int diff_alt = Fuzzy.LevenshteinDistance(default_Title, image.Title);
                                             if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff_alt != 0)
                                                 continue;
                                             if (diff_alt <= alt_MaxDiff && diff_alt < MatchDiff)
@@ -2522,7 +2517,7 @@ namespace GameLauncher
                                         alt_MaxDiff = 1;
                                         foreach (GameImage image in gameImages)
                                         {
-                                            int diff_alt = StrCompare.GetDifference(default_NameSimplified, image.NameSimplified);
+                                            int diff_alt = Fuzzy.LevenshteinDistance(default_NameSimplified, image.NameSimplified);
                                             if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff_alt != 0)
                                                 continue;
                                             if (diff_alt <= alt_MaxDiff && diff_alt < MatchDiff)
@@ -2546,7 +2541,7 @@ namespace GameLauncher
                             MatchDiff = rom.NameSimplified.Length * 2;
                             foreach (GameImage image in gameImages)
                             {
-                                int diff = StrCompare.GetDifference(rom.NameSimplified, image.NameSimplified);
+                                int diff = Fuzzy.LevenshteinDistance(rom.NameSimplified, image.NameSimplified);
                                 if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff != 0)
                                     continue;
                                 if (diff <= MaxDiff && diff < MatchDiff)
@@ -2563,7 +2558,7 @@ namespace GameLauncher
                             {
                                 foreach (AlternateNames alternateName in alternateNames)
                                 {
-                                    int diff = StrCompare.GetDifference(rom.NameSimplified, alternateName.NameSimplified);
+                                    int diff = Fuzzy.LevenshteinDistance(rom.NameSimplified, alternateName.NameSimplified);
                                     if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff != 0)
                                         continue;
                                     if (diff <= MaxDiff && diff < MatchDiff)
@@ -2573,7 +2568,7 @@ namespace GameLauncher
                                         int alt_MaxDiff = default_Title.Length > diffFactor ? (default_Title.Length / diffFactor) : 1;
                                         foreach (GameImage image in gameImages)
                                         {
-                                            int diff_alt = StrCompare.GetDifference(default_Title, image.Title);
+                                            int diff_alt = Fuzzy.LevenshteinDistance(default_Title, image.Title);
                                             if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff_alt != 0)
                                                 continue;
                                             if (diff_alt <= alt_MaxDiff && diff_alt < MatchDiff)
@@ -2591,7 +2586,7 @@ namespace GameLauncher
                                         alt_MaxDiff = default_NameSimplified.Length > diffFactor ? (default_NameSimplified.Length / diffFactor) : 1;
                                         foreach (GameImage image in gameImages)
                                         {
-                                            int diff_alt = StrCompare.GetDifference(default_NameSimplified, image.NameSimplified);
+                                            int diff_alt = Fuzzy.LevenshteinDistance(default_NameSimplified, image.NameSimplified);
                                             if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff_alt != 0)
                                                 continue;
                                             if (diff_alt <= alt_MaxDiff && diff_alt < MatchDiff)
@@ -2615,7 +2610,7 @@ namespace GameLauncher
                             if (gameImagesExtern != null)
                                 foreach (GameImage gameImage in gameImagesExtern) 
                                 {
-                                    int diff = StrCompare.GetDifference(rom.Title, gameImage.Title);
+                                    int diff = Fuzzy.LevenshteinDistance(rom.Title, gameImage.Title);
                                     if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff != 0)
                                         continue;
                                     if (diff <= MaxDiff && diff < MatchDiff)
@@ -2640,7 +2635,7 @@ namespace GameLauncher
                                 {
                                     foreach (GameImage gameImage in gameImagesExtern)
                                     {
-                                        int diff = StrCompare.GetDifference(rom.NameSimplified, gameImage.NameSimplified);
+                                        int diff = Fuzzy.LevenshteinDistance(rom.NameSimplified, gameImage.NameSimplified);
                                         if (searchAlgorithm == SearchAlgorithm.ExactMatch && diff != 0)
                                             continue;
                                         if (diff <= MaxDiff && diff < MatchDiff)
@@ -2676,12 +2671,12 @@ namespace GameLauncher
                                 doImportImage = true;
                         }
                         bool phraseMatch = false;
-                        if (IsEmptyOrNull(imagePath) && searchAlgorithm != SearchAlgorithm.ExactMatch && StrCompare.GetWordCount(rom.Title) >= PHRASE_MATCH_MIN_WORDS)
+                        if (IsEmptyOrNull(imagePath) && searchAlgorithm != SearchAlgorithm.ExactMatch && Fuzzy.GetWordCount(rom.Title) >= PHRASE_MATCH_MIN_WORDS)
                         {
                             MatchDiff = rom.Title.Length * 2;
                             foreach (GameImage image in gameImages)
                             {
-                                int diff = StrCompare.GetPhraseDifference(rom.Title, image.Title);
+                                int diff = Fuzzy.GetPhraseDifference(rom.Title, image.Title);
                                 if (diff < 2 && diff < MatchDiff)
                                 {
                                     MatchDiff = diff;
@@ -2704,7 +2699,7 @@ namespace GameLauncher
                                     if (gameImage != null)
                                     {
                                         MaxDiff = rom.Title.Length > diffFactor ? (rom.Title.Length / diffFactor) : 1;
-                                        MatchDiff = StrCompare.GetDifference(rom.Title, gameImage.Title);
+                                        MatchDiff = Fuzzy.LevenshteinDistance(rom.Title, gameImage.Title);
                                         accuracy = (float)(rom.Title.Length - MaxDiff) / (float)rom.Title.Length;
                                     }
                                 }
@@ -3759,6 +3754,9 @@ namespace GameLauncher
             }
             return null;
         }
+        public string PathToTitle(string path) => ConvertToTitle(GetFileNameWithoutExtensionAndWithoutBin(path));
+        public string PathToCompress(string path) => ConvertToCompress(GetFileNameWithoutExtensionAndWithoutBin(path));
+        public string PathToNameSimplified(string path) => ConvertToNameSimplified(GetFileNameWithoutExtensionAndWithoutBin(path));
         public string ConvertToTitle(string name)=> ConvertToSimplifiedName(name,false, false, true, false, true,
                         false, false, false, false, false,true, true,
                         true, true, false, false, false,false, true, true);
@@ -5915,77 +5913,81 @@ namespace GameLauncher
         }
         private void toolStripMenuItem_ResetRomTitleCompress_Click(object sender, EventArgs e)
         {
-            List<Rom> rom_list = new List<Rom>();
-            using (new CursorWait(taskbarProcess, progressBar_BottomRight))
-            {
-                if (!db.Get(ref rom_list))
-                    return;
-                ResetWorkStatus(rom_list.Count);
-                foreach (Rom rom in rom_list)
-                {
-                    if (DidCancelButtonGetPressed(true))
-                    {
-                        SendStatus($"ResetRomTitleCompress cancelled with only processing {qtyProcess} of {rom_list.Count} ROM's.", true);
-                        return;
-                    }
-                    IncProgress();
-                    ++qtyTotalProcess;
-                    SendStatus($"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}", true);
-                    string Compressed = rom.Compressed;
-                    string Title = rom.Title;
-                    string NameOrg = rom.NameOrg;
-                    string NameSimplified = rom.NameSimplified;
-                    rom.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(rom.FilePath);
-                    rom.NameSimplified = ConvertToNameSimplified(rom.NameOrg);
-                    rom.Compressed = ConvertToCompress(rom.NameOrg);
-                    rom.Title = ConvertToTitle(rom.NameOrg);
-                    if (!rom.NameOrg.Equals(NameOrg) || !rom.NameSimplified.Equals(NameSimplified) || !rom.Compressed.Equals(Compressed) || !rom.Title.Equals(Title))
-                    {
-                        SendStatus($"Updating ROM {rom.Title} compress field from \"{Compressed}\" to \"{rom.Compressed}\"; {qtyProcess} out of {rom_list.Count}", true);
-                        ++qtyChanges;
-                        ++qtyTotalChanges;
-                        db.Update(rom);
-                    }
-                }
-                SendStatus($"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}", true);
-            }
+            //List<Rom> rom_list = new List<Rom>();
+            //using (new CursorWait(taskbarProcess, progressBar_BottomRight))
+            //{
+            //    if (!db.Get(ref rom_list))
+            //        return;
+            //    ResetWorkStatus(rom_list.Count);
+            //    foreach (Rom rom in rom_list)
+            //    {
+            //        if (DidCancelButtonGetPressed(true))
+            //        {
+            //            SendStatus($"ResetRomTitleCompress cancelled with only processing {qtyProcess} of {rom_list.Count} ROM's.", true);
+            //            return;
+            //        }
+            //        IncProgress();
+            //        ++qtyTotalProcess;
+            //        SendStatus($"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}", true);
+            //        string Compressed = rom.Compressed;
+            //        string Title = rom.Title;
+            //        string NameOrg = rom.NameOrg;
+            //        string NameSimplified = rom.NameSimplified;
+            //        rom.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(rom.FilePath);
+            //        rom.NameSimplified = ConvertToNameSimplified(rom.NameOrg);
+            //        rom.Compressed = ConvertToCompress(rom.NameOrg);
+            //        rom.Title = ConvertToTitle(rom.NameOrg);
+            //        if (!rom.NameOrg.Equals(NameOrg) || !rom.NameSimplified.Equals(NameSimplified) || !rom.Compressed.Equals(Compressed) || !rom.Title.Equals(Title))
+            //        {
+            //            SendStatus($"Updating ROM {rom.Title} compress field from \"{Compressed}\" to \"{rom.Compressed}\"; {qtyProcess} out of {rom_list.Count}", true);
+            //            ++qtyChanges;
+            //            ++qtyTotalChanges;
+            //            db.Update(rom);
+            //        }
+            //    }
+            //    SendStatus($"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}", true);
+            //}
+            db.SP_UpdateAllRomNameFields();
+            SendStatus($"Updated ROM's in DB", true);
         }
         private void toolStripMenuItem_ResetImageTitleCompressInDB_Click(object sender, EventArgs e)
         {
-            List<GameImage> gameImages = null;
-            using (new CursorWait(taskbarProcess, progressBar_BottomRight))
-            {
-                if (!db.Get(ref gameImages))
-                    return;
-                ResetWorkStatus(gameImages.Count);
-                foreach (GameImage gameImage in gameImages)
-                {
-                    if (DidCancelButtonGetPressed(true))
-                    {
-                        SendStatus($"ResetImageTitleCompressInDB cancelled with only processing {qtyProcess} of {gameImages.Count} images.", true);
-                        return;
-                    }
-                    IncProgress();
-                    ++qtyTotalProcess;
-                    SendStatus($"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
-                    string Title = gameImage.Title;
-                    string Compressed = gameImage.Compressed;
-                    string NameOrg = gameImage.NameOrg;
-                    string NameSimplified = gameImage.NameSimplified;
-                    gameImage.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(gameImage.FilePath);
-                    gameImage.NameSimplified = ConvertToNameSimplified(gameImage.NameOrg);
-                    gameImage.Compressed = ConvertToCompress(gameImage.NameOrg);
-                    gameImage.Title = ConvertToTitle(gameImage.NameOrg);
-                    if (!gameImage.Title.Equals(Title) || !gameImage.NameOrg.Equals(NameOrg) || !gameImage.NameSimplified.Equals(NameSimplified) || !gameImage.Compressed.Equals(Compressed))
-                    {
-                        SendStatus($"Updating GameImage {NameOrg} to Title={gameImage.Title}; NameOrg={gameImage.NameOrg}; Compressed={gameImage.Compressed}; NameSimplified={gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
-                        ++qtyChanges;
-                        ++qtyTotalChanges;
-                        db.Update(gameImage);
-                    }
-                }
-                SendStatus($"Updated {qtyChanges} GameImage's in DB out of {gameImages.Count}", true);
-            }
+            //List<GameImage> gameImages = null;
+            //using (new CursorWait(taskbarProcess, progressBar_BottomRight))
+            //{
+            //    if (!db.Get(ref gameImages))
+            //        return;
+            //    ResetWorkStatus(gameImages.Count);
+            //    foreach (GameImage gameImage in gameImages)
+            //    {
+            //        if (DidCancelButtonGetPressed(true))
+            //        {
+            //            SendStatus($"ResetImageTitleCompressInDB cancelled with only processing {qtyProcess} of {gameImages.Count} images.", true);
+            //            return;
+            //        }
+            //        IncProgress();
+            //        ++qtyTotalProcess;
+            //        SendStatus($"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
+            //        string Title = gameImage.Title;
+            //        string Compressed = gameImage.Compressed;
+            //        string NameOrg = gameImage.NameOrg;
+            //        string NameSimplified = gameImage.NameSimplified;
+            //        gameImage.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(gameImage.FilePath);
+            //        gameImage.NameSimplified = ConvertToNameSimplified(gameImage.NameOrg);
+            //        gameImage.Compressed = ConvertToCompress(gameImage.NameOrg);
+            //        gameImage.Title = ConvertToTitle(gameImage.NameOrg);
+            //        if (!gameImage.Title.Equals(Title) || !gameImage.NameOrg.Equals(NameOrg) || !gameImage.NameSimplified.Equals(NameSimplified) || !gameImage.Compressed.Equals(Compressed))
+            //        {
+            //            SendStatus($"Updating GameImage {NameOrg} to Title={gameImage.Title}; NameOrg={gameImage.NameOrg}; Compressed={gameImage.Compressed}; NameSimplified={gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
+            //            ++qtyChanges;
+            //            ++qtyTotalChanges;
+            //            db.Update(gameImage);
+            //        }
+            //    }
+            //    SendStatus($"Updated {qtyChanges} GameImage's in DB out of {gameImages.Count}", true);
+            //}
+            db.SP_UpdateAllImageNameFields();
+            SendStatus($"Updated Images in DB", true);
         }
         private void toolStripMenuItem_ResetCompressNames_Click(object sender, EventArgs e)
         {

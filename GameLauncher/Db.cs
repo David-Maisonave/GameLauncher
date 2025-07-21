@@ -104,28 +104,45 @@ namespace GameLauncher
         public static SqliteConnection CreateConnection(string connectionString)
         {
             SqliteConnection conn = new SqliteConnection(connectionString);
-            conn.CreateFunction("Levenshtein", (string source1, string source2) => StrCompare.GetDifference(source1, source2));
-            conn.CreateFunction("Difference", (string source1, string source2) => StrCompare.Difference(source1, source2));
-            conn.CreateFunction("VerySimilar", (string source1, string source2) => StrCompare.VerySimilar(source1, source2));
-            conn.CreateFunction("Similar", (string source1, string source2) => StrCompare.Similar(source1, source2));
-            conn.CreateFunction("SomeWhatSimilar", (string source1, string source2) => StrCompare.SomeWhatSimilar(source1, source2));
-            conn.CreateFunction("SlightlySimilar", (string source1, string source2) => StrCompare.SlightlySimilar(source1, source2));
-            conn.CreateFunction("HardlySimilar", (string source1, string source2) => StrCompare.HardlySimilar(source1, source2));
-            conn.CreateFunction("NotSimilar", (string source1, string source2) => StrCompare.NotSimilar(source1, source2));
-            conn.CreateFunction("HowSimilar", (string source1, string source2) => StrCompare.HowSimilar(source1, source2, false));
-
-            conn.CreateFunction("PhraseVerySimilar", (string source1, string source2) => StrCompare.PhraseVerySimilar(source1, source2));
-            conn.CreateFunction("PhraseSimilar", (string source1, string source2) => StrCompare.PhraseSimilar(source1, source2));
-            conn.CreateFunction("PhraseSomeWhatSimilar", (string source1, string source2) => StrCompare.PhraseSomeWhatSimilar(source1, source2));
-            conn.CreateFunction("PhraseSlightlySimilar", (string source1, string source2) => StrCompare.PhraseSlightlySimilar(source1, source2));
-            conn.CreateFunction("PhraseHardlySimilar", (string source1, string source2) => StrCompare.PhraseHardlySimilar(source1, source2));
+            conn.CreateFunction("SetDefaultDistanceMethod", (string distanceMethod_Name) => Fuzzy.SetDefaultDistanceMethod(distanceMethod_Name)); // Allowed values SetDefaultDistanceMethod('Levenshtein'), SetDefaultDistanceMethod('DamerauLevenshtein'), SetDefaultDistanceMethod('JaroWinkler')
+            conn.CreateFunction("LevenshteinDistance", (string source1, string source2) => Fuzzy.LevenshteinDistance(source1, source2));
+            conn.CreateFunction("DamerauLevenshteinDistance", (string source1, string source2) => Fuzzy.DamerauLevenshteinDistance(source1, source2));
+            conn.CreateFunction("JaroWinklerDistance", (string source1, string source2) => Fuzzy.JaroWinklerDistance(source1, source2));
+            conn.CreateFunction("iLevDistance", (string source1, string source2) => Fuzzy.iLevDistance(source1, source2));
+            conn.CreateFunction("iDamLevDistance", (string source1, string source2) => Fuzzy.iDamLevDistance(source1, source2));
+            conn.CreateFunction("iJaroWinDistance", (string source1, string source2) => Fuzzy.iJaroWinDistance(source1, source2));
+            conn.CreateFunction("VerySimilar", (string source1, string source2) => Fuzzy.VerySimilar(source1, source2));
+            conn.CreateFunction("Similar", (string source1, string source2) => Fuzzy.Similar(source1, source2));
+            conn.CreateFunction("SomeWhatSimilar", (string source1, string source2) => Fuzzy.SomeWhatSimilar(source1, source2));
+            conn.CreateFunction("SlightlySimilar", (string source1, string source2) => Fuzzy.SlightlySimilar(source1, source2));
+            conn.CreateFunction("HardlySimilar", (string source1, string source2) => Fuzzy.HardlySimilar(source1, source2));
+            conn.CreateFunction("NotSimilar", (string source1, string source2) => Fuzzy.NotSimilar(source1, source2));
+            conn.CreateFunction("HowSimilar", (string source1, string source2) => Fuzzy.HowSimilar(source1, source2, false));
+            conn.CreateFunction("PhraseVerySimilar", (string source1, string source2) => Fuzzy.PhraseVerySimilar(source1, source2));
+            conn.CreateFunction("PhraseSimilar", (string source1, string source2) => Fuzzy.PhraseSimilar(source1, source2));
+            conn.CreateFunction("PhraseSomeWhatSimilar", (string source1, string source2) => Fuzzy.PhraseSomeWhatSimilar(source1, source2));
+            conn.CreateFunction("PhraseSlightlySimilar", (string source1, string source2) => Fuzzy.PhraseSlightlySimilar(source1, source2));
+            conn.CreateFunction("PhraseHardlySimilar", (string source1, string source2) => Fuzzy.PhraseHardlySimilar(source1, source2));
+            conn.CreateFunction("MaxVal", (int source1, int source2) => Math.Max(source1, source2));
+            conn.CreateFunction("PathToTitle", (string source) => form_Main.PathToTitle(source));
+            conn.CreateFunction("PathToNameOrg", (string source) => Form_Main.GetFileNameWithoutExtensionAndWithoutBin(source));
+            conn.CreateFunction("PathToCompress", (string source) => form_Main.PathToCompress(source));
+            conn.CreateFunction("PathToNameSimplified", (string source) => form_Main.PathToNameSimplified(source));
+            conn.CreateFunction("NameOrgToTitle", (string source) => form_Main.ConvertToTitle(source));
+            conn.CreateFunction("NameOrgToCompress", (string source) => form_Main.ConvertToCompress(source));
+            conn.CreateFunction("NameOrgToNameSimplified", (string source) => form_Main.ConvertToNameSimplified(source));
+            conn.CreateFunction("HasCharInSameOrder", (string source) => Fuzzy.HasCharInSameOrder(source));
+            conn.CreateFunction("GetChecksum", (string source) => Form_Main.GetRomChecksum(source, true));
+            conn.CreateFunction("GetCompressChecksum", (string source) => Form_Main.GetRomCompressChecksum(source, true));
             return conn;
         }
         public static void UnitTestCreatedFunctions()
         {
             // connection_memory = new SqliteConnection(":memory:");
             Form_Main.InfoLogging("This is a test............");
-            using (SqlReader reader = new SqlReader("select title, Difference('Adventur',title)  as c1, length(title) as tlen from roms where c1 < length(title)", Form_Main.connection))
+            string sql = "UPDATE Roms SET Title = PathToTitle(FilePath), NameOrg = PathToNameOrg(FilePath), NameSimplified = PathToNameSimplified(FilePath), Compressed = PathToCompress(FilePath)";
+            Form_Main.UpdateDB(sql, Form_Main.connection);
+            using (SqlReader reader = new SqlReader("select title, iLevDistance('Adventur',title)  as c1, length(title) as tlen from roms where c1 < length(title)", Form_Main.connection))
             {
                 while (reader.Read())
                 {
@@ -396,6 +413,44 @@ namespace GameLauncher
             }
             unit_test_conn = null;
             return true;
+        }
+        #endregion
+        #region SQL store procedures
+        public bool SP_UpdateAllRomNameFields(Microsoft.Data.Sqlite.SqliteConnection conn = null)
+        {
+            if (conn == null)
+                conn = unit_test_conn == null ? Form_Main.connection : unit_test_conn;
+            string sql = "UPDATE Roms SET Title = PathToTitle(FilePath), NameOrg = PathToNameOrg(FilePath), NameSimplified = PathToNameSimplified(FilePath), Compressed = PathToCompress(FilePath);";
+            return Form_Main.UpdateDB(sql, conn);
+        }
+        public bool SP_UpdateAllImageNameFields(Microsoft.Data.Sqlite.SqliteConnection conn = null)
+        {
+            if (conn == null)
+                conn = unit_test_conn == null ? Form_Main.connection : unit_test_conn;
+            string sql = "UPDATE Images SET Title = PathToTitle(FilePath), NameOrg = PathToNameOrg(FilePath), NameSimplified = PathToNameSimplified(FilePath), Compressed = PathToCompress(FilePath);";
+            return Form_Main.UpdateDB(sql, conn);
+        }
+        public bool SP_UpdateAllMainNameFields(Microsoft.Data.Sqlite.SqliteConnection conn = null)
+        {
+            bool updateAllRomNameFields = SP_UpdateAllRomNameFields(conn);
+            bool updateAllImageNameFields = SP_UpdateAllImageNameFields(conn);
+            return updateAllRomNameFields && updateAllImageNameFields;
+        }
+        public bool SP_UpdateAllRomChecksum(bool updateAll = true, Microsoft.Data.Sqlite.SqliteConnection conn = null)
+        {
+            if (conn == null)
+                conn = unit_test_conn == null ? Form_Main.connection : unit_test_conn;
+            string where = updateAll ? "" : " WHERE Checksum = '' OR Checksum IS NULL OR CompressChecksum = '' OR CompressChecksum IS NULL ";
+            string sql = $"UPDATE Roms SET Checksum = GetChecksum(FilePath), CompressChecksum = GetCompressChecksum(FilePath) {where};";
+            return Form_Main.UpdateDB(sql, conn);
+        }
+        public bool SP_UpdateAllImageChecksum(bool updateAll = true, Microsoft.Data.Sqlite.SqliteConnection conn = null)
+        {
+            if (conn == null)
+                conn = unit_test_conn == null ? Form_Main.connection : unit_test_conn;
+            string where = updateAll ? "" : " WHERE Checksum = '' OR Checksum IS NULL ";
+            string sql = $"UPDATE Images SET Checksum = GetChecksum(FilePath) {where};";
+            return Form_Main.UpdateDB(sql, conn);
         }
         #endregion
         #region Get Single item

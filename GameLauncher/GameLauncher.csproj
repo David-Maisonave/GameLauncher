@@ -306,7 +306,7 @@
     <Compile Include="SelectFolderDialog.cs" />
     <Compile Include="SerializableImageList.cs" />
     <Compile Include="SqlReader.cs" />
-    <Compile Include="StrCompare.cs" />
+    <Compile Include="Fuzzy.cs" />
     <Compile Include="TempDirStorage.cs" />
     <Resource Include="Properties\CreateDb.sql" />
     <Content Include="Properties\Neo Geo.xml">
