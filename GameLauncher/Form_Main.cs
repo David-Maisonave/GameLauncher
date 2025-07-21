@@ -1917,7 +1917,7 @@ namespace GameLauncher
             string[] keywords = Fuzzy.GetKeywordList(ref phrase, true);
             int phraseLen = phrase.Length;
             if (keywords.Length < minimumWordsRequired)
-                return null;+
+                return null;
             if (minCount == -1)
             {
                 if (keywords.Length >= minWordsPercMatch)
@@ -5913,79 +5913,11 @@ namespace GameLauncher
         }
         private void toolStripMenuItem_ResetRomTitleCompress_Click(object sender, EventArgs e)
         {
-            //List<Rom> rom_list = new List<Rom>();
-            //using (new CursorWait(taskbarProcess, progressBar_BottomRight))
-            //{
-            //    if (!db.Get(ref rom_list))
-            //        return;
-            //    ResetWorkStatus(rom_list.Count);
-            //    foreach (Rom rom in rom_list)
-            //    {
-            //        if (DidCancelButtonGetPressed(true))
-            //        {
-            //            SendStatus($"ResetRomTitleCompress cancelled with only processing {qtyProcess} of {rom_list.Count} ROM's.", true);
-            //            return;
-            //        }
-            //        IncProgress();
-            //        ++qtyTotalProcess;
-            //        SendStatus($"Processing ROM {rom.Title}; {qtyProcess} out of {rom_list.Count}", true);
-            //        string Compressed = rom.Compressed;
-            //        string Title = rom.Title;
-            //        string NameOrg = rom.NameOrg;
-            //        string NameSimplified = rom.NameSimplified;
-            //        rom.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(rom.FilePath);
-            //        rom.NameSimplified = ConvertToNameSimplified(rom.NameOrg);
-            //        rom.Compressed = ConvertToCompress(rom.NameOrg);
-            //        rom.Title = ConvertToTitle(rom.NameOrg);
-            //        if (!rom.NameOrg.Equals(NameOrg) || !rom.NameSimplified.Equals(NameSimplified) || !rom.Compressed.Equals(Compressed) || !rom.Title.Equals(Title))
-            //        {
-            //            SendStatus($"Updating ROM {rom.Title} compress field from \"{Compressed}\" to \"{rom.Compressed}\"; {qtyProcess} out of {rom_list.Count}", true);
-            //            ++qtyChanges;
-            //            ++qtyTotalChanges;
-            //            db.Update(rom);
-            //        }
-            //    }
-            //    SendStatus($"Updated {qtyChanges} ROM's in DB out of {rom_list.Count}", true);
-            //}
             db.SP_UpdateAllRomNameFields();
             SendStatus($"Updated ROM's in DB", true);
         }
         private void toolStripMenuItem_ResetImageTitleCompressInDB_Click(object sender, EventArgs e)
         {
-            //List<GameImage> gameImages = null;
-            //using (new CursorWait(taskbarProcess, progressBar_BottomRight))
-            //{
-            //    if (!db.Get(ref gameImages))
-            //        return;
-            //    ResetWorkStatus(gameImages.Count);
-            //    foreach (GameImage gameImage in gameImages)
-            //    {
-            //        if (DidCancelButtonGetPressed(true))
-            //        {
-            //            SendStatus($"ResetImageTitleCompressInDB cancelled with only processing {qtyProcess} of {gameImages.Count} images.", true);
-            //            return;
-            //        }
-            //        IncProgress();
-            //        ++qtyTotalProcess;
-            //        SendStatus($"Processing GameImage {gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
-            //        string Title = gameImage.Title;
-            //        string Compressed = gameImage.Compressed;
-            //        string NameOrg = gameImage.NameOrg;
-            //        string NameSimplified = gameImage.NameSimplified;
-            //        gameImage.NameOrg = GetFileNameWithoutExtensionAndWithoutBin(gameImage.FilePath);
-            //        gameImage.NameSimplified = ConvertToNameSimplified(gameImage.NameOrg);
-            //        gameImage.Compressed = ConvertToCompress(gameImage.NameOrg);
-            //        gameImage.Title = ConvertToTitle(gameImage.NameOrg);
-            //        if (!gameImage.Title.Equals(Title) || !gameImage.NameOrg.Equals(NameOrg) || !gameImage.NameSimplified.Equals(NameSimplified) || !gameImage.Compressed.Equals(Compressed))
-            //        {
-            //            SendStatus($"Updating GameImage {NameOrg} to Title={gameImage.Title}; NameOrg={gameImage.NameOrg}; Compressed={gameImage.Compressed}; NameSimplified={gameImage.NameSimplified}; {qtyProcess} out of {gameImages.Count}", true);
-            //            ++qtyChanges;
-            //            ++qtyTotalChanges;
-            //            db.Update(gameImage);
-            //        }
-            //    }
-            //    SendStatus($"Updated {qtyChanges} GameImage's in DB out of {gameImages.Count}", true);
-            //}
             db.SP_UpdateAllImageNameFields();
             SendStatus($"Updated Images in DB", true);
         }
